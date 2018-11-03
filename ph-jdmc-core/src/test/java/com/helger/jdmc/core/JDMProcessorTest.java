@@ -23,26 +23,35 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-public final class JDMFuncTest
+import com.helger.jdmc.core.datamodel.JDMClass;
+
+/**
+ * Test class for class {@link JDMProcessor}.
+ * 
+ * @author Philip Helger
+ */
+public final class JDMProcessorTest
 {
   @Test
   public void testReadSimple () throws IOException
   {
+    final File aSrcDir = new File ("src/test/resources/jdm");
+
     final JDMProcessor p = new JDMProcessor ("com.helger.bozoo.test");
     JDMClass aClass;
-    aClass = p.processFile (new File ("src/test/resources/jdm/Bestand.json"));
+    aClass = p.processFile (new File (aSrcDir, "Bestand.json"));
     assertNotNull (aClass);
-    aClass = p.processFile (new File ("src/test/resources/jdm/Habitatbaumgruppe.json"));
+    aClass = p.processFile (new File (aSrcDir, "Habitatbaumgruppe.json"));
     assertNotNull (aClass);
-    aClass = p.processFile (new File ("src/test/resources/jdm/Hoehletyp.json"));
+    aClass = p.processFile (new File (aSrcDir, "Hoehletyp.json"));
     assertNotNull (aClass);
-    aClass = p.processFile (new File ("src/test/resources/jdm/Stammtyp.json"));
+    aClass = p.processFile (new File (aSrcDir, "Stammtyp.json"));
     assertNotNull (aClass);
-    aClass = p.processFile (new File ("src/test/resources/jdm/Biotopbaum.json"));
+    aClass = p.processFile (new File (aSrcDir, "Biotopbaum.json"));
     assertNotNull (aClass);
-    aClass = p.processFile (new File ("src/test/resources/jdm/BiotopbaumAnzahl.json"));
+    aClass = p.processFile (new File (aSrcDir, "BiotopbaumAnzahl.json"));
     assertNotNull (aClass);
-    aClass = p.processFile (new File ("src/test/resources/jdm/Stichprobe.json"));
+    aClass = p.processFile (new File (aSrcDir, "Stichprobe.json"));
     assertNotNull (aClass);
 
     p.extractCommonEnums ();

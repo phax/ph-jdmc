@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.jdmc.core;
+package com.helger.jdmc.core.datamodel;
 
 import java.util.Locale;
 
