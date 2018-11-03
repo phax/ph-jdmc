@@ -39,19 +39,19 @@ public final class JDMProcessorTest
 
     final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.domain");
     JDMClass aClass;
-    aClass = p.processFile (new File (aSrcDir, "Bestand.json"));
+    aClass = p.readClassDef (new File (aSrcDir, "Bestand.json"));
     assertNotNull (aClass);
-    aClass = p.processFile (new File (aSrcDir, "Habitatbaumgruppe.json"));
+    aClass = p.readClassDef (new File (aSrcDir, "Habitatbaumgruppe.json"));
     assertNotNull (aClass);
-    aClass = p.processFile (new File (aSrcDir, "Hoehletyp.json"));
+    aClass = p.readClassDef (new File (aSrcDir, "Hoehletyp.json"));
     assertNotNull (aClass);
-    aClass = p.processFile (new File (aSrcDir, "Stammtyp.json"));
+    aClass = p.readClassDef (new File (aSrcDir, "Stammtyp.json"));
     assertNotNull (aClass);
-    aClass = p.processFile (new File (aSrcDir, "Biotopbaum.json"));
+    aClass = p.readClassDef (new File (aSrcDir, "Biotopbaum.json"));
     assertNotNull (aClass);
-    aClass = p.processFile (new File (aSrcDir, "BiotopbaumAnzahl.json"));
+    aClass = p.readClassDef (new File (aSrcDir, "BiotopbaumAnzahl.json"));
     assertNotNull (aClass);
-    aClass = p.processFile (new File (aSrcDir, "Stichprobe.json"));
+    aClass = p.readClassDef (new File (aSrcDir, "Stichprobe.json"));
     assertNotNull (aClass);
 
     p.extractCommonEnums ();

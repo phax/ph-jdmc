@@ -16,6 +16,8 @@
  */
 package com.helger.jdmc.core.datamodel;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -29,7 +31,7 @@ import com.helger.commons.hashcode.HashCodeGenerator;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class JDMEnumConstant
+public class JDMEnumConstant implements Serializable
 {
   private final String m_sID;
   private final String m_sDisplayName;

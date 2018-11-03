@@ -28,11 +28,11 @@ import com.helger.commons.collection.impl.ICommonsList;
 
 /**
  * A single constraint in a type.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
-public class JDMConstraint
+public class JDMConstraint implements Serializable
 {
   private final EJDMConstraintType m_eConstraintType;
   private final ICommonsList <Serializable> m_aValues;

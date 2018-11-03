@@ -56,6 +56,7 @@ import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMConstraint;
 import com.helger.jdmc.core.datamodel.JDMContext;
+import com.helger.jdmc.core.datamodel.JDMEnumConstant;
 import com.helger.jdmc.core.datamodel.JDMField;
 import com.helger.jdmc.core.datamodel.JDMType;
 import com.helger.json.IJson;
@@ -80,7 +81,7 @@ public class JDMProcessor
   }
 
   @Nullable
-  public JDMClass processFile (@Nonnull final File aSrcFile)
+  public JDMClass readClassDef (@Nonnull final File aSrcFile)
   {
     ValueEnforcer.notNull (aSrcFile, "SrcFile");
 
@@ -204,14 +205,14 @@ public class JDMProcessor
           final String sConstraintName = aConstraintEntry.getKey ();
           final IJson aConstraintDef = aConstraintEntry.getValue ();
 
-          // Define type
-          final EJDMConstraintType eConstraint = EJDMConstraintType.getFromIDOrNull (sConstraintName);
-          if (eConstraint == null)
+          // Resolve constraint type
+          final EJDMConstraintType eConstraintType = EJDMConstraintType.getFromIDOrNull (sConstraintName);
+          if (eConstraintType == null)
           {
             LOGGER.error ("Field '" + sFieldName + "' defines unknown constraint '" + sConstraintName + "'");
             return null;
           }
-          if (!eConstraint.isApplicableOn (eFieldBaseType))
+          if (!eConstraintType.isApplicableOn (eFieldBaseType))
           {
             LOGGER.error ("Field '" +
                           sFieldName +
@@ -223,11 +224,15 @@ public class JDMProcessor
             return null;
           }
 
+          final boolean bCreateEnumFromConstraint = eConstraintType == EJDMConstraintType.ENUMERATION &&
+                                                    eFieldBaseType == EJDMBaseType.STRING;
+
           // Single or multi value constraint?
-          final boolean bIsMultiValueConstraint = eConstraint.getConstraintDataType ().isMultiValue ();
+          final boolean bIsMultiValueConstraint = eConstraintType.getConstraintDataType ().isMultiValue ();
           final ICommonsList <IJson> aConstraintDataElements = new CommonsArrayList <> ();
           if (bIsMultiValueConstraint)
           {
+            // Add all constraint values
             if (aConstraintDef.isArray ())
               aConstraintDataElements.addAll (aConstraintDef.getAsArray ());
             else
@@ -245,6 +250,7 @@ public class JDMProcessor
           }
           else
           {
+            // Single constraint value
             if (aConstraintDef.isValue ())
               aConstraintDataElements.add (aConstraintDef.getAsValue ());
             else
@@ -257,9 +263,11 @@ public class JDMProcessor
               return null;
             }
           }
+
+          // Determine the base type of the constraint elements
           EJDMBaseType eConstraintElementType;
           boolean bConvert = false;
-          switch (eConstraint.getConstraintDataType ())
+          switch (eConstraintType.getConstraintDataType ())
           {
             case DEPENDS_MULTI_VALUE:
             case DEPENDS_SINGLE_VALUE:
@@ -267,6 +275,7 @@ public class JDMProcessor
                 eConstraintElementType = eFieldBaseType;
               else
               {
+                // Fallback: String
                 eConstraintElementType = EJDMBaseType.STRING;
                 bConvert = true;
               }
@@ -284,6 +293,8 @@ public class JDMProcessor
           assert eConstraintElementType == EJDMBaseType.STRING ||
                  eConstraintElementType == EJDMBaseType.INTEGER ||
                  eConstraintElementType == EJDMBaseType.DOUBLE;
+
+          // Read all values
           final ICommonsList <Serializable> aValues = new CommonsArrayList <> (aConstraintDataElements.size ());
           switch (eConstraintElementType)
           {
@@ -307,8 +318,63 @@ public class JDMProcessor
                   aValues.add ((Serializable) aItem.getAsValue ().getConvertedValue (aTargetClass));
               }
               else
-                for (final IJson aItem : aConstraintDataElements)
-                  aValues.add (aItem.getAsValue ().getAsString ());
+              {
+                if (bCreateEnumFromConstraint)
+                {
+                  // Create JDMEnumConstants
+                  for (final IJson aItem : aConstraintDataElements)
+                  {
+                    if (aItem.isValue ())
+                    {
+                      final String sValue = aItem.getAsValue ().getAsString ();
+                      aValues.add (new JDMEnumConstant (sValue, sValue));
+                    }
+                    else
+                      if (aItem.isArray ())
+                      {
+                        final IJsonArray aArray = aItem.getAsArray ();
+                        String sID;
+                        String sDisplayName;
+                        if (aArray.size () >= 2)
+                        {
+                          sID = aArray.getAsString (0);
+                          sDisplayName = aArray.getAsString (1);
+                        }
+                        else
+                          if (aArray.size () == 1)
+                          {
+                            sID = aArray.getAsString (0);
+                            sDisplayName = sID;
+                          }
+                          else
+                          {
+                            LOGGER.error ("Field '" +
+                                          sFieldName +
+                                          "' defines constraint '" +
+                                          sConstraintName +
+                                          "' that may not contain empty arrays");
+                            return null;
+                          }
+                        aValues.add (new JDMEnumConstant (sID, sDisplayName));
+                      }
+                      else
+                      {
+                        LOGGER.error ("Field '" +
+                                      sFieldName +
+                                      "' defines constraint '" +
+                                      sConstraintName +
+                                      "' that may not contain objects");
+                        return null;
+                      }
+                  }
+                }
+                else
+                {
+                  // Simple values
+                  for (final IJson aItem : aConstraintDataElements)
+                    aValues.add (aItem.getAsValue ().getAsString ());
+                }
+              }
               break;
             }
             case INTEGER:
@@ -322,10 +388,11 @@ public class JDMProcessor
             default:
               throw new IllegalStateException ("Internal inconsistency");
           }
-          aConstraints.add (new JDMConstraint (eConstraint, aValues));
+          aConstraints.add (new JDMConstraint (eConstraintType, aValues));
         }
       }
 
+      // Add the field with all constraints
       ret.fields ().add (new JDMField (sFieldName, aType, eMultiplicity, sComment, aConstraints));
     }
     if (ret.fields ().isEmpty ())

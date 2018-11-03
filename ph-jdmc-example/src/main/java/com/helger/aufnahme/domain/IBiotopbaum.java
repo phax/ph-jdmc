@@ -253,13 +253,18 @@ public interface IBiotopbaum
   short getVital();
 
   /**
-   * Baum-Sonderstrukturen (Mehrfachnennung möglich) 0 - 23; 0 = keine Sonderstruktur; checkbox; Feld A25-A50 im Aufnahmemanual Biotopbaum
+   * Baum-Sonderstrukturen (Mehrfachnennung möglich)
    * 
    * @return
-   *     The requested value. May not be <code>null</code>.
+   *     The requested value. May be <code>null</code>.
    */
-  @Nonnull
-  String getSonderstrukturen();
+  @Nullable
+  @ReturnsMutableObject
+  ICommonsList<String> sonderstrukturen();
+
+  default boolean hasSonderstrukturen() {
+    return (sonderstrukturen()!= null);
+  }
 
   /**
    * Sonstige Sonderstrukturen inkl. Beschreibung
