@@ -56,6 +56,6 @@ public final class JDMProcessorTest
 
     p.extractCommonEnums ();
 
-    p.createJavaClasses (new File ("../ph-jdmc-example/src/main/java"));
+    p.createCode (new File ("../ph-jdmc-example/src/main/java"));
   }
 }

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,6 +51,7 @@ import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
+import com.helger.jdmc.core.datamodel.AbstractJDMType;
 import com.helger.jdmc.core.datamodel.EJDMBaseType;
 import com.helger.jdmc.core.datamodel.EJDMConstraintType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
@@ -73,7 +75,7 @@ public class JDMProcessor
 
   private final String m_sDestinationPackageName;
   private final JDMContext m_aContext = new JDMContext ();
-  private final ICommonsList <JDMClass> m_aClasses = new CommonsArrayList <> ();
+  private final ICommonsList <AbstractJDMType> m_aTypes = new CommonsArrayList <> ();
 
   public JDMProcessor (@Nonnull final String sDestinationPackageName)
   {
@@ -403,7 +405,7 @@ public class JDMProcessor
 
     // Upon success, register this type
     m_aContext.types ().registerType (ret);
-    m_aClasses.add (ret);
+    m_aTypes.add (ret);
 
     return ret;
   }
@@ -413,16 +415,8 @@ public class JDMProcessor
     // TODO
   }
 
-  public void createJavaClasses (@Nonnull final File aDestDir) throws IOException
+  public void createJavaClasses (@Nonnull final JCodeModel cm, @Nonnull final ICommonsList <JDMClass> aClasses)
   {
-    // Create all classes
-    createJavaClasses (aDestDir, m_aClasses);
-  }
-
-  public void createJavaClasses (@Nonnull final File aDestDir,
-                                 @Nonnull final ICommonsList <JDMClass> aClasses) throws IOException
-  {
-    final JCodeModel cm = new JCodeModel ();
     for (final JDMClass aClass : aClasses)
     {
       try
@@ -442,8 +436,8 @@ public class JDMProcessor
           // Find type name
           final String sJavaTypeName1 = aField.getType ().getJavaFQCN (eMultiplicity);
           final String sJavaTypeName2;
-          final JDMClass aExistingClass = m_aClasses.findFirst (x -> x.getFQClassName ().equals (sJavaTypeName1));
-          if (aExistingClass != null)
+          final AbstractJDMType aExistingClass = m_aTypes.findFirst (x -> x.getFQClassName ().equals (sJavaTypeName1));
+          if (aExistingClass != null && aExistingClass instanceof JDMClass)
           {
             // It's one of our created classes - add an "I" prefix
             sJavaTypeName2 = aExistingClass.getFQInterfaceName ();
@@ -516,6 +510,17 @@ public class JDMProcessor
         throw new IllegalStateException (ex);
       }
     }
+  }
+
+  public void createCode (@Nonnull final File aDestDir) throws IOException
+  {
+    final JCodeModel cm = new JCodeModel ();
+
+    // Create all classes
+    final ICommonsList <JDMClass> aClasses = CommonsArrayList.createFiltered (m_aTypes,
+                                                                              x -> x instanceof JDMClass,
+                                                                              (Function <AbstractJDMType, JDMClass>) x -> (JDMClass) x);
+    createJavaClasses (cm, aClasses);
 
     new JCMWriter (cm).setCharset (StandardCharsets.UTF_8)
                       .setIndentString ("  ")
