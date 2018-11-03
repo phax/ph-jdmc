@@ -1,0 +1,40 @@
+dist: trusty
+sudo: required
+language: java
+
+env:
+  global:
+    - SONATYPE_USERNAME=ph@phloc.com
+    - secure: "ZbaiMTeNC2Z9qAKdHMdOczxxAijh+NnLKTUd6KMmTF/zX8H2DGUmhJXpc0UvAz2jS9Qx6tCU1OLSvhyIfz1OWAgzJ0jHJ6NbZzszJI4spbJFYztxhjm0H7jVwjTvWP6whrKjcaPdbRMltrAQeNahz
+WRRcrk9/KSgvY8VH2B9Rh3dkElJ+jeIZFfc/8w5NXOoHWb7YbBOIprR/JftB181pKggx50szJgEsgNQ79YR9o/GJhHWLkD7Z3v8u/tO2vdVbD+qLlvirbPX+UL0SnwGKdVm/E7sW1uAhkNYGAAU5/ZB+YxD9lExX
+LkxnkbVtM30YITNpQH3QKBTtnr/uJbkdnUwDDj/Fetm3hEHPmULcHuEecsnTc8u34OLFTQvUmQX0y+b/0Mr69Ocjf9T15VrdO85wa8PNjPxPCRuvaxGAsdRJV4WDMVZwL49Qa8q0aQNn0xzzyLwVAE7CFc916Icc
+cudJy0hkb7jeTZP1CeuOlLRTvxy1Xrg0Pqkp+f9qnfo0wkDY9DFhrblc2ACjeeZkWPuAVzWdm7uASlQHT5hmDXvfLj3uK4SC/9JLP6TdcvcOYOV1iKz5UWAH/gwZrCbnhI+jJOsxE0JrSf5hcdivS0b10RVJn1x3
+xui7r+YIX7Zkq4l2pimmf9IkLceRz5WwAMyT7zrfXXtdtSqs/X+1ss="
+
+addons:
+  sonarcloud:
+    organization: "phax-github"
+    token:
+      secure: "PRfReiSXtwx3bKpSiv0f1VLPh2nkeyPtawyp/p4gH4FhDj0X3nDfL5uxJsT0tDeYTWDuMAAaexQuQNRo5a/BnT9OC0K77bbqVHa6FeMamXxKWrSooc84PG0YQmIVArVhq9s/SYeuLgXja1VDYpQvN
+aFC7EKvH7erd72hfAwcY4gJ+MKw1oGgsI0DWb/5q/O+1gAuHmmA8fM1UdOBSQXG8yqT6zbcsN7oLhAw4NycSV+0YZldQx6P1q/3tFf0ec9JJ1qSAgY6nEbnKGdygf7vfe8C/G1V5/ksK0WDRntQtdGVEnZYJVYXM
+t7/7cBwEawKeZ8xM6DRvXtyiWmXPJWS9JQqDjwaYnvHqhuQtiIENWG9uI72/83MajD2LmC3k/yKFYa2ml+kY3kygcWuA2AD0E7U+h+JyF77DxX5y3X7XHuHUIj01wqrQVo3CZ04VmADc3NjJIAaQWlv49BHyHAkV
+auSw4XLp1nO/8LJYN+c33HoGjDy/wA3SYSZvtvmzl2xCPNEThvp4ZvRonXjS1BLQfu+rx0w2RgSjeroTqtD/hgZtVOXge28+WjSl4CAKqNMiifEUsGUI076nnjpOr8mDo3mK4EAHvaEor8gLmXe8CBjBYsD5n3GM
+fSAYsDJFxidNR2AXrA7N/CUcPiLe8K18XM06isQ8PayQBAxGA1hHfA="
+
+jdk:
+  - oraclejdk8
+  
+install:
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -U -P jdeps
+
+script:
+  - mvn test -B -P coverage sonar:sonar
+
+cache:
+  directories:
+    - $HOME/.m2
+
+after_success:
+  - mvn deploy --settings travis-settings.xml -DskipTests=true -B -P travis-deploy
+  - bash <(curl -s https://codecov.io/bash)
+  
