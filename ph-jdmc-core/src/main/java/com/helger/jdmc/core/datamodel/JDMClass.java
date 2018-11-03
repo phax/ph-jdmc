@@ -23,57 +23,15 @@ import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.commons.string.StringHelper;
 
 @NotThreadSafe
-public class JDMClass
+public class JDMClass extends AbstractJDMType
 {
-  private final String m_sPackageName;
-  private final String m_sClassName;
   private final ICommonsList <JDMField> m_aFields = new CommonsArrayList <> ();
-
-  @Nonnull
-  @Nonempty
-  public static String getFQCN (@Nonnull final String sPackageName, @Nonnull @Nonempty final String sClassName)
-  {
-    return (StringHelper.hasText (sPackageName) ? sPackageName + "." : "") + sClassName;
-  }
 
   public JDMClass (@Nonnull final String sPackageName, @Nonnull @Nonempty final String sClassName)
   {
-    m_sPackageName = sPackageName;
-    m_sClassName = sClassName;
-  }
-
-  @Nonnull
-  @Nonempty
-  public String getPackageName ()
-  {
-    return m_sPackageName;
-  }
-
-  /**
-   * @return The class name without a package.
-   */
-  @Nonnull
-  @Nonempty
-  public String getClassName ()
-  {
-    return m_sClassName;
-  }
-
-  @Nonnull
-  @Nonempty
-  public String getFQInterfaceName ()
-  {
-    return getFQCN (m_sPackageName, "I" + m_sClassName);
-  }
-
-  @Nonnull
-  @Nonempty
-  public String getFQClassName ()
-  {
-    return getFQCN (m_sPackageName, m_sClassName);
+    super (sPackageName, sClassName);
   }
 
   @Nonnull

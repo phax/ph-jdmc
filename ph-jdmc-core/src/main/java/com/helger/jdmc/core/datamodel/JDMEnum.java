@@ -16,46 +16,28 @@
  */
 package com.helger.jdmc.core.datamodel;
 
-import java.io.Serializable;
-
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableObject;
+import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 
-/**
- * A single constraint in a type.
- * 
- * @author Philip Helger
- */
 @NotThreadSafe
-public class JDMConstraint
+public class JDMEnum extends AbstractJDMType
 {
-  private final EJDMConstraintType m_eConstraintType;
-  private final ICommonsList <Serializable> m_aValues;
+  private final ICommonsList <JDMEnumConstant> m_aEnumConstants = new CommonsArrayList <> ();
 
-  public JDMConstraint (@Nonnull final EJDMConstraintType eConstraintType,
-                        @Nonnull @Nonempty final ICommonsList <Serializable> aValues)
+  public JDMEnum (@Nonnull final String sPackageName, @Nonnull @Nonempty final String sClassName)
   {
-    ValueEnforcer.notNull (eConstraintType, "ConstraintType");
-    ValueEnforcer.notEmpty (aValues, "Values");
-    m_eConstraintType = eConstraintType;
-    m_aValues = aValues.getClone ();
-  }
-
-  @Nonnull
-  public EJDMConstraintType getConstraintType ()
-  {
-    return m_eConstraintType;
+    super (sPackageName, sClassName);
   }
 
   @Nonnull
   @ReturnsMutableObject
-  public ICommonsList <Serializable> values ()
+  public ICommonsList <JDMEnumConstant> enumConstants ()
   {
-    return m_aValues;
+    return m_aEnumConstants;
   }
 }

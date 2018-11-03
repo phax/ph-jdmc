@@ -25,6 +25,11 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.lang.ClassHelper;
 
+/**
+ * Single type.
+ * 
+ * @author Philip Helger
+ */
 @NotThreadSafe
 public class JDMType
 {
@@ -39,6 +44,9 @@ public class JDMType
                    @Nonnull @Nonempty final String sClassName,
                    final boolean bIsPrimitive)
   {
+    ValueEnforcer.notEmpty (sShortName, "ShortName");
+    ValueEnforcer.notEmpty (sPackageName, "PackageName");
+    ValueEnforcer.notEmpty (sClassName, "ClassName");
     m_sShortName = sShortName;
     m_sPackageName = sPackageName;
     m_sClassName = sClassName;
@@ -99,7 +107,7 @@ public class JDMType
   @Nonempty
   public String getFQCN ()
   {
-    return JDMClass.getFQCN (m_sPackageName, m_sClassName);
+    return AbstractJDMType.getFQCN (m_sPackageName, m_sClassName);
   }
 
   /**

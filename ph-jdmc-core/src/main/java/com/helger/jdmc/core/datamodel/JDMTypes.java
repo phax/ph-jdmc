@@ -31,6 +31,11 @@ import com.helger.commons.collection.impl.ICommonsMap;
 import com.helger.commons.string.StringHelper;
 import com.helger.photon.core.userdata.UserDataObject;
 
+/**
+ * List of {@link JDMType}.
+ * 
+ * @author Philip Helger
+ */
 @NotThreadSafe
 public class JDMTypes
 {

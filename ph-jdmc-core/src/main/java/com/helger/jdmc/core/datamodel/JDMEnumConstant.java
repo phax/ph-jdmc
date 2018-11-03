@@ -16,46 +16,60 @@
  */
 package com.helger.jdmc.core.datamodel;
 
-import java.io.Serializable;
-
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
-import com.helger.commons.annotation.ReturnsMutableObject;
-import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.hashcode.HashCodeGenerator;
 
 /**
- * A single constraint in a type.
- * 
+ * Single enum constant.
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
-public class JDMConstraint
+public class JDMEnumConstant
 {
-  private final EJDMConstraintType m_eConstraintType;
-  private final ICommonsList <Serializable> m_aValues;
+  private final String m_sID;
+  private final String m_sDisplayName;
 
-  public JDMConstraint (@Nonnull final EJDMConstraintType eConstraintType,
-                        @Nonnull @Nonempty final ICommonsList <Serializable> aValues)
+  public JDMEnumConstant (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName)
   {
-    ValueEnforcer.notNull (eConstraintType, "ConstraintType");
-    ValueEnforcer.notEmpty (aValues, "Values");
-    m_eConstraintType = eConstraintType;
-    m_aValues = aValues.getClone ();
+    ValueEnforcer.notEmpty (sID, "ID");
+    ValueEnforcer.notEmpty (sDisplayName, "DisplayName");
+    m_sID = sID;
+    m_sDisplayName = sDisplayName;
   }
 
   @Nonnull
-  public EJDMConstraintType getConstraintType ()
+  @Nonempty
+  public String getID ()
   {
-    return m_eConstraintType;
+    return m_sID;
   }
 
   @Nonnull
-  @ReturnsMutableObject
-  public ICommonsList <Serializable> values ()
+  @Nonempty
+  public String getDisplayName ()
   {
-    return m_aValues;
+    return m_sDisplayName;
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final JDMEnumConstant rhs = (JDMEnumConstant) o;
+    return m_sID.equals (rhs.m_sID);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_sID).getHashCode ();
   }
 }

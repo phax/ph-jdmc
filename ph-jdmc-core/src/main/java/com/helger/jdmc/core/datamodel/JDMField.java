@@ -29,6 +29,11 @@ import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.string.StringHelper;
 
+/**
+ * Single field.
+ * 
+ * @author Philip Helger
+ */
 @NotThreadSafe
 public class JDMField
 {
