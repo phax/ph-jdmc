@@ -1,0 +1,6 @@
+/* Done */
+{ 
+  "BNr": ["String", "Nrn die mit Manual Biotopbaum aufgenommen wurden"],
+  "Anzahl": "int"
+} 
+  

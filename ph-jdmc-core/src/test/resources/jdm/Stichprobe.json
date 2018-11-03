@@ -1,0 +1,37 @@
+{
+  "StichNr": ["String", "Schlüsselfeld; im SHAPE"],
+  "StichNrzR": ["String", "Zugehörig zu Reservat"],  
+  "FotoNr": ["UserDataObject+", "Foto-Nr in RNr_Nr integriert. zB R1 _1_1;"],
+  "Datum": "LocalDate",
+  "groesse": ["short", "Größe in m² bei Abweichung von Radius"],
+  "Exposition": ["String", "Exposition", { "enumeration":[ "N", "NO", "O", "SO", "S", "SW", "W", "NW", "keine"] }],
+  /* keine, Angabe von Neigungen, Freitext */
+  "Hanglage": ["String", "Angabe von Neigungen"],
+  "Gesellschaft": ["String", "Waldgesellschaft oder Waldgruppe"],
+  "BKL0": ["double", "Bestandesklasse 0, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
+  "BKL1": ["double", "Bestandesklasse 1, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
+  "BKL2": ["double", "Bestandesklasse 2, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
+  "BKL3": ["double", "Bestandesklasse 3, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
+  "BKL4": ["double", "Bestandesklasse 4, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
+  "BKL5": ["double", "Bestandesklasse 5, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
+  "BKL6": ["double", "Bestandesklasse 6, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
+  "BKL7": ["double", "Bestandesklasse 7, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
+  "BKL8": ["double", "Bestandesklasse 8, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
+  "BKL9": ["double", "Bestandesklasse 9, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
+  "Nutzung": ["String", "Beschreibung Nutzungsspuren"],
+  "Beschreibung": ["String", "allgemeine Beschreibung"],
+  "BB_Anzahl": ["short", "Biotopbäume Anzahl automatische Berechnung!"],
+  "BB_Stichpr": ["BiotopbaumAnzahl+", "Biotopbäume innerhalb Stichprobenpunkt; Nrn eingeben"],
+  "Stich_Besch": ["String", "Beschreibung"],
+  "gleich": ["boolean", "gleichaltrig"], 
+  "ungleich": ["boolean", "ungleichaltrig"], 
+  "einschicht": ["boolean", "einschichtig"], 
+  "mehrschicht": ["boolean", "mehrschichtig"]
+}
+
+/*
+Tot_steh      checkbox (Zersetzungsgrade plus BA plus Angabe von L und BHD; automatische Berechnung der Menge
+Tot_lieg_1    Angabe je Transekt  checkbox (Zersetzungsgrade plus BA plus Angabe von L und BHD; automatische Berechnung der Mengen
+Tot_lieg_2    Angabe je Transekt  
+Totmenge  Zahl  automatische Berechnung der Totholzmenge aus den obigen 3 
+*/

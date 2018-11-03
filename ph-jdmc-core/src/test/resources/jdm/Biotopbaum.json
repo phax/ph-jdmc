@@ -1,0 +1,49 @@
+{
+  /* BB plus kurze fortlaufende Zahl als Numerierung */
+  "BBNr": ["int", "Schlüsselfeld"],
+  "BBFotoNr": ["UserDataObject+", "Foto"],
+  "Datum": ["LocalDate", "Aufnahmedatum"],
+  "BBzBNr": ["Bestand?"],
+  "BBzHBGNr": ["Habitatbaumgruppe?"],
+  "Standort": ["String?", "allg. Beschreibung"],
+  "Exposition": ["String", "Exposition", 
+                 { "enumeration":[ "N", "NO", "O", "SO", "S", "SW", "W", "NW", "keine", "über GIS bestimmen"] }],
+  /* keine, Angabe von Neigungen, Freitext */
+  "Hanglage": ["String?", "Angabe von Neigungen"],
+  "einschichtig": ["boolean", "Wald, einschichtig (1 Baumschicht, kaum Unterwuchs)"],
+  "mehrschichtig": ["boolean", "mehrschichtiger Bestand (Unterwuchs, Strauchsch., evtl. 2. Baumschicht)"],
+  "Solitaerbaum": ["boolean", "Solitärbaum"],
+  "licht": ["boolean", "lichter Bestand (Besonnung)"],
+  "geschlossen": ["boolean", "geschlossene Kronendach"],
+  "keine_Besonn": ["boolean", "explitzit keine Besonnung"],
+  "Ueber_viel_Sonne": ["boolean", "Überhälter, mind. 25% des Stammes besonnt"],
+  "Ueber_wenig_Sonne": ["boolean", "Überhälter, weniger als 25% des Stammes besonnt"],
+  "homogen_Umgeb": ["boolean", "eingebettet in homogenen Umgebung"],
+  "heterogen_Umgeb": ["boolean", "eingebettet in heterogene Umgebung"],
+  "Beschreibung": ["String", "Bemerkungen/ (ausführliche) Beschreibung"],
+  "BaumArt": ["String", "Baumart Abkürzung einer Baumart laut Aufnahmeblatt; nur eine möglich; Feld A7-A8 in Aufnahmemanual",
+               {"enumeration":["Buche", "Eiche", "Stiel-Eiche", "Trauben-Eiche", "Rot-Eiche", 
+                               "Edel-Kastanie", "Linde", "RoßKastanie", "Hainbuche", "Birke", 
+                               "Bergahorn", "Spitzahorn", "Robinie", "Kirsche", "Eberesche", 
+                               "Pappel", "Salweide", "Silberweide", "Kiefer", "Douglasie", 
+                               "Fichte", "Lärche", "sonstiges "]}],
+  /* Auswahl aus 5 vorgegebenen Texte; mehrere möglich; aber keine extra; check-box; Feld A13 - A18 im Manual Biotopbaum */
+  /* Welche Texte? */
+  "Typ_1": ["String+", "Biotopbaum-Typ (Hauptauswahlkriterium)",
+            { "enumeration": ["Totholz (eindeutig)", "Sonderstrukturen", "mächtiger Baum  / Uraltbaum (BHD)", "Anwärter/Alternative für Netzwerk", "sonstiger Biotopbaum" ] }],
+  "Hoehletyp": ["Hoehletyp*", "Höhlentyp und Anzahl mit Klasseneinteilung (Checkbox, mehrere möglich; dann noch Klassenangaben; C22-35 im Aufnahmemanual)"],
+  "Stamm": "Stammtyp+",
+  "Vital": ["short", "Vitalität", { "enumeration":[ 1,2,3,4 ] } ],
+  /* Repeat? */
+  "Sonderstrukturen": ["String", "Baum-Sonderstrukturen (Mehrfachnennung möglich) 0 - 23; 0 = keine Sonderstruktur; checkbox; Feld A25-A50 im Aufnahmemanual Biotopbaum"],
+  "Sonstige_Sonder": ["String?", "Sonstige Sonderstrukturen inkl. Beschreibung"],
+  "Anwaerter": ["String", "Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe)"],
+  "Markierung": ["boolean", "bestehende Markierung"],
+  "Mark_Besch": ["String", "Beschreibung bestehende Markierung"]
+}
+
+/*
+Totkat  Text  Totholzkategorien (bei toten Bäumen)  checkbox; mehrere möglich, Feld A54 - A61 im Manual Biotopbaum; daneben Feld zur Eingabe von Länge und Durchmesser - automatische Berechnung
+Totzers Text  Totholzmengen aufgeteilt in die 4 Totholzklassen  Automatische Berechnung der Menge je Klasse; Eingabe erfolgt in: L (Länge in cm) und BHD/MDM (Durchmesser in cm)
+Totholzmenge  Zahl  automatische Berechnung aus den beiden oben keine Eingabe
+*/
