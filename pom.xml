@@ -99,5 +99,6 @@
   
   <modules>
     <module>ph-jdmc-core</module>
+    <module>ph-jdmc-example</module>
   </modules>
 </project>

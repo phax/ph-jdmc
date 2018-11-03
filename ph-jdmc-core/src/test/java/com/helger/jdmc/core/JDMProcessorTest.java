@@ -27,7 +27,7 @@ import com.helger.jdmc.core.datamodel.JDMClass;
 
 /**
  * Test class for class {@link JDMProcessor}.
- * 
+ *
  * @author Philip Helger
  */
 public final class JDMProcessorTest
@@ -37,7 +37,7 @@ public final class JDMProcessorTest
   {
     final File aSrcDir = new File ("src/test/resources/jdm");
 
-    final JDMProcessor p = new JDMProcessor ("com.helger.bozoo.test");
+    final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.domain");
     JDMClass aClass;
     aClass = p.processFile (new File (aSrcDir, "Bestand.json"));
     assertNotNull (aClass);
@@ -56,6 +56,6 @@ public final class JDMProcessorTest
 
     p.extractCommonEnums ();
 
-    p.createJavaClasses (new File ("src/test/java"));
+    p.createJavaClasses (new File ("../ph-jdmc-example/src/main/java"));
   }
 }

@@ -45,6 +45,7 @@ import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JCommentPart;
 import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.writer.JCMWriter;
@@ -382,35 +383,38 @@ public class JDMProcessor
           }
           else
             sJavaTypeName2 = sJavaTypeName1;
+          final boolean bIsStringType = "String".equals (sJavaTypeName2);
 
           // List or field?
-          AbstractJType jType = cm.ref (sJavaTypeName2);
+          AbstractJType jReturnType = cm.ref (sJavaTypeName2);
           if (eMultiplicity.isOpenEnded ())
-            jType = cm.ref (ICommonsList.class).narrow (jType);
+            jReturnType = cm.ref (ICommonsList.class).narrow (jReturnType);
 
-          final JMethod aMethod = aInterface.method (0, jType, aField.getGetterName (eMultiplicity.isOpenEnded ()));
+          final JMethod aMethodGet = aInterface.method (0,
+                                                        jReturnType,
+                                                        aField.getMethodGetterName (eMultiplicity.isOpenEnded ()));
 
           // Annotations
           if (!bIsPrimitive)
           {
             if (eMultiplicity.isMin0 ())
-              aMethod.annotate (Nullable.class);
+              aMethodGet.annotate (Nullable.class);
             else
-              aMethod.annotate (Nonnull.class);
+              aMethodGet.annotate (Nonnull.class);
             if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
-              aMethod.annotate (Nonempty.class);
+              aMethodGet.annotate (Nonempty.class);
             if (eMultiplicity.isOpenEnded ())
-              aMethod.annotate (ReturnsMutableObject.class);
+              aMethodGet.annotate (ReturnsMutableObject.class);
           }
 
           // Java docs
           {
             if (aField.hasComment ())
-              aMethod.javadoc ().add (aField.getComment ());
+              aMethodGet.javadoc ().add (aField.getComment ());
             else
-              aMethod.javadoc ().add ("Get the value of " + aField.getOriginalFieldName () + ".");
+              aMethodGet.javadoc ().add ("Get the value of " + aField.getOriginalFieldName () + ".");
 
-            final JCommentPart aReturn = aMethod.javadoc ().addReturn ();
+            final JCommentPart aReturn = aMethodGet.javadoc ().addReturn ();
             aReturn.add ("The requested value.");
             if (!bIsPrimitive)
             {
@@ -424,6 +428,19 @@ public class JDMProcessor
                   aReturn.add (" May not be <code>null</code>.");
               }
             }
+          }
+
+          if (!bIsPrimitive && eMultiplicity.isMin0 ())
+          {
+            // Create the default "hasXXX" method
+            final JMethod aMethodHas = aInterface.method (JMod.DEFAULT, cm.BOOLEAN, aField.getMethodHasName ());
+            if (bIsStringType)
+            {
+              aMethodHas.body ()
+                        ._return (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (JExpr.invoke (aMethodGet)));
+            }
+            else
+              aMethodHas.body ()._return (JExpr.invoke (aMethodGet).neNull ());
           }
         }
       }

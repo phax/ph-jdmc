@@ -24,11 +24,11 @@
     <artifactId>ph-jdmc-parent-pom</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>ph-jdmc-core</artifactId>
+  <artifactId>ph-jdmc-example</artifactId>
   <packaging>bundle</packaging>
-  <name>ph-jdmc-core</name>
-  <description>JDMC core</description>
-  <url>https://github.com/phax/ph-jdmc/ph-jdmc-core</url>
+  <name>ph-jdmc-example</name>
+  <description>JDMC example</description>
+  <url>https://github.com/phax/ph-jdmc/ph-jdmc-example</url>
   <inceptionYear>2018</inceptionYear>
   <licenses>
     <license>
@@ -86,8 +86,8 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Automatic-Module-Name>com.helger.jdmc.core</Automatic-Module-Name>
-            <Export-Package>com.helger.jdmc.core.*</Export-Package>
+            <Automatic-Module-Name>com.helger.jdmc.example</Automatic-Module-Name>
+            <Export-Package>com.helger.jdmc.example.*</Export-Package>
             <Import-Package>!javax.annotation.*,*</Import-Package>
           </instructions>
         </configuration>

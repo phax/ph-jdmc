@@ -118,17 +118,27 @@ public class JDMField
 
   @Nonnull
   @Nonempty
-  public String getGetterName (final boolean bIsOpenEnded)
+  public String getMethodGetterName (final boolean bIsOpenEnded)
   {
     if (bIsOpenEnded)
+    {
+      // Lists have names likes "name()"
       return _getStartLC (m_sFieldName);
+    }
 
     return (m_aType.getBaseType ().isBoolean () ? "is" : "get") + _getStartUC (m_sFieldName);
   }
 
   @Nonnull
   @Nonempty
-  public String getSetterName ()
+  public String getMethodHasName ()
+  {
+    return "has" + _getStartUC (m_sFieldName);
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getMethodSetterName ()
   {
     return "set" + _getStartUC (m_sFieldName);
   }
