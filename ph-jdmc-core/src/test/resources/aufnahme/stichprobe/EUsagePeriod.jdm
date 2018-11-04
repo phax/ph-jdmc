@@ -1,0 +1,5 @@
+{
+"NONE" : [ "none", "keine" ],
+"HISTORIC" : [ "historic", "historisch" ],
+"CURRENT" : [ "current", "aktuell" ]
+}

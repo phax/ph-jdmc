@@ -69,6 +69,11 @@ public final class JDMProcessorTest
     aEnum = p.readEnumDef (new File (aSrcDir, "bestand/EStockType.jdm"));
     assertNotNull (aEnum);
 
+    aEnum = p.readEnumDef (new File (aSrcDir, "stichprobe/EUsagePeriod.jdm"));
+    assertNotNull (aEnum);
+    aEnum = p.readEnumDef (new File (aSrcDir, "stichprobe/EUsageType.jdm"));
+    assertNotNull (aEnum);
+
     JDMClass aClass;
     aClass = p.readClassDef (new File (aSrcDir, "biotopbaum/CaveType.jdm"));
     assertNotNull (aClass);

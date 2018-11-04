@@ -184,7 +184,7 @@ public interface IStichprobe
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getNutzung();
+  String getUsage();
 
   /**
    * allgemeine Beschreibung
@@ -193,7 +193,7 @@ public interface IStichprobe
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getBeschreibung();
+  String getUsageDesc();
 
   /**
    * Biotopbäume innerhalb Stichprobenpunkt
@@ -212,7 +212,7 @@ public interface IStichprobe
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getStichBesch();
+  String getDesc();
 
   /**
    * gleichaltrig oder ungleichaltrig
