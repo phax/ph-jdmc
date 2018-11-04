@@ -3,8 +3,8 @@
     "short",
     "Brusthöhendurchmesser; Mittendurchmesser in cm"
   ],
-  "Hoehe": [
-    "EHeight",
+  "height": [
+    "ETreeHeight",
     "Baumhöhe/Stammlänge"
   ]
 }

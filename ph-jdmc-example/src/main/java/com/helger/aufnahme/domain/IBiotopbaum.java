@@ -206,7 +206,7 @@ public interface IBiotopbaum
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EBaumArt getBaumArt();
+  ETreeKind getBaumArt();
 
   /**
    * Biotopbaum-Typ (Hauptauswahlkriterium)

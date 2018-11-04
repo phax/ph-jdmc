@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMProcessor
  */
-public enum EBaumArt
+public enum ETreeKind
   implements IHasID<String> , IHasDisplayName
 {
   Bergahorn("Bergahorn", "Bergahorn"),
@@ -43,7 +43,7 @@ public enum EBaumArt
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EBaumArt(
+  private ETreeKind(
     @Nonnull
     @Nonempty
     final String sID,
@@ -67,25 +67,25 @@ public enum EBaumArt
   }
 
   @Nullable
-  public static EBaumArt getFromIDOrNull(
+  public static ETreeKind getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(EBaumArt.class, sID);
+    return EnumHelper.getFromIDOrNull(ETreeKind.class, sID);
   }
 
   @Nullable
-  public static EBaumArt getFromIDOrDefault(
+  public static ETreeKind getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final EBaumArt eDefault) {
-    return EnumHelper.getFromIDOrDefault(EBaumArt.class, sID, eDefault);
+    final ETreeKind eDefault) {
+    return EnumHelper.getFromIDOrDefault(ETreeKind.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EBaumArt getFromIDOrThrow(
+  public static ETreeKind getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(EBaumArt.class, sID);
+    return EnumHelper.getFromIDOrThrow(ETreeKind.class, sID);
   }
 }

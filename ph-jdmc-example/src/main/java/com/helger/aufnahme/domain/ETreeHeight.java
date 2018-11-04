@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMProcessor
  */
-public enum EHeight
+public enum ETreeHeight
   implements IHasID<String> , IHasDisplayName
 {
 
@@ -27,7 +27,7 @@ public enum EHeight
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EHeight(
+  private ETreeHeight(
     @Nonnull
     @Nonempty
     final String sID,
@@ -51,25 +51,25 @@ public enum EHeight
   }
 
   @Nullable
-  public static EHeight getFromIDOrNull(
+  public static ETreeHeight getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(EHeight.class, sID);
+    return EnumHelper.getFromIDOrNull(ETreeHeight.class, sID);
   }
 
   @Nullable
-  public static EHeight getFromIDOrDefault(
+  public static ETreeHeight getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final EHeight eDefault) {
-    return EnumHelper.getFromIDOrDefault(EHeight.class, sID, eDefault);
+    final ETreeHeight eDefault) {
+    return EnumHelper.getFromIDOrDefault(ETreeHeight.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EHeight getFromIDOrThrow(
+  public static ETreeHeight getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(EHeight.class, sID);
+    return EnumHelper.getFromIDOrThrow(ETreeHeight.class, sID);
   }
 }

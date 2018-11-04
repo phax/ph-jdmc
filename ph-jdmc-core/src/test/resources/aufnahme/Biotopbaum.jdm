@@ -19,7 +19,7 @@
   "homogen_Umgeb": ["boolean", "eingebettet in homogenen Umgebung"],
   "heterogen_Umgeb": ["boolean", "eingebettet in heterogene Umgebung"],
   "Beschreibung": ["String", "Bemerkungen/ (ausführliche) Beschreibung"],
-  "BaumArt": ["EBaumArt", "Baumart Abkürzung einer Baumart laut Aufnahmeblatt" ],
+  "BaumArt": ["ETreeKind", "Baumart Abkürzung einer Baumart laut Aufnahmeblatt" ],
   "Typ_1": ["EBiotopbaumType+", "Biotopbaum-Typ (Hauptauswahlkriterium)" ],
   "Hoehletyp": ["CaveType*", "Höhlentyp und Anzahl mit Klasseneinteilung (Checkbox, mehrere möglich; dann noch Klassenangaben; C22-35 im Aufnahmemanual)"],
   "Stamm": "TreeSize+",
