@@ -63,19 +63,6 @@ public interface IBiotopbaum
   }
 
   /**
-   * Get the value of BBzHBGNr.
-   * 
-   * @return
-   *     The requested value. May be <code>null</code>.
-   */
-  @Nullable
-  IHabitatbaumgruppe getBBzHBGNr();
-
-  default boolean hasBBzHBGNr() {
-    return (getBBzHBGNr()!= null);
-  }
-
-  /**
    * allg. Beschreibung
    * 
    * @return
@@ -111,20 +98,12 @@ public interface IBiotopbaum
   }
 
   /**
-   * Wald, einschichtig (1 Baumschicht, kaum Unterwuchs)
+   * Wald, einschichtig (1 Baumschicht, kaum Unterwuchs) oder mehrschichtiger Bestand (Unterwuchs, Strauchsch., evtl. 2. Baumschicht)
    * 
    * @return
    *     The requested value.
    */
   boolean isEinschichtig();
-
-  /**
-   * mehrschichtiger Bestand (Unterwuchs, Strauchsch., evtl. 2. Baumschicht)
-   * 
-   * @return
-   *     The requested value.
-   */
-  boolean isMehrschichtig();
 
   /**
    * Solitärbaum
@@ -156,7 +135,7 @@ public interface IBiotopbaum
    * @return
    *     The requested value.
    */
-  boolean isKeineBesonn();
+  boolean isNoSun();
 
   /**
    * Überhälter, mind. 25% des Stammes besonnt
@@ -175,20 +154,12 @@ public interface IBiotopbaum
   boolean isUeberWenigSonne();
 
   /**
-   * eingebettet in homogenen Umgebung
+   * eingebettet in homogenene oder heterogene Umgebung
    * 
    * @return
    *     The requested value.
    */
-  boolean isHomogenUmgeb();
-
-  /**
-   * eingebettet in heterogene Umgebung
-   * 
-   * @return
-   *     The requested value.
-   */
-  boolean isHeterogenUmgeb();
+  boolean isHomogene();
 
   /**
    * Bemerkungen/ (ausführliche) Beschreibung

@@ -41,6 +41,10 @@ public final class JDMProcessorTest
     final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.domain");
 
     JDMEnum aEnum;
+
+    aEnum = p.readEnumDef (new File (aSrcDir, "common/EExposition.jdm"));
+    assertNotNull (aEnum);
+
     aEnum = p.readEnumDef (new File (aSrcDir, "biotopbaum/EBiotopbaumType.jdm"));
     assertNotNull (aEnum);
     aEnum = p.readEnumDef (new File (aSrcDir, "biotopbaum/ECaveClass.jdm"));
@@ -50,8 +54,6 @@ public final class JDMProcessorTest
     aEnum = p.readEnumDef (new File (aSrcDir, "biotopbaum/EDeadwoodCategory.jdm"));
     assertNotNull (aEnum);
     aEnum = p.readEnumDef (new File (aSrcDir, "biotopbaum/EDecompositionDegreeClass.jdm"));
-    assertNotNull (aEnum);
-    aEnum = p.readEnumDef (new File (aSrcDir, "biotopbaum/EExposition.jdm"));
     assertNotNull (aEnum);
     aEnum = p.readEnumDef (new File (aSrcDir, "biotopbaum/ESpecialStructure.jdm"));
     assertNotNull (aEnum);
@@ -81,9 +83,9 @@ public final class JDMProcessorTest
 
     aClass = p.readClassDef (new File (aSrcDir, "Bestand.jdm"));
     assertNotNull (aClass);
-    aClass = p.readClassDef (new File (aSrcDir, "Habitatbaumgruppe.jdm"));
-    assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "Biotopbaum.jdm"));
+    assertNotNull (aClass);
+    aClass = p.readClassDef (new File (aSrcDir, "Habitatbaumgruppe.jdm"));
     assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "BiotopbaumAnzahl.jdm"));
     assertNotNull (aClass);

@@ -38,7 +38,7 @@ public interface IStichprobe
   String getStichNrzR();
 
   /**
-   * Foto-Nr in RNr_Nr integriert. zB R1 _1_1;
+   * Fotos
    * 
    * @return
    *     The requested value. May neither be <code>null</code> nor empty.
@@ -49,13 +49,13 @@ public interface IStichprobe
   ICommonsList<UserDataObject> pics();
 
   /**
-   * Get the value of Datum.
+   * Get the value of date.
    * 
    * @return
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  LocalDate getDatum();
+  LocalDate getDate();
 
   /**
    * Größe in m² bei Abweichung von Radius
