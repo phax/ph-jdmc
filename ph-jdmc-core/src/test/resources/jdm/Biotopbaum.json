@@ -7,8 +7,7 @@
   "BBzHBGNr": ["Habitatbaumgruppe?"],
   "Standort": ["String?", "allg. Beschreibung"],
   "Exposition": ["EExposition", "Exposition"],
-  /* keine, Angabe von Neigungen, Freitext */
-  "Hanglage": ["String?", "Angabe von Neigungen"],
+  "Hanglage": ["String?", "Angabe von Neigungen: keine, Angabe von Neigungen, Freitext"],
   "einschichtig": ["boolean", "Wald, einschichtig (1 Baumschicht, kaum Unterwuchs)"],
   "mehrschichtig": ["boolean", "mehrschichtiger Bestand (Unterwuchs, Strauchsch., evtl. 2. Baumschicht)"],
   "Solitaerbaum": ["boolean", "Solitärbaum"],
@@ -25,7 +24,7 @@
                                "Edel-Kastanie", "Linde", "RoßKastanie", "Hainbuche", "Birke", 
                                "Bergahorn", "Spitzahorn", "Robinie", "Kirsche", "Eberesche", 
                                "Pappel", "Salweide", "Silberweide", "Kiefer", "Douglasie", 
-                               "Fichte", "Lärche", "sonstiges "]}],
+                               "Fichte", "Lärche", "sonstiges"]}],
   "Typ_1": ["String+", "Biotopbaum-Typ (Hauptauswahlkriterium)",
             { "enumeration": 
               [ [ "TOTHOLZ", "Totholz (eindeutig)" ], 
@@ -36,7 +35,7 @@
               ] }],
   "Hoehletyp": ["Hoehletyp*", "Höhlentyp und Anzahl mit Klasseneinteilung (Checkbox, mehrere möglich; dann noch Klassenangaben; C22-35 im Aufnahmemanual)"],
   "Stamm": "Stammtyp+",
-  "Vital": ["short", "Vitalität", { "enumeration":[ 1,2,3,4 ] } ],
+  "Vital": ["EVitality", "Vitalität" ],
   "Sonderstrukturen": ["String*", "Baum-Sonderstrukturen (Mehrfachnennung möglich)",
                       { "enumeration": [
                         ["_1", "mit Pilzbefall (z.B. Konsolen) (Anzahl)"],

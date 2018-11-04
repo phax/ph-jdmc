@@ -98,7 +98,7 @@ public interface IBiotopbaum
   EExposition getExposition();
 
   /**
-   * Angabe von Neigungen
+   * Angabe von Neigungen: keine, Angabe von Neigungen, Freitext
    * 
    * @return
    *     The requested value. May be <code>null</code>.
@@ -248,9 +248,10 @@ public interface IBiotopbaum
    * Vitalität
    * 
    * @return
-   *     The requested value.
+   *     The requested value. May not be <code>null</code>.
    */
-  short getVital();
+  @Nonnull
+  EVitality getVital();
 
   /**
    * Baum-Sonderstrukturen (Mehrfachnennung möglich)
