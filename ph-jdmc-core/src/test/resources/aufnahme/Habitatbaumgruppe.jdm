@@ -2,7 +2,9 @@
   "HBGNr": ["int", "Schlüsselfeld"],
   "pics": ["UserDataObject+", "Fotos"],
   "HBGzBB" : [ "Biotopbaum*", "zugehörige Biotopbäume" ],  
-  "HBGzB" : [ "Bestand", "zugehörig zu Bestand Nr." ],  
+/*
+  "HBGzB" : [ "Bestand", "zugehörig zu Bestand Nr." ],
+  */  
   "date": [ "LocalDate" ],
   "Standort" : [ "String", "allg. Beschreibung  Freitext" ],
   "oneLevel" : [ "boolean", "Wald, einschichtig (1 Baumschicht, kaum Unterwuchs) oder mehrschichtiger Bestand (Unterwuchs, Strauchsch., evtl. 2. Baumschicht)" ],
@@ -12,7 +14,7 @@
   "homogen" : [ "boolean", "eingebettet in homogenene oder heterogene Umgebung" ],
   "exposition": [ "EExposition", "Exposition" ],
   "Hanglage": [ "String?", "Angabe von Neigungen: keine, Angabe von Neigungen, Freitext"],
-  "areSize" : [ "int", "Größe (in m²)" ],
+  "areaSize" : [ "int", "Größe (in m²)" ],
   "onlyBB" : [ "boolean", "Habitatbaumgruppe NUR aus schon kartierten Biotopbäumen oder  auch aus anderen Bäumen bestehend" ], 
   "Beschreibung" : [ "String", "Freitext "]
 }

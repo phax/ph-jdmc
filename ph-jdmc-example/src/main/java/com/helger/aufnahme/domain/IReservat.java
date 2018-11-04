@@ -5,30 +5,38 @@ import javax.annotation.Nonnull;
 
 
 /**
- * Interface for class BiotopbaumAnzahl
- * This class was initially automatically created
+ * <p>Interface for class {@link Reservat}</p>
+ * <p>This class was initially automatically created</p>
  * 
  * 
  * @author JDMProcessor
  */
-public interface IBiotopbaumAnzahl
+public interface IReservat
   extends Serializable
 {
 
   /**
-   * Nrn die mit Manual Biotopbaum aufgenommen wurden
+   * Schlüsselfeld
+   * 
+   * @return
+   *     The requested value.
+   */
+  int getRNr();
+
+  /**
+   * Name des Reservats
    * 
    * @return
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getBNr();
+  String getName();
 
   /**
-   * Get the value of Anzahl.
+   * Größe in m²
    * 
    * @return
    *     The requested value.
    */
-  int getAnzahl();
+  int getAreaSize();
 }

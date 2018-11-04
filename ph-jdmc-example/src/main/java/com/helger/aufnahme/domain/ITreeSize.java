@@ -5,8 +5,8 @@ import javax.annotation.Nonnull;
 
 
 /**
- * Interface for class TreeSize
- * This class was initially automatically created
+ * <p>Interface for class {@link TreeSize}</p>
+ * <p>This class was initially automatically created</p>
  * 
  * 
  * @author JDMProcessor
@@ -21,7 +21,7 @@ public interface ITreeSize
    * @return
    *     The requested value.
    */
-  short getBHD();
+  int getBHD();
 
   /**
    * Baumhöhe/Stammlänge

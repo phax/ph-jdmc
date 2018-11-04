@@ -7,11 +7,12 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.photon.core.userdata.UserDataObject;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 /**
- * Interface for class Stichprobe
- * This class was initially automatically created
+ * <p>Interface for class {@link Stichprobe}</p>
+ * <p>This class was initially automatically created</p>
  * 
  * 
  * @author JDMProcessor
@@ -35,7 +36,7 @@ public interface IStichprobe
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getStichNrzR();
+  IReservat getStichNrzR();
 
   /**
    * Fotos
@@ -78,10 +79,14 @@ public interface IStichprobe
    * Angabe von Neigungen
    * 
    * @return
-   *     The requested value. May not be <code>null</code>.
+   *     The requested value. May be <code>null</code>.
    */
-  @Nonnull
+  @Nullable
   String getHanglage();
+
+  default boolean hasHanglage() {
+    return (getHanglage()!= null);
+  }
 
   /**
    * Waldgesellschaft oder Waldgruppe
@@ -191,23 +196,14 @@ public interface IStichprobe
   String getBeschreibung();
 
   /**
-   * Biotopbäume Anzahl automatische Berechnung!
+   * Biotopbäume innerhalb Stichprobenpunkt
    * 
    * @return
-   *     The requested value.
-   */
-  short getBBAnzahl();
-
-  /**
-   * Biotopbäume innerhalb Stichprobenpunkt; Nrn eingeben
-   * 
-   * @return
-   *     The requested value. May neither be <code>null</code> nor empty.
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  @Nonempty
   @ReturnsMutableObject
-  ICommonsList<IBiotopbaumAnzahl> bBStichpr();
+  ICommonsList<IBiotopbaum> bBStichpr();
 
   /**
    * Beschreibung
@@ -219,7 +215,7 @@ public interface IStichprobe
   String getStichBesch();
 
   /**
-   * gleichaltrig
+   * gleichaltrig oder ungleichaltrig
    * 
    * @return
    *     The requested value.
@@ -227,26 +223,10 @@ public interface IStichprobe
   boolean isGleich();
 
   /**
-   * ungleichaltrig
-   * 
-   * @return
-   *     The requested value.
-   */
-  boolean isUngleich();
-
-  /**
-   * einschichtig
+   * einschichtig oder mehrschichtig
    * 
    * @return
    *     The requested value.
    */
   boolean isEinschicht();
-
-  /**
-   * mehrschichtig
-   * 
-   * @return
-   *     The requested value.
-   */
-  boolean isMehrschicht();
 }

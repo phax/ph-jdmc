@@ -1,12 +1,12 @@
 {
   "StichNr": ["int", "Schlüsselfeld"],
-  "StichNrzR": ["String", "Zugehörig zu Reservat"],  
+  "StichNrzR": ["Reservat", "Zugehörig zu Reservat"],  
   "pics": ["UserDataObject+", "Fotos"],
   "date": "LocalDate",
   "groesse": ["short", "Größe in m² bei Abweichung von Radius"],
   "exposition": ["EExposition", "Exposition" ],
   /* keine, Angabe von Neigungen, Freitext */
-  "Hanglage": ["String", "Angabe von Neigungen"],
+  "Hanglage": ["String?", "Angabe von Neigungen"],
   "Gesellschaft": ["String", "Waldgesellschaft oder Waldgruppe"],
   "BKL0": ["double", "Bestandesklasse 0, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
   "BKL1": ["double", "Bestandesklasse 1, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
@@ -20,13 +20,10 @@
   "BKL9": ["double", "Bestandesklasse 9, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
   "Nutzung": ["String", "Beschreibung Nutzungsspuren"],
   "Beschreibung": ["String", "allgemeine Beschreibung"],
-  "BB_Anzahl": ["short", "Biotopbäume Anzahl automatische Berechnung!"],
-  "BB_Stichpr": ["BiotopbaumAnzahl+", "Biotopbäume innerhalb Stichprobenpunkt; Nrn eingeben"],
+  "BB_Stichpr": ["Biotopbaum*", "Biotopbäume innerhalb Stichprobenpunkt"],
   "Stich_Besch": ["String", "Beschreibung"],
-  "gleich": ["boolean", "gleichaltrig"], 
-  "ungleich": ["boolean", "ungleichaltrig"], 
-  "einschicht": ["boolean", "einschichtig"], 
-  "mehrschicht": ["boolean", "mehrschichtig"]
+  "gleich": ["boolean", "gleichaltrig oder ungleichaltrig"], 
+  "einschicht": ["boolean", "einschichtig oder mehrschichtig"]
 }
 
 /*

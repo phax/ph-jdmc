@@ -1,16 +1,6 @@
 {
-  "type": [
-    "EDeadwoodCategory"
-  ],
-  "enabled": [
-    "boolean"
-  ],
-  "length": [
-    "int",
-    "Länge in cm"
-  ],
-  "BHD": [
-    "int",
-    "BHD bzw. Mittendurchmesser in cm"
-  ]
+  "type": [ "EDeadwoodCategory", "Totholzkategorie" ],
+  "enabled": [ "boolean" ],
+  "length": [ "int", "Länge in cm" ],
+  "BHD": [ "int", "BHD bzw. Mittendurchmesser in cm" ]
 }

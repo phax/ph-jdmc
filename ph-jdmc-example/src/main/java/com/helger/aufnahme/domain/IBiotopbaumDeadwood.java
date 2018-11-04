@@ -5,8 +5,8 @@ import javax.annotation.Nonnull;
 
 
 /**
- * Interface for class BiotopbaumDeadwood
- * This class was initially automatically created
+ * <p>Interface for class {@link BiotopbaumDeadwood}</p>
+ * <p>This class was initially automatically created</p>
  * 
  * 
  * @author JDMProcessor
@@ -16,7 +16,7 @@ public interface IBiotopbaumDeadwood
 {
 
   /**
-   * Get the value of type.
+   * Totholzkategorie
    * 
    * @return
    *     The requested value. May not be <code>null</code>.

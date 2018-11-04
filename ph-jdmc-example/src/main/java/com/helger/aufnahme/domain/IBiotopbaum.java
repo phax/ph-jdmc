@@ -11,8 +11,8 @@ import javax.annotation.Nullable;
 
 
 /**
- * Interface for class Biotopbaum
- * This class was initially automatically created
+ * <p>Interface for class {@link Biotopbaum}</p>
+ * <p>This class was initially automatically created</p>
  * 
  * 
  * @author JDMProcessor
@@ -47,32 +47,30 @@ public interface IBiotopbaum
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  LocalDate getDatum();
+  LocalDate getDate();
 
   /**
-   * Get the value of BBzBNr.
+   * Biotopbaum-Typ (Hauptauswahlkriterium)
+   * 
+   * @return
+   *     The requested value. May neither be <code>null</code> nor empty.
+   */
+  @Nonnull
+  @Nonempty
+  @ReturnsMutableObject
+  ICommonsList<EBiotopbaumType> type();
+
+  /**
+   * allg. Beschreibung des Standorts
    * 
    * @return
    *     The requested value. May be <code>null</code>.
    */
   @Nullable
-  IBestand getBBzBNr();
+  String getLocation();
 
-  default boolean hasBBzBNr() {
-    return (getBBzBNr()!= null);
-  }
-
-  /**
-   * allg. Beschreibung
-   * 
-   * @return
-   *     The requested value. May be <code>null</code>.
-   */
-  @Nullable
-  String getStandort();
-
-  default boolean hasStandort() {
-    return (getStandort()!= null);
+  default boolean hasLocation() {
+    return (getLocation()!= null);
   }
 
   /**
@@ -111,7 +109,7 @@ public interface IBiotopbaum
    * @return
    *     The requested value.
    */
-  boolean isSolitaerbaum();
+  boolean isSolitary();
 
   /**
    * lichter Bestand (Besonnung)
@@ -119,7 +117,7 @@ public interface IBiotopbaum
    * @return
    *     The requested value.
    */
-  boolean isLicht();
+  boolean isLightLocation();
 
   /**
    * geschlossene Kronendach
@@ -127,7 +125,7 @@ public interface IBiotopbaum
    * @return
    *     The requested value.
    */
-  boolean isGeschlossen();
+  boolean isClosedCrown();
 
   /**
    * explitzit keine Besonnung
@@ -138,20 +136,12 @@ public interface IBiotopbaum
   boolean isNoSun();
 
   /**
-   * Überhälter, mind. 25% des Stammes besonnt
+   * Überhälter, mind. 25% oder weniger als 25% des Stammes besonnt
    * 
    * @return
    *     The requested value.
    */
-  boolean isUeberVielSonne();
-
-  /**
-   * Überhälter, weniger als 25% des Stammes besonnt
-   * 
-   * @return
-   *     The requested value.
-   */
-  boolean isUeberWenigSonne();
+  boolean isUebrSun();
 
   /**
    * eingebettet in homogenene oder heterogene Umgebung
@@ -177,35 +167,20 @@ public interface IBiotopbaum
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ETreeKind getBaumArt();
-
-  /**
-   * Biotopbaum-Typ (Hauptauswahlkriterium)
-   * 
-   * @return
-   *     The requested value. May neither be <code>null</code> nor empty.
-   */
-  @Nonnull
-  @Nonempty
-  @ReturnsMutableObject
-  ICommonsList<EBiotopbaumType> typ1();
+  ETreeKind getTreeKind();
 
   /**
    * Höhlentyp und Anzahl mit Klasseneinteilung (Checkbox, mehrere möglich; dann noch Klassenangaben; C22-35 im Aufnahmemanual)
    * 
    * @return
-   *     The requested value. May be <code>null</code>.
+   *     The requested value. May not be <code>null</code>.
    */
-  @Nullable
+  @Nonnull
   @ReturnsMutableObject
-  ICommonsList<ICaveType> hoehletyp();
-
-  default boolean hasHoehletyp() {
-    return (hoehletyp()!= null);
-  }
+  ICommonsList<ICaveType> caves();
 
   /**
-   * Get the value of Stamm.
+   * Daten zum Stamm/zu den Stämmen
    * 
    * @return
    *     The requested value. May neither be <code>null</code> nor empty.
@@ -213,7 +188,7 @@ public interface IBiotopbaum
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  ICommonsList<ITreeSize> stamm();
+  ICommonsList<ITreeSize> trunk();
 
   /**
    * Vitalität
@@ -222,21 +197,17 @@ public interface IBiotopbaum
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EVitality getVital();
+  EVitality getVitality();
 
   /**
    * Baum-Sonderstrukturen (Mehrfachnennung möglich)
    * 
    * @return
-   *     The requested value. May be <code>null</code>.
+   *     The requested value. May not be <code>null</code>.
    */
-  @Nullable
+  @Nonnull
   @ReturnsMutableObject
-  ICommonsList<ESpecialStructure> sonderstrukturen();
-
-  default boolean hasSonderstrukturen() {
-    return (sonderstrukturen()!= null);
-  }
+  ICommonsList<ESpecialStructure> specialStructure();
 
   /**
    * Sonstige Sonderstrukturen inkl. Beschreibung
@@ -245,10 +216,10 @@ public interface IBiotopbaum
    *     The requested value. May be <code>null</code>.
    */
   @Nullable
-  String getSonstigeSonder();
+  String getOtherSpecial();
 
-  default boolean hasSonstigeSonder() {
-    return (getSonstigeSonder()!= null);
+  default boolean hasOtherSpecial() {
+    return (getOtherSpecial()!= null);
   }
 
   /**
@@ -266,7 +237,7 @@ public interface IBiotopbaum
    * @return
    *     The requested value.
    */
-  boolean isMarkierung();
+  boolean isMarked();
 
   /**
    * Beschreibung bestehende Markierung
@@ -275,33 +246,25 @@ public interface IBiotopbaum
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  IEnabledDescription getMarkBesch();
+  IEnabledDescription getMarkDescription();
 
   /**
    * Totholzkategorien (bei toten Bäumen)
    * 
    * @return
-   *     The requested value. May be <code>null</code>.
+   *     The requested value. May not be <code>null</code>.
    */
-  @Nullable
+  @Nonnull
   @ReturnsMutableObject
   ICommonsList<IBiotopbaumDeadwood> totkat();
-
-  default boolean hasTotkat() {
-    return (totkat()!= null);
-  }
 
   /**
    * Totholzmengen aufgeteilt in die 5 Totholzklassen
    * 
    * @return
-   *     The requested value. May be <code>null</code>.
+   *     The requested value. May not be <code>null</code>.
    */
-  @Nullable
+  @Nonnull
   @ReturnsMutableObject
   ICommonsList<IBiotopbaumDecompositionDegree> totzers();
-
-  default boolean hasTotzers() {
-    return (totzers()!= null);
-  }
 }

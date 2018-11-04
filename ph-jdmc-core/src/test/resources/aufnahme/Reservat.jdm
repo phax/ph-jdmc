@@ -1,0 +1,6 @@
+{ 
+/* Von Karin eingegeben */
+  "RNr": [ "int", "Schlüsselfeld" ],
+  "name" : [ "String", "Name des Reservats" ],
+  "areaSize" : [ "int", "Größe in m²" ]
+}

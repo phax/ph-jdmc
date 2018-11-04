@@ -81,13 +81,14 @@ public final class JDMProcessorTest
     aClass = p.readClassDef (new File (aSrcDir, "biotopbaum/BiotopbaumDecompositionDegree.jdm"));
     assertNotNull (aClass);
 
-    aClass = p.readClassDef (new File (aSrcDir, "Bestand.jdm"));
-    assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "Biotopbaum.jdm"));
     assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "Habitatbaumgruppe.jdm"));
     assertNotNull (aClass);
-    aClass = p.readClassDef (new File (aSrcDir, "BiotopbaumAnzahl.jdm"));
+    aClass = p.readClassDef (new File (aSrcDir, "Bestand.jdm"));
+    assertNotNull (aClass);
+
+    aClass = p.readClassDef (new File (aSrcDir, "Reservat.jdm"));
     assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "Stichprobe.jdm"));
     assertNotNull (aClass);

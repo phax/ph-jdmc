@@ -5,8 +5,8 @@ import javax.annotation.Nullable;
 
 
 /**
- * Interface for class EnabledDescription
- * This class was initially automatically created
+ * <p>Interface for class {@link EnabledDescription}</p>
+ * <p>This class was initially automatically created</p>
  * 
  * 
  * @author JDMProcessor

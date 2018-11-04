@@ -472,8 +472,8 @@ public class JDMProcessor
       {
         final JDefinedClass aInterface = cm._class (JMod.PUBLIC, aClass.getFQInterfaceName (), EClassType.INTERFACE);
         aInterface._implements (Serializable.class);
-        aInterface.javadoc ().add ("Interface for class " + aClass.getClassName () + "\n");
-        aInterface.javadoc ().add ("This class was initially automatically created\n");
+        aInterface.javadoc ().add ("<p>Interface for class {@link " + aClass.getClassName () + "}</p>\n");
+        aInterface.javadoc ().add ("<p>This class was initially automatically created</p>\n");
         aInterface.javadoc ().addAuthor ().add ("JDMProcessor");
 
         for (final JDMField aField : aClass.fields ())
@@ -507,7 +507,7 @@ public class JDMProcessor
           // Annotations
           if (!bIsPrimitive)
           {
-            if (eMultiplicity.isMin0 ())
+            if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
               aMethodGet.annotate (Nullable.class);
             else
               aMethodGet.annotate (Nonnull.class);
@@ -528,7 +528,7 @@ public class JDMProcessor
             aReturn.add ("The requested value.");
             if (!bIsPrimitive)
             {
-              if (eMultiplicity.isMin0 ())
+              if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
                 aReturn.add (" May be <code>null</code>.");
               else
               {
@@ -540,7 +540,7 @@ public class JDMProcessor
             }
           }
 
-          if (!bIsPrimitive && eMultiplicity.isMin0 ())
+          if (!bIsPrimitive && eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
           {
             // Create the default "hasXXX" method
             final JMethod aMethodHas = aInterface.method (JMod.DEFAULT, cm.BOOLEAN, aField.getMethodHasName ());

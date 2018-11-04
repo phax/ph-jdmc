@@ -5,8 +5,8 @@ import javax.annotation.Nonnull;
 
 
 /**
- * Interface for class BiotopbaumDecompositionDegree
- * This class was initially automatically created
+ * <p>Interface for class {@link BiotopbaumDecompositionDegree}</p>
+ * <p>This class was initially automatically created</p>
  * 
  * 
  * @author JDMProcessor

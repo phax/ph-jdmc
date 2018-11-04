@@ -11,8 +11,8 @@ import javax.annotation.Nullable;
 
 
 /**
- * Interface for class Habitatbaumgruppe
- * This class was initially automatically created
+ * <p>Interface for class {@link Habitatbaumgruppe}</p>
+ * <p>This class was initially automatically created</p>
  * 
  * 
  * @author JDMProcessor
@@ -44,24 +44,11 @@ public interface IHabitatbaumgruppe
    * zugehörige Biotopbäume
    * 
    * @return
-   *     The requested value. May be <code>null</code>.
-   */
-  @Nullable
-  @ReturnsMutableObject
-  ICommonsList<IBiotopbaum> hBGzBB();
-
-  default boolean hasHBGzBB() {
-    return (hBGzBB()!= null);
-  }
-
-  /**
-   * zugehörig zu Bestand Nr.
-   * 
-   * @return
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  IBestand getHBGzB();
+  @ReturnsMutableObject
+  ICommonsList<IBiotopbaum> hBGzBB();
 
   /**
    * Get the value of date.
@@ -149,7 +136,7 @@ public interface IHabitatbaumgruppe
    * @return
    *     The requested value.
    */
-  int getAreSize();
+  int getAreaSize();
 
   /**
    * Habitatbaumgruppe NUR aus schon kartierten Biotopbäumen oder  auch aus anderen Bäumen bestehend

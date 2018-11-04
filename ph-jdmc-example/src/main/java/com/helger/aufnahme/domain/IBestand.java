@@ -11,8 +11,8 @@ import javax.annotation.Nullable;
 
 
 /**
- * Interface for class Bestand
- * This class was initially automatically created
+ * <p>Interface for class {@link Bestand}</p>
+ * <p>This class was initially automatically created</p>
  * 
  * 
  * @author JDMProcessor
@@ -63,12 +63,22 @@ public interface IBestand
   }
 
   /**
+   * Habitatbaumgruppen
+   * 
+   * @return
+   *     The requested value. May not be <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableObject
+  ICommonsList<IHabitatbaumgruppe> bZHBG();
+
+  /**
    * Größe in m²
    * 
    * @return
    *     The requested value.
    */
-  short getSize();
+  short getAreaSize();
 
   /**
    * Bestand-Beschreibung

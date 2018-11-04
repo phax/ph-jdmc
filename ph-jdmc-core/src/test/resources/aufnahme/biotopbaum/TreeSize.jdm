@@ -1,10 +1,4 @@
 {
-  "BHD": [
-    "short",
-    "Brusthöhendurchmesser; Mittendurchmesser in cm"
-  ],
-  "height": [
-    "ETreeHeight",
-    "Baumhöhe/Stammlänge"
-  ]
+  "BHD": [ "int", "Brusthöhendurchmesser; Mittendurchmesser in cm" ],
+  "height": [ "ETreeHeight", "Baumhöhe/Stammlänge" ]
 }
