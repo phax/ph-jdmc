@@ -31,13 +31,6 @@ public enum EJDMConstraintType implements IHasID <String>, IHasDisplayName
 {
   MIN_LENGTH ("minLength", "Minimum length", EJDMConstraintDataType.INT_GE0, EJDMBaseType.STRING),
   MAX_LENGTH ("maxLength", "Maximum length", EJDMConstraintDataType.INT_GE0, EJDMBaseType.STRING),
-  ENUMERATION ("enumeration",
-               "Enumeration",
-               EJDMConstraintDataType.DEPENDS_MULTI_VALUE,
-               EJDMBaseType.STRING,
-               EJDMBaseType.INTEGER,
-               EJDMBaseType.DOUBLE,
-               EJDMBaseType.DATETIME),
   MIN_VALUE_INCL ("minInclusive",
                   "Minimum value (inclusive)",
                   EJDMConstraintDataType.DEPENDS_SINGLE_VALUE,

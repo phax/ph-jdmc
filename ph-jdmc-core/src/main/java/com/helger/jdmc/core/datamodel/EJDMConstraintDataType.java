@@ -34,8 +34,7 @@ public enum EJDMConstraintDataType implements IHasID <String>, IHasDisplayName
   INT_GT0 ("intgt0", "Ganzzahl > 0"),
   INT_GE0 ("intge0", "Ganzzahl >= 0"),
   STRING ("string", "Zeichenkette"),
-  DEPENDS_SINGLE_VALUE ("dependssingle", "hängt vom Basistyp ab"),
-  DEPENDS_MULTI_VALUE ("dependsmulti", "hängt vom Basistyp ab");
+  DEPENDS_SINGLE_VALUE ("dependssingle", "hängt vom Basistyp ab");
 
   private final String m_sID;
   private final String m_sDisplayName;
@@ -58,15 +57,6 @@ public enum EJDMConstraintDataType implements IHasID <String>, IHasDisplayName
   public String getDisplayName ()
   {
     return m_sDisplayName;
-  }
-
-  /**
-   * @return <code>true</code> if this is a multi-value constraint (meaning, the
-   *         value type is an ordered set of base type elements).
-   */
-  public boolean isMultiValue ()
-  {
-    return this == DEPENDS_MULTI_VALUE;
   }
 
   @Nullable

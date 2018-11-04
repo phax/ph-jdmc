@@ -22,9 +22,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.ValueEnforcer;
-import com.helger.commons.annotation.Nonempty;
-import com.helger.commons.annotation.ReturnsMutableObject;
-import com.helger.commons.collection.impl.ICommonsList;
 
 /**
  * A single constraint in a type.
@@ -35,15 +32,14 @@ import com.helger.commons.collection.impl.ICommonsList;
 public class JDMConstraint implements Serializable
 {
   private final EJDMConstraintType m_eConstraintType;
-  private final ICommonsList <Serializable> m_aValues;
+  private final Serializable m_aValue;
 
-  public JDMConstraint (@Nonnull final EJDMConstraintType eConstraintType,
-                        @Nonnull @Nonempty final ICommonsList <Serializable> aValues)
+  public JDMConstraint (@Nonnull final EJDMConstraintType eConstraintType, @Nonnull final Serializable aValue)
   {
     ValueEnforcer.notNull (eConstraintType, "ConstraintType");
-    ValueEnforcer.notEmpty (aValues, "Values");
+    ValueEnforcer.notNull (aValue, "Value");
     m_eConstraintType = eConstraintType;
-    m_aValues = aValues.getClone ();
+    m_aValue = aValue;
   }
 
   @Nonnull
@@ -53,9 +49,8 @@ public class JDMConstraint implements Serializable
   }
 
   @Nonnull
-  @ReturnsMutableObject
-  public ICommonsList <Serializable> values ()
+  public Serializable getValue ()
   {
-    return m_aValues;
+    return m_aValue;
   }
 }
