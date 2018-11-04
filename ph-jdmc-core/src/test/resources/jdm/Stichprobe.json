@@ -4,7 +4,7 @@
   "FotoNr": ["UserDataObject+", "Foto-Nr in RNr_Nr integriert. zB R1 _1_1;"],
   "Datum": "LocalDate",
   "groesse": ["short", "Größe in m² bei Abweichung von Radius"],
-  "Exposition": ["String", "Exposition", { "enumeration":[ "N", "NO", "O", "SO", "S", "SW", "W", "NW", "keine"] }],
+  "Exposition": ["EExposition", "Exposition" ],
   /* keine, Angabe von Neigungen, Freitext */
   "Hanglage": ["String", "Angabe von Neigungen"],
   "Gesellschaft": ["String", "Waldgesellschaft oder Waldgruppe"],

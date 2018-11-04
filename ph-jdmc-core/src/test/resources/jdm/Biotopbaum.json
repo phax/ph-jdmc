@@ -6,8 +6,7 @@
   "BBzBNr": ["Bestand?"],
   "BBzHBGNr": ["Habitatbaumgruppe?"],
   "Standort": ["String?", "allg. Beschreibung"],
-  "Exposition": ["String", "Exposition", 
-                 { "enumeration":[ "N", "NO", "O", "SO", "S", "SW", "W", "NW", ["NONE", "keine"], ["VIA_GIS", "über GIS bestimmen"]] }],
+  "Exposition": ["EExposition", "Exposition"],
   /* keine, Angabe von Neigungen, Freitext */
   "Hanglage": ["String?", "Angabe von Neigungen"],
   "einschichtig": ["boolean", "Wald, einschichtig (1 Baumschicht, kaum Unterwuchs)"],

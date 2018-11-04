@@ -95,7 +95,7 @@ public interface IBiotopbaum
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getExposition();
+  EExposition getExposition();
 
   /**
    * Angabe von Neigungen

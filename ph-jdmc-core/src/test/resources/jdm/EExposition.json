@@ -1,0 +1,12 @@
+{
+  "N" :  ["n","Norden"],
+  "NO" : [ "ne", "Nordosten" ], 
+  "O" :  [ "e", "Osten" ], 
+  "SO" : [ "se", "Südosten" ], 
+  "S" :  [ "s", "Süden" ], 
+  "SW" : [ "sw", "Südwesten" ], 
+  "W" :  [ "w", "Westen" ], 
+  "NW" : [ "nw", "Nordwesten" ], 
+  "NONE" : [ "none", "keine"], 
+  "VIA_GIS" : [ "gis", "über GIS bestimmen"]
+}

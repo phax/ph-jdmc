@@ -30,5 +30,5 @@ public interface IStammtyp
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getHoehe();
+  EHeight getHoehe();
 }

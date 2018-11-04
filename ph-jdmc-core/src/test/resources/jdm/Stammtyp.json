@@ -1,4 +1,4 @@
 {
   "BHD": ["short", "Brusthöhendurchmesser; Mittendurchmesser in cm"],
-  "Hoehe": ["String", "Baumhöhe/Stammlänge", { "enumeration":[ "1", "2", "3" ] }]
+  "Hoehe": ["EHeight", "Baumhöhe/Stammlänge"]
 }

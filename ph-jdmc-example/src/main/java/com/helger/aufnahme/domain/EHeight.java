@@ -14,20 +14,20 @@ import javax.annotation.Nullable;
  * 
  * @author JDMProcessor
  */
-public enum EHoehe
+public enum EHeight
   implements IHasID<String> , IHasDisplayName
 {
 
   /**
    * Baumhöhen Klasse 1
    */
-  ONE("1", "1"),
-  TWO("2", "2"),
-  THREE("3", "3");
+  ONE("1", "Klasse 1"),
+  TWO("2", "Klasse 2"),
+  THREE("3", "Klasse 3");
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EHoehe(
+  private EHeight(
     @Nonnull
     @Nonempty
     final String sID,
@@ -51,25 +51,25 @@ public enum EHoehe
   }
 
   @Nullable
-  public static EHoehe getFromIDOrNull(
+  public static EHeight getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(EHoehe.class, sID);
+    return EnumHelper.getFromIDOrNull(EHeight.class, sID);
   }
 
   @Nullable
-  public static EHoehe getFromIDOrDefault(
+  public static EHeight getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final EHoehe eDefault) {
-    return EnumHelper.getFromIDOrDefault(EHoehe.class, sID, eDefault);
+    final EHeight eDefault) {
+    return EnumHelper.getFromIDOrDefault(EHeight.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EHoehe getFromIDOrThrow(
+  public static EHeight getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(EHoehe.class, sID);
+    return EnumHelper.getFromIDOrThrow(EHeight.class, sID);
   }
 }
