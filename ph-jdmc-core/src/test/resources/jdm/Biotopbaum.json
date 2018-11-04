@@ -21,14 +21,15 @@
   "Beschreibung": ["String", "Bemerkungen/ (ausführliche) Beschreibung"],
   "BaumArt": ["EBaumArt", "Baumart Abkürzung einer Baumart laut Aufnahmeblatt" ],
   "Typ_1": ["EBiotopbaumType+", "Biotopbaum-Typ (Hauptauswahlkriterium)" ],
-  "Hoehletyp": ["Hoehletyp*", "Höhlentyp und Anzahl mit Klasseneinteilung (Checkbox, mehrere möglich; dann noch Klassenangaben; C22-35 im Aufnahmemanual)"],
+  "Hoehletyp": ["CaveType*", "Höhlentyp und Anzahl mit Klasseneinteilung (Checkbox, mehrere möglich; dann noch Klassenangaben; C22-35 im Aufnahmemanual)"],
   "Stamm": "TreeSize+",
   "Vital": ["EVitality", "Vitalität" ],
   "Sonderstrukturen": ["ESpecialStructure*", "Baum-Sonderstrukturen (Mehrfachnennung möglich)" ],
   "Sonstige_Sonder": ["String?", "Sonstige Sonderstrukturen inkl. Beschreibung"],
   "Anwaerter": ["EnabledDescription", "Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe)"],
   "Markierung": ["boolean", "bestehende Markierung"],
-  "Mark_Besch": ["EnabledDescription", "Beschreibung bestehende Markierung"]
+  "Mark_Besch": ["EnabledDescription", "Beschreibung bestehende Markierung"],
+  "Totkat" : [ "BiotopbaumDeadwood*", "Totholzkategorien (bei toten Bäumen)" ]
 }
 
 /*

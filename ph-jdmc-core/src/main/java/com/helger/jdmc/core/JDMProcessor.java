@@ -51,6 +51,7 @@ import com.helger.jcodemodel.JCommentPart;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JEnumConstant;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JJavaName;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JVar;
@@ -86,6 +87,21 @@ public class JDMProcessor
   public JDMProcessor (@Nonnull final String sDestinationPackageName)
   {
     m_sDestinationPackageName = sDestinationPackageName;
+  }
+
+  public static boolean isValidIdentifier (@Nonnull @Nonempty final String s)
+  {
+    if (!RegExHelper.getAsIdentifier (s).equals (s))
+    {
+      // Contains illegal chars
+      return false;
+    }
+    if (!JJavaName.isJavaIdentifier (s))
+    {
+      // It's a reserved name or it contains illegal chars
+      return false;
+    }
+    return true;
   }
 
   @Nullable
@@ -135,7 +151,7 @@ public class JDMProcessor
         LOGGER.error ("The field name may not be empty");
         return null;
       }
-      if (!RegExHelper.getAsIdentifier (sFieldName).equals (sFieldName))
+      if (!isValidIdentifier (sFieldName))
       {
         LOGGER.error ("The field name '" + sFieldName + "' is not a valid identifier");
         return null;
@@ -450,7 +466,7 @@ public class JDMProcessor
         LOGGER.error ("The enum constant name may not be empty");
         return null;
       }
-      if (!RegExHelper.getAsIdentifier (sEnumConstantName).equals (sEnumConstantName))
+      if (!isValidIdentifier (sEnumConstantName))
       {
         LOGGER.error ("The enum constant name '" + sEnumConstantName + "' is not a valid identifier");
         return null;

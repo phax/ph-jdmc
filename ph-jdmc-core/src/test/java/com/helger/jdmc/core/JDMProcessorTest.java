@@ -45,6 +45,12 @@ public final class JDMProcessorTest
     assertNotNull (aEnum);
     aEnum = p.readEnumDef (new File (aSrcDir, "EBiotopbaumType.json"));
     assertNotNull (aEnum);
+    aEnum = p.readEnumDef (new File (aSrcDir, "ECaveClass.json"));
+    assertNotNull (aEnum);
+    aEnum = p.readEnumDef (new File (aSrcDir, "ECaveType.json"));
+    assertNotNull (aEnum);
+    aEnum = p.readEnumDef (new File (aSrcDir, "EDeadwoodCategory.json"));
+    assertNotNull (aEnum);
     aEnum = p.readEnumDef (new File (aSrcDir, "EExposition.json"));
     assertNotNull (aEnum);
     aEnum = p.readEnumDef (new File (aSrcDir, "EHeight.json"));
@@ -59,11 +65,13 @@ public final class JDMProcessorTest
     assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "Habitatbaumgruppe.json"));
     assertNotNull (aClass);
-    aClass = p.readClassDef (new File (aSrcDir, "Hoehletyp.json"));
+    aClass = p.readClassDef (new File (aSrcDir, "CaveType.json"));
     assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "TreeSize.json"));
     assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "EnabledDescription.json"));
+    assertNotNull (aClass);
+    aClass = p.readClassDef (new File (aSrcDir, "BiotopbaumDeadwood.json"));
     assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "Biotopbaum.json"));
     assertNotNull (aClass);

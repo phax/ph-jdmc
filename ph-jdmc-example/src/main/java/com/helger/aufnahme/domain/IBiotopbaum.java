@@ -227,7 +227,7 @@ public interface IBiotopbaum
    */
   @Nullable
   @ReturnsMutableObject
-  ICommonsList<IHoehletyp> hoehletyp();
+  ICommonsList<ICaveType> hoehletyp();
 
   default boolean hasHoehletyp() {
     return (hoehletyp()!= null);
@@ -305,4 +305,18 @@ public interface IBiotopbaum
    */
   @Nonnull
   IEnabledDescription getMarkBesch();
+
+  /**
+   * Totholzkategorien (bei toten Bäumen)
+   * 
+   * @return
+   *     The requested value. May be <code>null</code>.
+   */
+  @Nullable
+  @ReturnsMutableObject
+  ICommonsList<IBiotopbaumDeadwood> totkat();
+
+  default boolean hasTotkat() {
+    return (totkat()!= null);
+  }
 }

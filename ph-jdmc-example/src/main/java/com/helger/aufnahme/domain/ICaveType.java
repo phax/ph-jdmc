@@ -5,31 +5,31 @@ import javax.annotation.Nonnull;
 
 
 /**
- * Interface for class Hoehletyp
+ * Interface for class CaveType
  * This class was initially automatically created
  * 
  * 
  * @author JDMProcessor
  */
-public interface IHoehletyp
+public interface ICaveType
   extends Serializable
 {
 
   /**
-   * Get the value of Klasse.
+   * Get the value of clazz.
    * 
    * @return
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getKlasse();
+  ECaveClass getClazz();
 
   /**
-   * Get the value of Typ.
+   * Get the value of type.
    * 
    * @return
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getTyp();
+  ECaveType getType();
 }
