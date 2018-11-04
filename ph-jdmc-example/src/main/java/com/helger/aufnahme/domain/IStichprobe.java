@@ -21,13 +21,12 @@ public interface IStichprobe
 {
 
   /**
-   * Schlüsselfeld; im SHAPE
+   * Schlüsselfeld
    * 
    * @return
-   *     The requested value. May not be <code>null</code>.
+   *     The requested value.
    */
-  @Nonnull
-  String getStichNr();
+  int getStichNr();
 
   /**
    * Zugehörig zu Reservat
@@ -47,7 +46,7 @@ public interface IStichprobe
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  ICommonsList<UserDataObject> fotoNr();
+  ICommonsList<UserDataObject> pics();
 
   /**
    * Get the value of Datum.

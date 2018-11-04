@@ -1,7 +1,7 @@
 {
-  "StichNr": ["String", "Schlüsselfeld; im SHAPE"],
+  "StichNr": ["int", "Schlüsselfeld"],
   "StichNrzR": ["String", "Zugehörig zu Reservat"],  
-  "FotoNr": ["UserDataObject+", "Foto-Nr in RNr_Nr integriert. zB R1 _1_1;"],
+  "pics": ["UserDataObject+", "Foto-Nr in RNr_Nr integriert. zB R1 _1_1;"],
   "Datum": "LocalDate",
   "groesse": ["short", "Größe in m² bei Abweichung von Radius"],
   "Exposition": ["EExposition", "Exposition" ],

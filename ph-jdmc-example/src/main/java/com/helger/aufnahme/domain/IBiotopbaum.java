@@ -38,7 +38,7 @@ public interface IBiotopbaum
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  ICommonsList<UserDataObject> bBFotoNr();
+  ICommonsList<UserDataObject> pics();
 
   /**
    * Aufnahmedatum

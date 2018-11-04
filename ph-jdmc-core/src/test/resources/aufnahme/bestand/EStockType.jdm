@@ -1,0 +1,12 @@
+{
+  "_0" : [ "0", "keine Bestockung, aktuelle Schlagfläche" ],
+  "_1" : [ "1", "spärliche Verjüngung" ],
+  "_2" : [ "2", "Jungwuchs (Verjüngung bis 1,3m)" ],
+  "_3" : [ "3", "Dickung (beginnender Kronenschluss über 1,3m; Holz <10 cm BHD" ],
+  "_4" : [ "4", "Stangenholz (10-20 cm BHD)" ],
+  "_5" : [ "5", "Baumholz (über 20 cm BHD)" ],
+  "_6" : [ "6", "Altholz (hiebsreif)" ],
+  "_7" : [ "7", "Altholz verlichtet (schwach bestockt)" ],
+  "_8" : [ "8", "Plenterwald (alle Bestandsklassem kommen auf kleinster Fläche vor)" ],
+  "OTHER" : [ "other", "Sonstiges" ]
+}

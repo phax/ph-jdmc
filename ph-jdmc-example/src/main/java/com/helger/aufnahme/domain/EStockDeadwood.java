@@ -14,16 +14,18 @@ import javax.annotation.Nullable;
  * 
  * @author JDMProcessor
  */
-public enum ETreeHeight
+public enum EStockDeadwood
   implements IHasID<String> , IHasDisplayName
 {
-  ONE("1", "Klasse 1"),
-  TWO("2", "Klasse 2"),
-  THREE("3", "Klasse 3");
+  _0("0", "keines"),
+  _1("1", "wenig"),
+  _2("2", "mittel"),
+  _3("3", "viel"),
+  _4("4", "sehr viel");
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ETreeHeight(
+  private EStockDeadwood(
     @Nonnull
     @Nonempty
     final String sID,
@@ -47,25 +49,25 @@ public enum ETreeHeight
   }
 
   @Nullable
-  public static ETreeHeight getFromIDOrNull(
+  public static EStockDeadwood getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ETreeHeight.class, sID);
+    return EnumHelper.getFromIDOrNull(EStockDeadwood.class, sID);
   }
 
   @Nullable
-  public static ETreeHeight getFromIDOrDefault(
+  public static EStockDeadwood getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ETreeHeight eDefault) {
-    return EnumHelper.getFromIDOrDefault(ETreeHeight.class, sID, eDefault);
+    final EStockDeadwood eDefault) {
+    return EnumHelper.getFromIDOrDefault(EStockDeadwood.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ETreeHeight getFromIDOrThrow(
+  public static EStockDeadwood getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ETreeHeight.class, sID);
+    return EnumHelper.getFromIDOrThrow(EStockDeadwood.class, sID);
   }
 }

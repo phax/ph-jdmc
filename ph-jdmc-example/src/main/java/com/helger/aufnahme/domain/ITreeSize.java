@@ -30,5 +30,5 @@ public interface ITreeSize
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ETreeHeight getHoehe();
+  ETreeHeight getHeight();
 }

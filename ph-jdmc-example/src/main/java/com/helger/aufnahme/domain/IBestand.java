@@ -7,6 +7,7 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.photon.core.userdata.UserDataObject;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 /**
@@ -21,13 +22,12 @@ public interface IBestand
 {
 
   /**
-   * Get the value of BNr.
+   * Schlüsselfeld
    * 
    * @return
-   *     The requested value. May not be <code>null</code>.
+   *     The requested value.
    */
-  @Nonnull
-  String getBNr();
+  int getBNr();
 
   /**
    * Foto-Nr in BNr integriert zB B1_1;B1_2
@@ -38,7 +38,7 @@ public interface IBestand
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  ICommonsList<UserDataObject> fotoNr();
+  ICommonsList<UserDataObject> pics();
 
   /**
    * Get the value of Datum.
@@ -48,6 +48,19 @@ public interface IBestand
    */
   @Nonnull
   LocalDate getDatum();
+
+  /**
+   * GPS-Punkte oder Verweis auf Polygon
+   * 
+   * @return
+   *     The requested value. May be <code>null</code>.
+   */
+  @Nullable
+  String getVerortung();
+
+  default boolean hasVerortung() {
+    return (getVerortung()!= null);
+  }
 
   /**
    * Größe in m²
@@ -102,9 +115,10 @@ public interface IBestand
    * irgendwas zwischen 1 und 9
    * 
    * @return
-   *     The requested value.
+   *     The requested value. May not be <code>null</code>.
    */
-  short getBestandesklasse();
+  @Nonnull
+  EStockType getBestandesklasse();
 
   /**
    * Beschreibung Nutzungsspuren
@@ -152,50 +166,35 @@ public interface IBestand
    * Schätzung Totholz stehend
    * 
    * @return
-   *     The requested value.
-   */
-  short getTotholzStehend();
-
-  /**
-   * Beschreibung Totholz stehend
-   * 
-   * @return
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getStehendBesch();
+  EStockDeadwood getTotSteh();
 
   /**
-   * Schätzung Totholz liegend
-   * 
-   * @return
-   *     The requested value.
-   */
-  short getTotLieg();
-
-  /**
-   * Beschreibung Totholz liegend
-   * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
-   */
-  @Nonnull
-  String getTotLiegBesch();
-
-  /**
-   * Schätzung Totholz stehend
-   * 
-   * @return
-   *     The requested value.
-   */
-  short getTotSteh();
-
-  /**
-   * Beschreibung Totholz stehend
+   * Beschreibung Totholz stehend (geklumpt, Art, Herkunft, Zersetzungsgrade)
    * 
    * @return
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
   String getTotStehBesch();
+
+  /**
+   * Schätzung Totholz liegend
+   * 
+   * @return
+   *     The requested value. May not be <code>null</code>.
+   */
+  @Nonnull
+  EStockDeadwood getTotLieg();
+
+  /**
+   * Beschreibung Totholz liegend (geklumpt, Art, Herkunft, Zersetzungsgrade)
+   * 
+   * @return
+   *     The requested value. May not be <code>null</code>.
+   */
+  @Nonnull
+  String getTotLiegBesch();
 }

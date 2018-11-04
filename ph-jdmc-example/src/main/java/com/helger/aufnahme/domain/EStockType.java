@@ -14,16 +14,23 @@ import javax.annotation.Nullable;
  * 
  * @author JDMProcessor
  */
-public enum ETreeHeight
+public enum EStockType
   implements IHasID<String> , IHasDisplayName
 {
-  ONE("1", "Klasse 1"),
-  TWO("2", "Klasse 2"),
-  THREE("3", "Klasse 3");
+  _0("0", "keine Bestockung, aktuelle Schlagfl\u00e4che"),
+  _1("1", "sp\u00e4rliche Verj\u00fcngung"),
+  _2("2", "Jungwuchs (Verj\u00fcngung bis 1,3m)"),
+  _3("3", "Dickung (beginnender Kronenschluss \u00fcber 1,3m; Holz <10 cm BHD"),
+  _4("4", "Stangenholz (10-20 cm BHD)"),
+  _5("5", "Baumholz (\u00fcber 20 cm BHD)"),
+  _6("6", "Altholz (hiebsreif)"),
+  _7("7", "Altholz verlichtet (schwach bestockt)"),
+  _8("8", "Plenterwald (alle Bestandsklassem kommen auf kleinster Fl\u00e4che vor)"),
+  OTHER("other", "Sonstiges");
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ETreeHeight(
+  private EStockType(
     @Nonnull
     @Nonempty
     final String sID,
@@ -47,25 +54,25 @@ public enum ETreeHeight
   }
 
   @Nullable
-  public static ETreeHeight getFromIDOrNull(
+  public static EStockType getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ETreeHeight.class, sID);
+    return EnumHelper.getFromIDOrNull(EStockType.class, sID);
   }
 
   @Nullable
-  public static ETreeHeight getFromIDOrDefault(
+  public static EStockType getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ETreeHeight eDefault) {
-    return EnumHelper.getFromIDOrDefault(ETreeHeight.class, sID, eDefault);
+    final EStockType eDefault) {
+    return EnumHelper.getFromIDOrDefault(EStockType.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ETreeHeight getFromIDOrThrow(
+  public static EStockType getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ETreeHeight.class, sID);
+    return EnumHelper.getFromIDOrThrow(EStockType.class, sID);
   }
 }

@@ -1,7 +1,7 @@
 {
   /* BB plus kurze fortlaufende Zahl als Numerierung */
   "BBNr": ["int", "Schlüsselfeld"],
-  "BBFotoNr": ["UserDataObject+", "Foto"],
+  "pics": ["UserDataObject+", "Foto"],
   "Datum": ["LocalDate", "Aufnahmedatum"],
   "BBzBNr": ["Bestand?"],
   "BBzHBGNr": ["Habitatbaumgruppe?"],
