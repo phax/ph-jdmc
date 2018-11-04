@@ -319,4 +319,18 @@ public interface IBiotopbaum
   default boolean hasTotkat() {
     return (totkat()!= null);
   }
+
+  /**
+   * Totholzmengen aufgeteilt in die 5 Totholzklassen
+   * 
+   * @return
+   *     The requested value. May be <code>null</code>.
+   */
+  @Nullable
+  @ReturnsMutableObject
+  ICommonsList<IBiotopbaumDecompositionDegree> totzers();
+
+  default boolean hasTotzers() {
+    return (totzers()!= null);
+  }
 }

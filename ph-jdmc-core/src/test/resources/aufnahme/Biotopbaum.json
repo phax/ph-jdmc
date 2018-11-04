@@ -29,11 +29,6 @@
   "Anwaerter": ["EnabledDescription", "Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe)"],
   "Markierung": ["boolean", "bestehende Markierung"],
   "Mark_Besch": ["EnabledDescription", "Beschreibung bestehende Markierung"],
-  "Totkat" : [ "BiotopbaumDeadwood*", "Totholzkategorien (bei toten Bäumen)" ]
+  "Totkat" : [ "BiotopbaumDeadwood*", "Totholzkategorien (bei toten Bäumen)" ],
+  "Totzers" : [ "BiotopbaumDecompositionDegree*", "Totholzmengen aufgeteilt in die 5 Totholzklassen" ]
 }
-
-/*
-Totkat  Text  Totholzkategorien (bei toten Bäumen)  checkbox; mehrere möglich, Feld A54 - A61 im Manual Biotopbaum; daneben Feld zur Eingabe von Länge und Durchmesser - automatische Berechnung
-Totzers Text  Totholzmengen aufgeteilt in die 4 Totholzklassen  Automatische Berechnung der Menge je Klasse; Eingabe erfolgt in: L (Länge in cm) und BHD/MDM (Durchmesser in cm)
-Totholzmenge  Zahl  automatische Berechnung aus den beiden oben keine Eingabe
-*/

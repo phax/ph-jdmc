@@ -36,7 +36,7 @@ public final class JDMProcessorTest
   @Test
   public void testReadSimple () throws IOException
   {
-    final File aSrcDir = new File ("src/test/resources/jdm");
+    final File aSrcDir = new File ("src/test/resources/aufnahme");
 
     final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.domain");
 
@@ -50,6 +50,8 @@ public final class JDMProcessorTest
     aEnum = p.readEnumDef (new File (aSrcDir, "ECaveType.json"));
     assertNotNull (aEnum);
     aEnum = p.readEnumDef (new File (aSrcDir, "EDeadwoodCategory.json"));
+    assertNotNull (aEnum);
+    aEnum = p.readEnumDef (new File (aSrcDir, "EDecompositionDegreeClass.json"));
     assertNotNull (aEnum);
     aEnum = p.readEnumDef (new File (aSrcDir, "EExposition.json"));
     assertNotNull (aEnum);
@@ -72,6 +74,8 @@ public final class JDMProcessorTest
     aClass = p.readClassDef (new File (aSrcDir, "EnabledDescription.json"));
     assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "BiotopbaumDeadwood.json"));
+    assertNotNull (aClass);
+    aClass = p.readClassDef (new File (aSrcDir, "BiotopbaumDecompositionDegree.json"));
     assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "Biotopbaum.json"));
     assertNotNull (aClass);

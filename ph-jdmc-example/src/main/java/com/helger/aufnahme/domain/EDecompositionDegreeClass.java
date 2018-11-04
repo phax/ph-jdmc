@@ -14,20 +14,18 @@ import javax.annotation.Nullable;
  * 
  * @author JDMProcessor
  */
-public enum EDeadwoodCategory
+public enum EDecompositionDegreeClass
   implements IHasID<String> , IHasDisplayName
 {
-  CLASS1("c1", "Klasse I: stehend"),
-  CLASS2("c2", "Klasse II: Baumrest stehend"),
-  CLASS3("c3", "Klasse III: Hochstumpf (Baumrest zwischen 1 und 3 m hoch), st\u00fcrzt kaum mehr um"),
-  CLASS4("c4", "Klasse IV: Stumpf, Stock (=<1m)"),
-  CLASS5("c5", "Klasse V: Liegend, ganzer Baum"),
-  CLASS6("c6", "Klasse VI: Baumrest liegend"),
-  CLASS7("c7", "Klasse VII: Liegende Baumteile");
+  CLASS0("c0", "Klasse 0"),
+  CLASS1("c1", "Klasse 1"),
+  CLASS2("c2", "Klasse 2"),
+  CLASS3("c3", "Klasse 3"),
+  CLASS4("c4", "Klasse 4");
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EDeadwoodCategory(
+  private EDecompositionDegreeClass(
     @Nonnull
     @Nonempty
     final String sID,
@@ -51,25 +49,25 @@ public enum EDeadwoodCategory
   }
 
   @Nullable
-  public static EDeadwoodCategory getFromIDOrNull(
+  public static EDecompositionDegreeClass getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(EDeadwoodCategory.class, sID);
+    return EnumHelper.getFromIDOrNull(EDecompositionDegreeClass.class, sID);
   }
 
   @Nullable
-  public static EDeadwoodCategory getFromIDOrDefault(
+  public static EDecompositionDegreeClass getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final EDeadwoodCategory eDefault) {
-    return EnumHelper.getFromIDOrDefault(EDeadwoodCategory.class, sID, eDefault);
+    final EDecompositionDegreeClass eDefault) {
+    return EnumHelper.getFromIDOrDefault(EDecompositionDegreeClass.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EDeadwoodCategory getFromIDOrThrow(
+  public static EDecompositionDegreeClass getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(EDeadwoodCategory.class, sID);
+    return EnumHelper.getFromIDOrThrow(EDecompositionDegreeClass.class, sID);
   }
 }

@@ -5,13 +5,13 @@ import javax.annotation.Nonnull;
 
 
 /**
- * Interface for class BiotopbaumDeadwood
+ * Interface for class BiotopbaumDecompositionDegree
  * This class was initially automatically created
  * 
  * 
  * @author JDMProcessor
  */
-public interface IBiotopbaumDeadwood
+public interface IBiotopbaumDecompositionDegree
   extends Serializable
 {
 
@@ -22,7 +22,7 @@ public interface IBiotopbaumDeadwood
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EDeadwoodCategory getType();
+  EDecompositionDegreeClass getType();
 
   /**
    * Get the value of enabled.

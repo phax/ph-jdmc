@@ -1,4 +1,5 @@
 {
+  "type" : [ "EDeadwoodCategory" ],
   "enabled" : [ "boolean" ],
   "length" : ["int", "Länge in cm" ],
   "BHD" : ["int", "BHD bzw. Mittendurchmesser in cm"]
