@@ -5,13 +5,13 @@ import javax.annotation.Nonnull;
 
 
 /**
- * Interface for class Stammtyp
+ * Interface for class TreeSize
  * This class was initially automatically created
  * 
  * 
  * @author JDMProcessor
  */
-public interface IStammtyp
+public interface ITreeSize
   extends Serializable
 {
 

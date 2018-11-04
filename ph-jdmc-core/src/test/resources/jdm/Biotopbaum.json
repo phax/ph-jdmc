@@ -19,21 +19,16 @@
   "homogen_Umgeb": ["boolean", "eingebettet in homogenen Umgebung"],
   "heterogen_Umgeb": ["boolean", "eingebettet in heterogene Umgebung"],
   "Beschreibung": ["String", "Bemerkungen/ (ausführliche) Beschreibung"],
-  "BaumArt": ["String", "Baumart Abkürzung einer Baumart laut Aufnahmeblatt",
-               {"enumeration":["Buche", "Eiche", "Stiel-Eiche", "Trauben-Eiche", "Rot-Eiche", 
-                               "Edel-Kastanie", "Linde", "RoßKastanie", "Hainbuche", "Birke", 
-                               "Bergahorn", "Spitzahorn", "Robinie", "Kirsche", "Eberesche", 
-                               "Pappel", "Salweide", "Silberweide", "Kiefer", "Douglasie", 
-                               "Fichte", "Lärche", "sonstiges"]}],
+  "BaumArt": ["EBaumArt", "Baumart Abkürzung einer Baumart laut Aufnahmeblatt" ],
   "Typ_1": ["EBiotopbaumType+", "Biotopbaum-Typ (Hauptauswahlkriterium)" ],
   "Hoehletyp": ["Hoehletyp*", "Höhlentyp und Anzahl mit Klasseneinteilung (Checkbox, mehrere möglich; dann noch Klassenangaben; C22-35 im Aufnahmemanual)"],
-  "Stamm": "Stammtyp+",
+  "Stamm": "TreeSize+",
   "Vital": ["EVitality", "Vitalität" ],
   "Sonderstrukturen": ["ESpecialStructure*", "Baum-Sonderstrukturen (Mehrfachnennung möglich)" ],
   "Sonstige_Sonder": ["String?", "Sonstige Sonderstrukturen inkl. Beschreibung"],
-  "Anwaerter": ["String", "Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe)"],
+  "Anwaerter": ["EnabledDescription", "Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe)"],
   "Markierung": ["boolean", "bestehende Markierung"],
-  "Mark_Besch": ["String", "Beschreibung bestehende Markierung"]
+  "Mark_Besch": ["EnabledDescription", "Beschreibung bestehende Markierung"]
 }
 
 /*

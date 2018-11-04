@@ -200,13 +200,13 @@ public interface IBiotopbaum
   String getBeschreibung();
 
   /**
-   * Baumart Abkürzung einer Baumart laut Aufnahmeblatt; nur eine möglich; Feld A7-A8 in Aufnahmemanual
+   * Baumart Abkürzung einer Baumart laut Aufnahmeblatt
    * 
    * @return
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getBaumArt();
+  EBaumArt getBaumArt();
 
   /**
    * Biotopbaum-Typ (Hauptauswahlkriterium)
@@ -242,7 +242,7 @@ public interface IBiotopbaum
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  ICommonsList<IStammtyp> stamm();
+  ICommonsList<ITreeSize> stamm();
 
   /**
    * Vitalität
@@ -287,7 +287,7 @@ public interface IBiotopbaum
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getAnwaerter();
+  IEnabledDescription getAnwaerter();
 
   /**
    * bestehende Markierung
@@ -304,5 +304,5 @@ public interface IBiotopbaum
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getMarkBesch();
+  IEnabledDescription getMarkBesch();
 }
