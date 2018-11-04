@@ -141,7 +141,7 @@ public interface IBiotopbaum
    * @return
    *     The requested value.
    */
-  boolean isUebrSun();
+  boolean isUeberSun();
 
   /**
    * eingebettet in homogenene oder heterogene Umgebung
@@ -161,7 +161,7 @@ public interface IBiotopbaum
   String getBeschreibung();
 
   /**
-   * Baumart Abkürzung einer Baumart laut Aufnahmeblatt
+   * Baumart laut Aufnahmeblatt
    * 
    * @return
    *     The requested value. May not be <code>null</code>.

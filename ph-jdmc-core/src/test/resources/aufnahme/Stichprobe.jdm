@@ -2,8 +2,8 @@
   "StichNr": ["int", "Schlüsselfeld"],
   "StichNrzR": ["Reservat", "Zugehörig zu Reservat"],  
   "pics": ["UserDataObject+", "Fotos"],
-  "date": "LocalDate",
-  "groesse": ["short", "Größe in m² bei Abweichung von Radius"],
+  "date": [ "LocalDate" ],
+  "size": ["int", "Größe in m² bei Abweichung von Radius"],
   "exposition": ["EExposition", "Exposition" ],
   /* keine, Angabe von Neigungen, Freitext */
   "Hanglage": ["String?", "Angabe von Neigungen"],
@@ -20,15 +20,12 @@
   "BKL9": ["double", "Bestandesklasse 9, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
   "Nutzung": ["String", "Beschreibung Nutzungsspuren"],
   "Beschreibung": ["String", "allgemeine Beschreibung"],
-  "BB_Stichpr": ["Biotopbaum*", "Biotopbäume innerhalb Stichprobenpunkt"],
+  "trees": ["Biotopbaum*", "Biotopbäume innerhalb Stichprobenpunkt"],
+  /* Unterschied Beschreibung */
   "Stich_Besch": ["String", "Beschreibung"],
-  "gleich": ["boolean", "gleichaltrig oder ungleichaltrig"], 
-  "einschicht": ["boolean", "einschichtig oder mehrschichtig"]
+  "sameAge": ["boolean", "gleichaltrig oder ungleichaltrig"], 
+  "oneLevel": ["boolean", "einschichtig oder mehrschichtig"],
+  "Tot_steh" : [ "StichprobeDeadwood*", "Stehendes Totholz (Vollaufnahme) ab >= 5cm BHD" ],
+  "Tot_lieg_1" : [ "StichprobeDeadwood*", "Liegendes Totholz (Line-intersect, Transekt 1) ab Mindestdurchmesser >= 10 cm" ],
+  "Tot_lieg_2" : [ "StichprobeDeadwood*", "Liegendes Totholz (Line-intersect, Transekt 1) ab Mindestdurchmesser >= 10 cm" ],
 }
-
-/*
-Tot_steh      checkbox (Zersetzungsgrade plus BA plus Angabe von L und BHD; automatische Berechnung der Menge
-Tot_lieg_1    Angabe je Transekt  checkbox (Zersetzungsgrade plus BA plus Angabe von L und BHD; automatische Berechnung der Mengen
-Tot_lieg_2    Angabe je Transekt  
-Totmenge  Zahl  automatische Berechnung der Totholzmenge aus den obigen 3 
-*/

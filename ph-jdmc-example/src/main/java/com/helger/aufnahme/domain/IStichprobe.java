@@ -64,7 +64,7 @@ public interface IStichprobe
    * @return
    *     The requested value.
    */
-  short getGroesse();
+  int getSize();
 
   /**
    * Exposition
@@ -203,7 +203,7 @@ public interface IStichprobe
    */
   @Nonnull
   @ReturnsMutableObject
-  ICommonsList<IBiotopbaum> bBStichpr();
+  ICommonsList<IBiotopbaum> trees();
 
   /**
    * Beschreibung
@@ -220,7 +220,7 @@ public interface IStichprobe
    * @return
    *     The requested value.
    */
-  boolean isGleich();
+  boolean isSameAge();
 
   /**
    * einschichtig oder mehrschichtig
@@ -228,5 +228,35 @@ public interface IStichprobe
    * @return
    *     The requested value.
    */
-  boolean isEinschicht();
+  boolean isOneLevel();
+
+  /**
+   * Stehendes Totholz (Vollaufnahme) ab >= 5cm BHD
+   * 
+   * @return
+   *     The requested value. May not be <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableObject
+  ICommonsList<IStichprobeDeadwood> totSteh();
+
+  /**
+   * Liegendes Totholz (Line-intersect, Transekt 1) ab Mindestdurchmesser >= 10 cm
+   * 
+   * @return
+   *     The requested value. May not be <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableObject
+  ICommonsList<IStichprobeDeadwood> totLieg1();
+
+  /**
+   * Liegendes Totholz (Line-intersect, Transekt 1) ab Mindestdurchmesser >= 10 cm
+   * 
+   * @return
+   *     The requested value. May not be <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableObject
+  ICommonsList<IStichprobeDeadwood> totLieg2();
 }

@@ -82,7 +82,7 @@ public interface IHabitatbaumgruppe
    * @return
    *     The requested value.
    */
-  boolean isLicht();
+  boolean isLight();
 
   /**
    * geschlossene Kronendach
@@ -90,7 +90,7 @@ public interface IHabitatbaumgruppe
    * @return
    *     The requested value.
    */
-  boolean isClosed();
+  boolean isClosedCrown();
 
   /**
    * explitzit keine Besonnung

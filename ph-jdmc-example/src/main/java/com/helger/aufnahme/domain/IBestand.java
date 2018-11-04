@@ -78,7 +78,7 @@ public interface IBestand
    * @return
    *     The requested value.
    */
-  short getAreaSize();
+  int getAreaSize();
 
   /**
    * Bestand-Beschreibung
@@ -146,7 +146,7 @@ public interface IBestand
    * @return
    *     The requested value.
    */
-  boolean isLicht();
+  boolean isLightWoods();
 
   /**
    * Unterwuchs
