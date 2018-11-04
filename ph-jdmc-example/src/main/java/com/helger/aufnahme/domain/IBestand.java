@@ -30,7 +30,7 @@ public interface IBestand
   int getBNr();
 
   /**
-   * Foto-Nr in BNr integriert zB B1_1;B1_2
+   * Foto-Nr
    * 
    * @return
    *     The requested value. May neither be <code>null</code> nor empty.
@@ -41,13 +41,13 @@ public interface IBestand
   ICommonsList<UserDataObject> pics();
 
   /**
-   * Get the value of Datum.
+   * Get the value of date.
    * 
    * @return
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  LocalDate getDatum();
+  LocalDate getDate();
 
   /**
    * GPS-Punkte oder Verweis auf Polygon
@@ -68,7 +68,7 @@ public interface IBestand
    * @return
    *     The requested value.
    */
-  short getGroesse();
+  short getSize();
 
   /**
    * Bestand-Beschreibung
@@ -80,45 +80,29 @@ public interface IBestand
   String getBeschreib();
 
   /**
-   * gleichaltrig
+   * gleichaltrig oder ungleichaltrig
    * 
    * @return
    *     The requested value.
    */
-  boolean isGleich();
+  boolean isSameAge();
 
   /**
-   * ungleichaltrig
+   * einschichtig oder mehrschichtig
    * 
    * @return
    *     The requested value.
    */
-  boolean isUngleich();
+  boolean isOneLevel();
 
   /**
-   * einschichtig
-   * 
-   * @return
-   *     The requested value.
-   */
-  boolean isEinschicht();
-
-  /**
-   * mehrschichtig
-   * 
-   * @return
-   *     The requested value.
-   */
-  boolean isMehrschicht();
-
-  /**
-   * irgendwas zwischen 1 und 9
+   * Bestandesklasse
    * 
    * @return
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EStockType getBestandesklasse();
+  EStockType getStockType();
 
   /**
    * Beschreibung Nutzungsspuren
@@ -127,7 +111,7 @@ public interface IBestand
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getNutzung();
+  String getUsageDescription();
 
   /**
    * Waldgesellschaft oder Waldgruppe
@@ -155,7 +139,7 @@ public interface IBestand
   boolean isLicht();
 
   /**
-   * Get the value of Unterwuchs.
+   * Unterwuchs
    * 
    * @return
    *     The requested value.

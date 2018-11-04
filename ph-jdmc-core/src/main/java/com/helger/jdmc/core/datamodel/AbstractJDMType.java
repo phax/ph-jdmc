@@ -74,4 +74,14 @@ public abstract class AbstractJDMType
   {
     return getFQCN (m_sPackageName, m_sClassName);
   }
+
+  public final boolean isClass ()
+  {
+    return this instanceof JDMClass;
+  }
+
+  public final boolean isEnum ()
+  {
+    return this instanceof JDMEnum;
+  }
 }
