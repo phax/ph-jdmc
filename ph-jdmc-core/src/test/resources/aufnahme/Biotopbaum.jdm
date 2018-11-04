@@ -21,13 +21,14 @@
   "Beschreibung": ["String", "Bemerkungen/ (ausführliche) Beschreibung"],
   "treeKind": ["ETreeKind", "Baumart Abkürzung einer Baumart laut Aufnahmeblatt" ],
   "caves": ["CaveType*", "Höhlentyp und Anzahl mit Klasseneinteilung (Checkbox, mehrere möglich; dann noch Klassenangaben; C22-35 im Aufnahmemanual)"],
-  "trunk": [ "TreeSize+", "Daten zum Stamm/zu den Stämmen" ],
+  "trunk": [ "TrunkSize+", "Daten zum Stamm/zu den Stämmen" ],
   "vitality": ["EVitality", "Vitalität" ],
   "specialStructure": ["ESpecialStructure*", "Baum-Sonderstrukturen (Mehrfachnennung möglich)" ],
   "otherSpecial": ["String?", "Sonstige Sonderstrukturen inkl. Beschreibung"],
-  "Anwaerter": ["EnabledDescription", "Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe)"],
+  "aspirant": ["boolean", "Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe)"],
+  "aspirantDesc": ["String?", "Beschreibung Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe)"],
   "marked": ["boolean", "bestehende Markierung"],
-  "markDescription": ["EnabledDescription", "Beschreibung bestehende Markierung"],
-  "Totkat" : [ "BiotopbaumDeadwood*", "Totholzkategorien (bei toten Bäumen)" ],
-  "Totzers" : [ "BiotopbaumDecompositionDegree*", "Totholzmengen aufgeteilt in die 5 Totholzklassen" ]
+  "markedDesc": ["String?", "Beschreibung bestehende Markierung"],
+  "deadwoodCats" : [ "BiotopbaumDeadwood*", "Totholzkategorien (bei toten Bäumen)" ],
+  "deadwoodDoD" : [ "BiotopbaumDecompositionDegree*", "Totholzmengen aufgeteilt in die Zersetzungsklassen" ]
 }

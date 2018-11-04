@@ -5,13 +5,13 @@ import javax.annotation.Nonnull;
 
 
 /**
- * <p>Interface for class {@link TreeSize}</p>
+ * <p>Interface for class {@link TrunkSize}</p>
  * <p>This class was initially automatically created</p>
  * 
  * 
  * @author JDMProcessor
  */
-public interface ITreeSize
+public interface ITrunkSize
   extends Serializable
 {
 

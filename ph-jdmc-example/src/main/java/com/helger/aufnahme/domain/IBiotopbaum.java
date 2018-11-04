@@ -188,7 +188,7 @@ public interface IBiotopbaum
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  ICommonsList<ITreeSize> trunk();
+  ICommonsList<ITrunkSize> trunk();
 
   /**
    * Vitalität
@@ -226,10 +226,22 @@ public interface IBiotopbaum
    * Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe)
    * 
    * @return
-   *     The requested value. May not be <code>null</code>.
+   *     The requested value.
    */
-  @Nonnull
-  IEnabledDescription getAnwaerter();
+  boolean isAspirant();
+
+  /**
+   * Beschreibung Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe)
+   * 
+   * @return
+   *     The requested value. May be <code>null</code>.
+   */
+  @Nullable
+  String getAspirantDesc();
+
+  default boolean hasAspirantDesc() {
+    return (getAspirantDesc()!= null);
+  }
 
   /**
    * bestehende Markierung
@@ -243,10 +255,14 @@ public interface IBiotopbaum
    * Beschreibung bestehende Markierung
    * 
    * @return
-   *     The requested value. May not be <code>null</code>.
+   *     The requested value. May be <code>null</code>.
    */
-  @Nonnull
-  IEnabledDescription getMarkDescription();
+  @Nullable
+  String getMarkedDesc();
+
+  default boolean hasMarkedDesc() {
+    return (getMarkedDesc()!= null);
+  }
 
   /**
    * Totholzkategorien (bei toten Bäumen)
@@ -256,15 +272,15 @@ public interface IBiotopbaum
    */
   @Nonnull
   @ReturnsMutableObject
-  ICommonsList<IBiotopbaumDeadwood> totkat();
+  ICommonsList<IBiotopbaumDeadwood> deadwoodCats();
 
   /**
-   * Totholzmengen aufgeteilt in die 5 Totholzklassen
+   * Totholzmengen aufgeteilt in die Zersetzungsklassen
    * 
    * @return
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
   @ReturnsMutableObject
-  ICommonsList<IBiotopbaumDecompositionDegree> totzers();
+  ICommonsList<IBiotopbaumDecompositionDegree> deadwoodDoD();
 }
