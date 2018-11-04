@@ -1,0 +1,46 @@
+{
+  "_1": [
+    "1",
+    "abstehende Rinde /  Rindentasche"
+  ],
+  "_2": [
+    "2",
+    "Faul- Spalthöhle < 5 cm (nicht tierischer Ursprung)"
+  ],
+  "_3": [
+    "3",
+    "Faul- Spalthöhle ≥ 5 cm (nicht tierischer Ursprung)"
+  ],
+  "_4": [
+    "4",
+    "Faulhöhle- Spalthöhle  > 10 cm (nicht tierischer Ursprung)"
+  ],
+  "_5": [
+    "5",
+    "Hohler Stamm"
+  ],
+  "_6": [
+    "6",
+    "Stammfußhöhle"
+  ],
+  "_7": [
+    "7",
+    "begonnene Höhlen (Initialen)"
+  ],
+  "_8": [
+    "8",
+    "eindeutige Spechthöhle < 5 cm"
+  ],
+  "_9": [
+    "9",
+    "eindeutige Spechthöhle ≥ 5 cm"
+  ],
+  "_10": [
+    "10",
+    "Großhöhle > 10 cm "
+  ],
+  "OTHER": [
+    "other",
+    "Sonstige"
+  ]
+}

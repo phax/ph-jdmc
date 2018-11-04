@@ -1,0 +1,94 @@
+{
+  "Bergahorn": [
+    "Bergahorn",
+    "Bergahorn"
+  ],
+  "Birke": [
+    "Birke",
+    "Birke"
+  ],
+  "Buche": [
+    "Buche",
+    "Buche"
+  ],
+  "Douglasie": [
+    "Douglasie",
+    "Douglasie"
+  ],
+  "Eberesche": [
+    "Eberesche",
+    "Eberesche"
+  ],
+  "EdelKastanie": [
+    "EdelKastanie",
+    "Edel-Kastanie"
+  ],
+  "Eiche": [
+    "Eiche",
+    "Eiche"
+  ],
+  "Fichte": [
+    "Fichte",
+    "Fichte"
+  ],
+  "Hainbuche": [
+    "Hainbuche",
+    "Hainbuche"
+  ],
+  "Kiefer": [
+    "Kiefer",
+    "Kiefer"
+  ],
+  "Kirsche": [
+    "Kirsche",
+    "Kirsche"
+  ],
+  "Linde": [
+    "Linde",
+    "Linde"
+  ],
+  "Laerche": [
+    "Laerche",
+    "Lärche"
+  ],
+  "Pappel": [
+    "Pappel",
+    "Pappel"
+  ],
+  "Robinie": [
+    "Robinie",
+    "Robinie"
+  ],
+  "RotEiche": [
+    "Rot-Eiche",
+    "Rot-Eiche"
+  ],
+  "Rosskastanie": [
+    "RossKastanie",
+    "RoßKastanie"
+  ],
+  "Salweide": [
+    "Salweide",
+    "Salweide"
+  ],
+  "Silberweide": [
+    "Silberweide",
+    "Silberweide"
+  ],
+  "Spitzahorn": [
+    "Spitzahorn",
+    "Spitzahorn"
+  ],
+  "StielEiche": [
+    "StielEiche",
+    "Stiel-Eiche"
+  ],
+  "TraubenEiche": [
+    "TraubenEiche",
+    "Trauben-Eiche"
+  ],
+  "OTHER": [
+    "other",
+    "sonstiges"
+  ]
+}

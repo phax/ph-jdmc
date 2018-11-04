@@ -1,0 +1,10 @@
+{
+  "BHD": [
+    "short",
+    "Brusthöhendurchmesser; Mittendurchmesser in cm"
+  ],
+  "Hoehe": [
+    "EHeight",
+    "Baumhöhe/Stammlänge"
+  ]
+}
