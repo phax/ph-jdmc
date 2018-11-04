@@ -41,9 +41,13 @@ public final class JDMProcessorTest
     final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.domain");
 
     JDMEnum aEnum;
+    aEnum = p.readEnumDef (new File (aSrcDir, "EBiotopbaumType.json"));
+    assertNotNull (aEnum);
     aEnum = p.readEnumDef (new File (aSrcDir, "EExposition.json"));
     assertNotNull (aEnum);
     aEnum = p.readEnumDef (new File (aSrcDir, "EHeight.json"));
+    assertNotNull (aEnum);
+    aEnum = p.readEnumDef (new File (aSrcDir, "ESpecialStructure.json"));
     assertNotNull (aEnum);
     aEnum = p.readEnumDef (new File (aSrcDir, "EVitality.json"));
     assertNotNull (aEnum);

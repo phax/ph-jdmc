@@ -217,7 +217,7 @@ public interface IBiotopbaum
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  ICommonsList<String> typ1();
+  ICommonsList<EBiotopbaumType> typ1();
 
   /**
    * Höhlentyp und Anzahl mit Klasseneinteilung (Checkbox, mehrere möglich; dann noch Klassenangaben; C22-35 im Aufnahmemanual)
@@ -261,7 +261,7 @@ public interface IBiotopbaum
    */
   @Nullable
   @ReturnsMutableObject
-  ICommonsList<String> sonderstrukturen();
+  ICommonsList<ESpecialStructure> sonderstrukturen();
 
   default boolean hasSonderstrukturen() {
     return (sonderstrukturen()!= null);

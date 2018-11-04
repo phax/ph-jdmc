@@ -1,0 +1,7 @@
+{
+  "TOTHOLZ" :    [ "dead", "Totholz (eindeutig)" ], 
+  "SPECIAL":     [ "special", "Sonderstrukturen" ], 
+  "TREE":        [ "tree", "mächtiger Baum  / Uraltbaum (BHD)" ], 
+  "ALTERNATIVE": [ "alt", "Anwärter/Alternative für Netzwerk" ], 
+  "OTHER":       [ "other", "sonstiger Biotopbaum" ] 
+}
