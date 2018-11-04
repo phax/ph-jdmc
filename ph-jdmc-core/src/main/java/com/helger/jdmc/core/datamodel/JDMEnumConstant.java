@@ -19,11 +19,13 @@ package com.helger.jdmc.core.datamodel;
 import java.io.Serializable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.hashcode.HashCodeGenerator;
+import com.helger.commons.string.StringHelper;
 
 /**
  * Single enum constant.
@@ -33,15 +35,30 @@ import com.helger.commons.hashcode.HashCodeGenerator;
 @NotThreadSafe
 public class JDMEnumConstant implements Serializable
 {
+  private final String m_sName;
   private final String m_sID;
   private final String m_sDisplayName;
+  private final String m_sComment;
 
-  public JDMEnumConstant (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName)
+  public JDMEnumConstant (@Nonnull @Nonempty final String sName,
+                          @Nonnull @Nonempty final String sID,
+                          @Nonnull @Nonempty final String sDisplayName,
+                          @Nullable final String sComment)
   {
+    ValueEnforcer.notEmpty (sName, "Name");
     ValueEnforcer.notEmpty (sID, "ID");
     ValueEnforcer.notEmpty (sDisplayName, "DisplayName");
+    m_sName = sName;
     m_sID = sID;
     m_sDisplayName = sDisplayName;
+    m_sComment = sComment;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getName ()
+  {
+    return m_sName;
   }
 
   @Nonnull
@@ -58,6 +75,17 @@ public class JDMEnumConstant implements Serializable
     return m_sDisplayName;
   }
 
+  @Nullable
+  public String getComment ()
+  {
+    return m_sComment;
+  }
+
+  public boolean hasComment ()
+  {
+    return StringHelper.hasText (m_sComment);
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -66,12 +94,12 @@ public class JDMEnumConstant implements Serializable
     if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final JDMEnumConstant rhs = (JDMEnumConstant) o;
-    return m_sID.equals (rhs.m_sID);
+    return m_sName.equals (rhs.m_sName);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sID).getHashCode ();
+    return new HashCodeGenerator (this).append (m_sName).getHashCode ();
   }
 }

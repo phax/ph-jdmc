@@ -33,7 +33,7 @@ import com.helger.photon.core.userdata.UserDataObject;
 
 /**
  * List of {@link JDMType}.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -94,7 +94,7 @@ public class JDMTypes
   }
 
   @Nonnull
-  public JDMType registerType (@Nonnull final JDMClass aClass)
+  public JDMType registerType (@Nonnull final AbstractJDMType aClass)
   {
     final JDMType aType = JDMType.createClassType (aClass.getPackageName (), aClass.getClassName ());
     _register (aType);

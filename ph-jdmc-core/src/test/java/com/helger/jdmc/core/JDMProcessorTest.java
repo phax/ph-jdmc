@@ -24,6 +24,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.helger.jdmc.core.datamodel.JDMClass;
+import com.helger.jdmc.core.datamodel.JDMEnum;
 
 /**
  * Test class for class {@link JDMProcessor}.
@@ -38,6 +39,11 @@ public final class JDMProcessorTest
     final File aSrcDir = new File ("src/test/resources/jdm");
 
     final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.domain");
+
+    JDMEnum aEnum;
+    aEnum = p.readEnumDef (new File (aSrcDir, "EHoehe.json"));
+    assertNotNull (aEnum);
+
     JDMClass aClass;
     aClass = p.readClassDef (new File (aSrcDir, "Bestand.json"));
     assertNotNull (aClass);
@@ -53,8 +59,6 @@ public final class JDMProcessorTest
     assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "Stichprobe.json"));
     assertNotNull (aClass);
-
-    p.extractCommonEnums ();
 
     p.createCode (new File ("../ph-jdmc-example/src/main/java"));
   }

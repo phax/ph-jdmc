@@ -35,9 +35,12 @@ import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.id.IHasID;
 import com.helger.commons.io.file.FilenameHelper;
 import com.helger.commons.io.resource.FileSystemResource;
+import com.helger.commons.lang.EnumHelper;
 import com.helger.commons.lang.GenericReflection;
+import com.helger.commons.name.IHasDisplayName;
 import com.helger.commons.regex.RegExHelper;
 import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.AbstractJType;
@@ -46,9 +49,11 @@ import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JCommentPart;
 import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.JEnumConstant;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
+import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 import com.helger.jdmc.core.datamodel.AbstractJDMType;
@@ -58,6 +63,7 @@ import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMConstraint;
 import com.helger.jdmc.core.datamodel.JDMContext;
+import com.helger.jdmc.core.datamodel.JDMEnum;
 import com.helger.jdmc.core.datamodel.JDMEnumConstant;
 import com.helger.jdmc.core.datamodel.JDMField;
 import com.helger.jdmc.core.datamodel.JDMType;
@@ -83,10 +89,8 @@ public class JDMProcessor
   }
 
   @Nullable
-  public JDMClass readClassDef (@Nonnull final File aSrcFile)
+  private IJsonObject _parseJson (@Nonnull final File aSrcFile)
   {
-    ValueEnforcer.notNull (aSrcFile, "SrcFile");
-
     LOGGER.info ("Parsing JSON '" + aSrcFile.getAbsolutePath () + "'");
 
     final CollectingJsonParserHandler aHandler = new CollectingJsonParserHandler ();
@@ -106,10 +110,22 @@ public class JDMProcessor
       return null;
     }
 
+    return aJson.getAsObject ();
+  }
+
+  @Nullable
+  public JDMClass readClassDef (@Nonnull final File aSrcFile)
+  {
+    ValueEnforcer.notNull (aSrcFile, "SrcFile");
+
+    final IJsonObject aJsonObj = _parseJson (aSrcFile);
+    if (aJsonObj == null)
+      return null;
+
     final String sLocalClassName = FilenameHelper.getBaseName (aSrcFile);
     final JDMClass ret = new JDMClass (m_sDestinationPackageName, sLocalClassName);
 
-    for (final Map.Entry <String, IJson> aFieldEntry : aJson.getAsObject ())
+    for (final Map.Entry <String, IJson> aFieldEntry : aJsonObj)
     {
       final String sFieldName = aFieldEntry.getKey ();
       final IJson aFieldDef = aFieldEntry.getValue ();
@@ -329,7 +345,8 @@ public class JDMProcessor
                     if (aItem.isValue ())
                     {
                       final String sValue = aItem.getAsValue ().getAsString ();
-                      aValues.add (new JDMEnumConstant (sValue, sValue));
+                      final String sName = RegExHelper.getAsIdentifier (sValue);
+                      aValues.add (new JDMEnumConstant (sName, sValue, sValue, null));
                     }
                     else
                       if (aItem.isArray ())
@@ -357,7 +374,8 @@ public class JDMProcessor
                                           "' that may not contain empty arrays");
                             return null;
                           }
-                        aValues.add (new JDMEnumConstant (sID, sDisplayName));
+                        final String sName = RegExHelper.getAsIdentifier (sID);
+                        aValues.add (new JDMEnumConstant (sName, sID, sDisplayName, null));
                       }
                       else
                       {
@@ -410,9 +428,108 @@ public class JDMProcessor
     return ret;
   }
 
-  public void extractCommonEnums ()
+  @Nullable
+  public JDMEnum readEnumDef (@Nonnull final File aSrcFile)
   {
-    // TODO
+    ValueEnforcer.notNull (aSrcFile, "SrcFile");
+
+    final IJsonObject aJsonObj = _parseJson (aSrcFile);
+    if (aJsonObj == null)
+      return null;
+
+    final String sLocalClassName = FilenameHelper.getBaseName (aSrcFile);
+    final JDMEnum ret = new JDMEnum (m_sDestinationPackageName, sLocalClassName);
+
+    for (final Map.Entry <String, IJson> aFieldEntry : aJsonObj)
+    {
+      final String sEnumConstantName = aFieldEntry.getKey ();
+      final IJson aEnumConstantDef = aFieldEntry.getValue ();
+
+      if (StringHelper.hasNoText (sEnumConstantName))
+      {
+        LOGGER.error ("The enum constant name may not be empty");
+        return null;
+      }
+      if (!RegExHelper.getAsIdentifier (sEnumConstantName).equals (sEnumConstantName))
+      {
+        LOGGER.error ("The enum constant name '" + sEnumConstantName + "' is not a valid identifier");
+        return null;
+      }
+      if (ret.enumConstants ().containsAny (x -> x.getName ().equals (sEnumConstantName)))
+      {
+        LOGGER.error ("Another enum constant with name '" + sEnumConstantName + "' is already present");
+        return null;
+      }
+
+      String sID;
+      String sDisplayName;
+      final String sComment;
+      if (aEnumConstantDef.isValue ())
+      {
+        // ID
+        final IJsonValue aValue = aEnumConstantDef.getAsValue ();
+        sID = aValue.getAsString ();
+        sDisplayName = null;
+        sComment = null;
+      }
+      else
+        if (aEnumConstantDef.isArray ())
+        {
+          // [ID] or
+          // [ID, DisplayName] or
+          // [ID, DisplayName, Comment]
+          final IJsonArray aArray = aEnumConstantDef.getAsArray ();
+          sID = aArray.getAsString (0);
+          final IJson aSecond = aArray.get (1);
+          final IJson aThird = aArray.get (2);
+          if (aSecond == null)
+            sDisplayName = null;
+          else
+            if (aSecond.isValue ())
+              sDisplayName = aSecond.getAsValue ().getAsString ();
+            else
+            {
+              LOGGER.error ("The enum constant definition of '" +
+                            sEnumConstantName +
+                            "' is inconsistent (display name)");
+              return null;
+            }
+          if (aThird == null)
+            sComment = null;
+          else
+            if (aThird.isValue ())
+              sComment = aThird.getAsValue ().getAsString ();
+            else
+            {
+              LOGGER.error ("The enum constant definition of '" + sEnumConstantName + "' is inconsistent (comment)");
+              return null;
+            }
+        }
+        else
+        {
+          LOGGER.error ("The enum constant definition of '" + sEnumConstantName + "' is neither a value nor an array");
+          return null;
+        }
+
+      if (sID == null)
+        sID = sEnumConstantName;
+      if (sDisplayName == null)
+        sDisplayName = sID;
+
+      // Add the field with all constraints
+      ret.enumConstants ().add (new JDMEnumConstant (sEnumConstantName, sID, sDisplayName, sComment));
+    }
+    if (ret.enumConstants ().isEmpty ())
+    {
+      LOGGER.error ("No enum constant found");
+      return null;
+    }
+
+    // Upon success, register this type
+    m_aContext.types ().registerType (ret);
+    m_aTypes.add (ret);
+
+    return ret;
   }
 
   public void createJavaClasses (@Nonnull final JCodeModel cm, @Nonnull final ICommonsList <JDMClass> aClasses)
@@ -512,6 +629,103 @@ public class JDMProcessor
     }
   }
 
+  public void createJavaEnums (@Nonnull final JCodeModel cm, @Nonnull final ICommonsList <JDMEnum> aEnums)
+  {
+    final AbstractJType jString = cm.ref (String.class);
+    for (final JDMEnum aEnum : aEnums)
+    {
+      try
+      {
+        final JDefinedClass jEnum = cm._class (JMod.PUBLIC, aEnum.getFQClassName (), EClassType.ENUM);
+        jEnum._implements (cm.ref (IHasID.class).narrow (jString));
+        jEnum._implements (cm.ref (IHasDisplayName.class));
+        jEnum.javadoc ().add ("This class was initially automatically created\n");
+        jEnum.javadoc ().addAuthor ().add ("JDMProcessor");
+
+        for (final JDMEnumConstant aEnumConstant : aEnum.enumConstants ())
+        {
+          final JEnumConstant jEnumConstant = jEnum.enumConstant (aEnumConstant.getName ())
+                                                   .arg (JExpr.lit (aEnumConstant.getID ()))
+                                                   .arg (JExpr.lit (aEnumConstant.getDisplayName ()));
+          if (aEnumConstant.hasComment ())
+            jEnumConstant.javadoc ().add (aEnumConstant.getComment ());
+        }
+
+        final JVar jFieldID = jEnum.field (JMod.PRIVATE | JMod.FINAL, jString, "m_sID");
+        final JVar jFieldDisplayName = jEnum.field (JMod.PRIVATE | JMod.FINAL, jString, "m_sDisplayName");
+
+        {
+          final JMethod jMethod = jEnum.constructor (JMod.PRIVATE);
+          final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
+          jID.annotate (Nonnull.class);
+          jID.annotate (Nonempty.class);
+          final JVar jDisplayName = jMethod.param (JMod.FINAL, jString, "sDisplayName");
+          jDisplayName.annotate (Nonnull.class);
+          jDisplayName.annotate (Nonempty.class);
+          jMethod.body ().assign (jFieldID, jID);
+          jMethod.body ().assign (jFieldDisplayName, jDisplayName);
+        }
+
+        {
+          final JMethod jMethod = jEnum.method (JMod.PUBLIC, jString, "getID");
+          jMethod.annotate (Nonnull.class);
+          jMethod.annotate (Nonempty.class);
+          jMethod.body ()._return (jFieldID);
+        }
+
+        {
+          final JMethod jMethod = jEnum.method (JMod.PUBLIC, jString, "getDisplayName");
+          jMethod.annotate (Nonnull.class);
+          jMethod.annotate (Nonempty.class);
+          jMethod.body ()._return (jFieldDisplayName);
+        }
+
+        {
+          final JMethod jMethod = jEnum.method (JMod.PUBLIC | JMod.STATIC, jEnum, "getFromIDOrNull");
+          jMethod.annotate (Nullable.class);
+          final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
+          jID.annotate (Nullable.class);
+          jMethod.body ()
+                 ._return (cm.ref (EnumHelper.class)
+                             .staticInvoke ("getFromIDOrNull")
+                             .arg (jEnum.dotclass ())
+                             .arg (jID));
+        }
+
+        {
+          final JMethod jMethod = jEnum.method (JMod.PUBLIC | JMod.STATIC, jEnum, "getFromIDOrDefault");
+          jMethod.annotate (Nullable.class);
+          final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
+          jID.annotate (Nullable.class);
+          final JVar jDefault = jMethod.param (JMod.FINAL, jEnum, "eDefault");
+          jDefault.annotate (Nullable.class);
+          jMethod.body ()
+                 ._return (cm.ref (EnumHelper.class)
+                             .staticInvoke ("getFromIDOrDefault")
+                             .arg (jEnum.dotclass ())
+                             .arg (jID)
+                             .arg (jDefault));
+        }
+
+        {
+          final JMethod jMethod = jEnum.method (JMod.PUBLIC | JMod.STATIC, jEnum, "getFromIDOrThrow");
+          jMethod.annotate (Nonnull.class);
+          final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
+          jID.annotate (Nullable.class);
+          jMethod.body ()
+                 ._return (cm.ref (EnumHelper.class)
+                             .staticInvoke ("getFromIDOrThrow")
+                             .arg (jEnum.dotclass ())
+                             .arg (jID));
+        }
+      }
+      catch (final JClassAlreadyExistsException ex)
+      {
+        throw new IllegalStateException (ex);
+      }
+    }
+  }
+
   public void createCode (@Nonnull final File aDestDir) throws IOException
   {
     final JCodeModel cm = new JCodeModel ();
@@ -521,6 +735,12 @@ public class JDMProcessor
                                                                               x -> x instanceof JDMClass,
                                                                               (Function <AbstractJDMType, JDMClass>) x -> (JDMClass) x);
     createJavaClasses (cm, aClasses);
+
+    // Create all enums
+    final ICommonsList <JDMEnum> aEnums = CommonsArrayList.createFiltered (m_aTypes,
+                                                                           x -> x instanceof JDMEnum,
+                                                                           (Function <AbstractJDMType, JDMEnum>) x -> (JDMEnum) x);
+    createJavaEnums (cm, aEnums);
 
     new JCMWriter (cm).setCharset (StandardCharsets.UTF_8)
                       .setIndentString ("  ")
