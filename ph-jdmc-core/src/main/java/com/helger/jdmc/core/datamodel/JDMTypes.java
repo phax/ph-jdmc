@@ -16,15 +16,23 @@
  */
 package com.helger.jdmc.core.datamodel;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.Period;
+import java.time.ZonedDateTime;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
+import javax.xml.namespace.QName;
+
+import org.w3c.dom.Element;
 
 import com.helger.commons.collection.impl.CommonsHashMap;
 import com.helger.commons.collection.impl.ICommonsMap;
@@ -41,31 +49,49 @@ public class JDMTypes
 {
   private final ICommonsMap <String, JDMType> m_aTypeHierarchy = new CommonsHashMap <> ();
 
-  private void _register (@Nonnull final JDMType aType)
+  @Nonnull
+  private JDMType _register (@Nonnull final JDMType aType)
   {
     final String sShortName = aType.getShortName ();
     if (m_aTypeHierarchy.containsKey (sShortName))
       throw new IllegalArgumentException ("A type with the name '" + sShortName + "' is already registered");
     m_aTypeHierarchy.put (sShortName, aType);
+    return aType;
   }
 
   private void _registerStandardTypes ()
   {
-    _register (JDMType.createPrimitiveType ("boolean", "Boolean"));
-    _register (JDMType.createPrimitiveType ("byte", "Byte"));
-    _register (JDMType.createPrimitiveType ("char", "Character"));
-    _register (JDMType.createPrimitiveType ("double", "Double"));
-    _register (JDMType.createPrimitiveType ("float", "Float"));
-    _register (JDMType.createPrimitiveType ("int", "Integer"));
-    _register (JDMType.createPrimitiveType ("long", "Long"));
-    _register (JDMType.createPrimitiveType ("short", "Short"));
-    _register (JDMType.createClassType (String.class));
-    _register (JDMType.createClassType (LocalDate.class));
-    _register (JDMType.createClassType (LocalTime.class));
-    _register (JDMType.createClassType (LocalDateTime.class));
-    _register (JDMType.createClassType (BigDecimal.class));
-    _register (JDMType.createClassType (BigInteger.class));
-    _register (JDMType.createClassType (UserDataObject.class));
+    _register (JDMType.createClassTypeImmutable (BigDecimal.class));
+    _register (JDMType.createClassTypeImmutable (BigInteger.class));
+    final JDMType aBoolean = _register (JDMType.createClassTypeImmutable (Boolean.class));
+    _register (JDMType.createPrimitiveType ("boolean", aBoolean));
+    final JDMType aByte = _register (JDMType.createClassTypeImmutable (Byte.class));
+    _register (JDMType.createPrimitiveType ("byte", aByte));
+    final JDMType aCharacter = _register (JDMType.createClassTypeImmutable (Character.class));
+    _register (JDMType.createPrimitiveType ("char", aCharacter));
+    final JDMType aDouble = _register (JDMType.createClassTypeImmutable (Double.class));
+    _register (JDMType.createPrimitiveType ("double", aDouble));
+    _register (JDMType.createClassTypeImmutable (Duration.class));
+    _register (JDMType.createClassTypeImmutable (Element.class));
+    final JDMType aFloat = _register (JDMType.createClassTypeImmutable (Float.class));
+    _register (JDMType.createPrimitiveType ("float", aFloat));
+    final JDMType aInteger = _register (JDMType.createClassTypeImmutable (Integer.class));
+    _register (JDMType.createPrimitiveType ("int", aInteger));
+    _register (JDMType.createClassTypeImmutable (LocalDate.class));
+    _register (JDMType.createClassTypeImmutable (LocalDateTime.class));
+    _register (JDMType.createClassTypeImmutable (LocalTime.class));
+    final JDMType aLong = _register (JDMType.createClassTypeImmutable (Long.class));
+    _register (JDMType.createPrimitiveType ("long", aLong));
+    _register (JDMType.createClassTypeImmutable (Object.class));
+    _register (JDMType.createClassTypeImmutable (OffsetDateTime.class));
+    _register (JDMType.createClassTypeImmutable (Period.class));
+    _register (JDMType.createClassTypeImmutable (QName.class));
+    _register (JDMType.createClassTypeImmutable (Serializable.class));
+    final JDMType aShort = _register (JDMType.createClassTypeImmutable (Short.class));
+    _register (JDMType.createPrimitiveType ("short", aShort));
+    _register (JDMType.createClassTypeImmutable (String.class));
+    _register (JDMType.createClassTypeImmutable (UserDataObject.class));
+    _register (JDMType.createClassTypeImmutable (ZonedDateTime.class));
   }
 
   public JDMTypes ()
@@ -82,22 +108,14 @@ public class JDMTypes
   }
 
   @Nonnull
-  public JDMType ensureTypeIsPresent (@Nonnull final String sPackageName, @Nonnull final String sLocalClassName)
-  {
-    JDMType aType = findType (sLocalClassName);
-    if (aType == null)
-    {
-      aType = JDMType.createClassType (sPackageName, sLocalClassName);
-      _register (aType);
-    }
-    return aType;
-  }
-
-  @Nonnull
   public JDMType registerType (@Nonnull final AbstractJDMType aClass)
   {
-    final JDMType aType = JDMType.createClassType (aClass.getPackageName (), aClass.getClassName ());
-    _register (aType);
-    return aType;
+    final boolean bIsImmutable = aClass.isEnum ();
+    final boolean bIsSerializable = true;
+    final JDMType aType = JDMType.createClassType (aClass.getPackageName (),
+                                                   aClass.getClassName (),
+                                                   bIsImmutable,
+                                                   bIsSerializable);
+    return _register (aType);
   }
 }

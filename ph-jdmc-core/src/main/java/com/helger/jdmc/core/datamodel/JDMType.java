@@ -27,7 +27,7 @@ import com.helger.commons.lang.ClassHelper;
 
 /**
  * Single type.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -37,44 +37,64 @@ public class JDMType
   private final String m_sPackageName;
   private final String m_sClassName;
   private final boolean m_bIsPrimitive;
+  private final boolean m_bImmutable;
+  private final boolean m_bSerializable;
   private EJDMBaseType m_eBaseType;
 
   private JDMType (@Nonnull @Nonempty final String sShortName,
-                   @Nonnull @Nonempty final String sPackageName,
+                   @Nonnull final String sPackageName,
                    @Nonnull @Nonempty final String sClassName,
-                   final boolean bIsPrimitive)
+                   final boolean bIsPrimitive,
+                   final boolean bImmutable,
+                   final boolean bSerializable)
   {
     ValueEnforcer.notEmpty (sShortName, "ShortName");
-    ValueEnforcer.notEmpty (sPackageName, "PackageName");
+    ValueEnforcer.notNull (sPackageName, "PackageName");
     ValueEnforcer.notEmpty (sClassName, "ClassName");
     m_sShortName = sShortName;
     m_sPackageName = sPackageName;
     m_sClassName = sClassName;
     m_bIsPrimitive = bIsPrimitive;
-    if ("boolean".equals (sShortName))
+    m_bImmutable = bImmutable;
+    m_bSerializable = bSerializable;
+    if ("boolean".equals (sShortName) || "Boolean".equals (sShortName))
       m_eBaseType = EJDMBaseType.BOOLEAN;
     else
       if ("String".equals (sShortName))
         m_eBaseType = EJDMBaseType.STRING;
       else
         if ("byte".equals (sShortName) ||
+            "Byte".equals (sShortName) ||
             "int".equals (sShortName) ||
+            "Integer".equals (sShortName) ||
             "long".equals (sShortName) ||
+            "Long".equals (sShortName) ||
             "short".equals (sShortName) ||
+            "Short".equals (sShortName) ||
             "BigInteger".equals (sShortName))
           m_eBaseType = EJDMBaseType.INTEGER;
         else
-          if ("double".equals (sShortName) || "float".equals (sShortName) || "BigDecimal".equals (sShortName))
+          if ("double".equals (sShortName) ||
+              "Double".equals (sShortName) ||
+              "float".equals (sShortName) ||
+              "Float".equals (sShortName) ||
+              "BigDecimal".equals (sShortName))
             m_eBaseType = EJDMBaseType.DOUBLE;
           else
             if ("LocalDate".equals (sShortName) ||
                 "LocalTime".equals (sShortName) ||
-                "LocalDateTime".equals (sShortName))
+                "LocalDateTime".equals (sShortName) ||
+                "OffsetDateTime".equals (sShortName) ||
+                "ZonedDateTime".equals (sShortName))
               m_eBaseType = EJDMBaseType.DATETIME;
             else
               m_eBaseType = EJDMBaseType.OBJECT;
   }
 
+  /**
+   * @return The class short name without the package. Neither <code>null</code>
+   *         nor empty.
+   */
   @Nonnull
   @Nonempty
   public String getShortName ()
@@ -82,8 +102,10 @@ public class JDMType
     return m_sShortName;
   }
 
+  /**
+   * @return The package name only. Never <code>null</code> but maybe empty.
+   */
   @Nonnull
-  @Nonempty
   public String getPackageName ()
   {
     return m_sPackageName;
@@ -141,29 +163,32 @@ public class JDMType
 
   @Nonnull
   public static JDMType createPrimitiveType (@Nonnull @Nonempty final String sShortName,
-                                             @Nonnull @Nonempty final String sLocalClassName)
+                                             @Nonnull @Nonempty final JDMType aClassType)
   {
     ValueEnforcer.notEmpty (sShortName, "ShortName");
-    ValueEnforcer.notEmpty (sLocalClassName, "LocalClassName");
-    ValueEnforcer.isTrue (sLocalClassName.indexOf ('.') < 0, "LocalClassName may not contain a dot");
-    return new JDMType (sShortName, "java.lang", sLocalClassName, true);
+    ValueEnforcer.notNull (aClassType, "ClassType");
+    return new JDMType (sShortName, aClassType.getPackageName (), aClassType.getClassName (), true, true, true);
   }
 
   @Nonnull
   public static JDMType createClassType (@Nonnull final String sPackageName,
-                                         @Nonnull @Nonempty final String sLocalClassName)
+                                         @Nonnull @Nonempty final String sLocalClassName,
+                                         final boolean bImmutable,
+                                         final boolean bSerializable)
   {
     ValueEnforcer.notNull (sPackageName, "PackageName");
     ValueEnforcer.notEmpty (sLocalClassName, "LocalClassName");
     ValueEnforcer.isTrue (sLocalClassName.indexOf ('.') < 0, "LocalClassName may not contain a dot");
-    return new JDMType (sLocalClassName, sPackageName, sLocalClassName, false);
+    return new JDMType (sLocalClassName, sPackageName, sLocalClassName, false, bImmutable, bSerializable);
   }
 
   @Nonnull
-  public static JDMType createClassType (@Nonnull final Class <?> aClass)
+  public static JDMType createClassTypeImmutable (@Nonnull final Class <?> aClass)
   {
-    ValueEnforcer.isTrue (Serializable.class.isAssignableFrom (aClass),
-                          () -> aClass.getName () + " is not Serilizable");
-    return createClassType (aClass.getPackage ().getName (), ClassHelper.getClassLocalName (aClass));
+    final boolean bSerializable = Serializable.class.isAssignableFrom (aClass);
+    return createClassType (aClass.getPackage ().getName (),
+                            ClassHelper.getClassLocalName (aClass),
+                            true,
+                            bSerializable);
   }
 }
