@@ -23,12 +23,24 @@ package com.helger.jdmc.core.datamodel;
  */
 public enum EJDMBaseType
 {
-  BOOLEAN,
-  STRING,
-  INTEGER,
-  DOUBLE,
-  DATETIME,
-  OBJECT;
+  BOOLEAN ('b'),
+  STRING ('s'),
+  INTEGER ('n'),
+  DOUBLE ('d'),
+  DATETIME ('a'),
+  OBJECT ('a');
+
+  private final char m_cPrefix;
+
+  private EJDMBaseType (final char cPrefix)
+  {
+    m_cPrefix = cPrefix;
+  }
+
+  public char getPrefix ()
+  {
+    return m_cPrefix;
+  }
 
   public boolean isBoolean ()
   {

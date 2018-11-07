@@ -26,5 +26,5 @@
   "oneLevel": ["boolean", "einschichtig oder mehrschichtig"],
   "Tot_steh" : [ "StichprobeDeadwood*", "Stehendes Totholz (Vollaufnahme) ab >= 5cm BHD" ],
   "Tot_lieg_1" : [ "StichprobeDeadwood*", "Liegendes Totholz (Line-intersect, Transekt 1) ab Mindestdurchmesser >= 10 cm" ],
-  "Tot_lieg_2" : [ "StichprobeDeadwood*", "Liegendes Totholz (Line-intersect, Transekt 1) ab Mindestdurchmesser >= 10 cm" ],
+  "Tot_lieg_2" : [ "StichprobeDeadwood*", "Liegendes Totholz (Line-intersect, Transekt 2) ab Mindestdurchmesser >= 10 cm" ]
 }

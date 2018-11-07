@@ -31,7 +31,7 @@ import com.helger.commons.string.StringHelper;
 
 /**
  * Single field.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -146,6 +146,31 @@ public class JDMField
   public String getMethodSetterName ()
   {
     return "set" + _getStartUC (m_sFieldName);
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getJavaVarName (@Nonnull final EJDMMultiplicity eMultiplicity)
+  {
+    final char cPrefix = m_aType.isEnum () ? 'e'
+                                           : m_aType.isJavaPrimitive (eMultiplicity) ||
+                                             m_aType.getBaseType ().isString () ? m_aType.getBaseType ().getPrefix ()
+                                                                                : 'a';
+    return cPrefix + _getStartUC (m_sFieldName);
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getJavaMemberName (@Nonnull final EJDMMultiplicity eMultiplicity)
+  {
+    return "m_" + getJavaVarName (eMultiplicity);
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getJavaStaticName (@Nonnull final EJDMMultiplicity eMultiplicity)
+  {
+    return "s_" + getJavaVarName (eMultiplicity);
   }
 
   @Nonnull

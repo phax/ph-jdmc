@@ -39,6 +39,7 @@ public class JDMType
   private final boolean m_bIsPrimitive;
   private final boolean m_bImmutable;
   private final boolean m_bSerializable;
+  private final boolean m_bIsEnum;
   private EJDMBaseType m_eBaseType;
 
   private JDMType (@Nonnull @Nonempty final String sShortName,
@@ -46,7 +47,8 @@ public class JDMType
                    @Nonnull @Nonempty final String sClassName,
                    final boolean bIsPrimitive,
                    final boolean bImmutable,
-                   final boolean bSerializable)
+                   final boolean bSerializable,
+                   final boolean bIsEnum)
   {
     ValueEnforcer.notEmpty (sShortName, "ShortName");
     ValueEnforcer.notNull (sPackageName, "PackageName");
@@ -57,6 +59,7 @@ public class JDMType
     m_bIsPrimitive = bIsPrimitive;
     m_bImmutable = bImmutable;
     m_bSerializable = bSerializable;
+    m_bIsEnum = bIsEnum;
     if ("boolean".equals (sShortName) || "Boolean".equals (sShortName))
       m_eBaseType = EJDMBaseType.BOOLEAN;
     else
@@ -132,6 +135,12 @@ public class JDMType
     return AbstractJDMType.getFQCN (m_sPackageName, m_sClassName);
   }
 
+  @Nonnull
+  public EJDMBaseType getBaseType ()
+  {
+    return m_eBaseType;
+  }
+
   /**
    * @return <code>true</code> if this is a primitive type, <code>false</code>
    *         if not.
@@ -141,10 +150,19 @@ public class JDMType
     return m_bIsPrimitive;
   }
 
-  @Nonnull
-  public EJDMBaseType getBaseType ()
+  public boolean isImmutable ()
   {
-    return m_eBaseType;
+    return m_bImmutable;
+  }
+
+  public boolean isSerializable ()
+  {
+    return m_bSerializable;
+  }
+
+  public boolean isEnum ()
+  {
+    return m_bIsEnum;
   }
 
   public boolean isJavaPrimitive (@Nonnull final EJDMMultiplicity eMultiplicity)
@@ -167,28 +185,49 @@ public class JDMType
   {
     ValueEnforcer.notEmpty (sShortName, "ShortName");
     ValueEnforcer.notNull (aClassType, "ClassType");
-    return new JDMType (sShortName, aClassType.getPackageName (), aClassType.getClassName (), true, true, true);
+    final boolean bIsPrimitive = true;
+    final boolean bImmutable = true;
+    final boolean bSerializable = true;
+    final boolean bIsEnum = false;
+    return new JDMType (sShortName,
+                        aClassType.getPackageName (),
+                        aClassType.getClassName (),
+                        bIsPrimitive,
+                        bImmutable,
+                        bSerializable,
+                        bIsEnum);
   }
 
   @Nonnull
   public static JDMType createClassType (@Nonnull final String sPackageName,
                                          @Nonnull @Nonempty final String sLocalClassName,
                                          final boolean bImmutable,
-                                         final boolean bSerializable)
+                                         final boolean bSerializable,
+                                         final boolean bIsEnum)
   {
     ValueEnforcer.notNull (sPackageName, "PackageName");
     ValueEnforcer.notEmpty (sLocalClassName, "LocalClassName");
     ValueEnforcer.isTrue (sLocalClassName.indexOf ('.') < 0, "LocalClassName may not contain a dot");
-    return new JDMType (sLocalClassName, sPackageName, sLocalClassName, false, bImmutable, bSerializable);
+    final boolean bIsPrimitive = false;
+    return new JDMType (sLocalClassName,
+                        sPackageName,
+                        sLocalClassName,
+                        bIsPrimitive,
+                        bImmutable,
+                        bSerializable,
+                        bIsEnum);
   }
 
   @Nonnull
   public static JDMType createClassTypeImmutable (@Nonnull final Class <?> aClass)
   {
     final boolean bSerializable = Serializable.class.isAssignableFrom (aClass);
-    return createClassType (aClass.getPackage ().getName (),
+    final boolean bIsEnum = Enum.class.isAssignableFrom (aClass);
+    return createClassType (aClass.getPackage ()
+                                  .getName (),
                             ClassHelper.getClassLocalName (aClass),
                             true,
-                            bSerializable);
+                            bSerializable,
+                            bIsEnum);
   }
 }

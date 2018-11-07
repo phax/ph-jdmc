@@ -464,95 +464,181 @@ public class JDMProcessor
     return ret;
   }
 
+  @Nonnull
+  private JDefinedClass _createJavaInterface (@Nonnull final JCodeModel cm,
+                                              @Nonnull final JDMClass aClass) throws JClassAlreadyExistsException
+  {
+    final JDefinedClass jInterface = cm._class (JMod.PUBLIC, aClass.getFQInterfaceName (), EClassType.INTERFACE);
+    jInterface._implements (Serializable.class);
+    jInterface.javadoc ().add ("<p>Interface for class {@link " + aClass.getClassName () + "}</p>\n");
+    jInterface.javadoc ().add ("<p>This class was initially automatically created</p>\n");
+    jInterface.javadoc ().addAuthor ().add ("JDMProcessor");
+
+    for (final JDMField aField : aClass.fields ())
+    {
+      final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+      final boolean bIsPrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
+      // Create getter
+
+      // Find type name
+      final String sJavaTypeName1 = aField.getType ().getJavaFQCN (eMultiplicity);
+      final String sJavaTypeName2;
+      final AbstractJDMType aExistingClass = m_aTypes.findFirst (x -> x.getFQClassName ().equals (sJavaTypeName1));
+      if (aExistingClass != null && aExistingClass instanceof JDMClass)
+      {
+        // It's one of our created classes - add an "I" prefix
+        sJavaTypeName2 = aExistingClass.getFQInterfaceName ();
+      }
+      else
+        sJavaTypeName2 = sJavaTypeName1;
+      final boolean bIsStringType = "String".equals (sJavaTypeName2);
+
+      // List or field?
+      AbstractJType jReturnType = cm.ref (sJavaTypeName2);
+      if (eMultiplicity.isOpenEnded ())
+        jReturnType = cm.ref (ICommonsList.class).narrow (jReturnType);
+
+      final JMethod aMethodGet = jInterface.method (0,
+                                                    jReturnType,
+                                                    aField.getMethodGetterName (eMultiplicity.isOpenEnded ()));
+
+      // Annotations
+      if (!bIsPrimitive)
+      {
+        if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+          aMethodGet.annotate (Nullable.class);
+        else
+          aMethodGet.annotate (Nonnull.class);
+        if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+          aMethodGet.annotate (Nonempty.class);
+        if (eMultiplicity.isOpenEnded ())
+          aMethodGet.annotate (ReturnsMutableObject.class);
+      }
+
+      // Java docs
+      {
+        if (aField.hasComment ())
+          aMethodGet.javadoc ().add (aField.getComment ());
+        else
+          aMethodGet.javadoc ().add ("Get the value of " + aField.getOriginalFieldName () + ".");
+
+        final JCommentPart aReturn = aMethodGet.javadoc ().addReturn ();
+        aReturn.add ("The requested value.");
+        if (!bIsPrimitive)
+        {
+          if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+            aReturn.add (" May be <code>null</code>.");
+          else
+          {
+            if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+              aReturn.add (" May neither be <code>null</code> nor empty.");
+            else
+              aReturn.add (" May not be <code>null</code>.");
+          }
+        }
+      }
+
+      if (!bIsPrimitive && eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+      {
+        // Create the default "hasXXX" method
+        final JMethod aMethodHas = jInterface.method (JMod.DEFAULT, cm.BOOLEAN, aField.getMethodHasName ());
+        if (bIsStringType)
+        {
+          aMethodHas.body ()
+                    ._return (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (JExpr.invoke (aMethodGet)));
+        }
+        else
+          aMethodHas.body ()._return (JExpr.invoke (aMethodGet).neNull ());
+      }
+    }
+    return jInterface;
+  }
+
+  private void _createJavaClass (@Nonnull final JCodeModel cm,
+                                 @Nonnull final JDMClass aClass,
+                                 @Nonnull final JDefinedClass jInterface) throws JClassAlreadyExistsException
+  {
+    final JDefinedClass jClass = cm._class (JMod.PUBLIC, aClass.getFQClassName (), EClassType.CLASS);
+    jClass._implements (jInterface);
+    jClass.javadoc ().add ("<p>Default implementation of {@link " + aClass.getFQInterfaceName () + "}</p>\n");
+    jClass.javadoc ().add ("<p>This class was initially automatically created</p>\n");
+    jClass.javadoc ().addAuthor ().add ("JDMProcessor");
+
+    for (final JDMField aField : aClass.fields ())
+    {
+      final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+      final boolean bIsPrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
+
+      // Create getter
+
+      // Find type name
+      final String sJavaTypeName1 = aField.getType ().getJavaFQCN (eMultiplicity);
+      final String sJavaTypeName2;
+      final AbstractJDMType aExistingClass = m_aTypes.findFirst (x -> x.getFQClassName ().equals (sJavaTypeName1));
+      if (aExistingClass != null && aExistingClass instanceof JDMClass)
+      {
+        // It's one of our created classes - add an "I" prefix
+        sJavaTypeName2 = aExistingClass.getFQInterfaceName ();
+      }
+      else
+        sJavaTypeName2 = sJavaTypeName1;
+      final boolean bIsStringType = "String".equals (sJavaTypeName2);
+
+      // List or field?
+      AbstractJType jFieldType = cm.ref (sJavaTypeName2);
+      if (eMultiplicity.isOpenEnded ())
+        jFieldType = cm.ref (ICommonsList.class).narrow (jFieldType);
+
+      // Class field
+      final JVar jField = jClass.field (JMod.PRIVATE, jFieldType, aField.getJavaMemberName (eMultiplicity));
+
+      // Getter
+      {
+        final JMethod aMethodGet = jClass.method (JMod.PUBLIC | JMod.FINAL,
+                                                  jFieldType,
+                                                  aField.getMethodGetterName (eMultiplicity.isOpenEnded ()));
+
+        // Annotations
+        if (!bIsPrimitive)
+        {
+          if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+            aMethodGet.annotate (Nullable.class);
+          else
+            aMethodGet.annotate (Nonnull.class);
+          if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+            aMethodGet.annotate (Nonempty.class);
+          if (eMultiplicity.isOpenEnded ())
+            aMethodGet.annotate (ReturnsMutableObject.class);
+        }
+        aMethodGet.body ()._return (jField);
+      }
+
+      // Setter
+      {
+        final JMethod aMethodSet = jClass.method (JMod.PUBLIC | JMod.FINAL, cm.VOID, aField.getMethodSetterName ());
+        final JVar jParam = aMethodSet.param (jFieldType, aField.getJavaVarName (eMultiplicity));
+        if (!bIsPrimitive)
+        {
+          if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+            jParam.annotate (Nullable.class);
+          else
+            jParam.annotate (Nonnull.class);
+          if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+            jParam.annotate (Nonempty.class);
+        }
+        aMethodSet.body ().assign (jField, jParam);
+      }
+    }
+  }
+
   public void createJavaClasses (@Nonnull final JCodeModel cm, @Nonnull final ICommonsList <JDMClass> aClasses)
   {
     for (final JDMClass aClass : aClasses)
     {
       try
       {
-        final JDefinedClass aInterface = cm._class (JMod.PUBLIC, aClass.getFQInterfaceName (), EClassType.INTERFACE);
-        aInterface._implements (Serializable.class);
-        aInterface.javadoc ().add ("<p>Interface for class {@link " + aClass.getClassName () + "}</p>\n");
-        aInterface.javadoc ().add ("<p>This class was initially automatically created</p>\n");
-        aInterface.javadoc ().addAuthor ().add ("JDMProcessor");
-
-        for (final JDMField aField : aClass.fields ())
-        {
-          final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
-          final boolean bIsPrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
-          // Create getter
-
-          // Find type name
-          final String sJavaTypeName1 = aField.getType ().getJavaFQCN (eMultiplicity);
-          final String sJavaTypeName2;
-          final AbstractJDMType aExistingClass = m_aTypes.findFirst (x -> x.getFQClassName ().equals (sJavaTypeName1));
-          if (aExistingClass != null && aExistingClass instanceof JDMClass)
-          {
-            // It's one of our created classes - add an "I" prefix
-            sJavaTypeName2 = aExistingClass.getFQInterfaceName ();
-          }
-          else
-            sJavaTypeName2 = sJavaTypeName1;
-          final boolean bIsStringType = "String".equals (sJavaTypeName2);
-
-          // List or field?
-          AbstractJType jReturnType = cm.ref (sJavaTypeName2);
-          if (eMultiplicity.isOpenEnded ())
-            jReturnType = cm.ref (ICommonsList.class).narrow (jReturnType);
-
-          final JMethod aMethodGet = aInterface.method (0,
-                                                        jReturnType,
-                                                        aField.getMethodGetterName (eMultiplicity.isOpenEnded ()));
-
-          // Annotations
-          if (!bIsPrimitive)
-          {
-            if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
-              aMethodGet.annotate (Nullable.class);
-            else
-              aMethodGet.annotate (Nonnull.class);
-            if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
-              aMethodGet.annotate (Nonempty.class);
-            if (eMultiplicity.isOpenEnded ())
-              aMethodGet.annotate (ReturnsMutableObject.class);
-          }
-
-          // Java docs
-          {
-            if (aField.hasComment ())
-              aMethodGet.javadoc ().add (aField.getComment ());
-            else
-              aMethodGet.javadoc ().add ("Get the value of " + aField.getOriginalFieldName () + ".");
-
-            final JCommentPart aReturn = aMethodGet.javadoc ().addReturn ();
-            aReturn.add ("The requested value.");
-            if (!bIsPrimitive)
-            {
-              if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
-                aReturn.add (" May be <code>null</code>.");
-              else
-              {
-                if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
-                  aReturn.add (" May neither be <code>null</code> nor empty.");
-                else
-                  aReturn.add (" May not be <code>null</code>.");
-              }
-            }
-          }
-
-          if (!bIsPrimitive && eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
-          {
-            // Create the default "hasXXX" method
-            final JMethod aMethodHas = aInterface.method (JMod.DEFAULT, cm.BOOLEAN, aField.getMethodHasName ());
-            if (bIsStringType)
-            {
-              aMethodHas.body ()
-                        ._return (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (JExpr.invoke (aMethodGet)));
-            }
-            else
-              aMethodHas.body ()._return (JExpr.invoke (aMethodGet).neNull ());
-          }
-        }
+        final JDefinedClass jInterface = _createJavaInterface (cm, aClass);
+        _createJavaClass (cm, aClass, jInterface);
       }
       catch (final JClassAlreadyExistsException ex)
       {

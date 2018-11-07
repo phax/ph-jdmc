@@ -112,10 +112,12 @@ public class JDMTypes
   {
     final boolean bIsImmutable = aClass.isEnum ();
     final boolean bIsSerializable = true;
+    final boolean bIsEnum = aClass.isEnum ();
     final JDMType aType = JDMType.createClassType (aClass.getPackageName (),
                                                    aClass.getClassName (),
                                                    bIsImmutable,
-                                                   bIsSerializable);
+                                                   bIsSerializable,
+                                                   bIsEnum);
     return _register (aType);
   }
 }
