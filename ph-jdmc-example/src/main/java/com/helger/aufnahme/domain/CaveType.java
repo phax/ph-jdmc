@@ -1,5 +1,7 @@
 package com.helger.aufnahme.domain;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.state.EChange;
 import javax.annotation.Nonnull;
 
 
@@ -21,10 +23,16 @@ public class CaveType
     return m_eClazz;
   }
 
-  public final void setClazz(
+  @Nonnull
+  public final EChange setClazz(
     @Nonnull
-    ECaveClass eClazz) {
+    final ECaveClass eClazz) {
+    ValueEnforcer.notNull(eClazz, "Clazz");
+    if (eClazz.equals(m_eClazz)) {
+      return EChange.UNCHANGED;
+    }
     m_eClazz = eClazz;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -32,9 +40,15 @@ public class CaveType
     return m_eType;
   }
 
-  public final void setType(
+  @Nonnull
+  public final EChange setType(
     @Nonnull
-    ECaveType eType) {
+    final ECaveType eType) {
+    ValueEnforcer.notNull(eType, "Type");
+    if (eType.equals(m_eType)) {
+      return EChange.UNCHANGED;
+    }
     m_eType = eType;
+    return EChange.CHANGED;
   }
 }

@@ -1,10 +1,14 @@
 package com.helger.aufnahme.domain;
 
+import java.io.File;
 import java.time.LocalDate;
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableObject;
+import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.photon.core.userdata.UserDataObject;
+import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.state.EChange;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -20,9 +24,9 @@ public class Biotopbaum
   implements IBiotopbaum
 {
   private int m_nBBNr;
-  private ICommonsList<UserDataObject> m_aPics;
+  private ICommonsList<File> m_aPics = new CommonsArrayList<>();
   private LocalDate m_aDate;
-  private ICommonsList<EBiotopbaumType> m_eType;
+  private ICommonsList<EBiotopbaumType> m_eType = new CommonsArrayList<>();
   private String m_sLocation;
   private EExposition m_eExposition;
   private String m_sHanglage;
@@ -35,38 +39,47 @@ public class Biotopbaum
   private boolean m_bHomogene;
   private String m_sBeschreibung;
   private ETreeKind m_eTreeKind;
-  private ICommonsList<ICaveType> m_aCaves;
-  private ICommonsList<ITrunkSize> m_aTrunk;
+  private ICommonsList<ICaveType> m_aCaves = new CommonsArrayList<>();
+  private ICommonsList<ITrunkSize> m_aTrunk = new CommonsArrayList<>();
   private EVitality m_eVitality;
-  private ICommonsList<ESpecialStructure> m_eSpecialStructure;
+  private ICommonsList<ESpecialStructure> m_eSpecialStructure = new CommonsArrayList<>();
   private String m_sOtherSpecial;
   private boolean m_bAspirant;
   private String m_sAspirantDesc;
   private boolean m_bMarked;
   private String m_sMarkedDesc;
-  private ICommonsList<IBiotopbaumDeadwood> m_aDeadwoodCats;
-  private ICommonsList<IBiotopbaumDecompositionDegree> m_aDeadwoodDoD;
+  private ICommonsList<IBiotopbaumDeadwood> m_aDeadwoodCats = new CommonsArrayList<>();
+  private ICommonsList<IBiotopbaumDecompositionDegree> m_aDeadwoodDoD = new CommonsArrayList<>();
 
   public final int getBBNr() {
     return m_nBBNr;
   }
 
-  public final void setBBNr(int nBBNr) {
+  @Nonnull
+  public final EChange setBBNr(final int nBBNr) {
+    if (nBBNr == m_nBBNr) {
+      return EChange.UNCHANGED;
+    }
     m_nBBNr = nBBNr;
+    return EChange.CHANGED;
   }
 
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  public final ICommonsList<UserDataObject> pics() {
+  public final ICommonsList<File> pics() {
     return m_aPics;
   }
 
-  public final void setPics(
+  @Nonnull
+  public final EChange setPics(
     @Nonnull
     @Nonempty
-    ICommonsList<UserDataObject> aPics) {
+    final ICommonsList<File> aPics) {
+    ValueEnforcer.notEmpty(aPics, "Pics");
+    // TODO list equals
     m_aPics = aPics;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -74,10 +87,16 @@ public class Biotopbaum
     return m_aDate;
   }
 
-  public final void setDate(
+  @Nonnull
+  public final EChange setDate(
     @Nonnull
-    LocalDate aDate) {
+    final LocalDate aDate) {
+    ValueEnforcer.notNull(aDate, "Date");
+    if (aDate.equals(m_aDate)) {
+      return EChange.UNCHANGED;
+    }
     m_aDate = aDate;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -87,11 +106,15 @@ public class Biotopbaum
     return m_eType;
   }
 
-  public final void setType(
+  @Nonnull
+  public final EChange setType(
     @Nonnull
     @Nonempty
-    ICommonsList<EBiotopbaumType> eType) {
+    final ICommonsList<EBiotopbaumType> eType) {
+    ValueEnforcer.notEmpty(eType, "Type");
+    // TODO list equals
     m_eType = eType;
+    return EChange.CHANGED;
   }
 
   @Nullable
@@ -99,10 +122,15 @@ public class Biotopbaum
     return m_sLocation;
   }
 
-  public final void setLocation(
+  @Nonnull
+  public final EChange setLocation(
     @Nullable
-    String sLocation) {
+    final String sLocation) {
+    if (EqualsHelper.equals(sLocation, m_sLocation)) {
+      return EChange.UNCHANGED;
+    }
     m_sLocation = sLocation;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -110,10 +138,16 @@ public class Biotopbaum
     return m_eExposition;
   }
 
-  public final void setExposition(
+  @Nonnull
+  public final EChange setExposition(
     @Nonnull
-    EExposition eExposition) {
+    final EExposition eExposition) {
+    ValueEnforcer.notNull(eExposition, "Exposition");
+    if (eExposition.equals(m_eExposition)) {
+      return EChange.UNCHANGED;
+    }
     m_eExposition = eExposition;
+    return EChange.CHANGED;
   }
 
   @Nullable
@@ -121,66 +155,106 @@ public class Biotopbaum
     return m_sHanglage;
   }
 
-  public final void setHanglage(
+  @Nonnull
+  public final EChange setHanglage(
     @Nullable
-    String sHanglage) {
+    final String sHanglage) {
+    if (EqualsHelper.equals(sHanglage, m_sHanglage)) {
+      return EChange.UNCHANGED;
+    }
     m_sHanglage = sHanglage;
+    return EChange.CHANGED;
   }
 
   public final boolean isEinschichtig() {
     return m_bEinschichtig;
   }
 
-  public final void setEinschichtig(boolean bEinschichtig) {
+  @Nonnull
+  public final EChange setEinschichtig(final boolean bEinschichtig) {
+    if (bEinschichtig == m_bEinschichtig) {
+      return EChange.UNCHANGED;
+    }
     m_bEinschichtig = bEinschichtig;
+    return EChange.CHANGED;
   }
 
   public final boolean isSolitary() {
     return m_bSolitary;
   }
 
-  public final void setSolitary(boolean bSolitary) {
+  @Nonnull
+  public final EChange setSolitary(final boolean bSolitary) {
+    if (bSolitary == m_bSolitary) {
+      return EChange.UNCHANGED;
+    }
     m_bSolitary = bSolitary;
+    return EChange.CHANGED;
   }
 
   public final boolean isLightLocation() {
     return m_bLightLocation;
   }
 
-  public final void setLightLocation(boolean bLightLocation) {
+  @Nonnull
+  public final EChange setLightLocation(final boolean bLightLocation) {
+    if (bLightLocation == m_bLightLocation) {
+      return EChange.UNCHANGED;
+    }
     m_bLightLocation = bLightLocation;
+    return EChange.CHANGED;
   }
 
   public final boolean isClosedCrown() {
     return m_bClosedCrown;
   }
 
-  public final void setClosedCrown(boolean bClosedCrown) {
+  @Nonnull
+  public final EChange setClosedCrown(final boolean bClosedCrown) {
+    if (bClosedCrown == m_bClosedCrown) {
+      return EChange.UNCHANGED;
+    }
     m_bClosedCrown = bClosedCrown;
+    return EChange.CHANGED;
   }
 
   public final boolean isNoSun() {
     return m_bNoSun;
   }
 
-  public final void setNoSun(boolean bNoSun) {
+  @Nonnull
+  public final EChange setNoSun(final boolean bNoSun) {
+    if (bNoSun == m_bNoSun) {
+      return EChange.UNCHANGED;
+    }
     m_bNoSun = bNoSun;
+    return EChange.CHANGED;
   }
 
   public final boolean isUeberSun() {
     return m_bUeberSun;
   }
 
-  public final void setUeberSun(boolean bUeberSun) {
+  @Nonnull
+  public final EChange setUeberSun(final boolean bUeberSun) {
+    if (bUeberSun == m_bUeberSun) {
+      return EChange.UNCHANGED;
+    }
     m_bUeberSun = bUeberSun;
+    return EChange.CHANGED;
   }
 
   public final boolean isHomogene() {
     return m_bHomogene;
   }
 
-  public final void setHomogene(boolean bHomogene) {
+  @Nonnull
+  public final EChange setHomogene(final boolean bHomogene) {
+    if (bHomogene == m_bHomogene) {
+      return EChange.UNCHANGED;
+    }
     m_bHomogene = bHomogene;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -188,10 +262,16 @@ public class Biotopbaum
     return m_sBeschreibung;
   }
 
-  public final void setBeschreibung(
+  @Nonnull
+  public final EChange setBeschreibung(
     @Nonnull
-    String sBeschreibung) {
+    final String sBeschreibung) {
+    ValueEnforcer.notNull(sBeschreibung, "Beschreibung");
+    if (sBeschreibung.equals(m_sBeschreibung)) {
+      return EChange.UNCHANGED;
+    }
     m_sBeschreibung = sBeschreibung;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -199,10 +279,16 @@ public class Biotopbaum
     return m_eTreeKind;
   }
 
-  public final void setTreeKind(
+  @Nonnull
+  public final EChange setTreeKind(
     @Nonnull
-    ETreeKind eTreeKind) {
+    final ETreeKind eTreeKind) {
+    ValueEnforcer.notNull(eTreeKind, "TreeKind");
+    if (eTreeKind.equals(m_eTreeKind)) {
+      return EChange.UNCHANGED;
+    }
     m_eTreeKind = eTreeKind;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -211,10 +297,13 @@ public class Biotopbaum
     return m_aCaves;
   }
 
-  public final void setCaves(
+  @Nonnull
+  public final EChange setCaves(
     @Nonnull
-    ICommonsList<ICaveType> aCaves) {
+    final ICommonsList<ICaveType> aCaves) {
+    // TODO list equals
     m_aCaves = aCaves;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -224,11 +313,15 @@ public class Biotopbaum
     return m_aTrunk;
   }
 
-  public final void setTrunk(
+  @Nonnull
+  public final EChange setTrunk(
     @Nonnull
     @Nonempty
-    ICommonsList<ITrunkSize> aTrunk) {
+    final ICommonsList<ITrunkSize> aTrunk) {
+    ValueEnforcer.notEmpty(aTrunk, "Trunk");
+    // TODO list equals
     m_aTrunk = aTrunk;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -236,10 +329,16 @@ public class Biotopbaum
     return m_eVitality;
   }
 
-  public final void setVitality(
+  @Nonnull
+  public final EChange setVitality(
     @Nonnull
-    EVitality eVitality) {
+    final EVitality eVitality) {
+    ValueEnforcer.notNull(eVitality, "Vitality");
+    if (eVitality.equals(m_eVitality)) {
+      return EChange.UNCHANGED;
+    }
     m_eVitality = eVitality;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -248,10 +347,13 @@ public class Biotopbaum
     return m_eSpecialStructure;
   }
 
-  public final void setSpecialStructure(
+  @Nonnull
+  public final EChange setSpecialStructure(
     @Nonnull
-    ICommonsList<ESpecialStructure> eSpecialStructure) {
+    final ICommonsList<ESpecialStructure> eSpecialStructure) {
+    // TODO list equals
     m_eSpecialStructure = eSpecialStructure;
+    return EChange.CHANGED;
   }
 
   @Nullable
@@ -259,18 +361,28 @@ public class Biotopbaum
     return m_sOtherSpecial;
   }
 
-  public final void setOtherSpecial(
+  @Nonnull
+  public final EChange setOtherSpecial(
     @Nullable
-    String sOtherSpecial) {
+    final String sOtherSpecial) {
+    if (EqualsHelper.equals(sOtherSpecial, m_sOtherSpecial)) {
+      return EChange.UNCHANGED;
+    }
     m_sOtherSpecial = sOtherSpecial;
+    return EChange.CHANGED;
   }
 
   public final boolean isAspirant() {
     return m_bAspirant;
   }
 
-  public final void setAspirant(boolean bAspirant) {
+  @Nonnull
+  public final EChange setAspirant(final boolean bAspirant) {
+    if (bAspirant == m_bAspirant) {
+      return EChange.UNCHANGED;
+    }
     m_bAspirant = bAspirant;
+    return EChange.CHANGED;
   }
 
   @Nullable
@@ -278,18 +390,28 @@ public class Biotopbaum
     return m_sAspirantDesc;
   }
 
-  public final void setAspirantDesc(
+  @Nonnull
+  public final EChange setAspirantDesc(
     @Nullable
-    String sAspirantDesc) {
+    final String sAspirantDesc) {
+    if (EqualsHelper.equals(sAspirantDesc, m_sAspirantDesc)) {
+      return EChange.UNCHANGED;
+    }
     m_sAspirantDesc = sAspirantDesc;
+    return EChange.CHANGED;
   }
 
   public final boolean isMarked() {
     return m_bMarked;
   }
 
-  public final void setMarked(boolean bMarked) {
+  @Nonnull
+  public final EChange setMarked(final boolean bMarked) {
+    if (bMarked == m_bMarked) {
+      return EChange.UNCHANGED;
+    }
     m_bMarked = bMarked;
+    return EChange.CHANGED;
   }
 
   @Nullable
@@ -297,10 +419,15 @@ public class Biotopbaum
     return m_sMarkedDesc;
   }
 
-  public final void setMarkedDesc(
+  @Nonnull
+  public final EChange setMarkedDesc(
     @Nullable
-    String sMarkedDesc) {
+    final String sMarkedDesc) {
+    if (EqualsHelper.equals(sMarkedDesc, m_sMarkedDesc)) {
+      return EChange.UNCHANGED;
+    }
     m_sMarkedDesc = sMarkedDesc;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -309,10 +436,13 @@ public class Biotopbaum
     return m_aDeadwoodCats;
   }
 
-  public final void setDeadwoodCats(
+  @Nonnull
+  public final EChange setDeadwoodCats(
     @Nonnull
-    ICommonsList<IBiotopbaumDeadwood> aDeadwoodCats) {
+    final ICommonsList<IBiotopbaumDeadwood> aDeadwoodCats) {
+    // TODO list equals
     m_aDeadwoodCats = aDeadwoodCats;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -321,9 +451,12 @@ public class Biotopbaum
     return m_aDeadwoodDoD;
   }
 
-  public final void setDeadwoodDoD(
+  @Nonnull
+  public final EChange setDeadwoodDoD(
     @Nonnull
-    ICommonsList<IBiotopbaumDecompositionDegree> aDeadwoodDoD) {
+    final ICommonsList<IBiotopbaumDecompositionDegree> aDeadwoodDoD) {
+    // TODO list equals
     m_aDeadwoodDoD = aDeadwoodDoD;
+    return EChange.CHANGED;
   }
 }

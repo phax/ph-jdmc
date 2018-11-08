@@ -16,6 +16,7 @@
  */
 package com.helger.jdmc.core.datamodel;
 
+import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -37,7 +38,6 @@ import org.w3c.dom.Element;
 import com.helger.commons.collection.impl.CommonsHashMap;
 import com.helger.commons.collection.impl.ICommonsMap;
 import com.helger.commons.string.StringHelper;
-import com.helger.photon.core.userdata.UserDataObject;
 
 /**
  * List of {@link JDMType}.
@@ -73,6 +73,7 @@ public class JDMTypes
     _register (JDMType.createPrimitiveType ("double", aDouble));
     _register (JDMType.createClassTypeImmutable (Duration.class));
     _register (JDMType.createClassTypeImmutable (Element.class));
+    _register (JDMType.createClassTypeImmutable (File.class));
     final JDMType aFloat = _register (JDMType.createClassTypeImmutable (Float.class));
     _register (JDMType.createPrimitiveType ("float", aFloat));
     final JDMType aInteger = _register (JDMType.createClassTypeImmutable (Integer.class));
@@ -90,7 +91,6 @@ public class JDMTypes
     final JDMType aShort = _register (JDMType.createClassTypeImmutable (Short.class));
     _register (JDMType.createPrimitiveType ("short", aShort));
     _register (JDMType.createClassTypeImmutable (String.class));
-    _register (JDMType.createClassTypeImmutable (UserDataObject.class));
     _register (JDMType.createClassTypeImmutable (ZonedDateTime.class));
   }
 

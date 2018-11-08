@@ -35,6 +35,7 @@ import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.equals.EqualsHelper;
 import com.helger.commons.id.IHasID;
 import com.helger.commons.io.file.FilenameHelper;
 import com.helger.commons.io.resource.FileSystemResource;
@@ -42,9 +43,12 @@ import com.helger.commons.lang.EnumHelper;
 import com.helger.commons.lang.GenericReflection;
 import com.helger.commons.name.IHasDisplayName;
 import com.helger.commons.regex.RegExHelper;
+import com.helger.commons.state.EChange;
 import com.helger.commons.string.StringHelper;
+import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
+import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JCommentPart;
@@ -564,6 +568,8 @@ public class JDMProcessor
     jClass.javadoc ().add ("<p>This class was initially automatically created</p>\n");
     jClass.javadoc ().addAuthor ().add ("JDMProcessor");
 
+    final AbstractJClass jEChange = cm.ref (EChange.class);
+
     for (final JDMField aField : aClass.fields ())
     {
       final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
@@ -582,15 +588,18 @@ public class JDMProcessor
       }
       else
         sJavaTypeName2 = sJavaTypeName1;
-      final boolean bIsStringType = "String".equals (sJavaTypeName2);
 
       // List or field?
       AbstractJType jFieldType = cm.ref (sJavaTypeName2);
+      IJExpression aFieldInit = null;
       if (eMultiplicity.isOpenEnded ())
+      {
         jFieldType = cm.ref (ICommonsList.class).narrow (jFieldType);
+        aFieldInit = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ();
+      }
 
       // Class field
-      final JVar jField = jClass.field (JMod.PRIVATE, jFieldType, aField.getJavaMemberName (eMultiplicity));
+      final JVar jField = jClass.field (JMod.PRIVATE, jFieldType, aField.getJavaMemberName (eMultiplicity), aFieldInit);
 
       // Getter
       {
@@ -615,8 +624,9 @@ public class JDMProcessor
 
       // Setter
       {
-        final JMethod aMethodSet = jClass.method (JMod.PUBLIC | JMod.FINAL, cm.VOID, aField.getMethodSetterName ());
-        final JVar jParam = aMethodSet.param (jFieldType, aField.getJavaVarName (eMultiplicity));
+        final JMethod aMethodSet = jClass.method (JMod.PUBLIC | JMod.FINAL, jEChange, aField.getMethodSetterName ());
+        aMethodSet.annotate (Nonnull.class);
+        final JVar jParam = aMethodSet.param (JMod.FINAL, jFieldType, aField.getJavaVarName (eMultiplicity));
         if (!bIsPrimitive)
         {
           if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
@@ -626,7 +636,61 @@ public class JDMProcessor
           if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
             jParam.annotate (Nonempty.class);
         }
+
+        if (!bIsPrimitive)
+        {
+          if (eMultiplicity.isMin1 ())
+          {
+            // Use param name without prefix
+            if (eMultiplicity.isOpenEnded ())
+              aMethodSet.body ()
+                        .add (cm.ref (ValueEnforcer.class)
+                                .staticInvoke ("notEmpty")
+                                .arg (jParam)
+                                .arg (JExpr.lit (jParam.name ().substring (1))));
+            else
+              aMethodSet.body ()
+                        .add (cm.ref (ValueEnforcer.class)
+                                .staticInvoke ("notNull")
+                                .arg (jParam)
+                                .arg (JExpr.lit (jParam.name ().substring (1))));
+          }
+        }
+
+        if (bIsPrimitive)
+        {
+          // if (param == field) return EChange.UNCHANGED
+          aMethodSet.body ()._if (jParam.eq (jField))._then ()._return (jEChange.staticRef ("UNCHANGED"));
+        }
+        else
+          if (eMultiplicity.isOpenEnded ())
+          {
+            // List
+            aMethodSet.body ().addSingleLineComment ("TODO list equals");
+          }
+          else
+          {
+            if (eMultiplicity.isMin1 ())
+            {
+              // if (param.equals (field)) return EChange.UNCHANGED
+              aMethodSet.body ()
+                        ._if (jParam.invoke ("equals").arg (jField))
+                        ._then ()
+                        ._return (jEChange.staticRef ("UNCHANGED"));
+            }
+            else
+            {
+              // if (EqualsHelper.equals (param, field)) return
+              // EChange.UNCHANGED
+              aMethodSet.body ()
+                        ._if (cm.ref (EqualsHelper.class).staticInvoke ("equals").arg (jParam).arg (jField))
+                        ._then ()
+                        ._return (jEChange.staticRef ("UNCHANGED"));
+            }
+          }
+
         aMethodSet.body ().assign (jField, jParam);
+        aMethodSet.body ()._return (jEChange.staticRef ("CHANGED"));
       }
     }
   }

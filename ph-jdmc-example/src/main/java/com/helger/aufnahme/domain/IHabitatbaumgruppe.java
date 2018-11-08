@@ -1,11 +1,11 @@
 package com.helger.aufnahme.domain;
 
+import java.io.File;
 import java.io.Serializable;
 import java.time.LocalDate;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.photon.core.userdata.UserDataObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -38,7 +38,7 @@ public interface IHabitatbaumgruppe
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  ICommonsList<UserDataObject> pics();
+  ICommonsList<File> pics();
 
   /**
    * zugehörige Biotopbäume

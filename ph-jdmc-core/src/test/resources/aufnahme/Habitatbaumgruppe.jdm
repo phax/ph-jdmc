@@ -1,6 +1,6 @@
 {
   "HBGNr": ["int", "Schlüsselfeld"],
-  "pics": ["UserDataObject+", "Fotos"],
+  "pics": ["File+", "Fotos"],
   "HBGzBB" : [ "Biotopbaum*", "zugehörige Biotopbäume" ],  
 /*
   "HBGzB" : [ "Bestand", "zugehörig zu Bestand Nr." ],

@@ -1,5 +1,7 @@
 package com.helger.aufnahme.domain;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.state.EChange;
 import javax.annotation.Nonnull;
 
 
@@ -20,8 +22,13 @@ public class TrunkSize
     return m_nBHD;
   }
 
-  public final void setBHD(int nBHD) {
+  @Nonnull
+  public final EChange setBHD(final int nBHD) {
+    if (nBHD == m_nBHD) {
+      return EChange.UNCHANGED;
+    }
     m_nBHD = nBHD;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -29,9 +36,15 @@ public class TrunkSize
     return m_eHeight;
   }
 
-  public final void setHeight(
+  @Nonnull
+  public final EChange setHeight(
     @Nonnull
-    ETreeHeight eHeight) {
+    final ETreeHeight eHeight) {
+    ValueEnforcer.notNull(eHeight, "Height");
+    if (eHeight.equals(m_eHeight)) {
+      return EChange.UNCHANGED;
+    }
     m_eHeight = eHeight;
+    return EChange.CHANGED;
   }
 }

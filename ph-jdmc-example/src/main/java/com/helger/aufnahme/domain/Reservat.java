@@ -1,5 +1,7 @@
 package com.helger.aufnahme.domain;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.state.EChange;
 import javax.annotation.Nonnull;
 
 
@@ -21,8 +23,13 @@ public class Reservat
     return m_nRNr;
   }
 
-  public final void setRNr(int nRNr) {
+  @Nonnull
+  public final EChange setRNr(final int nRNr) {
+    if (nRNr == m_nRNr) {
+      return EChange.UNCHANGED;
+    }
     m_nRNr = nRNr;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -30,17 +37,28 @@ public class Reservat
     return m_sName;
   }
 
-  public final void setName(
+  @Nonnull
+  public final EChange setName(
     @Nonnull
-    String sName) {
+    final String sName) {
+    ValueEnforcer.notNull(sName, "Name");
+    if (sName.equals(m_sName)) {
+      return EChange.UNCHANGED;
+    }
     m_sName = sName;
+    return EChange.CHANGED;
   }
 
   public final int getAreaSize() {
     return m_nAreaSize;
   }
 
-  public final void setAreaSize(int nAreaSize) {
+  @Nonnull
+  public final EChange setAreaSize(final int nAreaSize) {
+    if (nAreaSize == m_nAreaSize) {
+      return EChange.UNCHANGED;
+    }
     m_nAreaSize = nAreaSize;
+    return EChange.CHANGED;
   }
 }

@@ -1,10 +1,14 @@
 package com.helger.aufnahme.domain;
 
+import java.io.File;
 import java.time.LocalDate;
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableObject;
+import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.photon.core.userdata.UserDataObject;
+import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.state.EChange;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -20,10 +24,10 @@ public class Bestand
   implements IBestand
 {
   private int m_nBNr;
-  private ICommonsList<UserDataObject> m_aPics;
+  private ICommonsList<File> m_aPics = new CommonsArrayList<>();
   private LocalDate m_aDate;
   private String m_sVerortung;
-  private ICommonsList<IHabitatbaumgruppe> m_aBZHBG;
+  private ICommonsList<IHabitatbaumgruppe> m_aBZHBG = new CommonsArrayList<>();
   private int m_nAreaSize;
   private String m_sBeschreib;
   private boolean m_bSameAge;
@@ -43,22 +47,31 @@ public class Bestand
     return m_nBNr;
   }
 
-  public final void setBNr(int nBNr) {
+  @Nonnull
+  public final EChange setBNr(final int nBNr) {
+    if (nBNr == m_nBNr) {
+      return EChange.UNCHANGED;
+    }
     m_nBNr = nBNr;
+    return EChange.CHANGED;
   }
 
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  public final ICommonsList<UserDataObject> pics() {
+  public final ICommonsList<File> pics() {
     return m_aPics;
   }
 
-  public final void setPics(
+  @Nonnull
+  public final EChange setPics(
     @Nonnull
     @Nonempty
-    ICommonsList<UserDataObject> aPics) {
+    final ICommonsList<File> aPics) {
+    ValueEnforcer.notEmpty(aPics, "Pics");
+    // TODO list equals
     m_aPics = aPics;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -66,10 +79,16 @@ public class Bestand
     return m_aDate;
   }
 
-  public final void setDate(
+  @Nonnull
+  public final EChange setDate(
     @Nonnull
-    LocalDate aDate) {
+    final LocalDate aDate) {
+    ValueEnforcer.notNull(aDate, "Date");
+    if (aDate.equals(m_aDate)) {
+      return EChange.UNCHANGED;
+    }
     m_aDate = aDate;
+    return EChange.CHANGED;
   }
 
   @Nullable
@@ -77,10 +96,15 @@ public class Bestand
     return m_sVerortung;
   }
 
-  public final void setVerortung(
+  @Nonnull
+  public final EChange setVerortung(
     @Nullable
-    String sVerortung) {
+    final String sVerortung) {
+    if (EqualsHelper.equals(sVerortung, m_sVerortung)) {
+      return EChange.UNCHANGED;
+    }
     m_sVerortung = sVerortung;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -89,18 +113,26 @@ public class Bestand
     return m_aBZHBG;
   }
 
-  public final void setBZHBG(
+  @Nonnull
+  public final EChange setBZHBG(
     @Nonnull
-    ICommonsList<IHabitatbaumgruppe> aBZHBG) {
+    final ICommonsList<IHabitatbaumgruppe> aBZHBG) {
+    // TODO list equals
     m_aBZHBG = aBZHBG;
+    return EChange.CHANGED;
   }
 
   public final int getAreaSize() {
     return m_nAreaSize;
   }
 
-  public final void setAreaSize(int nAreaSize) {
+  @Nonnull
+  public final EChange setAreaSize(final int nAreaSize) {
+    if (nAreaSize == m_nAreaSize) {
+      return EChange.UNCHANGED;
+    }
     m_nAreaSize = nAreaSize;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -108,26 +140,42 @@ public class Bestand
     return m_sBeschreib;
   }
 
-  public final void setBeschreib(
+  @Nonnull
+  public final EChange setBeschreib(
     @Nonnull
-    String sBeschreib) {
+    final String sBeschreib) {
+    ValueEnforcer.notNull(sBeschreib, "Beschreib");
+    if (sBeschreib.equals(m_sBeschreib)) {
+      return EChange.UNCHANGED;
+    }
     m_sBeschreib = sBeschreib;
+    return EChange.CHANGED;
   }
 
   public final boolean isSameAge() {
     return m_bSameAge;
   }
 
-  public final void setSameAge(boolean bSameAge) {
+  @Nonnull
+  public final EChange setSameAge(final boolean bSameAge) {
+    if (bSameAge == m_bSameAge) {
+      return EChange.UNCHANGED;
+    }
     m_bSameAge = bSameAge;
+    return EChange.CHANGED;
   }
 
   public final boolean isOneLevel() {
     return m_bOneLevel;
   }
 
-  public final void setOneLevel(boolean bOneLevel) {
+  @Nonnull
+  public final EChange setOneLevel(final boolean bOneLevel) {
+    if (bOneLevel == m_bOneLevel) {
+      return EChange.UNCHANGED;
+    }
     m_bOneLevel = bOneLevel;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -135,10 +183,16 @@ public class Bestand
     return m_eStockType;
   }
 
-  public final void setStockType(
+  @Nonnull
+  public final EChange setStockType(
     @Nonnull
-    EStockType eStockType) {
+    final EStockType eStockType) {
+    ValueEnforcer.notNull(eStockType, "StockType");
+    if (eStockType.equals(m_eStockType)) {
+      return EChange.UNCHANGED;
+    }
     m_eStockType = eStockType;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -146,10 +200,16 @@ public class Bestand
     return m_sUsageDescription;
   }
 
-  public final void setUsageDescription(
+  @Nonnull
+  public final EChange setUsageDescription(
     @Nonnull
-    String sUsageDescription) {
+    final String sUsageDescription) {
+    ValueEnforcer.notNull(sUsageDescription, "UsageDescription");
+    if (sUsageDescription.equals(m_sUsageDescription)) {
+      return EChange.UNCHANGED;
+    }
     m_sUsageDescription = sUsageDescription;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -157,34 +217,55 @@ public class Bestand
     return m_sGesellschaft;
   }
 
-  public final void setGesellschaft(
+  @Nonnull
+  public final EChange setGesellschaft(
     @Nonnull
-    String sGesellschaft) {
+    final String sGesellschaft) {
+    ValueEnforcer.notNull(sGesellschaft, "Gesellschaft");
+    if (sGesellschaft.equals(m_sGesellschaft)) {
+      return EChange.UNCHANGED;
+    }
     m_sGesellschaft = sGesellschaft;
+    return EChange.CHANGED;
   }
 
   public final boolean isKronenschluss() {
     return m_bKronenschluss;
   }
 
-  public final void setKronenschluss(boolean bKronenschluss) {
+  @Nonnull
+  public final EChange setKronenschluss(final boolean bKronenschluss) {
+    if (bKronenschluss == m_bKronenschluss) {
+      return EChange.UNCHANGED;
+    }
     m_bKronenschluss = bKronenschluss;
+    return EChange.CHANGED;
   }
 
   public final boolean isLightWoods() {
     return m_bLightWoods;
   }
 
-  public final void setLightWoods(boolean bLightWoods) {
+  @Nonnull
+  public final EChange setLightWoods(final boolean bLightWoods) {
+    if (bLightWoods == m_bLightWoods) {
+      return EChange.UNCHANGED;
+    }
     m_bLightWoods = bLightWoods;
+    return EChange.CHANGED;
   }
 
   public final boolean isUnterwuchs() {
     return m_bUnterwuchs;
   }
 
-  public final void setUnterwuchs(boolean bUnterwuchs) {
+  @Nonnull
+  public final EChange setUnterwuchs(final boolean bUnterwuchs) {
+    if (bUnterwuchs == m_bUnterwuchs) {
+      return EChange.UNCHANGED;
+    }
     m_bUnterwuchs = bUnterwuchs;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -192,10 +273,16 @@ public class Bestand
     return m_eTotSteh;
   }
 
-  public final void setTotSteh(
+  @Nonnull
+  public final EChange setTotSteh(
     @Nonnull
-    EStockDeadwood eTotSteh) {
+    final EStockDeadwood eTotSteh) {
+    ValueEnforcer.notNull(eTotSteh, "TotSteh");
+    if (eTotSteh.equals(m_eTotSteh)) {
+      return EChange.UNCHANGED;
+    }
     m_eTotSteh = eTotSteh;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -203,10 +290,16 @@ public class Bestand
     return m_sTotStehBesch;
   }
 
-  public final void setTotStehBesch(
+  @Nonnull
+  public final EChange setTotStehBesch(
     @Nonnull
-    String sTotStehBesch) {
+    final String sTotStehBesch) {
+    ValueEnforcer.notNull(sTotStehBesch, "TotStehBesch");
+    if (sTotStehBesch.equals(m_sTotStehBesch)) {
+      return EChange.UNCHANGED;
+    }
     m_sTotStehBesch = sTotStehBesch;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -214,10 +307,16 @@ public class Bestand
     return m_eTotLieg;
   }
 
-  public final void setTotLieg(
+  @Nonnull
+  public final EChange setTotLieg(
     @Nonnull
-    EStockDeadwood eTotLieg) {
+    final EStockDeadwood eTotLieg) {
+    ValueEnforcer.notNull(eTotLieg, "TotLieg");
+    if (eTotLieg.equals(m_eTotLieg)) {
+      return EChange.UNCHANGED;
+    }
     m_eTotLieg = eTotLieg;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -225,9 +324,15 @@ public class Bestand
     return m_sTotLiegBesch;
   }
 
-  public final void setTotLiegBesch(
+  @Nonnull
+  public final EChange setTotLiegBesch(
     @Nonnull
-    String sTotLiegBesch) {
+    final String sTotLiegBesch) {
+    ValueEnforcer.notNull(sTotLiegBesch, "TotLiegBesch");
+    if (sTotLiegBesch.equals(m_sTotLiegBesch)) {
+      return EChange.UNCHANGED;
+    }
     m_sTotLiegBesch = sTotLiegBesch;
+    return EChange.CHANGED;
   }
 }

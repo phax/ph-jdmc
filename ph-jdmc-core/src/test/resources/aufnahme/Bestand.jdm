@@ -1,6 +1,6 @@
 { 
   "BNr": [ "int", "Schlüsselfeld" ],
-  "pics": ["UserDataObject+", "Foto-Nr"],
+  "pics": ["File+", "Foto-Nr"],
   "date": "LocalDate",
   "Verortung": ["String?", "GPS-Punkte oder Verweis auf Polygon"],
   "BZHBG" : ["Habitatbaumgruppe*" , "Habitatbaumgruppen"],

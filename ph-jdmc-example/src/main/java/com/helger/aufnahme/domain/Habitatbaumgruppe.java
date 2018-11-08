@@ -1,10 +1,14 @@
 package com.helger.aufnahme.domain;
 
+import java.io.File;
 import java.time.LocalDate;
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableObject;
+import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.photon.core.userdata.UserDataObject;
+import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.state.EChange;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -20,8 +24,8 @@ public class Habitatbaumgruppe
   implements IHabitatbaumgruppe
 {
   private int m_nHBGNr;
-  private ICommonsList<UserDataObject> m_aPics;
-  private ICommonsList<IBiotopbaum> m_aHBGzBB;
+  private ICommonsList<File> m_aPics = new CommonsArrayList<>();
+  private ICommonsList<IBiotopbaum> m_aHBGzBB = new CommonsArrayList<>();
   private LocalDate m_aDate;
   private String m_sStandort;
   private boolean m_bOneLevel;
@@ -39,22 +43,31 @@ public class Habitatbaumgruppe
     return m_nHBGNr;
   }
 
-  public final void setHBGNr(int nHBGNr) {
+  @Nonnull
+  public final EChange setHBGNr(final int nHBGNr) {
+    if (nHBGNr == m_nHBGNr) {
+      return EChange.UNCHANGED;
+    }
     m_nHBGNr = nHBGNr;
+    return EChange.CHANGED;
   }
 
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  public final ICommonsList<UserDataObject> pics() {
+  public final ICommonsList<File> pics() {
     return m_aPics;
   }
 
-  public final void setPics(
+  @Nonnull
+  public final EChange setPics(
     @Nonnull
     @Nonempty
-    ICommonsList<UserDataObject> aPics) {
+    final ICommonsList<File> aPics) {
+    ValueEnforcer.notEmpty(aPics, "Pics");
+    // TODO list equals
     m_aPics = aPics;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -63,10 +76,13 @@ public class Habitatbaumgruppe
     return m_aHBGzBB;
   }
 
-  public final void setHBGzBB(
+  @Nonnull
+  public final EChange setHBGzBB(
     @Nonnull
-    ICommonsList<IBiotopbaum> aHBGzBB) {
+    final ICommonsList<IBiotopbaum> aHBGzBB) {
+    // TODO list equals
     m_aHBGzBB = aHBGzBB;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -74,10 +90,16 @@ public class Habitatbaumgruppe
     return m_aDate;
   }
 
-  public final void setDate(
+  @Nonnull
+  public final EChange setDate(
     @Nonnull
-    LocalDate aDate) {
+    final LocalDate aDate) {
+    ValueEnforcer.notNull(aDate, "Date");
+    if (aDate.equals(m_aDate)) {
+      return EChange.UNCHANGED;
+    }
     m_aDate = aDate;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -85,50 +107,81 @@ public class Habitatbaumgruppe
     return m_sStandort;
   }
 
-  public final void setStandort(
+  @Nonnull
+  public final EChange setStandort(
     @Nonnull
-    String sStandort) {
+    final String sStandort) {
+    ValueEnforcer.notNull(sStandort, "Standort");
+    if (sStandort.equals(m_sStandort)) {
+      return EChange.UNCHANGED;
+    }
     m_sStandort = sStandort;
+    return EChange.CHANGED;
   }
 
   public final boolean isOneLevel() {
     return m_bOneLevel;
   }
 
-  public final void setOneLevel(boolean bOneLevel) {
+  @Nonnull
+  public final EChange setOneLevel(final boolean bOneLevel) {
+    if (bOneLevel == m_bOneLevel) {
+      return EChange.UNCHANGED;
+    }
     m_bOneLevel = bOneLevel;
+    return EChange.CHANGED;
   }
 
   public final boolean isLight() {
     return m_bLight;
   }
 
-  public final void setLight(boolean bLight) {
+  @Nonnull
+  public final EChange setLight(final boolean bLight) {
+    if (bLight == m_bLight) {
+      return EChange.UNCHANGED;
+    }
     m_bLight = bLight;
+    return EChange.CHANGED;
   }
 
   public final boolean isClosedCrown() {
     return m_bClosedCrown;
   }
 
-  public final void setClosedCrown(boolean bClosedCrown) {
+  @Nonnull
+  public final EChange setClosedCrown(final boolean bClosedCrown) {
+    if (bClosedCrown == m_bClosedCrown) {
+      return EChange.UNCHANGED;
+    }
     m_bClosedCrown = bClosedCrown;
+    return EChange.CHANGED;
   }
 
   public final boolean isNoSun() {
     return m_bNoSun;
   }
 
-  public final void setNoSun(boolean bNoSun) {
+  @Nonnull
+  public final EChange setNoSun(final boolean bNoSun) {
+    if (bNoSun == m_bNoSun) {
+      return EChange.UNCHANGED;
+    }
     m_bNoSun = bNoSun;
+    return EChange.CHANGED;
   }
 
   public final boolean isHomogen() {
     return m_bHomogen;
   }
 
-  public final void setHomogen(boolean bHomogen) {
+  @Nonnull
+  public final EChange setHomogen(final boolean bHomogen) {
+    if (bHomogen == m_bHomogen) {
+      return EChange.UNCHANGED;
+    }
     m_bHomogen = bHomogen;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -136,10 +189,16 @@ public class Habitatbaumgruppe
     return m_eExposition;
   }
 
-  public final void setExposition(
+  @Nonnull
+  public final EChange setExposition(
     @Nonnull
-    EExposition eExposition) {
+    final EExposition eExposition) {
+    ValueEnforcer.notNull(eExposition, "Exposition");
+    if (eExposition.equals(m_eExposition)) {
+      return EChange.UNCHANGED;
+    }
     m_eExposition = eExposition;
+    return EChange.CHANGED;
   }
 
   @Nullable
@@ -147,26 +206,41 @@ public class Habitatbaumgruppe
     return m_sHanglage;
   }
 
-  public final void setHanglage(
+  @Nonnull
+  public final EChange setHanglage(
     @Nullable
-    String sHanglage) {
+    final String sHanglage) {
+    if (EqualsHelper.equals(sHanglage, m_sHanglage)) {
+      return EChange.UNCHANGED;
+    }
     m_sHanglage = sHanglage;
+    return EChange.CHANGED;
   }
 
   public final int getAreaSize() {
     return m_nAreaSize;
   }
 
-  public final void setAreaSize(int nAreaSize) {
+  @Nonnull
+  public final EChange setAreaSize(final int nAreaSize) {
+    if (nAreaSize == m_nAreaSize) {
+      return EChange.UNCHANGED;
+    }
     m_nAreaSize = nAreaSize;
+    return EChange.CHANGED;
   }
 
   public final boolean isOnlyBB() {
     return m_bOnlyBB;
   }
 
-  public final void setOnlyBB(boolean bOnlyBB) {
+  @Nonnull
+  public final EChange setOnlyBB(final boolean bOnlyBB) {
+    if (bOnlyBB == m_bOnlyBB) {
+      return EChange.UNCHANGED;
+    }
     m_bOnlyBB = bOnlyBB;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -174,9 +248,15 @@ public class Habitatbaumgruppe
     return m_sBeschreibung;
   }
 
-  public final void setBeschreibung(
+  @Nonnull
+  public final EChange setBeschreibung(
     @Nonnull
-    String sBeschreibung) {
+    final String sBeschreibung) {
+    ValueEnforcer.notNull(sBeschreibung, "Beschreibung");
+    if (sBeschreibung.equals(m_sBeschreibung)) {
+      return EChange.UNCHANGED;
+    }
     m_sBeschreibung = sBeschreibung;
+    return EChange.CHANGED;
   }
 }

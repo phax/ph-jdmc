@@ -1,5 +1,7 @@
 package com.helger.aufnahme.domain;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.state.EChange;
 import javax.annotation.Nonnull;
 
 
@@ -23,10 +25,16 @@ public class StichprobeDeadwood
     return m_eDoD;
   }
 
-  public final void setDoD(
+  @Nonnull
+  public final EChange setDoD(
     @Nonnull
-    EDecompositionDegreeClass eDoD) {
+    final EDecompositionDegreeClass eDoD) {
+    ValueEnforcer.notNull(eDoD, "DoD");
+    if (eDoD.equals(m_eDoD)) {
+      return EChange.UNCHANGED;
+    }
     m_eDoD = eDoD;
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -34,25 +42,41 @@ public class StichprobeDeadwood
     return m_eTreeKind;
   }
 
-  public final void setTreeKind(
+  @Nonnull
+  public final EChange setTreeKind(
     @Nonnull
-    ETreeKind eTreeKind) {
+    final ETreeKind eTreeKind) {
+    ValueEnforcer.notNull(eTreeKind, "TreeKind");
+    if (eTreeKind.equals(m_eTreeKind)) {
+      return EChange.UNCHANGED;
+    }
     m_eTreeKind = eTreeKind;
+    return EChange.CHANGED;
   }
 
   public final int getLength() {
     return m_nLength;
   }
 
-  public final void setLength(int nLength) {
+  @Nonnull
+  public final EChange setLength(final int nLength) {
+    if (nLength == m_nLength) {
+      return EChange.UNCHANGED;
+    }
     m_nLength = nLength;
+    return EChange.CHANGED;
   }
 
   public final int getBHD() {
     return m_nBHD;
   }
 
-  public final void setBHD(int nBHD) {
+  @Nonnull
+  public final EChange setBHD(final int nBHD) {
+    if (nBHD == m_nBHD) {
+      return EChange.UNCHANGED;
+    }
     m_nBHD = nBHD;
+    return EChange.CHANGED;
   }
 }

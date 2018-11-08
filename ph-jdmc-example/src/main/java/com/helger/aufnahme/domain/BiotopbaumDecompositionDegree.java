@@ -1,5 +1,7 @@
 package com.helger.aufnahme.domain;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.state.EChange;
 import javax.annotation.Nonnull;
 
 
@@ -23,33 +25,54 @@ public class BiotopbaumDecompositionDegree
     return m_eType;
   }
 
-  public final void setType(
+  @Nonnull
+  public final EChange setType(
     @Nonnull
-    EDecompositionDegreeClass eType) {
+    final EDecompositionDegreeClass eType) {
+    ValueEnforcer.notNull(eType, "Type");
+    if (eType.equals(m_eType)) {
+      return EChange.UNCHANGED;
+    }
     m_eType = eType;
+    return EChange.CHANGED;
   }
 
   public final boolean isEnabled() {
     return m_bEnabled;
   }
 
-  public final void setEnabled(boolean bEnabled) {
+  @Nonnull
+  public final EChange setEnabled(final boolean bEnabled) {
+    if (bEnabled == m_bEnabled) {
+      return EChange.UNCHANGED;
+    }
     m_bEnabled = bEnabled;
+    return EChange.CHANGED;
   }
 
   public final int getLength() {
     return m_nLength;
   }
 
-  public final void setLength(int nLength) {
+  @Nonnull
+  public final EChange setLength(final int nLength) {
+    if (nLength == m_nLength) {
+      return EChange.UNCHANGED;
+    }
     m_nLength = nLength;
+    return EChange.CHANGED;
   }
 
   public final int getBHD() {
     return m_nBHD;
   }
 
-  public final void setBHD(int nBHD) {
+  @Nonnull
+  public final EChange setBHD(final int nBHD) {
+    if (nBHD == m_nBHD) {
+      return EChange.UNCHANGED;
+    }
     m_nBHD = nBHD;
+    return EChange.CHANGED;
   }
 }
