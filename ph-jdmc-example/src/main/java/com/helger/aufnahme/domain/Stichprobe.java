@@ -94,8 +94,12 @@ public class Stichprobe
     @Nonempty
     final ICommonsList<File> aPics) {
     ValueEnforcer.notEmpty(aPics, "Pics");
-    // TODO list equals
-    m_aPics = aPics;
+    // Ensure the same implementation type
+    final ICommonsList<File> aRealList = new CommonsArrayList<>(aPics);
+    if (aRealList.equals(m_aPics)) {
+      return EChange.UNCHANGED;
+    }
+    m_aPics.setAll(aRealList);
     return EChange.CHANGED;
   }
 
@@ -353,8 +357,13 @@ public class Stichprobe
   public final EChange setTrees(
     @Nonnull
     final ICommonsList<IBiotopbaum> aTrees) {
-    // TODO list equals
-    m_aTrees = aTrees;
+    ValueEnforcer.notNull(aTrees, "Trees");
+    // Ensure the same implementation type
+    final ICommonsList<IBiotopbaum> aRealList = new CommonsArrayList<>(aTrees);
+    if (aRealList.equals(m_aTrees)) {
+      return EChange.UNCHANGED;
+    }
+    m_aTrees.setAll(aRealList);
     return EChange.CHANGED;
   }
 
@@ -411,8 +420,13 @@ public class Stichprobe
   public final EChange setTotSteh(
     @Nonnull
     final ICommonsList<IStichprobeDeadwood> aTotSteh) {
-    // TODO list equals
-    m_aTotSteh = aTotSteh;
+    ValueEnforcer.notNull(aTotSteh, "TotSteh");
+    // Ensure the same implementation type
+    final ICommonsList<IStichprobeDeadwood> aRealList = new CommonsArrayList<>(aTotSteh);
+    if (aRealList.equals(m_aTotSteh)) {
+      return EChange.UNCHANGED;
+    }
+    m_aTotSteh.setAll(aRealList);
     return EChange.CHANGED;
   }
 
@@ -426,8 +440,13 @@ public class Stichprobe
   public final EChange setTotLieg1(
     @Nonnull
     final ICommonsList<IStichprobeDeadwood> aTotLieg1) {
-    // TODO list equals
-    m_aTotLieg1 = aTotLieg1;
+    ValueEnforcer.notNull(aTotLieg1, "TotLieg1");
+    // Ensure the same implementation type
+    final ICommonsList<IStichprobeDeadwood> aRealList = new CommonsArrayList<>(aTotLieg1);
+    if (aRealList.equals(m_aTotLieg1)) {
+      return EChange.UNCHANGED;
+    }
+    m_aTotLieg1 .setAll(aRealList);
     return EChange.CHANGED;
   }
 
@@ -441,8 +460,13 @@ public class Stichprobe
   public final EChange setTotLieg2(
     @Nonnull
     final ICommonsList<IStichprobeDeadwood> aTotLieg2) {
-    // TODO list equals
-    m_aTotLieg2 = aTotLieg2;
+    ValueEnforcer.notNull(aTotLieg2, "TotLieg2");
+    // Ensure the same implementation type
+    final ICommonsList<IStichprobeDeadwood> aRealList = new CommonsArrayList<>(aTotLieg2);
+    if (aRealList.equals(m_aTotLieg2)) {
+      return EChange.UNCHANGED;
+    }
+    m_aTotLieg2 .setAll(aRealList);
     return EChange.CHANGED;
   }
 }

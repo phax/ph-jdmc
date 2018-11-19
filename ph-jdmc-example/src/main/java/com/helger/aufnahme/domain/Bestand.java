@@ -69,8 +69,12 @@ public class Bestand
     @Nonempty
     final ICommonsList<File> aPics) {
     ValueEnforcer.notEmpty(aPics, "Pics");
-    // TODO list equals
-    m_aPics = aPics;
+    // Ensure the same implementation type
+    final ICommonsList<File> aRealList = new CommonsArrayList<>(aPics);
+    if (aRealList.equals(m_aPics)) {
+      return EChange.UNCHANGED;
+    }
+    m_aPics.setAll(aRealList);
     return EChange.CHANGED;
   }
 
@@ -117,8 +121,13 @@ public class Bestand
   public final EChange setBZHBG(
     @Nonnull
     final ICommonsList<IHabitatbaumgruppe> aBZHBG) {
-    // TODO list equals
-    m_aBZHBG = aBZHBG;
+    ValueEnforcer.notNull(aBZHBG, "BZHBG");
+    // Ensure the same implementation type
+    final ICommonsList<IHabitatbaumgruppe> aRealList = new CommonsArrayList<>(aBZHBG);
+    if (aRealList.equals(m_aBZHBG)) {
+      return EChange.UNCHANGED;
+    }
+    m_aBZHBG.setAll(aRealList);
     return EChange.CHANGED;
   }
 

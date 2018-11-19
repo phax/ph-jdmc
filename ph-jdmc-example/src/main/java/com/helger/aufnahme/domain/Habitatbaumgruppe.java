@@ -65,8 +65,12 @@ public class Habitatbaumgruppe
     @Nonempty
     final ICommonsList<File> aPics) {
     ValueEnforcer.notEmpty(aPics, "Pics");
-    // TODO list equals
-    m_aPics = aPics;
+    // Ensure the same implementation type
+    final ICommonsList<File> aRealList = new CommonsArrayList<>(aPics);
+    if (aRealList.equals(m_aPics)) {
+      return EChange.UNCHANGED;
+    }
+    m_aPics.setAll(aRealList);
     return EChange.CHANGED;
   }
 
@@ -80,8 +84,13 @@ public class Habitatbaumgruppe
   public final EChange setHBGzBB(
     @Nonnull
     final ICommonsList<IBiotopbaum> aHBGzBB) {
-    // TODO list equals
-    m_aHBGzBB = aHBGzBB;
+    ValueEnforcer.notNull(aHBGzBB, "HBGzBB");
+    // Ensure the same implementation type
+    final ICommonsList<IBiotopbaum> aRealList = new CommonsArrayList<>(aHBGzBB);
+    if (aRealList.equals(m_aHBGzBB)) {
+      return EChange.UNCHANGED;
+    }
+    m_aHBGzBB.setAll(aRealList);
     return EChange.CHANGED;
   }
 

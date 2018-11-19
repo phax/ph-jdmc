@@ -49,6 +49,7 @@ import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JBlock;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JCommentPart;
@@ -637,60 +638,63 @@ public class JDMProcessor
             jParam.annotate (Nonempty.class);
         }
 
+        final JBlock aBody = aMethodSet.body ();
+
         if (!bIsPrimitive)
         {
+          // Use param name without prefix
+          final String sParamNameLit = jParam.name ().substring (1);
           if (eMultiplicity.isMin1 ())
           {
-            // Use param name without prefix
             if (eMultiplicity.isOpenEnded ())
-              aMethodSet.body ()
-                        .add (cm.ref (ValueEnforcer.class)
-                                .staticInvoke ("notEmpty")
-                                .arg (jParam)
-                                .arg (JExpr.lit (jParam.name ().substring (1))));
+              aBody.add (cm.ref (ValueEnforcer.class).staticInvoke ("notEmpty").arg (jParam).arg (sParamNameLit));
             else
-              aMethodSet.body ()
-                        .add (cm.ref (ValueEnforcer.class)
-                                .staticInvoke ("notNull")
-                                .arg (jParam)
-                                .arg (JExpr.lit (jParam.name ().substring (1))));
+              aBody.add (cm.ref (ValueEnforcer.class).staticInvoke ("notNull").arg (jParam).arg (sParamNameLit));
+          }
+          else
+          {
+            if (eMultiplicity.isOpenEnded ())
+              aBody.add (cm.ref (ValueEnforcer.class).staticInvoke ("notNull").arg (jParam).arg (sParamNameLit));
           }
         }
 
         if (bIsPrimitive)
         {
           // if (param == field) return EChange.UNCHANGED
-          aMethodSet.body ()._if (jParam.eq (jField))._then ()._return (jEChange.staticRef ("UNCHANGED"));
+          aBody._if (jParam.eq (jField))._then ()._return (jEChange.staticRef ("UNCHANGED"));
+          aBody.assign (jField, jParam);
         }
         else
           if (eMultiplicity.isOpenEnded ())
           {
             // List
-            aMethodSet.body ().addSingleLineComment ("TODO list equals");
+            aBody.addSingleLineComment ("Ensure the same implementation type");
+            final JVar jTmpVar = aBody.decl (JMod.FINAL,
+                                             jField.type (),
+                                             "aRealList",
+                                             cm.ref (CommonsArrayList.class).narrowEmpty ()._new ().arg (jParam));
+            aBody._if (jTmpVar.invoke ("equals").arg (jField))._then ()._return (jEChange.staticRef ("UNCHANGED"));
+            aBody.add (jField.invoke ("setAll").arg (jTmpVar));
           }
           else
           {
             if (eMultiplicity.isMin1 ())
             {
               // if (param.equals (field)) return EChange.UNCHANGED
-              aMethodSet.body ()
-                        ._if (jParam.invoke ("equals").arg (jField))
-                        ._then ()
-                        ._return (jEChange.staticRef ("UNCHANGED"));
+              aBody._if (jParam.invoke ("equals").arg (jField))._then ()._return (jEChange.staticRef ("UNCHANGED"));
             }
             else
             {
               // if (EqualsHelper.equals (param, field)) return
               // EChange.UNCHANGED
-              aMethodSet.body ()
-                        ._if (cm.ref (EqualsHelper.class).staticInvoke ("equals").arg (jParam).arg (jField))
-                        ._then ()
-                        ._return (jEChange.staticRef ("UNCHANGED"));
+              aBody._if (cm.ref (EqualsHelper.class).staticInvoke ("equals").arg (jParam).arg (jField))
+                   ._then ()
+                   ._return (jEChange.staticRef ("UNCHANGED"));
             }
+            aBody.assign (jField, jParam);
           }
 
-        aMethodSet.body ().assign (jField, jParam);
-        aMethodSet.body ()._return (jEChange.staticRef ("CHANGED"));
+        aBody._return (jEChange.staticRef ("CHANGED"));
       }
     }
   }

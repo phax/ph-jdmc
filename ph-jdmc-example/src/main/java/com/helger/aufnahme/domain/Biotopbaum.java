@@ -77,8 +77,12 @@ public class Biotopbaum
     @Nonempty
     final ICommonsList<File> aPics) {
     ValueEnforcer.notEmpty(aPics, "Pics");
-    // TODO list equals
-    m_aPics = aPics;
+    // Ensure the same implementation type
+    final ICommonsList<File> aRealList = new CommonsArrayList<>(aPics);
+    if (aRealList.equals(m_aPics)) {
+      return EChange.UNCHANGED;
+    }
+    m_aPics.setAll(aRealList);
     return EChange.CHANGED;
   }
 
@@ -112,8 +116,12 @@ public class Biotopbaum
     @Nonempty
     final ICommonsList<EBiotopbaumType> eType) {
     ValueEnforcer.notEmpty(eType, "Type");
-    // TODO list equals
-    m_eType = eType;
+    // Ensure the same implementation type
+    final ICommonsList<EBiotopbaumType> aRealList = new CommonsArrayList<>(eType);
+    if (aRealList.equals(m_eType)) {
+      return EChange.UNCHANGED;
+    }
+    m_eType.setAll(aRealList);
     return EChange.CHANGED;
   }
 
@@ -301,8 +309,13 @@ public class Biotopbaum
   public final EChange setCaves(
     @Nonnull
     final ICommonsList<ICaveType> aCaves) {
-    // TODO list equals
-    m_aCaves = aCaves;
+    ValueEnforcer.notNull(aCaves, "Caves");
+    // Ensure the same implementation type
+    final ICommonsList<ICaveType> aRealList = new CommonsArrayList<>(aCaves);
+    if (aRealList.equals(m_aCaves)) {
+      return EChange.UNCHANGED;
+    }
+    m_aCaves.setAll(aRealList);
     return EChange.CHANGED;
   }
 
@@ -319,8 +332,12 @@ public class Biotopbaum
     @Nonempty
     final ICommonsList<ITrunkSize> aTrunk) {
     ValueEnforcer.notEmpty(aTrunk, "Trunk");
-    // TODO list equals
-    m_aTrunk = aTrunk;
+    // Ensure the same implementation type
+    final ICommonsList<ITrunkSize> aRealList = new CommonsArrayList<>(aTrunk);
+    if (aRealList.equals(m_aTrunk)) {
+      return EChange.UNCHANGED;
+    }
+    m_aTrunk.setAll(aRealList);
     return EChange.CHANGED;
   }
 
@@ -351,8 +368,13 @@ public class Biotopbaum
   public final EChange setSpecialStructure(
     @Nonnull
     final ICommonsList<ESpecialStructure> eSpecialStructure) {
-    // TODO list equals
-    m_eSpecialStructure = eSpecialStructure;
+    ValueEnforcer.notNull(eSpecialStructure, "SpecialStructure");
+    // Ensure the same implementation type
+    final ICommonsList<ESpecialStructure> aRealList = new CommonsArrayList<>(eSpecialStructure);
+    if (aRealList.equals(m_eSpecialStructure)) {
+      return EChange.UNCHANGED;
+    }
+    m_eSpecialStructure.setAll(aRealList);
     return EChange.CHANGED;
   }
 
@@ -440,8 +462,13 @@ public class Biotopbaum
   public final EChange setDeadwoodCats(
     @Nonnull
     final ICommonsList<IBiotopbaumDeadwood> aDeadwoodCats) {
-    // TODO list equals
-    m_aDeadwoodCats = aDeadwoodCats;
+    ValueEnforcer.notNull(aDeadwoodCats, "DeadwoodCats");
+    // Ensure the same implementation type
+    final ICommonsList<IBiotopbaumDeadwood> aRealList = new CommonsArrayList<>(aDeadwoodCats);
+    if (aRealList.equals(m_aDeadwoodCats)) {
+      return EChange.UNCHANGED;
+    }
+    m_aDeadwoodCats.setAll(aRealList);
     return EChange.CHANGED;
   }
 
@@ -455,8 +482,13 @@ public class Biotopbaum
   public final EChange setDeadwoodDoD(
     @Nonnull
     final ICommonsList<IBiotopbaumDecompositionDegree> aDeadwoodDoD) {
-    // TODO list equals
-    m_aDeadwoodDoD = aDeadwoodDoD;
+    ValueEnforcer.notNull(aDeadwoodDoD, "DeadwoodDoD");
+    // Ensure the same implementation type
+    final ICommonsList<IBiotopbaumDecompositionDegree> aRealList = new CommonsArrayList<>(aDeadwoodDoD);
+    if (aRealList.equals(m_aDeadwoodDoD)) {
+      return EChange.UNCHANGED;
+    }
+    m_aDeadwoodDoD.setAll(aRealList);
     return EChange.CHANGED;
   }
 }
