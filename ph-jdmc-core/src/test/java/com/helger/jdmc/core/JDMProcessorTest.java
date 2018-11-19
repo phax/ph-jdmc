@@ -21,6 +21,8 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
+
 import org.junit.Test;
 
 import com.helger.jdmc.core.datamodel.JDMClass;
@@ -33,12 +35,9 @@ import com.helger.jdmc.core.datamodel.JDMEnum;
  */
 public final class JDMProcessorTest
 {
-  @Test
-  public void testReadSimple () throws IOException
+  private static void _applyTestJDM (@Nonnull final JDMProcessor p)
   {
     final File aSrcDir = new File ("src/test/resources/aufnahme");
-
-    final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.domain");
 
     JDMEnum aEnum;
 
@@ -98,7 +97,23 @@ public final class JDMProcessorTest
     assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "Stichprobe.jdm"));
     assertNotNull (aClass);
+  }
 
-    p.createCode (new File ("../ph-jdmc-example/src/main/java"));
+  private static final File DIR_EX = new File ("../ph-jdmc-example/src/main/java");
+
+  @Test
+  public void testSimple () throws IOException
+  {
+    final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.simple");
+    _applyTestJDM (p);
+    p.createCode (DIR_EX, false);
+  }
+
+  @Test
+  public void testBusinessObject () throws IOException
+  {
+    final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.businessobj");
+    _applyTestJDM (p);
+    p.createCode (DIR_EX, true);
   }
 }

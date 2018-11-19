@@ -62,6 +62,10 @@
       <groupId>com.helger</groupId>
       <artifactId>ph-json</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.helger</groupId>
+      <artifactId>ph-tenancy</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>

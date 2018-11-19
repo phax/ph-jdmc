@@ -45,6 +45,7 @@ import com.helger.commons.name.IHasDisplayName;
 import com.helger.commons.regex.RegExHelper;
 import com.helger.commons.state.EChange;
 import com.helger.commons.string.StringHelper;
+import com.helger.commons.type.ObjectType;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
@@ -56,6 +57,8 @@ import com.helger.jcodemodel.JCommentPart;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JEnumConstant;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JFieldVar;
+import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JJavaName;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
@@ -79,6 +82,8 @@ import com.helger.json.IJsonObject;
 import com.helger.json.IJsonValue;
 import com.helger.json.parser.handler.CollectingJsonParserHandler;
 import com.helger.json.serialize.JsonReader;
+import com.helger.tenancy.AbstractBusinessObject;
+import com.helger.tenancy.IBusinessObject;
 
 @NotThreadSafe
 public class JDMProcessor
@@ -471,10 +476,14 @@ public class JDMProcessor
 
   @Nonnull
   private JDefinedClass _createJavaInterface (@Nonnull final JCodeModel cm,
-                                              @Nonnull final JDMClass aClass) throws JClassAlreadyExistsException
+                                              @Nonnull final JDMClass aClass,
+                                              final boolean bUseBusinessObject) throws JClassAlreadyExistsException
   {
     final JDefinedClass jInterface = cm._class (JMod.PUBLIC, aClass.getFQInterfaceName (), EClassType.INTERFACE);
-    jInterface._implements (Serializable.class);
+    if (bUseBusinessObject)
+      jInterface._implements (IBusinessObject.class);
+    else
+      jInterface._implements (Serializable.class);
     jInterface.javadoc ().add ("<p>Interface for class {@link " + aClass.getClassName () + "}</p>\n");
     jInterface.javadoc ().add ("<p>This class was initially automatically created</p>\n");
     jInterface.javadoc ().addAuthor ().add ("JDMProcessor");
@@ -561,15 +570,56 @@ public class JDMProcessor
 
   private void _createJavaClass (@Nonnull final JCodeModel cm,
                                  @Nonnull final JDMClass aClass,
-                                 @Nonnull final JDefinedClass jInterface) throws JClassAlreadyExistsException
+                                 @Nonnull final JDefinedClass jInterface,
+                                 final boolean bUseBusinessObject) throws JClassAlreadyExistsException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC, aClass.getFQClassName (), EClassType.CLASS);
+    if (bUseBusinessObject)
+      jClass._extends (AbstractBusinessObject.class);
     jClass._implements (jInterface);
     jClass.javadoc ().add ("<p>Default implementation of {@link " + aClass.getFQInterfaceName () + "}</p>\n");
     jClass.javadoc ().add ("<p>This class was initially automatically created</p>\n");
     jClass.javadoc ().addAuthor ().add ("JDMProcessor");
 
+    final JFieldVar jOT = jClass.field (JMod.PUBLIC_STATIC_FINAL,
+                                        ObjectType.class,
+                                        "OT",
+                                        cm.ref (ObjectType.class)._new ().arg (aClass.getClassName ()));
+
     final AbstractJClass jEChange = cm.ref (EChange.class);
+
+    final JMethod jCtor1;
+    JInvocation jC1CallsC2 = null;
+    final JMethod jCtor2;
+    final JMethod jCtor3;
+    JVar jC3Arg = null;
+    if (bUseBusinessObject)
+    {
+      final AbstractJClass jSO = cm.ref ("com.helger.photon.security.object.StubObject");
+
+      jCtor1 = jClass.constructor (JMod.PUBLIC);
+      jC1CallsC2 = JInvocation._this ();
+      jC1CallsC2.arg (jSO.staticInvoke ("createForCurrentUser"));
+      jCtor1.body ().add (jC1CallsC2);
+
+      jCtor2 = jClass.constructor (JMod.PROTECTED);
+      final JVar jC2Stub = jCtor2.param (JMod.FINAL, jSO, "aStubObject");
+      jCtor2.body ().add (JInvocation._super ().arg (jC2Stub));
+
+      jCtor3 = null;
+
+      final JMethod jGetOT = jClass.method (JMod.PUBLIC | JMod.FINAL, ObjectType.class, "getObjectType");
+      jGetOT.annotate (Nonnull.class);
+      jGetOT.body ()._return (jOT);
+    }
+    else
+    {
+      jCtor1 = jClass.constructor (JMod.PUBLIC);
+      jCtor2 = jClass.constructor (JMod.PUBLIC);
+      jCtor3 = jClass.constructor (JMod.PUBLIC);
+      jC3Arg = jCtor3.param (JMod.FINAL, jInterface, "aOther");
+      jC3Arg.annotate (Nonnull.class);
+    }
 
     for (final JDMField aField : aClass.fields ())
     {
@@ -597,6 +647,50 @@ public class JDMProcessor
       {
         jFieldType = cm.ref (ICommonsList.class).narrow (jFieldType);
         aFieldInit = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ();
+      }
+
+      final String sVarName = aField.getJavaVarName (eMultiplicity);
+      if (bUseBusinessObject)
+      {
+        final JVar jC1Arg = jCtor1.param (JMod.FINAL, jFieldType, sVarName);
+        final JVar jC2Arg = jCtor2.param (JMod.FINAL, jFieldType, sVarName);
+        if (!bIsPrimitive)
+        {
+          if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+          {
+            jC1Arg.annotate (Nullable.class);
+            jC2Arg.annotate (Nullable.class);
+          }
+          else
+          {
+            jC1Arg.annotate (Nonnull.class);
+            jC2Arg.annotate (Nonnull.class);
+          }
+          if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+          {
+            jC1Arg.annotate (Nonempty.class);
+            jC2Arg.annotate (Nonempty.class);
+          }
+        }
+        jC1CallsC2.arg (jC1Arg);
+        jCtor2.body ().add (JExpr.invoke (aField.getMethodSetterName ()).arg (jC2Arg));
+      }
+      else
+      {
+        final JVar jC2Arg = jCtor2.param (JMod.FINAL, jFieldType, sVarName);
+        if (!bIsPrimitive)
+        {
+          if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+            jC2Arg.annotate (Nullable.class);
+          else
+            jC2Arg.annotate (Nonnull.class);
+          if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+            jC2Arg.annotate (Nonempty.class);
+        }
+        jCtor2.body ().add (JExpr.invoke (aField.getMethodSetterName ()).arg (jC2Arg));
+        jCtor3.body ()
+              .add (JExpr.invoke (aField.getMethodSetterName ())
+                         .arg (jC3Arg.invoke (aField.getMethodGetterName (eMultiplicity.isOpenEnded ()))));
       }
 
       // Class field
@@ -699,14 +793,16 @@ public class JDMProcessor
     }
   }
 
-  public void createJavaClasses (@Nonnull final JCodeModel cm, @Nonnull final ICommonsList <JDMClass> aClasses)
+  public void createJavaClasses (@Nonnull final JCodeModel cm,
+                                 @Nonnull final ICommonsList <JDMClass> aClasses,
+                                 final boolean bUseBusinessObject)
   {
     for (final JDMClass aClass : aClasses)
     {
       try
       {
-        final JDefinedClass jInterface = _createJavaInterface (cm, aClass);
-        _createJavaClass (cm, aClass, jInterface);
+        final JDefinedClass jInterface = _createJavaInterface (cm, aClass, bUseBusinessObject);
+        _createJavaClass (cm, aClass, jInterface, bUseBusinessObject);
       }
       catch (final JClassAlreadyExistsException ex)
       {
@@ -812,7 +908,7 @@ public class JDMProcessor
     }
   }
 
-  public void createCode (@Nonnull final File aDestDir) throws IOException
+  public void createCode (@Nonnull final File aDestDir, final boolean bUseBusinessObject) throws IOException
   {
     final JCodeModel cm = new JCodeModel ();
 
@@ -820,7 +916,7 @@ public class JDMProcessor
     final ICommonsList <JDMClass> aClasses = CommonsArrayList.createFiltered (m_aTypes,
                                                                               x -> x instanceof JDMClass,
                                                                               (Function <AbstractJDMType, JDMClass>) x -> (JDMClass) x);
-    createJavaClasses (cm, aClasses);
+    createJavaClasses (cm, aClasses, bUseBusinessObject);
 
     // Create all enums
     final ICommonsList <JDMEnum> aEnums = CommonsArrayList.createFiltered (m_aTypes,
