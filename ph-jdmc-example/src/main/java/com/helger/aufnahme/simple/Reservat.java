@@ -1,6 +1,8 @@
 package com.helger.aufnahme.simple;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
@@ -38,6 +40,32 @@ public class Reservat
     setRNr(aOther.getRNr());
     setName(aOther.getName());
     setAreaSize(aOther.getAreaSize());
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (o == this) {
+      return true;
+    }
+    if ((o == null)||(this.getClass()!= o.getClass())) {
+      return false;
+    }
+    final Reservat rhs = ((Reservat) o);
+    if (!EqualsHelper.equals(m_nRNr, rhs.m_nRNr)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sName, rhs.m_sName)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_nAreaSize, rhs.m_nAreaSize)) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeGenerator(this).append(m_nRNr).append(m_sName).append(m_nAreaSize).getHashCode();
   }
 
   public final int getRNr() {

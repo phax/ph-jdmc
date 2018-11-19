@@ -8,6 +8,7 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
@@ -143,6 +144,104 @@ public class Stichprobe
     setTotSteh(aOther.totSteh());
     setTotLieg1(aOther.totLieg1());
     setTotLieg2(aOther.totLieg2());
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (o == this) {
+      return true;
+    }
+    if ((o == null)||(this.getClass()!= o.getClass())) {
+      return false;
+    }
+    final Stichprobe rhs = ((Stichprobe) o);
+    if (!EqualsHelper.equals(m_nStichNr, rhs.m_nStichNr)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aStichNrzR, rhs.m_aStichNrzR)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aPics, rhs.m_aPics)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aDate, rhs.m_aDate)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_nSize, rhs.m_nSize)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_eExposition, rhs.m_eExposition)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sHanglage, rhs.m_sHanglage)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sGesellschaft, rhs.m_sGesellschaft)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_dBKL0, rhs.m_dBKL0)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_dBKL1, rhs.m_dBKL1)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_dBKL2, rhs.m_dBKL2)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_dBKL3, rhs.m_dBKL3)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_dBKL4, rhs.m_dBKL4)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_dBKL5, rhs.m_dBKL5)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_dBKL6, rhs.m_dBKL6)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_dBKL7, rhs.m_dBKL7)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_dBKL8, rhs.m_dBKL8)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_dBKL9, rhs.m_dBKL9)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sUsage, rhs.m_sUsage)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sUsageDesc, rhs.m_sUsageDesc)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aTrees, rhs.m_aTrees)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sDesc, rhs.m_sDesc)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bSameAge, rhs.m_bSameAge)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bOneLevel, rhs.m_bOneLevel)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aTotSteh, rhs.m_aTotSteh)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aTotLieg1, rhs.m_aTotLieg1)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aTotLieg2, rhs.m_aTotLieg2)) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeGenerator(this).append(m_nStichNr).append(m_aStichNrzR).append(m_aPics).append(m_aDate).append(m_nSize).append(m_eExposition).append(m_sHanglage).append(m_sGesellschaft).append(m_dBKL0).append(m_dBKL1).append(m_dBKL2).append(m_dBKL3).append(m_dBKL4).append(m_dBKL5).append(m_dBKL6).append(m_dBKL7).append(m_dBKL8).append(m_dBKL9).append(m_sUsage).append(m_sUsageDesc).append(m_aTrees).append(m_sDesc).append(m_bSameAge).append(m_bOneLevel).append(m_aTotSteh).append(m_aTotLieg1).append(m_aTotLieg2).getHashCode();
   }
 
   public final int getStichNr() {

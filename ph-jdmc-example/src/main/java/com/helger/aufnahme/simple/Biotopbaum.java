@@ -8,6 +8,7 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
@@ -153,6 +154,104 @@ public class Biotopbaum
     setMarkedDesc(aOther.getMarkedDesc());
     setDeadwoodCats(aOther.deadwoodCats());
     setDeadwoodDoD(aOther.deadwoodDoD());
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (o == this) {
+      return true;
+    }
+    if ((o == null)||(this.getClass()!= o.getClass())) {
+      return false;
+    }
+    final Biotopbaum rhs = ((Biotopbaum) o);
+    if (!EqualsHelper.equals(m_nBBNr, rhs.m_nBBNr)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aPics, rhs.m_aPics)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aDate, rhs.m_aDate)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_eType, rhs.m_eType)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sLocation, rhs.m_sLocation)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_eExposition, rhs.m_eExposition)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sHanglage, rhs.m_sHanglage)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bEinschichtig, rhs.m_bEinschichtig)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bSolitary, rhs.m_bSolitary)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bLightLocation, rhs.m_bLightLocation)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bClosedCrown, rhs.m_bClosedCrown)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bNoSun, rhs.m_bNoSun)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bUeberSun, rhs.m_bUeberSun)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bHomogene, rhs.m_bHomogene)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sBeschreibung, rhs.m_sBeschreibung)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_eTreeKind, rhs.m_eTreeKind)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aCaves, rhs.m_aCaves)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aTrunk, rhs.m_aTrunk)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_eVitality, rhs.m_eVitality)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_eSpecialStructure, rhs.m_eSpecialStructure)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sOtherSpecial, rhs.m_sOtherSpecial)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bAspirant, rhs.m_bAspirant)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sAspirantDesc, rhs.m_sAspirantDesc)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bMarked, rhs.m_bMarked)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sMarkedDesc, rhs.m_sMarkedDesc)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aDeadwoodCats, rhs.m_aDeadwoodCats)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aDeadwoodDoD, rhs.m_aDeadwoodDoD)) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeGenerator(this).append(m_nBBNr).append(m_aPics).append(m_aDate).append(m_eType).append(m_sLocation).append(m_eExposition).append(m_sHanglage).append(m_bEinschichtig).append(m_bSolitary).append(m_bLightLocation).append(m_bClosedCrown).append(m_bNoSun).append(m_bUeberSun).append(m_bHomogene).append(m_sBeschreibung).append(m_eTreeKind).append(m_aCaves).append(m_aTrunk).append(m_eVitality).append(m_eSpecialStructure).append(m_sOtherSpecial).append(m_bAspirant).append(m_sAspirantDesc).append(m_bMarked).append(m_sMarkedDesc).append(m_aDeadwoodCats).append(m_aDeadwoodDoD).getHashCode();
   }
 
   public final int getBBNr() {

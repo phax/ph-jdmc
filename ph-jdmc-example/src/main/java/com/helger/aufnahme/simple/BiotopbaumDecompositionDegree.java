@@ -1,6 +1,8 @@
 package com.helger.aufnahme.simple;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
@@ -41,6 +43,35 @@ public class BiotopbaumDecompositionDegree
     setEnabled(aOther.isEnabled());
     setLength(aOther.getLength());
     setBHD(aOther.getBHD());
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (o == this) {
+      return true;
+    }
+    if ((o == null)||(this.getClass()!= o.getClass())) {
+      return false;
+    }
+    final BiotopbaumDecompositionDegree rhs = ((BiotopbaumDecompositionDegree) o);
+    if (!EqualsHelper.equals(m_eType, rhs.m_eType)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bEnabled, rhs.m_bEnabled)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_nLength, rhs.m_nLength)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_nBHD, rhs.m_nBHD)) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeGenerator(this).append(m_eType).append(m_bEnabled).append(m_nLength).append(m_nBHD).getHashCode();
   }
 
   @Nonnull

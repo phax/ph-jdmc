@@ -8,6 +8,7 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
@@ -117,6 +118,80 @@ public class Bestand
     setTotStehBesch(aOther.getTotStehBesch());
     setTotLieg(aOther.getTotLieg());
     setTotLiegBesch(aOther.getTotLiegBesch());
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (o == this) {
+      return true;
+    }
+    if ((o == null)||(this.getClass()!= o.getClass())) {
+      return false;
+    }
+    final Bestand rhs = ((Bestand) o);
+    if (!EqualsHelper.equals(m_nBNr, rhs.m_nBNr)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aPics, rhs.m_aPics)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aDate, rhs.m_aDate)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sVerortung, rhs.m_sVerortung)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_aBZHBG, rhs.m_aBZHBG)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_nAreaSize, rhs.m_nAreaSize)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sBeschreib, rhs.m_sBeschreib)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bSameAge, rhs.m_bSameAge)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bOneLevel, rhs.m_bOneLevel)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_eStockType, rhs.m_eStockType)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sUsageDescription, rhs.m_sUsageDescription)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sGesellschaft, rhs.m_sGesellschaft)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bKronenschluss, rhs.m_bKronenschluss)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bLightWoods, rhs.m_bLightWoods)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_bUnterwuchs, rhs.m_bUnterwuchs)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_eTotSteh, rhs.m_eTotSteh)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sTotStehBesch, rhs.m_sTotStehBesch)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_eTotLieg, rhs.m_eTotLieg)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_sTotLiegBesch, rhs.m_sTotLiegBesch)) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeGenerator(this).append(m_nBNr).append(m_aPics).append(m_aDate).append(m_sVerortung).append(m_aBZHBG).append(m_nAreaSize).append(m_sBeschreib).append(m_bSameAge).append(m_bOneLevel).append(m_eStockType).append(m_sUsageDescription).append(m_sGesellschaft).append(m_bKronenschluss).append(m_bLightWoods).append(m_bUnterwuchs).append(m_eTotSteh).append(m_sTotStehBesch).append(m_eTotLieg).append(m_sTotLiegBesch).getHashCode();
   }
 
   public final int getBNr() {

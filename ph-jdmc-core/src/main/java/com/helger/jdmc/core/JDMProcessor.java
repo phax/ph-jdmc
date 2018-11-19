@@ -36,6 +36,7 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.id.IHasID;
 import com.helger.commons.io.file.FilenameHelper;
 import com.helger.commons.io.resource.FileSystemResource;
@@ -62,6 +63,7 @@ import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JJavaName;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
+import com.helger.jcodemodel.JReturn;
 import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
@@ -593,6 +595,10 @@ public class JDMProcessor
     final JMethod jCtor2;
     final JMethod jCtor3;
     JVar jC3Arg = null;
+    final JMethod jEquals;
+    JVar jEqualsParam = null;
+    final JMethod jHashcode;
+    JInvocation jHashcodeInvocation = null;
     if (bUseBusinessObject)
     {
       final AbstractJClass jSO = cm.ref ("com.helger.photon.security.object.StubObject");
@@ -607,6 +613,8 @@ public class JDMProcessor
       jCtor2.body ().add (JInvocation._super ().arg (jC2Stub));
 
       jCtor3 = null;
+      jEquals = null;
+      jHashcode = null;
 
       final JMethod jGetOT = jClass.method (JMod.PUBLIC | JMod.FINAL, ObjectType.class, "getObjectType");
       jGetOT.annotate (Nonnull.class);
@@ -619,6 +627,19 @@ public class JDMProcessor
       jCtor3 = jClass.constructor (JMod.PUBLIC);
       jC3Arg = jCtor3.param (JMod.FINAL, jInterface, "aOther");
       jC3Arg.annotate (Nonnull.class);
+
+      jEquals = jClass.method (JMod.PUBLIC, cm.BOOLEAN, "equals");
+      jEquals.annotate (Override.class);
+      final JVar jEqualsArg = jEquals.param (JMod.FINAL, cm.ref (Object.class), "o");
+      jEquals.body ()._if (jEqualsArg.eq (JExpr._this ()), new JReturn (JExpr.TRUE));
+      jEquals.body ()
+             ._if (jEqualsArg.eqNull ().cor (JExpr.invokeThis ("getClass").ne (jEqualsArg.invoke ("getClass"))),
+                   new JReturn (JExpr.FALSE));
+      jEqualsParam = jEquals.body ().decl (JMod.FINAL, jClass, "rhs", jEqualsArg.castTo (jClass));
+
+      jHashcode = jClass.method (JMod.PUBLIC, cm.INT, "hashCode");
+      jHashcode.annotate (Override.class);
+      jHashcodeInvocation = cm.ref (HashCodeGenerator.class)._new ().arg (JExpr._this ());
     }
 
     for (final JDMField aField : aClass.fields ())
@@ -648,6 +669,9 @@ public class JDMProcessor
         jFieldType = cm.ref (ICommonsList.class).narrow (jFieldType);
         aFieldInit = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ();
       }
+
+      // Class field
+      final JVar jField = jClass.field (JMod.PRIVATE, jFieldType, aField.getJavaMemberName (eMultiplicity), aFieldInit);
 
       final String sVarName = aField.getJavaVarName (eMultiplicity);
       if (bUseBusinessObject)
@@ -691,10 +715,16 @@ public class JDMProcessor
         jCtor3.body ()
               .add (JExpr.invoke (aField.getMethodSetterName ())
                          .arg (jC3Arg.invoke (aField.getMethodGetterName (eMultiplicity.isOpenEnded ()))));
-      }
 
-      // Class field
-      final JVar jField = jClass.field (JMod.PRIVATE, jFieldType, aField.getJavaMemberName (eMultiplicity), aFieldInit);
+        jEquals.body ()
+               ._if (cm.ref (EqualsHelper.class)
+                       .staticInvoke ("equals")
+                       .arg (jField)
+                       .arg (jEqualsParam.ref (jField))
+                       .not (),
+                     new JReturn (JExpr.FALSE));
+        jHashcodeInvocation = jHashcodeInvocation.invoke ("append").arg (jField);
+      }
 
       // Getter
       {
@@ -791,6 +821,11 @@ public class JDMProcessor
         aBody._return (jEChange.staticRef ("CHANGED"));
       }
     }
+
+    if (jEquals != null)
+      jEquals.body ()._return (JExpr.TRUE);
+    if (jHashcode != null)
+      jHashcode.body ()._return (jHashcodeInvocation.invoke ("getHashCode"));
   }
 
   public void createJavaClasses (@Nonnull final JCodeModel cm,

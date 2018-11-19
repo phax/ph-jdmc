@@ -1,6 +1,8 @@
 package com.helger.aufnahme.simple;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
@@ -37,6 +39,29 @@ public class CaveType
     final ICaveType aOther) {
     setClazz(aOther.getClazz());
     setType(aOther.getType());
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (o == this) {
+      return true;
+    }
+    if ((o == null)||(this.getClass()!= o.getClass())) {
+      return false;
+    }
+    final CaveType rhs = ((CaveType) o);
+    if (!EqualsHelper.equals(m_eClazz, rhs.m_eClazz)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_eType, rhs.m_eType)) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeGenerator(this).append(m_eClazz).append(m_eType).getHashCode();
   }
 
   @Nonnull

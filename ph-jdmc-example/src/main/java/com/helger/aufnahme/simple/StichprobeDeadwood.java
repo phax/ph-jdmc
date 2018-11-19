@@ -1,6 +1,8 @@
 package com.helger.aufnahme.simple;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
@@ -43,6 +45,35 @@ public class StichprobeDeadwood
     setTreeKind(aOther.getTreeKind());
     setLength(aOther.getLength());
     setBHD(aOther.getBHD());
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (o == this) {
+      return true;
+    }
+    if ((o == null)||(this.getClass()!= o.getClass())) {
+      return false;
+    }
+    final StichprobeDeadwood rhs = ((StichprobeDeadwood) o);
+    if (!EqualsHelper.equals(m_eDoD, rhs.m_eDoD)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_eTreeKind, rhs.m_eTreeKind)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_nLength, rhs.m_nLength)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_nBHD, rhs.m_nBHD)) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeGenerator(this).append(m_eDoD).append(m_eTreeKind).append(m_nLength).append(m_nBHD).getHashCode();
   }
 
   @Nonnull

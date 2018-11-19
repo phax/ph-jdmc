@@ -1,6 +1,8 @@
 package com.helger.aufnahme.simple;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
@@ -35,6 +37,29 @@ public class TrunkSize
     final ITrunkSize aOther) {
     setBHD(aOther.getBHD());
     setHeight(aOther.getHeight());
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (o == this) {
+      return true;
+    }
+    if ((o == null)||(this.getClass()!= o.getClass())) {
+      return false;
+    }
+    final TrunkSize rhs = ((TrunkSize) o);
+    if (!EqualsHelper.equals(m_nBHD, rhs.m_nBHD)) {
+      return false;
+    }
+    if (!EqualsHelper.equals(m_eHeight, rhs.m_eHeight)) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeGenerator(this).append(m_nBHD).append(m_eHeight).getHashCode();
   }
 
   public final int getBHD() {
