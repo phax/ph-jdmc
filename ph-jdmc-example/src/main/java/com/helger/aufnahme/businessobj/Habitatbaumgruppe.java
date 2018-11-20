@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
  * <p>This class was initially automatically created</p>
  * 
  * 
- * @author JDMProcessor
+ * @author JDMCodeGenerator
  */
 public class Habitatbaumgruppe
   extends AbstractBusinessObject

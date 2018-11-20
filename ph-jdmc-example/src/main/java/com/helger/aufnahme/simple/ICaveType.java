@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
  * <p>This class was initially automatically created</p>
  * 
  * 
- * @author JDMProcessor
+ * @author JDMCodeGenerator
  */
 public interface ICaveType
   extends Serializable

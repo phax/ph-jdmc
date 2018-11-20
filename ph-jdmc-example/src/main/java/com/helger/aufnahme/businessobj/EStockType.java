@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
  * This class was initially automatically created
  * 
  * 
- * @author JDMProcessor
+ * @author JDMCodeGenerator
  */
 public enum EStockType
   implements IHasID<String> , IHasDisplayName
