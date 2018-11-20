@@ -26,7 +26,9 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +71,7 @@ import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMEnum;
 import com.helger.jdmc.core.datamodel.JDMEnumConstant;
 import com.helger.jdmc.core.datamodel.JDMField;
+import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
 import com.helger.tenancy.AbstractBusinessObject;
 import com.helger.tenancy.IBusinessObject;
 
@@ -561,13 +564,43 @@ public class JDMCodeGenerator
   {
     for (final JDMClass aClass : aClasses)
     {
-      // TODO
+      try
+      {
+        final AbstractJClass jClass = cm.ref (aClass.getFQClassName ());
+        final JDefinedClass jTestClass = cm._class (JMod.PUBLIC, aClass.getFQTestClassName (), EClassType.CLASS);
+        jTestClass.javadoc ().add ("This is the test class for class {@link " + aClass.getFQClassName () + "}\n");
+        jTestClass.javadoc ().add ("This class was initially automatically created\n");
+        jTestClass.javadoc ().addAuthor ().add (AUTHOR);
+
+        if (m_bUseBusinessObject)
+        {
+          // JUnit 4 test rule
+          final JVar jRule = jTestClass.field (JMod.PUBLIC | JMod.FINAL,
+                                               cm.ref (TestRule.class),
+                                               "m_aRule",
+                                               cm.ref (PhotonBasicWebTestRule.class)._new ());
+          jRule.annotate (Rule.class);
+        }
+
+        if (m_bUseBusinessObject)
+        {}
+        else
+        {
+          final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testSetterAndGetter");
+          jMethod.annotate (Test.class);
+          jMethod.body ().decl (jClass, "x", jClass._new ());
+
+        }
+      }
+      catch (final JClassAlreadyExistsException ex)
+      {
+        throw new IllegalStateException (ex);
+      }
     }
   }
 
   public void createTestJavaEnums (@Nonnull final JCodeModel cm, @Nonnull final ICommonsList <JDMEnum> aEnums)
   {
-    final AbstractJType jString = cm.ref (String.class);
     for (final JDMEnum aEnum : aEnums)
     {
       try
