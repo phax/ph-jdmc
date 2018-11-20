@@ -75,6 +75,13 @@ public abstract class AbstractJDMType
     return getFQCN (m_sPackageName, m_sClassName);
   }
 
+  @Nonnull
+  @Nonempty
+  public final String getFQTestClassName ()
+  {
+    return getFQCN (m_sPackageName, m_sClassName + "Test");
+  }
+
   public final boolean isClass ()
   {
     return this instanceof JDMClass;

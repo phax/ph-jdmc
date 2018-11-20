@@ -99,14 +99,14 @@ public final class JDMProcessorTest
     assertNotNull (aClass);
   }
 
-  private static final File DIR_EX = new File ("../ph-jdmc-example/src/main/java");
+  private static final File DIR_EXAMPLE_SRC = new File ("../ph-jdmc-example");
 
   @Test
   public void testSimple () throws IOException
   {
     final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.simple");
     _applyTestJDM (p);
-    p.createCode (DIR_EX, false);
+    new JDMCodeGenerator (p).setUseBusinessObject (false).createCode (DIR_EXAMPLE_SRC);
   }
 
   @Test
@@ -114,6 +114,6 @@ public final class JDMProcessorTest
   {
     final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.businessobj");
     _applyTestJDM (p);
-    p.createCode (DIR_EX, true);
+    new JDMCodeGenerator (p).setUseBusinessObject (true).createCode (DIR_EXAMPLE_SRC);
   }
 }
