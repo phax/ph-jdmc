@@ -24,7 +24,7 @@ import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.string.StringHelper;
 
 @NotThreadSafe
-public abstract class AbstractJDMType
+public abstract class AbstractJDMClassType
 {
   private final String m_sPackageName;
   private final String m_sClassName;
@@ -36,7 +36,7 @@ public abstract class AbstractJDMType
     return (StringHelper.hasText (sPackageName) ? sPackageName + "." : "") + sClassName;
   }
 
-  public AbstractJDMType (@Nonnull final String sPackageName, @Nonnull @Nonempty final String sClassName)
+  public AbstractJDMClassType (@Nonnull final String sPackageName, @Nonnull @Nonempty final String sClassName)
   {
     ValueEnforcer.notNull (sPackageName, "PackageName");
     ValueEnforcer.notEmpty (sClassName, "ClassName");

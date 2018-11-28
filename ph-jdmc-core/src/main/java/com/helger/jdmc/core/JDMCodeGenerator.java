@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableObject;
+import com.helger.commons.collection.CollectionHelper;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.equals.EqualsHelper;
@@ -65,12 +67,13 @@ import com.helger.jcodemodel.JReturn;
 import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
-import com.helger.jdmc.core.datamodel.AbstractJDMType;
+import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMEnum;
 import com.helger.jdmc.core.datamodel.JDMEnumConstant;
 import com.helger.jdmc.core.datamodel.JDMField;
+import com.helger.jdmc.core.datamodel.JDMType;
 import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
 import com.helger.tenancy.AbstractBusinessObject;
 import com.helger.tenancy.IBusinessObject;
@@ -144,7 +147,7 @@ public class JDMCodeGenerator
       // Find type name
       final String sJavaTypeName1 = aField.getType ().getJavaFQCN (eMultiplicity);
       final String sJavaTypeName2;
-      final AbstractJDMType aExistingClass = m_aProcessor.findTypeByName (sJavaTypeName1);
+      final AbstractJDMClassType aExistingClass = m_aProcessor.findTypeByName (sJavaTypeName1);
       if (aExistingClass != null && aExistingClass instanceof JDMClass)
       {
         // It's one of our created classes - add an "I" prefix
@@ -296,7 +299,7 @@ public class JDMCodeGenerator
       // Find type name
       final String sJavaTypeName1 = aField.getType ().getJavaFQCN (eMultiplicity);
       final String sJavaTypeName2;
-      final AbstractJDMType aExistingClass = m_aProcessor.findTypeByName (sJavaTypeName1);
+      final AbstractJDMClassType aExistingClass = m_aProcessor.findTypeByName (sJavaTypeName1);
       if (aExistingClass != null && aExistingClass instanceof JDMClass)
       {
         // It's one of our created classes - add an "I" prefix
@@ -592,6 +595,39 @@ public class JDMCodeGenerator
     }
   }
 
+  public void createTestJavaSelfTest (@Nonnull final JCodeModel cm)
+  {
+    try
+    {
+      final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
+                                                  AbstractJDMClassType.getFQCN (m_aProcessor.getDestinationPackageName (),
+                                                                                "JDMSelfTest"),
+                                                  EClassType.CLASS);
+      jTestClass.javadoc ().add ("This is the self-test class of JDM\n");
+      jTestClass.javadoc ().add ("This class was initially automatically created\n");
+      jTestClass.javadoc ().addAuthor ().add (AUTHOR);
+
+      final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testSetterAndGetter");
+      jMethod.annotate (Test.class);
+
+      int nCount = 0;
+      for (final JDMType aType : CollectionHelper.getSorted (m_aProcessor.getContext ().types ().getTypes (),
+                                                             Comparator.comparing (JDMType::getClassName)))
+      {
+        final JVar aVar = jMethod.body ().decl (cm.ref (aType.getFQCN ()), "var" + nCount);
+        jMethod.body ().assign (aVar, aType.createTestValue (cm));
+        if (!aType.isPrimitive () && aType.isImmutable ())
+          jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotNull").arg (aVar));
+
+        ++nCount;
+      }
+    }
+    catch (final JClassAlreadyExistsException ex)
+    {
+      throw new IllegalStateException (ex);
+    }
+  }
+
   public void createTestJavaClasses (@Nonnull final JCodeModel cm, @Nonnull final ICommonsList <JDMClass> aClasses)
   {
     for (final JDMClass aClass : aClasses)
@@ -728,6 +764,8 @@ public class JDMCodeGenerator
       final File aSrcTestResources = new File (aDestDir, "src/test/resources");
 
       final JCodeModel cm = new JCodeModel ();
+
+      createTestJavaSelfTest (cm);
 
       // Create all classes
       createTestJavaClasses (cm, aClasses);

@@ -31,7 +31,7 @@ public class JDMContext
 
   @Nonnull
   @ReturnsMutableObject
-  public JDMTypes types ()
+  public final JDMTypes types ()
   {
     return m_aTypes;
   }

@@ -25,7 +25,7 @@ import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 
 @NotThreadSafe
-public class JDMEnum extends AbstractJDMType
+public class JDMEnum extends AbstractJDMClassType
 {
   private final ICommonsList <JDMEnumConstant> m_aEnumConstants = new CommonsArrayList <> ();
 

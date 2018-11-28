@@ -25,7 +25,7 @@ import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 
 @NotThreadSafe
-public class JDMClass extends AbstractJDMType
+public class JDMClass extends AbstractJDMClassType
 {
   private final ICommonsList <JDMField> m_aFields = new CommonsArrayList <> ();
 

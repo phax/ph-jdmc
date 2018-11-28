@@ -39,8 +39,9 @@ import com.helger.commons.io.resource.FileSystemResource;
 import com.helger.commons.lang.GenericReflection;
 import com.helger.commons.regex.RegExHelper;
 import com.helger.commons.string.StringHelper;
+import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JJavaName;
-import com.helger.jdmc.core.datamodel.AbstractJDMType;
+import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
 import com.helger.jdmc.core.datamodel.EJDMBaseType;
 import com.helger.jdmc.core.datamodel.EJDMConstraintType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
@@ -65,11 +66,24 @@ public class JDMProcessor
 
   private final String m_sDestinationPackageName;
   private final JDMContext m_aContext = new JDMContext ();
-  private final ICommonsList <AbstractJDMType> m_aTypes = new CommonsArrayList <> ();
+  private final ICommonsList <AbstractJDMClassType> m_aTypes = new CommonsArrayList <> ();
 
   public JDMProcessor (@Nonnull final String sDestinationPackageName)
   {
+    ValueEnforcer.notNull (sDestinationPackageName, "DestinationPackageName");
     m_sDestinationPackageName = sDestinationPackageName;
+  }
+
+  @Nonnull
+  public final String getDestinationPackageName ()
+  {
+    return m_sDestinationPackageName;
+  }
+
+  @Nonnull
+  public final JDMContext getContext ()
+  {
+    return m_aContext;
   }
 
   public static boolean isValidIdentifier (@Nonnull @Nonempty final String s)
@@ -337,10 +351,7 @@ public class JDMProcessor
     }
 
     // Upon success, register this type
-    // TODO
-    m_aContext.types ().registerType (ret, cm -> {
-      throw new UnsupportedOperationException ("Cannot create test values for created classes yet");
-    });
+    m_aContext.types ().registerType (ret, cm -> JExpr._null ());
     m_aTypes.add (ret);
 
     return ret;
@@ -447,14 +458,14 @@ public class JDMProcessor
     m_aContext.types ()
               .registerType (ret,
                              cm -> cm.ref (ret.getFQClassName ())
-                                     .staticInvoke (ret.enumConstants ().getFirst ().getName ()));
+                                     .staticRef (ret.enumConstants ().getFirst ().getName ()));
     m_aTypes.add (ret);
 
     return ret;
   }
 
   @Nullable
-  public AbstractJDMType findTypeByName (@Nonnull final String sFQCN)
+  public AbstractJDMClassType findTypeByName (@Nonnull final String sFQCN)
   {
     return m_aTypes.findFirst (x -> x.getFQClassName ().equals (sFQCN));
   }
@@ -465,7 +476,7 @@ public class JDMProcessor
   {
     return CommonsArrayList.createFiltered (m_aTypes,
                                             x -> x instanceof JDMClass,
-                                            (Function <AbstractJDMType, JDMClass>) x -> (JDMClass) x);
+                                            (Function <AbstractJDMClassType, JDMClass>) x -> (JDMClass) x);
   }
 
   @Nonnull
@@ -474,6 +485,6 @@ public class JDMProcessor
   {
     return CommonsArrayList.createFiltered (m_aTypes,
                                             x -> x instanceof JDMEnum,
-                                            (Function <AbstractJDMType, JDMEnum>) x -> (JDMEnum) x);
+                                            (Function <AbstractJDMClassType, JDMEnum>) x -> (JDMEnum) x);
   }
 }

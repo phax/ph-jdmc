@@ -23,7 +23,6 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
-import com.helger.commons.functional.IBiFunction;
 import com.helger.commons.lang.ClassHelper;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JCodeModel;
@@ -34,7 +33,7 @@ import com.helger.jcodemodel.JCodeModel;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class JDMType
+public class JDMType implements Serializable
 {
   private final String m_sShortName;
   private final String m_sPackageName;
@@ -44,6 +43,7 @@ public class JDMType
   private final boolean m_bSerializable;
   private final boolean m_bIsEnum;
   private EJDMBaseType m_eBaseType;
+  private final IJDMTypeTestValueCreator m_aTestValueFactory;
 
   private JDMType (@Nonnull @Nonempty final String sShortName,
                    @Nonnull final String sPackageName,
@@ -98,6 +98,7 @@ public class JDMType
               m_eBaseType = EJDMBaseType.DATETIME;
             else
               m_eBaseType = EJDMBaseType.OBJECT;
+    m_aTestValueFactory = aTestValueFactory;
   }
 
   /**
@@ -138,7 +139,7 @@ public class JDMType
   @Nonempty
   public String getFQCN ()
   {
-    return AbstractJDMType.getFQCN (m_sPackageName, m_sClassName);
+    return AbstractJDMClassType.getFQCN (m_sPackageName, m_sClassName);
   }
 
   @Nonnull
@@ -186,6 +187,12 @@ public class JDMType
   }
 
   @Nonnull
+  public IJExpression createTestValue (@Nonnull final JCodeModel cm)
+  {
+    return m_aTestValueFactory.createTestValue (cm);
+  }
+
+  @Nonnull
   public static JDMType createPrimitiveType (@Nonnull @Nonempty final String sShortName,
                                              @Nonnull @Nonempty final JDMType aClassType,
                                              @Nonnull final IJExpression aTestValue)
@@ -230,13 +237,6 @@ public class JDMType
                         bSerializable,
                         bIsEnum,
                         aTestValueFactory);
-  }
-
-  @Nonnull
-  public static JDMType createClassTypeImmutable (@Nonnull final Class <?> aClass,
-                                                  @Nonnull final IBiFunction <JCodeModel, Class <?>, IJExpression> aTestValueFactory)
-  {
-    return createClassTypeImmutable (aClass, cm -> aTestValueFactory.apply (cm, aClass));
   }
 
   @Nonnull
