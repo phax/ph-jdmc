@@ -67,7 +67,7 @@ public class TrunkSize
   }
 
   @Nonnull
-  public final EChange setBHD(final int nBHD) {
+  final EChange setBHD(final int nBHD) {
     if (nBHD == m_nBHD) {
       return EChange.UNCHANGED;
     }
@@ -81,7 +81,7 @@ public class TrunkSize
   }
 
   @Nonnull
-  public final EChange setHeight(
+  final EChange setHeight(
     @Nonnull
     final ETreeHeight eHeight) {
     ValueEnforcer.notNull(eHeight, "Height");

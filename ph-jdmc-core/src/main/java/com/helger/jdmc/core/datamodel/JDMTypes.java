@@ -37,7 +37,11 @@ import org.w3c.dom.Element;
 
 import com.helger.commons.collection.impl.CommonsHashMap;
 import com.helger.commons.collection.impl.ICommonsMap;
+import com.helger.commons.datetime.PDTFactory;
+import com.helger.commons.math.MathHelper;
 import com.helger.commons.string.StringHelper;
+import com.helger.jcodemodel.JExpr;
+import com.helger.xml.serialize.read.DOMReader;
 
 /**
  * List of {@link JDMType}.
@@ -61,37 +65,83 @@ public class JDMTypes
 
   private void _registerStandardTypes ()
   {
-    _register (JDMType.createClassTypeImmutable (BigDecimal.class));
-    _register (JDMType.createClassTypeImmutable (BigInteger.class));
-    final JDMType aBoolean = _register (JDMType.createClassTypeImmutable (Boolean.class));
-    _register (JDMType.createPrimitiveType ("boolean", aBoolean));
-    final JDMType aByte = _register (JDMType.createClassTypeImmutable (Byte.class));
-    _register (JDMType.createPrimitiveType ("byte", aByte));
-    final JDMType aCharacter = _register (JDMType.createClassTypeImmutable (Character.class));
-    _register (JDMType.createPrimitiveType ("char", aCharacter));
-    final JDMType aDouble = _register (JDMType.createClassTypeImmutable (Double.class));
-    _register (JDMType.createPrimitiveType ("double", aDouble));
-    _register (JDMType.createClassTypeImmutable (Duration.class));
-    _register (JDMType.createClassTypeImmutable (Element.class));
-    _register (JDMType.createClassTypeImmutable (File.class));
-    final JDMType aFloat = _register (JDMType.createClassTypeImmutable (Float.class));
-    _register (JDMType.createPrimitiveType ("float", aFloat));
-    final JDMType aInteger = _register (JDMType.createClassTypeImmutable (Integer.class));
-    _register (JDMType.createPrimitiveType ("int", aInteger));
-    _register (JDMType.createClassTypeImmutable (LocalDate.class));
-    _register (JDMType.createClassTypeImmutable (LocalDateTime.class));
-    _register (JDMType.createClassTypeImmutable (LocalTime.class));
-    final JDMType aLong = _register (JDMType.createClassTypeImmutable (Long.class));
-    _register (JDMType.createPrimitiveType ("long", aLong));
-    _register (JDMType.createClassTypeImmutable (Object.class));
-    _register (JDMType.createClassTypeImmutable (OffsetDateTime.class));
-    _register (JDMType.createClassTypeImmutable (Period.class));
-    _register (JDMType.createClassTypeImmutable (QName.class));
-    _register (JDMType.createClassTypeImmutable (Serializable.class));
-    final JDMType aShort = _register (JDMType.createClassTypeImmutable (Short.class));
-    _register (JDMType.createPrimitiveType ("short", aShort));
-    _register (JDMType.createClassTypeImmutable (String.class));
-    _register (JDMType.createClassTypeImmutable (ZonedDateTime.class));
+    _register (JDMType.createClassTypeImmutable (BigDecimal.class,
+                                                 (cm) -> cm.ref (MathHelper.class)
+                                                           .staticInvoke ("toBigDecimal")
+                                                           .arg ("12.3456")));
+    _register (JDMType.createClassTypeImmutable (BigInteger.class,
+                                                 (cm) -> cm.ref (MathHelper.class)
+                                                           .staticInvoke ("toBigInteger")
+                                                           .arg ("7890")));
+    final JDMType aBoolean = _register (JDMType.createClassTypeImmutable (Boolean.class,
+                                                                          (cm, cls) -> cm.ref (cls)
+                                                                                         .staticRef ("TRUE")));
+    _register (JDMType.createPrimitiveType ("boolean", aBoolean, JExpr.TRUE));
+    final JDMType aByte = _register (JDMType.createClassTypeImmutable (Byte.class,
+                                                                       (cm, cls) -> cm.ref (cls)
+                                                                                      .staticInvoke ("valueOf")
+                                                                                      .arg (0)));
+    _register (JDMType.createPrimitiveType ("byte", aByte, JExpr.lit (0)));
+    final JDMType aCharacter = _register (JDMType.createClassTypeImmutable (Character.class,
+                                                                            (cm, cls) -> cm.ref (cls)
+                                                                                           .staticInvoke ("valueOf")
+                                                                                           .arg (' ')));
+    _register (JDMType.createPrimitiveType ("char", aCharacter, JExpr.lit (' ')));
+    final JDMType aDouble = _register (JDMType.createClassTypeImmutable (Double.class,
+                                                                         (cm, cls) -> cm.ref (cls)
+                                                                                        .staticInvoke ("valueOf")
+                                                                                        .arg (0d)));
+    _register (JDMType.createPrimitiveType ("double", aDouble, JExpr.lit (0d)));
+    _register (JDMType.createClassTypeImmutable (Duration.class,
+                                                 (cm, cls) -> cm.ref (cls).staticInvoke ("ofDays").arg (0L)));
+    _register (JDMType.createClassTypeImmutable (Element.class,
+                                                 cm -> cm.ref (DOMReader.class)
+                                                         .staticInvoke ("readXMLDOM")
+                                                         .arg ("<item/>")
+                                                         .invoke ("getDocumentElement")));
+    _register (JDMType.createClassTypeImmutable (File.class, (cm, cls) -> cm.ref (cls)._new ().arg ("file.txt")));
+    final JDMType aFloat = _register (JDMType.createClassTypeImmutable (Float.class,
+                                                                        (cm, cls) -> cm.ref (cls)
+                                                                                       .staticInvoke ("valueOf")
+                                                                                       .arg (0f)));
+    _register (JDMType.createPrimitiveType ("float", aFloat, JExpr.lit (0f)));
+    final JDMType aInteger = _register (JDMType.createClassTypeImmutable (Integer.class,
+                                                                          (cm, cls) -> cm.ref (cls)
+                                                                                         .staticInvoke ("valueOf")
+                                                                                         .arg (0)));
+    _register (JDMType.createPrimitiveType ("int", aInteger, JExpr.lit (0)));
+    _register (JDMType.createClassTypeImmutable (LocalDate.class,
+                                                 cm -> cm.ref (PDTFactory.class).staticInvoke ("getCurrentLocalDate")));
+    _register (JDMType.createClassTypeImmutable (LocalDateTime.class,
+                                                 cm -> cm.ref (PDTFactory.class)
+                                                         .staticInvoke ("getCurrentLocalDateTime")));
+    _register (JDMType.createClassTypeImmutable (LocalTime.class,
+                                                 cm -> cm.ref (PDTFactory.class).staticInvoke ("getCurrentLocalTime")));
+    final JDMType aLong = _register (JDMType.createClassTypeImmutable (Long.class,
+                                                                       (cm, cls) -> cm.ref (cls)
+                                                                                      .staticInvoke ("valueOf")
+                                                                                      .arg (0L)));
+    _register (JDMType.createPrimitiveType ("long", aLong, JExpr.lit (0L)));
+    _register (JDMType.createClassTypeImmutable (Object.class,
+                                                 (cm, cls) -> JExpr.lit ("object").castTo (cm.ref (cls))));
+    _register (JDMType.createClassTypeImmutable (OffsetDateTime.class,
+                                                 cm -> cm.ref (PDTFactory.class)
+                                                         .staticInvoke ("getCurrentOffsetDateTime")));
+    _register (JDMType.createClassTypeImmutable (Period.class,
+                                                 (cm, cls) -> cm.ref (cls).staticInvoke ("ofDays").arg (0)));
+    _register (JDMType.createClassTypeImmutable (QName.class,
+                                                 (cm, cls) -> cm.ref (cls)._new ().arg ("urn:example").arg ("elem")));
+    _register (JDMType.createClassTypeImmutable (Serializable.class,
+                                                 (cm, cls) -> JExpr.lit ("object").castTo (cm.ref (cls))));
+    final JDMType aShort = _register (JDMType.createClassTypeImmutable (Short.class,
+                                                                        (cm, cls) -> cm.ref (cls)
+                                                                                       .staticInvoke ("valueOf")
+                                                                                       .arg (0)));
+    _register (JDMType.createPrimitiveType ("short", aShort, JExpr.lit (0)));
+    _register (JDMType.createClassTypeImmutable (String.class, cm -> JExpr.lit ("foo")));
+    _register (JDMType.createClassTypeImmutable (ZonedDateTime.class,
+                                                 cm -> cm.ref (PDTFactory.class)
+                                                         .staticInvoke ("getCurrentZonedDateTime")));
   }
 
   public JDMTypes ()
@@ -108,7 +158,8 @@ public class JDMTypes
   }
 
   @Nonnull
-  public JDMType registerType (@Nonnull final AbstractJDMType aClass)
+  public JDMType registerType (@Nonnull final AbstractJDMType aClass,
+                               @Nonnull final IJDMTypeTestValueCreator aTestValueFactory)
   {
     final boolean bIsImmutable = aClass.isEnum ();
     final boolean bIsSerializable = true;
@@ -117,7 +168,8 @@ public class JDMTypes
                                                    aClass.getClassName (),
                                                    bIsImmutable,
                                                    bIsSerializable,
-                                                   bIsEnum);
+                                                   bIsEnum,
+                                                   aTestValueFactory);
     return _register (aType);
   }
 }

@@ -56,7 +56,7 @@ public class StichprobeDeadwood
   }
 
   @Nonnull
-  public final EChange setDoD(
+  final EChange setDoD(
     @Nonnull
     final EDecompositionDegreeClass eDoD) {
     ValueEnforcer.notNull(eDoD, "DoD");
@@ -73,7 +73,7 @@ public class StichprobeDeadwood
   }
 
   @Nonnull
-  public final EChange setTreeKind(
+  final EChange setTreeKind(
     @Nonnull
     final ETreeKind eTreeKind) {
     ValueEnforcer.notNull(eTreeKind, "TreeKind");
@@ -89,7 +89,7 @@ public class StichprobeDeadwood
   }
 
   @Nonnull
-  public final EChange setLength(final int nLength) {
+  final EChange setLength(final int nLength) {
     if (nLength == m_nLength) {
       return EChange.UNCHANGED;
     }
@@ -102,7 +102,7 @@ public class StichprobeDeadwood
   }
 
   @Nonnull
-  public final EChange setBHD(final int nBHD) {
+  final EChange setBHD(final int nBHD) {
     if (nBHD == m_nBHD) {
       return EChange.UNCHANGED;
     }

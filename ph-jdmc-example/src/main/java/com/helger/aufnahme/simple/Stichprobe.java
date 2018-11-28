@@ -28,7 +28,7 @@ public class Stichprobe
   public static final ObjectType OT = new ObjectType("Stichprobe");
   private int m_nStichNr;
   private IReservat m_aStichNrzR;
-  private ICommonsList<File> m_aPics = new CommonsArrayList<>();
+  private final ICommonsList<File> m_aPics = new CommonsArrayList<>();
   private LocalDate m_aDate;
   private int m_nSize;
   private EExposition m_eExposition;
@@ -46,13 +46,13 @@ public class Stichprobe
   private double m_dBKL9;
   private String m_sUsage;
   private String m_sUsageDesc;
-  private ICommonsList<IBiotopbaum> m_aTrees = new CommonsArrayList<>();
+  private final ICommonsList<IBiotopbaum> m_aTrees = new CommonsArrayList<>();
   private String m_sDesc;
   private boolean m_bSameAge;
   private boolean m_bOneLevel;
-  private ICommonsList<IStichprobeDeadwood> m_aTotSteh = new CommonsArrayList<>();
-  private ICommonsList<IStichprobeDeadwood> m_aTotLieg1 = new CommonsArrayList<>();
-  private ICommonsList<IStichprobeDeadwood> m_aTotLieg2 = new CommonsArrayList<>();
+  private final ICommonsList<IStichprobeDeadwood> m_aTotSteh = new CommonsArrayList<>();
+  private final ICommonsList<IStichprobeDeadwood> m_aTotLieg1 = new CommonsArrayList<>();
+  private final ICommonsList<IStichprobeDeadwood> m_aTotLieg2 = new CommonsArrayList<>();
 
   public Stichprobe() {
   }
@@ -249,7 +249,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setStichNr(final int nStichNr) {
+  final EChange setStichNr(final int nStichNr) {
     if (nStichNr == m_nStichNr) {
       return EChange.UNCHANGED;
     }
@@ -263,7 +263,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setStichNrzR(
+  final EChange setStichNrzR(
     @Nonnull
     final IReservat aStichNrzR) {
     ValueEnforcer.notNull(aStichNrzR, "StichNrzR");
@@ -282,7 +282,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setPics(
+  final EChange setPics(
     @Nonnull
     @Nonempty
     final ICommonsList<File> aPics) {
@@ -302,7 +302,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setDate(
+  final EChange setDate(
     @Nonnull
     final LocalDate aDate) {
     ValueEnforcer.notNull(aDate, "Date");
@@ -318,7 +318,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setSize(final int nSize) {
+  final EChange setSize(final int nSize) {
     if (nSize == m_nSize) {
       return EChange.UNCHANGED;
     }
@@ -332,7 +332,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setExposition(
+  final EChange setExposition(
     @Nonnull
     final EExposition eExposition) {
     ValueEnforcer.notNull(eExposition, "Exposition");
@@ -349,7 +349,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setHanglage(
+  final EChange setHanglage(
     @Nullable
     final String sHanglage) {
     if (EqualsHelper.equals(sHanglage, m_sHanglage)) {
@@ -365,7 +365,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setGesellschaft(
+  final EChange setGesellschaft(
     @Nonnull
     final String sGesellschaft) {
     ValueEnforcer.notNull(sGesellschaft, "Gesellschaft");
@@ -381,7 +381,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setBKL0(final double dBKL0) {
+  final EChange setBKL0(final double dBKL0) {
     if (dBKL0 == m_dBKL0) {
       return EChange.UNCHANGED;
     }
@@ -394,7 +394,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setBKL1(final double dBKL1) {
+  final EChange setBKL1(final double dBKL1) {
     if (dBKL1 == m_dBKL1) {
       return EChange.UNCHANGED;
     }
@@ -407,7 +407,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setBKL2(final double dBKL2) {
+  final EChange setBKL2(final double dBKL2) {
     if (dBKL2 == m_dBKL2) {
       return EChange.UNCHANGED;
     }
@@ -420,7 +420,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setBKL3(final double dBKL3) {
+  final EChange setBKL3(final double dBKL3) {
     if (dBKL3 == m_dBKL3) {
       return EChange.UNCHANGED;
     }
@@ -433,7 +433,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setBKL4(final double dBKL4) {
+  final EChange setBKL4(final double dBKL4) {
     if (dBKL4 == m_dBKL4) {
       return EChange.UNCHANGED;
     }
@@ -446,7 +446,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setBKL5(final double dBKL5) {
+  final EChange setBKL5(final double dBKL5) {
     if (dBKL5 == m_dBKL5) {
       return EChange.UNCHANGED;
     }
@@ -459,7 +459,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setBKL6(final double dBKL6) {
+  final EChange setBKL6(final double dBKL6) {
     if (dBKL6 == m_dBKL6) {
       return EChange.UNCHANGED;
     }
@@ -472,7 +472,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setBKL7(final double dBKL7) {
+  final EChange setBKL7(final double dBKL7) {
     if (dBKL7 == m_dBKL7) {
       return EChange.UNCHANGED;
     }
@@ -485,7 +485,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setBKL8(final double dBKL8) {
+  final EChange setBKL8(final double dBKL8) {
     if (dBKL8 == m_dBKL8) {
       return EChange.UNCHANGED;
     }
@@ -498,7 +498,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setBKL9(final double dBKL9) {
+  final EChange setBKL9(final double dBKL9) {
     if (dBKL9 == m_dBKL9) {
       return EChange.UNCHANGED;
     }
@@ -512,7 +512,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setUsage(
+  final EChange setUsage(
     @Nonnull
     final String sUsage) {
     ValueEnforcer.notNull(sUsage, "Usage");
@@ -529,7 +529,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setUsageDesc(
+  final EChange setUsageDesc(
     @Nonnull
     final String sUsageDesc) {
     ValueEnforcer.notNull(sUsageDesc, "UsageDesc");
@@ -547,7 +547,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setTrees(
+  final EChange setTrees(
     @Nonnull
     final ICommonsList<IBiotopbaum> aTrees) {
     ValueEnforcer.notNull(aTrees, "Trees");
@@ -566,7 +566,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setDesc(
+  final EChange setDesc(
     @Nonnull
     final String sDesc) {
     ValueEnforcer.notNull(sDesc, "Desc");
@@ -582,7 +582,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setSameAge(final boolean bSameAge) {
+  final EChange setSameAge(final boolean bSameAge) {
     if (bSameAge == m_bSameAge) {
       return EChange.UNCHANGED;
     }
@@ -595,7 +595,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setOneLevel(final boolean bOneLevel) {
+  final EChange setOneLevel(final boolean bOneLevel) {
     if (bOneLevel == m_bOneLevel) {
       return EChange.UNCHANGED;
     }
@@ -610,7 +610,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setTotSteh(
+  final EChange setTotSteh(
     @Nonnull
     final ICommonsList<IStichprobeDeadwood> aTotSteh) {
     ValueEnforcer.notNull(aTotSteh, "TotSteh");
@@ -630,7 +630,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setTotLieg1(
+  final EChange setTotLieg1(
     @Nonnull
     final ICommonsList<IStichprobeDeadwood> aTotLieg1) {
     ValueEnforcer.notNull(aTotLieg1, "TotLieg1");
@@ -650,7 +650,7 @@ public class Stichprobe
   }
 
   @Nonnull
-  public final EChange setTotLieg2(
+  final EChange setTotLieg2(
     @Nonnull
     final ICommonsList<IStichprobeDeadwood> aTotLieg2) {
     ValueEnforcer.notNull(aTotLieg2, "TotLieg2");

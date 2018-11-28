@@ -337,7 +337,10 @@ public class JDMProcessor
     }
 
     // Upon success, register this type
-    m_aContext.types ().registerType (ret);
+    // TODO
+    m_aContext.types ().registerType (ret, cm -> {
+      throw new UnsupportedOperationException ("Cannot create test values for created classes yet");
+    });
     m_aTypes.add (ret);
 
     return ret;
@@ -441,7 +444,10 @@ public class JDMProcessor
     }
 
     // Upon success, register this type
-    m_aContext.types ().registerType (ret);
+    m_aContext.types ()
+              .registerType (ret,
+                             cm -> cm.ref (ret.getFQClassName ())
+                                     .staticInvoke (ret.enumConstants ().getFirst ().getName ()));
     m_aTypes.add (ret);
 
     return ret;

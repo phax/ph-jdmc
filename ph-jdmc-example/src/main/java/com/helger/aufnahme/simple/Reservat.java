@@ -73,7 +73,7 @@ public class Reservat
   }
 
   @Nonnull
-  public final EChange setRNr(final int nRNr) {
+  final EChange setRNr(final int nRNr) {
     if (nRNr == m_nRNr) {
       return EChange.UNCHANGED;
     }
@@ -87,7 +87,7 @@ public class Reservat
   }
 
   @Nonnull
-  public final EChange setName(
+  final EChange setName(
     @Nonnull
     final String sName) {
     ValueEnforcer.notNull(sName, "Name");
@@ -103,7 +103,7 @@ public class Reservat
   }
 
   @Nonnull
-  public final EChange setAreaSize(final int nAreaSize) {
+  final EChange setAreaSize(final int nAreaSize) {
     if (nAreaSize == m_nAreaSize) {
       return EChange.UNCHANGED;
     }

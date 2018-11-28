@@ -27,10 +27,10 @@ public class Bestand
 {
   public static final ObjectType OT = new ObjectType("Bestand");
   private int m_nBNr;
-  private ICommonsList<File> m_aPics = new CommonsArrayList<>();
+  private final ICommonsList<File> m_aPics = new CommonsArrayList<>();
   private LocalDate m_aDate;
   private String m_sVerortung;
-  private ICommonsList<IHabitatbaumgruppe> m_aBZHBG = new CommonsArrayList<>();
+  private final ICommonsList<IHabitatbaumgruppe> m_aBZHBG = new CommonsArrayList<>();
   private int m_nAreaSize;
   private String m_sBeschreib;
   private boolean m_bSameAge;
@@ -199,7 +199,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setBNr(final int nBNr) {
+  final EChange setBNr(final int nBNr) {
     if (nBNr == m_nBNr) {
       return EChange.UNCHANGED;
     }
@@ -215,7 +215,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setPics(
+  final EChange setPics(
     @Nonnull
     @Nonempty
     final ICommonsList<File> aPics) {
@@ -235,7 +235,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setDate(
+  final EChange setDate(
     @Nonnull
     final LocalDate aDate) {
     ValueEnforcer.notNull(aDate, "Date");
@@ -252,7 +252,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setVerortung(
+  final EChange setVerortung(
     @Nullable
     final String sVerortung) {
     if (EqualsHelper.equals(sVerortung, m_sVerortung)) {
@@ -269,7 +269,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setBZHBG(
+  final EChange setBZHBG(
     @Nonnull
     final ICommonsList<IHabitatbaumgruppe> aBZHBG) {
     ValueEnforcer.notNull(aBZHBG, "BZHBG");
@@ -287,7 +287,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setAreaSize(final int nAreaSize) {
+  final EChange setAreaSize(final int nAreaSize) {
     if (nAreaSize == m_nAreaSize) {
       return EChange.UNCHANGED;
     }
@@ -301,7 +301,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setBeschreib(
+  final EChange setBeschreib(
     @Nonnull
     final String sBeschreib) {
     ValueEnforcer.notNull(sBeschreib, "Beschreib");
@@ -317,7 +317,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setSameAge(final boolean bSameAge) {
+  final EChange setSameAge(final boolean bSameAge) {
     if (bSameAge == m_bSameAge) {
       return EChange.UNCHANGED;
     }
@@ -330,7 +330,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setOneLevel(final boolean bOneLevel) {
+  final EChange setOneLevel(final boolean bOneLevel) {
     if (bOneLevel == m_bOneLevel) {
       return EChange.UNCHANGED;
     }
@@ -344,7 +344,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setStockType(
+  final EChange setStockType(
     @Nonnull
     final EStockType eStockType) {
     ValueEnforcer.notNull(eStockType, "StockType");
@@ -361,7 +361,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setUsageDescription(
+  final EChange setUsageDescription(
     @Nonnull
     final String sUsageDescription) {
     ValueEnforcer.notNull(sUsageDescription, "UsageDescription");
@@ -378,7 +378,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setGesellschaft(
+  final EChange setGesellschaft(
     @Nonnull
     final String sGesellschaft) {
     ValueEnforcer.notNull(sGesellschaft, "Gesellschaft");
@@ -394,7 +394,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setKronenschluss(final boolean bKronenschluss) {
+  final EChange setKronenschluss(final boolean bKronenschluss) {
     if (bKronenschluss == m_bKronenschluss) {
       return EChange.UNCHANGED;
     }
@@ -407,7 +407,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setLightWoods(final boolean bLightWoods) {
+  final EChange setLightWoods(final boolean bLightWoods) {
     if (bLightWoods == m_bLightWoods) {
       return EChange.UNCHANGED;
     }
@@ -420,7 +420,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setUnterwuchs(final boolean bUnterwuchs) {
+  final EChange setUnterwuchs(final boolean bUnterwuchs) {
     if (bUnterwuchs == m_bUnterwuchs) {
       return EChange.UNCHANGED;
     }
@@ -434,7 +434,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setTotSteh(
+  final EChange setTotSteh(
     @Nonnull
     final EStockDeadwood eTotSteh) {
     ValueEnforcer.notNull(eTotSteh, "TotSteh");
@@ -451,7 +451,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setTotStehBesch(
+  final EChange setTotStehBesch(
     @Nonnull
     final String sTotStehBesch) {
     ValueEnforcer.notNull(sTotStehBesch, "TotStehBesch");
@@ -468,7 +468,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setTotLieg(
+  final EChange setTotLieg(
     @Nonnull
     final EStockDeadwood eTotLieg) {
     ValueEnforcer.notNull(eTotLieg, "TotLieg");
@@ -485,7 +485,7 @@ public class Bestand
   }
 
   @Nonnull
-  public final EChange setTotLiegBesch(
+  final EChange setTotLiegBesch(
     @Nonnull
     final String sTotLiegBesch) {
     ValueEnforcer.notNull(sTotLiegBesch, "TotLiegBesch");

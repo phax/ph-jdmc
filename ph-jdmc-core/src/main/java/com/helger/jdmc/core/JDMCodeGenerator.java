@@ -83,6 +83,7 @@ public class JDMCodeGenerator
 
   private final JDMProcessor m_aProcessor;
   private boolean m_bUseBusinessObject = false;
+  private boolean m_bSetterArePackagePrivate = true;
 
   public JDMCodeGenerator (@Nonnull final JDMProcessor aProcessor)
   {
@@ -90,10 +91,34 @@ public class JDMCodeGenerator
     m_aProcessor = aProcessor;
   }
 
+  /**
+   * Should the {@link IBusinessObject} base interface etc. be used for the
+   * created objects?
+   *
+   * @param bUseBusinessObject
+   *        <code>true</code> to enable it, <code>false</code> to disable it.
+   * @return this for chaining
+   */
   @Nonnull
   public JDMCodeGenerator setUseBusinessObject (final boolean bUseBusinessObject)
   {
     m_bUseBusinessObject = bUseBusinessObject;
+    return this;
+  }
+
+  /**
+   * Should the setter of the domain object implementation package private or
+   * public.
+   *
+   * @param bSetterArePackagePrivate
+   *        <code>true</code> for package private, <code>false</code> for
+   *        public.
+   * @return this for chaining
+   */
+  @Nonnull
+  public JDMCodeGenerator setSetterArePackagePrivate (final boolean bSetterArePackagePrivate)
+  {
+    m_bSetterArePackagePrivate = bSetterArePackagePrivate;
     return this;
   }
 
@@ -283,14 +308,19 @@ public class JDMCodeGenerator
       // List or field?
       AbstractJType jFieldType = cm.ref (sJavaTypeName2);
       IJExpression aFieldInit = null;
+      boolean bFieldIsFinal = false;
       if (eMultiplicity.isOpenEnded ())
       {
         jFieldType = cm.ref (ICommonsList.class).narrow (jFieldType);
         aFieldInit = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ();
+        bFieldIsFinal = true;
       }
 
       // Class field
-      final JVar jField = jClass.field (JMod.PRIVATE, jFieldType, aField.getJavaMemberName (eMultiplicity), aFieldInit);
+      final JVar jField = jClass.field (JMod.PRIVATE | (bFieldIsFinal ? JMod.FINAL : 0),
+                                        jFieldType,
+                                        aField.getJavaMemberName (eMultiplicity),
+                                        aFieldInit);
 
       final String sVarName = aField.getJavaVarName (eMultiplicity);
       if (m_bUseBusinessObject)
@@ -368,7 +398,9 @@ public class JDMCodeGenerator
 
       // Setter
       {
-        final JMethod aMethodSet = jClass.method (JMod.PUBLIC | JMod.FINAL, jEChange, aField.getMethodSetterName ());
+        final JMethod aMethodSet = jClass.method ((m_bSetterArePackagePrivate ? 0 : JMod.PUBLIC) | JMod.FINAL,
+                                                  jEChange,
+                                                  aField.getMethodSetterName ());
         aMethodSet.annotate (Nonnull.class);
         final JVar jParam = aMethodSet.param (JMod.FINAL, jFieldType, aField.getJavaVarName (eMultiplicity));
         if (!bIsPrimitive)
@@ -567,7 +599,9 @@ public class JDMCodeGenerator
       try
       {
         final AbstractJClass jClass = cm.ref (aClass.getFQClassName ());
-        final JDefinedClass jTestClass = cm._class (JMod.PUBLIC, aClass.getFQTestClassName (), EClassType.CLASS);
+        final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
+                                                    aClass.getFQTestClassName (),
+                                                    EClassType.CLASS);
         jTestClass.javadoc ().add ("This is the test class for class {@link " + aClass.getFQClassName () + "}\n");
         jTestClass.javadoc ().add ("This class was initially automatically created\n");
         jTestClass.javadoc ().addAuthor ().add (AUTHOR);
@@ -583,13 +617,16 @@ public class JDMCodeGenerator
         }
 
         if (m_bUseBusinessObject)
-        {}
+        {
+          // TODO
+        }
         else
         {
           final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testSetterAndGetter");
           jMethod.annotate (Test.class);
           jMethod.body ().decl (jClass, "x", jClass._new ());
 
+          // TODO
         }
       }
       catch (final JClassAlreadyExistsException ex)

@@ -23,7 +23,10 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
+import com.helger.commons.functional.IBiFunction;
 import com.helger.commons.lang.ClassHelper;
+import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JCodeModel;
 
 /**
  * Single type.
@@ -48,11 +51,14 @@ public class JDMType
                    final boolean bIsPrimitive,
                    final boolean bImmutable,
                    final boolean bSerializable,
-                   final boolean bIsEnum)
+                   final boolean bIsEnum,
+                   @Nonnull final IJDMTypeTestValueCreator aTestValueFactory)
   {
     ValueEnforcer.notEmpty (sShortName, "ShortName");
     ValueEnforcer.notNull (sPackageName, "PackageName");
     ValueEnforcer.notEmpty (sClassName, "ClassName");
+    ValueEnforcer.notNull (aTestValueFactory, "TestValueFactory");
+
     m_sShortName = sShortName;
     m_sPackageName = sPackageName;
     m_sClassName = sClassName;
@@ -181,10 +187,13 @@ public class JDMType
 
   @Nonnull
   public static JDMType createPrimitiveType (@Nonnull @Nonempty final String sShortName,
-                                             @Nonnull @Nonempty final JDMType aClassType)
+                                             @Nonnull @Nonempty final JDMType aClassType,
+                                             @Nonnull final IJExpression aTestValue)
   {
     ValueEnforcer.notEmpty (sShortName, "ShortName");
     ValueEnforcer.notNull (aClassType, "ClassType");
+    ValueEnforcer.notNull (aTestValue, "TestValue");
+
     final boolean bIsPrimitive = true;
     final boolean bImmutable = true;
     final boolean bSerializable = true;
@@ -195,7 +204,8 @@ public class JDMType
                         bIsPrimitive,
                         bImmutable,
                         bSerializable,
-                        bIsEnum);
+                        bIsEnum,
+                        cm -> aTestValue);
   }
 
   @Nonnull
@@ -203,11 +213,14 @@ public class JDMType
                                          @Nonnull @Nonempty final String sLocalClassName,
                                          final boolean bImmutable,
                                          final boolean bSerializable,
-                                         final boolean bIsEnum)
+                                         final boolean bIsEnum,
+                                         @Nonnull final IJDMTypeTestValueCreator aTestValueFactory)
   {
     ValueEnforcer.notNull (sPackageName, "PackageName");
     ValueEnforcer.notEmpty (sLocalClassName, "LocalClassName");
     ValueEnforcer.isTrue (sLocalClassName.indexOf ('.') < 0, "LocalClassName may not contain a dot");
+    ValueEnforcer.notNull (aTestValueFactory, "TestValueFactory");
+
     final boolean bIsPrimitive = false;
     return new JDMType (sLocalClassName,
                         sPackageName,
@@ -215,19 +228,28 @@ public class JDMType
                         bIsPrimitive,
                         bImmutable,
                         bSerializable,
-                        bIsEnum);
+                        bIsEnum,
+                        aTestValueFactory);
   }
 
   @Nonnull
-  public static JDMType createClassTypeImmutable (@Nonnull final Class <?> aClass)
+  public static JDMType createClassTypeImmutable (@Nonnull final Class <?> aClass,
+                                                  @Nonnull final IBiFunction <JCodeModel, Class <?>, IJExpression> aTestValueFactory)
+  {
+    return createClassTypeImmutable (aClass, cm -> aTestValueFactory.apply (cm, aClass));
+  }
+
+  @Nonnull
+  public static JDMType createClassTypeImmutable (@Nonnull final Class <?> aClass,
+                                                  @Nonnull final IJDMTypeTestValueCreator aTestValueFactory)
   {
     final boolean bSerializable = Serializable.class.isAssignableFrom (aClass);
     final boolean bIsEnum = Enum.class.isAssignableFrom (aClass);
-    return createClassType (aClass.getPackage ()
-                                  .getName (),
+    return createClassType (aClass.getPackage ().getName (),
                             ClassHelper.getClassLocalName (aClass),
                             true,
                             bSerializable,
-                            bIsEnum);
+                            bIsEnum,
+                            aTestValueFactory);
   }
 }

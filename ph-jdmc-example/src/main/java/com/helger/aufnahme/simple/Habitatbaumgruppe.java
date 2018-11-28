@@ -27,8 +27,8 @@ public class Habitatbaumgruppe
 {
   public static final ObjectType OT = new ObjectType("Habitatbaumgruppe");
   private int m_nHBGNr;
-  private ICommonsList<File> m_aPics = new CommonsArrayList<>();
-  private ICommonsList<IBiotopbaum> m_aHBGzBB = new CommonsArrayList<>();
+  private final ICommonsList<File> m_aPics = new CommonsArrayList<>();
+  private final ICommonsList<IBiotopbaum> m_aHBGzBB = new CommonsArrayList<>();
   private LocalDate m_aDate;
   private String m_sStandort;
   private boolean m_bOneLevel;
@@ -165,7 +165,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setHBGNr(final int nHBGNr) {
+  final EChange setHBGNr(final int nHBGNr) {
     if (nHBGNr == m_nHBGNr) {
       return EChange.UNCHANGED;
     }
@@ -181,7 +181,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setPics(
+  final EChange setPics(
     @Nonnull
     @Nonempty
     final ICommonsList<File> aPics) {
@@ -202,7 +202,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setHBGzBB(
+  final EChange setHBGzBB(
     @Nonnull
     final ICommonsList<IBiotopbaum> aHBGzBB) {
     ValueEnforcer.notNull(aHBGzBB, "HBGzBB");
@@ -221,7 +221,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setDate(
+  final EChange setDate(
     @Nonnull
     final LocalDate aDate) {
     ValueEnforcer.notNull(aDate, "Date");
@@ -238,7 +238,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setStandort(
+  final EChange setStandort(
     @Nonnull
     final String sStandort) {
     ValueEnforcer.notNull(sStandort, "Standort");
@@ -254,7 +254,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setOneLevel(final boolean bOneLevel) {
+  final EChange setOneLevel(final boolean bOneLevel) {
     if (bOneLevel == m_bOneLevel) {
       return EChange.UNCHANGED;
     }
@@ -267,7 +267,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setLight(final boolean bLight) {
+  final EChange setLight(final boolean bLight) {
     if (bLight == m_bLight) {
       return EChange.UNCHANGED;
     }
@@ -280,7 +280,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setClosedCrown(final boolean bClosedCrown) {
+  final EChange setClosedCrown(final boolean bClosedCrown) {
     if (bClosedCrown == m_bClosedCrown) {
       return EChange.UNCHANGED;
     }
@@ -293,7 +293,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setNoSun(final boolean bNoSun) {
+  final EChange setNoSun(final boolean bNoSun) {
     if (bNoSun == m_bNoSun) {
       return EChange.UNCHANGED;
     }
@@ -306,7 +306,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setHomogen(final boolean bHomogen) {
+  final EChange setHomogen(final boolean bHomogen) {
     if (bHomogen == m_bHomogen) {
       return EChange.UNCHANGED;
     }
@@ -320,7 +320,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setExposition(
+  final EChange setExposition(
     @Nonnull
     final EExposition eExposition) {
     ValueEnforcer.notNull(eExposition, "Exposition");
@@ -337,7 +337,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setHanglage(
+  final EChange setHanglage(
     @Nullable
     final String sHanglage) {
     if (EqualsHelper.equals(sHanglage, m_sHanglage)) {
@@ -352,7 +352,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setAreaSize(final int nAreaSize) {
+  final EChange setAreaSize(final int nAreaSize) {
     if (nAreaSize == m_nAreaSize) {
       return EChange.UNCHANGED;
     }
@@ -365,7 +365,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setOnlyBB(final boolean bOnlyBB) {
+  final EChange setOnlyBB(final boolean bOnlyBB) {
     if (bOnlyBB == m_bOnlyBB) {
       return EChange.UNCHANGED;
     }
@@ -379,7 +379,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EChange setBeschreibung(
+  final EChange setBeschreibung(
     @Nonnull
     final String sBeschreibung) {
     ValueEnforcer.notNull(sBeschreibung, "Beschreibung");

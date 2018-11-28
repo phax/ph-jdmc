@@ -70,7 +70,7 @@ public class CaveType
   }
 
   @Nonnull
-  public final EChange setClazz(
+  final EChange setClazz(
     @Nonnull
     final ECaveClass eClazz) {
     ValueEnforcer.notNull(eClazz, "Clazz");
@@ -87,7 +87,7 @@ public class CaveType
   }
 
   @Nonnull
-  public final EChange setType(
+  final EChange setType(
     @Nonnull
     final ECaveType eType) {
     ValueEnforcer.notNull(eType, "Type");
