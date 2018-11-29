@@ -12,7 +12,7 @@ import org.junit.rules.TestRule;
  * 
  * @author JDMCodeGenerator
  */
-public class CaveTypeTest {
+public final class CaveTypeTest {
   @Rule
   public final TestRule m_aRule = new PhotonBasicWebTestRule();
 }

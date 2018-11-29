@@ -12,7 +12,7 @@ import org.junit.rules.TestRule;
  * 
  * @author JDMCodeGenerator
  */
-public class BiotopbaumTest {
+public final class BiotopbaumTest {
   @Rule
   public final TestRule m_aRule = new PhotonBasicWebTestRule();
 }

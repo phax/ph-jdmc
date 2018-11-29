@@ -10,7 +10,7 @@ import org.junit.Test;
  * 
  * @author JDMCodeGenerator
  */
-public class TrunkSizeTest {
+public final class TrunkSizeTest {
 
   @Test
   public void testSetterAndGetter() {

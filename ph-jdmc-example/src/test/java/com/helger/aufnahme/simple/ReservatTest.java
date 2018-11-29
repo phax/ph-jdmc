@@ -10,7 +10,7 @@ import org.junit.Test;
  * 
  * @author JDMCodeGenerator
  */
-public class ReservatTest {
+public final class ReservatTest {
 
   @Test
   public void testSetterAndGetter() {

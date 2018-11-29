@@ -12,7 +12,7 @@ import org.junit.rules.TestRule;
  * 
  * @author JDMCodeGenerator
  */
-public class BestandTest {
+public final class BestandTest {
   @Rule
   public final TestRule m_aRule = new PhotonBasicWebTestRule();
 }

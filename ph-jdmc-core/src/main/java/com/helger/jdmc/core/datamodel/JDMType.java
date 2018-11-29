@@ -195,11 +195,11 @@ public class JDMType implements Serializable
   @Nonnull
   public static JDMType createPrimitiveType (@Nonnull @Nonempty final String sShortName,
                                              @Nonnull @Nonempty final JDMType aClassType,
-                                             @Nonnull final IJExpression aTestValue)
+                                             @Nonnull final IJDMTypeTestValueCreator aTestValueFactory)
   {
     ValueEnforcer.notEmpty (sShortName, "ShortName");
     ValueEnforcer.notNull (aClassType, "ClassType");
-    ValueEnforcer.notNull (aTestValue, "TestValue");
+    ValueEnforcer.notNull (aTestValueFactory, "TestValueFactory");
 
     final boolean bIsPrimitive = true;
     final boolean bImmutable = true;
@@ -212,7 +212,7 @@ public class JDMType implements Serializable
                         bImmutable,
                         bSerializable,
                         bIsEnum,
-                        cm -> aTestValue);
+                        aTestValueFactory);
   }
 
   @Nonnull

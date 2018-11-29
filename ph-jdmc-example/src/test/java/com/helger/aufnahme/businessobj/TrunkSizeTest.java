@@ -12,7 +12,7 @@ import org.junit.rules.TestRule;
  * 
  * @author JDMCodeGenerator
  */
-public class TrunkSizeTest {
+public final class TrunkSizeTest {
   @Rule
   public final TestRule m_aRule = new PhotonBasicWebTestRule();
 }

@@ -51,6 +51,7 @@ import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JAnnotationUse;
 import com.helger.jcodemodel.JBlock;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
@@ -609,12 +610,16 @@ public class JDMCodeGenerator
 
       final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testSetterAndGetter");
       jMethod.annotate (Test.class);
+      jMethod.annotate (SuppressWarnings.class)
+             .paramArray (JAnnotationUse.SPECIAL_KEY_VALUE, new String [] { "unused", "cast" });
 
       int nCount = 0;
       for (final JDMType aType : CollectionHelper.getSorted (m_aProcessor.getContext ().types ().getTypes (),
                                                              Comparator.comparing (JDMType::getClassName)))
       {
-        final JVar aVar = jMethod.body ().decl (cm.ref (aType.getFQCN ()), "var" + nCount);
+        final JVar aVar = jMethod.body ()
+                                 .decl (cm.ref (aType.isPrimitive () ? aType.getShortName () : aType.getFQCN ()),
+                                        "var" + nCount);
         jMethod.body ().assign (aVar, aType.createTestValue (cm));
         if (!aType.isPrimitive () && aType.isImmutable ())
           jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotNull").arg (aVar));

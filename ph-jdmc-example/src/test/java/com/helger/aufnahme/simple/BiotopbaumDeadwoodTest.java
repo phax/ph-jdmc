@@ -10,7 +10,7 @@ import org.junit.Test;
  * 
  * @author JDMCodeGenerator
  */
-public class BiotopbaumDeadwoodTest {
+public final class BiotopbaumDeadwoodTest {
 
   @Test
   public void testSetterAndGetter() {

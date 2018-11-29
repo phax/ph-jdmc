@@ -10,7 +10,7 @@ import org.junit.Test;
  * 
  * @author JDMCodeGenerator
  */
-public class HabitatbaumgruppeTest {
+public final class HabitatbaumgruppeTest {
 
   @Test
   public void testSetterAndGetter() {

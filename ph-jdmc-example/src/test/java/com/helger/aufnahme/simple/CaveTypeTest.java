@@ -10,7 +10,7 @@ import org.junit.Test;
  * 
  * @author JDMCodeGenerator
  */
-public class CaveTypeTest {
+public final class CaveTypeTest {
 
   @Test
   public void testSetterAndGetter() {
