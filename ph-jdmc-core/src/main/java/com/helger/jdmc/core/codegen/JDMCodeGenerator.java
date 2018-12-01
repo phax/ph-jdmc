@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.jdmc.core;
+package com.helger.jdmc.core.codegen;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,10 +41,7 @@ import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.equals.EqualsHelper;
 import com.helger.commons.hashcode.HashCodeGenerator;
-import com.helger.commons.id.IHasID;
 import com.helger.commons.io.file.FileOperationManager;
-import com.helger.commons.lang.EnumHelper;
-import com.helger.commons.name.IHasDisplayName;
 import com.helger.commons.state.EChange;
 import com.helger.commons.string.StringHelper;
 import com.helger.commons.string.ToStringGenerator;
@@ -59,10 +56,8 @@ import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JCommentPart;
 import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JEnumConstant;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JFieldVar;
-import com.helger.jcodemodel.JForEach;
 import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
@@ -70,11 +65,11 @@ import com.helger.jcodemodel.JReturn;
 import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
+import com.helger.jdmc.core.JDMProcessor;
 import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMEnum;
-import com.helger.jdmc.core.datamodel.JDMEnumConstant;
 import com.helger.jdmc.core.datamodel.JDMField;
 import com.helger.jdmc.core.datamodel.JDMType;
 import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
@@ -88,8 +83,7 @@ public class JDMCodeGenerator
   private static final Logger LOGGER = LoggerFactory.getLogger (JDMCodeGenerator.class);
 
   private final JDMProcessor m_aProcessor;
-  private boolean m_bUseBusinessObject = false;
-  private boolean m_bSetterArePackagePrivate = true;
+  private final JDMCodeGenSettings m_aSettings = new JDMCodeGenSettings ();
 
   public JDMCodeGenerator (@Nonnull final JDMProcessor aProcessor)
   {
@@ -97,35 +91,11 @@ public class JDMCodeGenerator
     m_aProcessor = aProcessor;
   }
 
-  /**
-   * Should the {@link IBusinessObject} base interface etc. be used for the
-   * created objects?
-   *
-   * @param bUseBusinessObject
-   *        <code>true</code> to enable it, <code>false</code> to disable it.
-   * @return this for chaining
-   */
   @Nonnull
-  public JDMCodeGenerator setUseBusinessObject (final boolean bUseBusinessObject)
+  @ReturnsMutableObject
+  public final JDMCodeGenSettings settings ()
   {
-    m_bUseBusinessObject = bUseBusinessObject;
-    return this;
-  }
-
-  /**
-   * Should the setter of the domain object implementation package private or
-   * public.
-   *
-   * @param bSetterArePackagePrivate
-   *        <code>true</code> for package private, <code>false</code> for
-   *        public.
-   * @return this for chaining
-   */
-  @Nonnull
-  public JDMCodeGenerator setSetterArePackagePrivate (final boolean bSetterArePackagePrivate)
-  {
-    m_bSetterArePackagePrivate = bSetterArePackagePrivate;
-    return this;
+    return m_aSettings;
   }
 
   @Nonnull
@@ -133,7 +103,7 @@ public class JDMCodeGenerator
                                                   @Nonnull final JDMClass aClass) throws JClassAlreadyExistsException
   {
     final JDefinedClass jInterface = cm._class (JMod.PUBLIC, aClass.getFQInterfaceName (), EClassType.INTERFACE);
-    if (m_bUseBusinessObject)
+    if (m_aSettings.isUseBusinessObject ())
       jInterface._implements (IBusinessObject.class);
     else
       jInterface._implements (Serializable.class);
@@ -221,12 +191,13 @@ public class JDMCodeGenerator
     return jInterface;
   }
 
-  private void _createMainJavaClass (@Nonnull final JCodeModel cm,
-                                     @Nonnull final JDMClass aClass,
-                                     @Nonnull final JDefinedClass jInterface) throws JClassAlreadyExistsException
+  @Nonnull
+  private JDefinedClass _createMainJavaClass (@Nonnull final JCodeModel cm,
+                                              @Nonnull final JDMClass aClass,
+                                              @Nonnull final JDefinedClass jInterface) throws JClassAlreadyExistsException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC, aClass.getFQClassName (), EClassType.CLASS);
-    if (m_bUseBusinessObject)
+    if (m_aSettings.isUseBusinessObject ())
       jClass._extends (AbstractBusinessObject.class);
     jClass._implements (jInterface);
     jClass.javadoc ().add ("<p>Default implementation of {@link " + aClass.getFQInterfaceName () + "}</p>\n");
@@ -252,7 +223,7 @@ public class JDMCodeGenerator
     JInvocation jHashcodeInvocation = null;
     final JMethod jToString;
     JInvocation jToStringInvocation = null;
-    if (m_bUseBusinessObject)
+    if (m_aSettings.isUseBusinessObject ())
     {
       final AbstractJClass jSO = cm.ref ("com.helger.photon.security.object.StubObject");
 
@@ -365,7 +336,7 @@ public class JDMCodeGenerator
                                         aFieldInit);
 
       final String sVarName = aField.getJavaVarName (eMultiplicity);
-      if (m_bUseBusinessObject)
+      if (m_aSettings.isUseBusinessObject ())
       {
         final JVar jC1Arg = jCtor1.param (JMod.FINAL, jFieldType, sVarName);
         if (!bIsPrimitive)
@@ -454,7 +425,8 @@ public class JDMCodeGenerator
 
       // Setter
       {
-        final JMethod aMethodSet = jClass.method ((m_bSetterArePackagePrivate ? 0 : JMod.PUBLIC) | JMod.FINAL,
+        final JMethod aMethodSet = jClass.method ((m_aSettings.isSetterArePackagePrivate () ? 0 : JMod.PUBLIC) |
+                                                  JMod.FINAL,
                                                   jEChange,
                                                   aField.getMethodSetterName ());
         aMethodSet.annotate (Nonnull.class);
@@ -536,6 +508,8 @@ public class JDMCodeGenerator
       jHashcode.body ()._return (jHashcodeInvocation.invoke ("getHashCode"));
     if (jToString != null)
       jToString.body ()._return (jToStringInvocation.invoke ("getToString"));
+
+    return jClass;
   }
 
   public void createMainJavaClasses (@Nonnull final JCodeModel cm, @Nonnull final ICommonsList <JDMClass> aClasses)
@@ -545,104 +519,13 @@ public class JDMCodeGenerator
       try
       {
         final JDefinedClass jInterface = _createMainJavaInterface (cm, aClass);
-        _createMainJavaClass (cm, aClass, jInterface);
-      }
-      catch (final JClassAlreadyExistsException ex)
-      {
-        throw new IllegalStateException (ex);
-      }
-    }
-  }
-
-  public void createMainJavaEnums (@Nonnull final JCodeModel cm, @Nonnull final ICommonsList <JDMEnum> aEnums)
-  {
-    final AbstractJType jString = cm.ref (String.class);
-    for (final JDMEnum aEnum : aEnums)
-    {
-      try
-      {
-        final JDefinedClass jEnum = cm._class (JMod.PUBLIC, aEnum.getFQClassName (), EClassType.ENUM);
-        jEnum._implements (cm.ref (IHasID.class).narrow (jString));
-        jEnum._implements (cm.ref (IHasDisplayName.class));
-        jEnum.javadoc ().add ("This class was initially automatically created\n");
-        jEnum.javadoc ().addAuthor ().add (AUTHOR);
-
-        for (final JDMEnumConstant aEnumConstant : aEnum.enumConstants ())
-        {
-          final JEnumConstant jEnumConstant = jEnum.enumConstant (aEnumConstant.getName ())
-                                                   .arg (JExpr.lit (aEnumConstant.getID ()))
-                                                   .arg (JExpr.lit (aEnumConstant.getDisplayName ()));
-          if (aEnumConstant.hasComment ())
-            jEnumConstant.javadoc ().add (aEnumConstant.getComment ());
-        }
-
-        final JVar jFieldID = jEnum.field (JMod.PRIVATE | JMod.FINAL, jString, "m_sID");
-        final JVar jFieldDisplayName = jEnum.field (JMod.PRIVATE | JMod.FINAL, jString, "m_sDisplayName");
-
-        {
-          final JMethod jMethod = jEnum.constructor (JMod.PRIVATE);
-          final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
-          jID.annotate (Nonnull.class);
-          jID.annotate (Nonempty.class);
-          final JVar jDisplayName = jMethod.param (JMod.FINAL, jString, "sDisplayName");
-          jDisplayName.annotate (Nonnull.class);
-          jDisplayName.annotate (Nonempty.class);
-          jMethod.body ().assign (jFieldID, jID);
-          jMethod.body ().assign (jFieldDisplayName, jDisplayName);
-        }
-
-        {
-          final JMethod jMethod = jEnum.method (JMod.PUBLIC, jString, "getID");
-          jMethod.annotate (Nonnull.class);
-          jMethod.annotate (Nonempty.class);
-          jMethod.body ()._return (jFieldID);
-        }
-
-        {
-          final JMethod jMethod = jEnum.method (JMod.PUBLIC, jString, "getDisplayName");
-          jMethod.annotate (Nonnull.class);
-          jMethod.annotate (Nonempty.class);
-          jMethod.body ()._return (jFieldDisplayName);
-        }
-
-        {
-          final JMethod jMethod = jEnum.method (JMod.PUBLIC | JMod.STATIC, jEnum, "getFromIDOrNull");
-          jMethod.annotate (Nullable.class);
-          final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
-          jID.annotate (Nullable.class);
-          jMethod.body ()
-                 ._return (cm.ref (EnumHelper.class)
-                             .staticInvoke ("getFromIDOrNull")
-                             .arg (jEnum.dotclass ())
-                             .arg (jID));
-        }
-
-        {
-          final JMethod jMethod = jEnum.method (JMod.PUBLIC | JMod.STATIC, jEnum, "getFromIDOrDefault");
-          jMethod.annotate (Nullable.class);
-          final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
-          jID.annotate (Nullable.class);
-          final JVar jDefault = jMethod.param (JMod.FINAL, jEnum, "eDefault");
-          jDefault.annotate (Nullable.class);
-          jMethod.body ()
-                 ._return (cm.ref (EnumHelper.class)
-                             .staticInvoke ("getFromIDOrDefault")
-                             .arg (jEnum.dotclass ())
-                             .arg (jID)
-                             .arg (jDefault));
-        }
-
-        {
-          final JMethod jMethod = jEnum.method (JMod.PUBLIC | JMod.STATIC, jEnum, "getFromIDOrThrow");
-          jMethod.annotate (Nonnull.class);
-          final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
-          jID.annotate (Nullable.class);
-          jMethod.body ()
-                 ._return (cm.ref (EnumHelper.class)
-                             .staticInvoke ("getFromIDOrThrow")
-                             .arg (jEnum.dotclass ())
-                             .arg (jID));
-        }
+        final JDefinedClass jDomainClass = _createMainJavaClass (cm, aClass, jInterface);
+        if (false)
+          JDMHelperMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings,
+                                                                         cm,
+                                                                         aClass,
+                                                                         jInterface,
+                                                                         jDomainClass);
       }
       catch (final JClassAlreadyExistsException ex)
       {
@@ -702,7 +585,7 @@ public class JDMCodeGenerator
         jTestClass.javadoc ().add ("This class was initially automatically created\n");
         jTestClass.javadoc ().addAuthor ().add (AUTHOR);
 
-        if (m_bUseBusinessObject)
+        if (m_aSettings.isUseBusinessObject ())
         {
           // JUnit 4 test rule
           final JVar jRule = jTestClass.field (JMod.PUBLIC | JMod.FINAL,
@@ -712,7 +595,7 @@ public class JDMCodeGenerator
           jRule.annotate (Rule.class);
         }
 
-        if (m_bUseBusinessObject)
+        if (m_aSettings.isUseBusinessObject ())
         {
           // TODO
         }
@@ -724,60 +607,6 @@ public class JDMCodeGenerator
 
           // TODO
         }
-      }
-      catch (final JClassAlreadyExistsException ex)
-      {
-        throw new IllegalStateException (ex);
-      }
-    }
-  }
-
-  public void createTestJavaEnums (@Nonnull final JCodeModel cm, @Nonnull final ICommonsList <JDMEnum> aEnums)
-  {
-    for (final JDMEnum aEnum : aEnums)
-    {
-      try
-      {
-        final AbstractJClass jEnum = cm.ref (aEnum.getFQClassName ());
-        final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
-                                                    aEnum.getFQTestClassName (),
-                                                    EClassType.CLASS);
-        jTestClass.javadoc ().add ("This is the test class for class {@link " + aEnum.getFQClassName () + "}\n");
-        jTestClass.javadoc ().add ("This class was initially automatically created\n");
-        jTestClass.javadoc ().addAuthor ().add (AUTHOR);
-
-        final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testBasic");
-        jMethod.annotate (Test.class);
-        final JForEach jForEach = jMethod.body ().forEach (JMod.FINAL, jEnum, "e", jEnum.staticInvoke ("values"));
-        jForEach.body ()
-                .add (cm.ref (Assert.class)
-                        .staticInvoke ("assertTrue")
-                        .arg (cm.ref (StringHelper.class)
-                                .staticInvoke ("hasText")
-                                .arg (jForEach.var ().invoke ("getID"))));
-        jForEach.body ()
-                .add (cm.ref (Assert.class)
-                        .staticInvoke ("assertTrue")
-                        .arg (cm.ref (StringHelper.class)
-                                .staticInvoke ("hasText")
-                                .arg (jForEach.var ().invoke ("getDisplayName"))));
-        jForEach.body ()
-                .add (cm.ref (Assert.class)
-                        .staticInvoke ("assertSame")
-                        .arg (jForEach.var ())
-                        .arg (jEnum.staticInvoke ("getFromIDOrNull").arg (jForEach.var ().invoke ("getID"))));
-        jForEach.body ()
-                .add (cm.ref (Assert.class)
-                        .staticInvoke ("assertSame")
-                        .arg (jForEach.var ())
-                        .arg (jEnum.staticInvoke ("getFromIDOrDefault")
-                                   .arg (jForEach.var ().invoke ("getID"))
-                                   .argNull ()));
-        jForEach.body ()
-                .add (cm.ref (Assert.class)
-                        .staticInvoke ("assertSame")
-                        .arg (jForEach.var ())
-                        .arg (jEnum.staticInvoke ("getFromIDOrThrow").arg (jForEach.var ().invoke ("getID"))));
       }
       catch (final JClassAlreadyExistsException ex)
       {
@@ -815,7 +644,7 @@ public class JDMCodeGenerator
       createMainJavaClasses (cm, aClasses);
 
       // Create all enums
-      createMainJavaEnums (cm, aEnums);
+      JDMHelperEnum.createMainJavaEnums (cm, aEnums);
 
       new JCMWriter (cm).setCharset (StandardCharsets.UTF_8)
                         .setIndentString ("  ")
@@ -837,7 +666,7 @@ public class JDMCodeGenerator
       createTestJavaClasses (cm, aClasses);
 
       // Create all enums
-      createTestJavaEnums (cm, aEnums);
+      JDMHelperEnum.createTestJavaEnums (cm, aEnums);
 
       new JCMWriter (cm).setCharset (StandardCharsets.UTF_8)
                         .setIndentString ("  ")

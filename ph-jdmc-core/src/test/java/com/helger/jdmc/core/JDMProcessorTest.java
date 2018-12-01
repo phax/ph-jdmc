@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 
 import org.junit.Test;
 
+import com.helger.jdmc.core.codegen.JDMCodeGenerator;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMEnum;
 
@@ -110,7 +111,9 @@ public final class JDMProcessorTest
   {
     final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.simple");
     _applyTestJDM (p);
-    new JDMCodeGenerator (p).setUseBusinessObject (false).createCode (DIR_EXAMPLE_SRC);
+    final JDMCodeGenerator cg = new JDMCodeGenerator (p);
+    cg.settings ().setUseBusinessObject (false);
+    cg.createCode (DIR_EXAMPLE_SRC);
   }
 
   @Test
@@ -119,6 +122,8 @@ public final class JDMProcessorTest
     final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.businessobj");
     p.setClassNamePrefix ("Ex").setClassNameSuffix ("BO");
     _applyTestJDM (p);
-    new JDMCodeGenerator (p).setUseBusinessObject (true).createCode (DIR_EXAMPLE_SRC);
+    final JDMCodeGenerator cg = new JDMCodeGenerator (p);
+    cg.settings ().setUseBusinessObject (true).setSetterArePackagePrivate (true);
+    cg.createCode (DIR_EXAMPLE_SRC);
   }
 }
