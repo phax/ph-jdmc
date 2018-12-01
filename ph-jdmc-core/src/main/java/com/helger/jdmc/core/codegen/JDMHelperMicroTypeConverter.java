@@ -16,29 +16,79 @@
  */
 package com.helger.jdmc.core.codegen;
 
-import javax.annotation.Nonnull;
+import java.util.Locale;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
+import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
-import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JFieldVar;
+import com.helger.jcodemodel.JInvocation;
+import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
+import com.helger.jcodemodel.JVar;
+import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMClass;
+import com.helger.jdmc.core.datamodel.JDMField;
+import com.helger.jdmc.core.datamodel.JDMType;
 import com.helger.photon.security.object.AbstractBusinessObjectMicroTypeConverter;
+import com.helger.xml.microdom.IMicroElement;
+import com.helger.xml.microdom.MicroElement;
 import com.helger.xml.microdom.convert.IMicroTypeConverter;
+import com.helger.xml.microdom.util.MicroHelper;
 
 final class JDMHelperMicroTypeConverter
 {
   private JDMHelperMicroTypeConverter ()
   {}
 
-  private static boolean _isElement ()
+  private static boolean _isString (@Nonnull final JDMType aType)
   {
+    return aType.getShortName ().equals ("String");
+  }
+
+  private static boolean _isElement (@Nonnull final JDMField aField)
+  {
+    if (aField.getMultiplicity ().isOpenEnded ())
+    {
+      // Lists are always elements
+      return true;
+    }
+    if (aField.getType ().isPrimitive ())
+    {
+      // Primitive types are always attributes
+      return false;
+    }
+    if (aField.getType ().isEnum ())
+    {
+      // Enums are always attributes
+      return false;
+    }
+    if (!aField.getType ().isPredefined ())
+    {
+      // Nested, created types, are always elements, except for enums
+      return true;
+    }
+    if (_isString (aField.getType ()))
+    {
+      // Special predefined types that should be elements
+      return true;
+    }
+
+    // Assume attribute
     return false;
   }
 
   static void createMainMicroTypeConverterClass (@Nonnull final JDMCodeGenSettings aSettings,
-                                                 @Nonnull final JCodeModel cm,
+                                                 @Nonnull final JDMCodeModel cm,
                                                  @Nonnull final JDMClass aClass,
                                                  @Nonnull final JDefinedClass jInterface,
                                                  @Nonnull final JDefinedClass jDomainClass) throws JClassAlreadyExistsException
@@ -53,5 +103,192 @@ final class JDMHelperMicroTypeConverter
     jClass.javadoc ().add ("<p>This class was initially automatically created</p>\n");
     jClass.javadoc ().addAuthor ().add (JDMCodeGenerator.AUTHOR);
 
+    // Method stub convertToMicroElement
+    final JMethod jToMicroElement = jClass.method (JMod.PUBLIC, cm.ref (IMicroElement.class), "convertToMicroElement");
+    jToMicroElement.annotate (Nonnull.class);
+    final JVar jToObj = jToMicroElement.param (JMod.FINAL, jDomainClass, "aValue");
+    jToObj.annotate (Nonnull.class);
+    final JVar jToNS = jToMicroElement.param (JMod.FINAL, cm.ref (String.class), "sNamespaceURI");
+    jToNS.annotate (Nullable.class);
+    final JVar jToTN = jToMicroElement.param (JMod.FINAL, cm.ref (String.class), "sTagName");
+    jToTN.annotate (Nonnull.class);
+    final JVar jElement = jToMicroElement.body ()
+                                         .decl (JMod.FINAL,
+                                                cm.ref (IMicroElement.class),
+                                                "aElement",
+                                                cm.ref (MicroElement.class)._new ().arg (jToNS).arg (jToTN));
+    if (aSettings.isUseBusinessObject ())
+    {
+      jToMicroElement.body ().add (JExpr._super ().invoke ("setObjectFields").arg (jToObj).arg (jElement));
+    }
+
+    // Method stub convertToNative
+    final JMethod jToNative = jClass.method (JMod.PUBLIC, jDomainClass, "convertToNative");
+    jToNative.annotate (Nonnull.class);
+    final JVar jToNativeElement = jToNative.param (JMod.FINAL, cm.ref (IMicroElement.class), "aElement");
+    jToNativeElement.annotate (Nonnull.class);
+
+    final ICommonsList <JVar> aParamsToNative = new CommonsArrayList <> ();
+
+    for (final JDMField aField : aClass.fields ())
+    {
+      final boolean bIsPrimitive = aField.getType ().isPrimitive ();
+      final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+
+      final boolean bIsElement = _isElement (aField);
+      final JFieldVar jFieldName = jClass.field (JMod.PRIVATE | JMod.STATIC | JMod.FINAL,
+                                                 cm.ref (String.class),
+                                                 (bIsElement ? "ELEMENT_" : "ATTR_") +
+                                                                        aField.getOriginalFieldName ()
+                                                                              .toUpperCase (Locale.ROOT),
+                                                 JExpr.lit (aField.getFieldName ().toLowerCase (Locale.ROOT)));
+
+      // To MicroElement
+      {
+        final boolean bHasHasMethod = !bIsPrimitive && eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ();
+        if (bIsElement)
+        {
+          if (_isString (aField.getType ()))
+          {
+            final IJStatement aExec = jElement.invoke ("appendElement")
+                                              .arg (jToNS)
+                                              .arg (jFieldName)
+                                              .invoke ("appendText")
+                                              .arg (jToObj.invoke (aField.getMethodGetterName (eMultiplicity.isOpenEnded ())));
+            if (bHasHasMethod)
+              jToMicroElement.body ()._if (jToObj.invoke (aField.getMethodHasName ()), aExec);
+            else
+              jToMicroElement.body ().add (aExec);
+          }
+          else
+            jToMicroElement.body ()
+                           .addSingleLineComment ("TODO " +
+                                                  aField.getType ().getShortName () +
+                                                  "::" +
+                                                  aField.getFieldName ());
+        }
+        else
+        {
+          // attribute
+          if (aField.getType ().isEnum ())
+          {
+            final IJStatement aExec = jElement.invoke ("setAttribute")
+                                              .arg (jFieldName)
+                                              .arg (jToObj.invoke (aField.getMethodGetterName (eMultiplicity.isOpenEnded ()))
+                                                          .invoke ("getID"));
+            if (bHasHasMethod)
+              jToMicroElement.body ()._if (jToObj.invoke (aField.getMethodHasName ()), aExec);
+            else
+              jToMicroElement.body ().add (aExec);
+          }
+          else
+            if (aField.getType ().isPrimitive ())
+            {
+              jToMicroElement.body ()
+                             .add (jElement.invoke ("setAttribute")
+                                           .arg (jFieldName)
+                                           .arg (jToObj.invoke (aField.getMethodGetterName (eMultiplicity.isOpenEnded ()))));
+            }
+            else
+            {
+              jToMicroElement.body ()
+                             .add (jElement.invoke ("setAttributeWithConversion")
+                                           .arg (jFieldName)
+                                           .arg (jToObj.invoke (aField.getMethodGetterName (eMultiplicity.isOpenEnded ()))));
+            }
+        }
+      }
+
+      // To Native
+      {
+        // List or field?
+        AbstractJType jFieldType = cm.ref (aField.getType ().getJavaFQCN (eMultiplicity));
+        IJExpression aFieldInit = null;
+        boolean bFieldIsFinal = false;
+        if (eMultiplicity.isOpenEnded ())
+        {
+          jFieldType = cm.ref (ICommonsList.class).narrow (jFieldType);
+          aFieldInit = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ();
+          bFieldIsFinal = true;
+        }
+
+        IJExpression aInit = null;
+        if (bIsElement)
+        {
+          if (_isString (aField.getType ()))
+          {
+            aInit = cm.ref (MicroHelper.class)
+                      .staticInvoke ("getChildTextContent")
+                      .arg (jToNativeElement)
+                      .arg (jFieldName);
+          }
+        }
+        else
+        {
+          // Attribute
+          if (aField.getType ().isEnum ())
+            aInit = cm.ref (aField.getType ().getFQCN ())
+                      .staticInvoke ("getFromIDOrNull")
+                      .arg (jToNativeElement.invoke ("getAttributeValue").arg (jFieldName));
+          else
+            if (jFieldType.equals (cm.BOOLEAN))
+              aInit = jToNativeElement.invoke ("getAttributeValueAsBool").arg (jFieldName).arg (JExpr.FALSE);
+            else
+              if (jFieldType == cm.BYTE)
+                aInit = jToNativeElement.invoke ("getAttributeValueAsInt").arg (jFieldName).arg (-1).castTo (cm.BYTE);
+              else
+                if (jFieldType == cm.DOUBLE)
+                  aInit = jToNativeElement.invoke ("getAttributeValueAsDouble")
+                                          .arg (jFieldName)
+                                          .arg (cm.ref (Double.class).staticRef ("NaN"));
+                else
+                  if (jFieldType == cm.FLOAT)
+                    aInit = jToNativeElement.invoke ("getAttributeValueAsFloat")
+                                            .arg (jFieldName)
+                                            .arg (cm.ref (Float.class).staticRef ("NaN"));
+                  else
+                    if (jFieldType == cm.INT)
+                      aInit = jToNativeElement.invoke ("getAttributeValueAsInt").arg (jFieldName).arg (-1);
+                    else
+                      if (jFieldType == cm.LONG)
+                        aInit = jToNativeElement.invoke ("getAttributeValueAsLong").arg (jFieldName).arg (-1);
+                      else
+                        if (jFieldType == cm.SHORT)
+                          aInit = jToNativeElement.invoke ("getAttributeValueAsInt")
+                                                  .arg (jFieldName)
+                                                  .arg (-1)
+                                                  .castTo (cm.SHORT);
+                        else
+                          aInit = jToNativeElement.invoke ("getAttributeValueWithConversion")
+                                                  .arg (jFieldName)
+                                                  .arg (JExpr.dotclass (jFieldType));
+
+        }
+
+        if (aInit == null)
+          jToNative.body ()
+                   .addSingleLineComment ("TODO " + aField.getType ().getShortName () + "::" + aField.getFieldName ());
+
+        final JVar jVar = jToNative.body ()
+                                   .decl (JMod.FINAL,
+                                          jFieldType,
+                                          aField.getJavaVarName (aField.getMultiplicity ()),
+                                          aInit);
+        aParamsToNative.add (jVar);
+      }
+    }
+
+    {
+      jToMicroElement.body ()._return (jElement);
+    }
+
+    {
+      final JInvocation jInvRet = jDomainClass._new ();
+      if (aSettings.isUseBusinessObject ())
+        jInvRet.arg (JExpr._super ().invoke ("getStubObject").arg (jToNativeElement));
+      for (final JVar aVar : aParamsToNative)
+        jInvRet.arg (aVar);
+      jToNative.body ()._return (jInvRet);
+    }
   }
 }

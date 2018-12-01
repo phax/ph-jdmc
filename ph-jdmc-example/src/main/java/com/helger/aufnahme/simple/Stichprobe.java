@@ -14,6 +14,7 @@ import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 
 /**
@@ -23,6 +24,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
+@NotThreadSafe
 public class Stichprobe
   implements IStichprobe
 {

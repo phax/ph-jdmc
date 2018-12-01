@@ -53,7 +53,6 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JAnnotationUse;
 import com.helger.jcodemodel.JBlock;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
-import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JCommentPart;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
@@ -99,7 +98,7 @@ public class JDMCodeGenerator
   }
 
   @Nonnull
-  private JDefinedClass _createMainJavaInterface (@Nonnull final JCodeModel cm,
+  private JDefinedClass _createMainJavaInterface (@Nonnull final JDMCodeModel cm,
                                                   @Nonnull final JDMClass aClass) throws JClassAlreadyExistsException
   {
     final JDefinedClass jInterface = cm._class (JMod.PUBLIC, aClass.getFQInterfaceName (), EClassType.INTERFACE);
@@ -128,7 +127,6 @@ public class JDMCodeGenerator
       }
       else
         sJavaTypeName2 = sJavaTypeName1;
-      final boolean bIsStringType = "String".equals (sJavaTypeName2);
 
       // List or field?
       AbstractJType jReturnType = cm.ref (sJavaTypeName2);
@@ -138,6 +136,8 @@ public class JDMCodeGenerator
       final JMethod aMethodGet = jInterface.method (0,
                                                     jReturnType,
                                                     aField.getMethodGetterName (eMultiplicity.isOpenEnded ()));
+
+      final boolean bIsStringType = "String".equals (sJavaTypeName2);
 
       // Annotations
       if (!bIsPrimitive)
@@ -192,7 +192,7 @@ public class JDMCodeGenerator
   }
 
   @Nonnull
-  private JDefinedClass _createMainJavaClass (@Nonnull final JCodeModel cm,
+  private JDefinedClass _createMainJavaClass (@Nonnull final JDMCodeModel cm,
                                               @Nonnull final JDMClass aClass,
                                               @Nonnull final JDefinedClass jInterface) throws JClassAlreadyExistsException
   {
@@ -200,6 +200,7 @@ public class JDMCodeGenerator
     if (m_aSettings.isUseBusinessObject ())
       jClass._extends (AbstractBusinessObject.class);
     jClass._implements (jInterface);
+    jClass.annotate (NotThreadSafe.class);
     jClass.javadoc ().add ("<p>Default implementation of {@link " + aClass.getFQInterfaceName () + "}</p>\n");
     jClass.javadoc ().add ("<p>This class was initially automatically created</p>\n");
     jClass.javadoc ().addAuthor ().add (AUTHOR);
@@ -512,7 +513,7 @@ public class JDMCodeGenerator
     return jClass;
   }
 
-  public void createMainJavaClasses (@Nonnull final JCodeModel cm, @Nonnull final ICommonsList <JDMClass> aClasses)
+  public void createMainJavaClasses (@Nonnull final JDMCodeModel cm, @Nonnull final ICommonsList <JDMClass> aClasses)
   {
     for (final JDMClass aClass : aClasses)
     {
@@ -520,12 +521,11 @@ public class JDMCodeGenerator
       {
         final JDefinedClass jInterface = _createMainJavaInterface (cm, aClass);
         final JDefinedClass jDomainClass = _createMainJavaClass (cm, aClass, jInterface);
-        if (false)
-          JDMHelperMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings,
-                                                                         cm,
-                                                                         aClass,
-                                                                         jInterface,
-                                                                         jDomainClass);
+        JDMHelperMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings,
+                                                                       cm,
+                                                                       aClass,
+                                                                       jInterface,
+                                                                       jDomainClass);
       }
       catch (final JClassAlreadyExistsException ex)
       {
@@ -534,7 +534,7 @@ public class JDMCodeGenerator
     }
   }
 
-  public void createTestJavaSelfTest (@Nonnull final JCodeModel cm)
+  public void createTestJavaSelfTest (@Nonnull final JDMCodeModel cm)
   {
     try
     {
@@ -555,9 +555,7 @@ public class JDMCodeGenerator
       for (final JDMType aType : CollectionHelper.getSorted (m_aProcessor.getContext ().types ().getTypes (),
                                                              Comparator.comparing (JDMType::getClassName)))
       {
-        final JVar aVar = jMethod.body ()
-                                 .decl (cm.ref (aType.isPrimitive () ? aType.getShortName () : aType.getFQCN ()),
-                                        "var" + nCount);
+        final JVar aVar = jMethod.body ().decl (cm.ref (aType), "var" + nCount);
         jMethod.body ().assign (aVar, aType.createTestValue (cm));
         if (!aType.isPrimitive () && aType.isImmutable ())
           jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotNull").arg (aVar));
@@ -571,7 +569,7 @@ public class JDMCodeGenerator
     }
   }
 
-  public void createTestJavaClasses (@Nonnull final JCodeModel cm, @Nonnull final ICommonsList <JDMClass> aClasses)
+  public void createTestJavaClasses (@Nonnull final JDMCodeModel cm, @Nonnull final ICommonsList <JDMClass> aClasses)
   {
     for (final JDMClass aClass : aClasses)
     {
@@ -638,7 +636,7 @@ public class JDMCodeGenerator
       FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcMainJava);
       FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcMainResources);
 
-      final JCodeModel cm = new JCodeModel ();
+      final JDMCodeModel cm = new JDMCodeModel ();
 
       // Create all classes
       createMainJavaClasses (cm, aClasses);
@@ -658,7 +656,7 @@ public class JDMCodeGenerator
       FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcTestJava);
       FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcTestResources);
 
-      final JCodeModel cm = new JCodeModel ();
+      final JDMCodeModel cm = new JDMCodeModel ();
 
       createTestJavaSelfTest (cm);
 

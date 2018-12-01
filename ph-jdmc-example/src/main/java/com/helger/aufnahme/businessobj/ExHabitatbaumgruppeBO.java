@@ -15,6 +15,7 @@ import com.helger.photon.security.object.StubObject;
 import com.helger.tenancy.AbstractBusinessObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 
 /**
@@ -24,6 +25,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
+@NotThreadSafe
 public class ExHabitatbaumgruppeBO
   extends AbstractBusinessObject
   implements IExHabitatbaumgruppeBO

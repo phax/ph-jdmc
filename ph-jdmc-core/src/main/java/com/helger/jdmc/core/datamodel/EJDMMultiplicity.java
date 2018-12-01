@@ -40,21 +40,37 @@ public enum EJDMMultiplicity
     return m_sSuffix;
   }
 
+  /**
+   * @return <code>true</code> if the value is optional (minimum occurrence is
+   *         0)
+   */
   public boolean isMin0 ()
   {
     return this == OPTIONAL || this == OPTIONAL_OR_MORE;
   }
 
+  /**
+   * @return <code>true</code> if the value is mandatory (minimum occurrence is
+   *         1)
+   */
   public boolean isMin1 ()
   {
     return this == MANDATORY || this == MANDATORY_OR_MORE;
   }
 
+  /**
+   * @return <code>true</code> if the value can occur at last once (maximum
+   *         occurrence is 1)
+   */
   public boolean isMax1 ()
   {
     return this == MANDATORY || this == OPTIONAL;
   }
 
+  /**
+   * @return <code>true</code> if the value can occur multiple times (list
+   *         value)
+   */
   public boolean isOpenEnded ()
   {
     return this == MANDATORY_OR_MORE || this == OPTIONAL_OR_MORE;

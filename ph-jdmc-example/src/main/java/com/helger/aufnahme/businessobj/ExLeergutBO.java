@@ -4,6 +4,7 @@ import com.helger.commons.type.ObjectType;
 import com.helger.photon.security.object.StubObject;
 import com.helger.tenancy.AbstractBusinessObject;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 
 /**
@@ -13,6 +14,7 @@ import javax.annotation.Nonnull;
  * 
  * @author JDMCodeGenerator
  */
+@NotThreadSafe
 public class ExLeergutBO
   extends AbstractBusinessObject
   implements IExLeergutBO

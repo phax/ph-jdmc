@@ -7,6 +7,7 @@ import com.helger.commons.state.EChange;
 import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 
 /**
@@ -16,6 +17,7 @@ import javax.annotation.Nonnull;
  * 
  * @author JDMCodeGenerator
  */
+@NotThreadSafe
 public class TrunkSize
   implements ITrunkSize
 {

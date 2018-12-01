@@ -38,20 +38,22 @@ public class JDMType implements Serializable
   private final String m_sShortName;
   private final String m_sPackageName;
   private final String m_sClassName;
-  private final boolean m_bIsPrimitive;
+  private final boolean m_bPrimitive;
+  private final boolean m_bPredefined;
   private final boolean m_bImmutable;
   private final boolean m_bSerializable;
-  private final boolean m_bIsEnum;
+  private final boolean m_bEnum;
   private EJDMBaseType m_eBaseType;
   private final IJDMTypeTestValueCreator m_aTestValueFactory;
 
   private JDMType (@Nonnull @Nonempty final String sShortName,
                    @Nonnull final String sPackageName,
                    @Nonnull @Nonempty final String sClassName,
-                   final boolean bIsPrimitive,
+                   final boolean bPrimitive,
+                   final boolean bPredefined,
                    final boolean bImmutable,
                    final boolean bSerializable,
-                   final boolean bIsEnum,
+                   final boolean bEnum,
                    @Nonnull final IJDMTypeTestValueCreator aTestValueFactory)
   {
     ValueEnforcer.notEmpty (sShortName, "ShortName");
@@ -62,10 +64,11 @@ public class JDMType implements Serializable
     m_sShortName = sShortName;
     m_sPackageName = sPackageName;
     m_sClassName = sClassName;
-    m_bIsPrimitive = bIsPrimitive;
+    m_bPrimitive = bPrimitive;
+    m_bPredefined = bPredefined;
     m_bImmutable = bImmutable;
     m_bSerializable = bSerializable;
-    m_bIsEnum = bIsEnum;
+    m_bEnum = bEnum;
     if ("boolean".equals (sShortName) || "Boolean".equals (sShortName))
       m_eBaseType = EJDMBaseType.BOOLEAN;
     else
@@ -149,27 +152,49 @@ public class JDMType implements Serializable
   }
 
   /**
-   * @return <code>true</code> if this is a primitive type, <code>false</code>
-   *         if not.
+   * @return <code>true</code> if this is a primitive type (boolean, byte, char,
+   *         double, float, int, long, short), <code>false</code> if not.
    */
-  public boolean isPrimitive ()
+  public final boolean isPrimitive ()
   {
-    return m_bIsPrimitive;
+    return m_bPrimitive;
   }
 
-  public boolean isImmutable ()
+  /**
+   * @return <code>true</code> if it is a predefined type, <code>false</code> if
+   *         it is a type representing a generated class.
+   */
+  public final boolean isPredefined ()
+  {
+    return m_bPredefined;
+  }
+
+  /**
+   * @return <code>true</code> if the content of the data type is immutable
+   *         (like String), <code>false</code> if it is mutable (and has e.g.
+   *         setter)
+   */
+  public final boolean isImmutable ()
   {
     return m_bImmutable;
   }
 
-  public boolean isSerializable ()
+  /**
+   * @return <code>true</code> if the created class implements
+   *         <code>java.io.Serializable</code>, <code>false</code> if not.
+   */
+  public final boolean isSerializable ()
   {
     return m_bSerializable;
   }
 
-  public boolean isEnum ()
+  /**
+   * @return <code>true</code> if it is an enumeration, <code>false</code> if
+   *         not.
+   */
+  public final boolean isEnum ()
   {
-    return m_bIsEnum;
+    return m_bEnum;
   }
 
   public boolean isJavaPrimitive (@Nonnull final EJDMMultiplicity eMultiplicity)
@@ -193,22 +218,24 @@ public class JDMType implements Serializable
   }
 
   @Nonnull
-  public static JDMType createPrimitiveType (@Nonnull @Nonempty final String sShortName,
-                                             @Nonnull @Nonempty final JDMType aClassType,
-                                             @Nonnull final IJDMTypeTestValueCreator aTestValueFactory)
+  public static JDMType createPredefinedPrimitiveType (@Nonnull @Nonempty final String sShortName,
+                                                       @Nonnull @Nonempty final JDMType aClassType,
+                                                       @Nonnull final IJDMTypeTestValueCreator aTestValueFactory)
   {
     ValueEnforcer.notEmpty (sShortName, "ShortName");
     ValueEnforcer.notNull (aClassType, "ClassType");
     ValueEnforcer.notNull (aTestValueFactory, "TestValueFactory");
 
-    final boolean bIsPrimitive = true;
+    final boolean bPrimitive = true;
+    final boolean bPredefined = true;
     final boolean bImmutable = true;
     final boolean bSerializable = true;
     final boolean bIsEnum = false;
     return new JDMType (sShortName,
                         aClassType.getPackageName (),
                         aClassType.getClassName (),
-                        bIsPrimitive,
+                        bPrimitive,
+                        bPredefined,
                         bImmutable,
                         bSerializable,
                         bIsEnum,
@@ -218,6 +245,7 @@ public class JDMType implements Serializable
   @Nonnull
   public static JDMType createClassType (@Nonnull final String sPackageName,
                                          @Nonnull @Nonempty final String sLocalClassName,
+                                         final boolean bPredefined,
                                          final boolean bImmutable,
                                          final boolean bSerializable,
                                          final boolean bIsEnum,
@@ -228,11 +256,12 @@ public class JDMType implements Serializable
     ValueEnforcer.isTrue (sLocalClassName.indexOf ('.') < 0, "LocalClassName may not contain a dot");
     ValueEnforcer.notNull (aTestValueFactory, "TestValueFactory");
 
-    final boolean bIsPrimitive = false;
+    final boolean bPrimitive = false;
     return new JDMType (sLocalClassName,
                         sPackageName,
                         sLocalClassName,
-                        bIsPrimitive,
+                        bPrimitive,
+                        bPredefined,
                         bImmutable,
                         bSerializable,
                         bIsEnum,
@@ -240,14 +269,17 @@ public class JDMType implements Serializable
   }
 
   @Nonnull
-  public static JDMType createClassTypeImmutable (@Nonnull final Class <?> aClass,
-                                                  @Nonnull final IJDMTypeTestValueCreator aTestValueFactory)
+  static JDMType createPredefinedClassTypeImmutable (@Nonnull final Class <?> aClass,
+                                                     @Nonnull final IJDMTypeTestValueCreator aTestValueFactory)
   {
+    final boolean bPredefined = true;
+    final boolean bImmutable = true;
     final boolean bSerializable = Serializable.class.isAssignableFrom (aClass);
     final boolean bIsEnum = Enum.class.isAssignableFrom (aClass);
     return createClassType (aClass.getPackage ().getName (),
                             ClassHelper.getClassLocalName (aClass),
-                            true,
+                            bPredefined,
+                            bImmutable,
                             bSerializable,
                             bIsEnum,
                             aTestValueFactory);
