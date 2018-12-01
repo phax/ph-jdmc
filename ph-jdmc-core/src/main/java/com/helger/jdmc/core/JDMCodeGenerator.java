@@ -42,10 +42,12 @@ import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.equals.EqualsHelper;
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.id.IHasID;
+import com.helger.commons.io.file.FileOperationManager;
 import com.helger.commons.lang.EnumHelper;
 import com.helger.commons.name.IHasDisplayName;
 import com.helger.commons.state.EChange;
 import com.helger.commons.string.StringHelper;
+import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
@@ -238,6 +240,7 @@ public class JDMCodeGenerator
 
     final AbstractJClass jEChange = cm.ref (EChange.class);
 
+    final boolean bHasFields = aClass.fields ().isNotEmpty ();
     final JMethod jCtor1;
     JInvocation jC1CallsC2 = null;
     final JMethod jCtor2;
@@ -247,6 +250,8 @@ public class JDMCodeGenerator
     JVar jEqualsParam = null;
     final JMethod jHashcode;
     JInvocation jHashcodeInvocation = null;
+    final JMethod jToString;
+    JInvocation jToStringInvocation = null;
     if (m_bUseBusinessObject)
     {
       final AbstractJClass jSO = cm.ref ("com.helger.photon.security.object.StubObject");
@@ -261,33 +266,65 @@ public class JDMCodeGenerator
       jCtor2.body ().add (JInvocation._super ().arg (jC2Stub));
 
       jCtor3 = null;
+
+      // equals and hashCode are in parent class already
       jEquals = null;
       jHashcode = null;
 
       final JMethod jGetOT = jClass.method (JMod.PUBLIC | JMod.FINAL, ObjectType.class, "getObjectType");
       jGetOT.annotate (Nonnull.class);
       jGetOT.body ()._return (jOT);
+
+      if (bHasFields)
+      {
+        jToString = jClass.method (JMod.PUBLIC, cm.ref (String.class), "toString");
+        jToString.annotate (Override.class);
+        jToStringInvocation = cm.ref (ToStringGenerator.class)
+                                .staticInvoke ("getDerived")
+                                .arg (JExpr._super ().invoke ("toString"));
+      }
+      else
+        jToString = null;
     }
     else
     {
       jCtor1 = jClass.constructor (JMod.PUBLIC);
-      jCtor2 = jClass.constructor (JMod.PUBLIC);
+
+      if (bHasFields)
+        jCtor2 = jClass.constructor (JMod.PUBLIC);
+      else
+        jCtor2 = null;
+
       jCtor3 = jClass.constructor (JMod.PUBLIC);
       jC3Arg = jCtor3.param (JMod.FINAL, jInterface, "aOther");
       jC3Arg.annotate (Nonnull.class);
+      jCtor3.body ().add (cm.ref (ValueEnforcer.class).staticInvoke ("notNull").arg (jC3Arg).arg ("Other"));
 
-      jEquals = jClass.method (JMod.PUBLIC, cm.BOOLEAN, "equals");
-      jEquals.annotate (Override.class);
-      final JVar jEqualsArg = jEquals.param (JMod.FINAL, cm.ref (Object.class), "o");
-      jEquals.body ()._if (jEqualsArg.eq (JExpr._this ()), new JReturn (JExpr.TRUE));
-      jEquals.body ()
-             ._if (jEqualsArg.eqNull ().cor (JExpr.invokeThis ("getClass").ne (jEqualsArg.invoke ("getClass"))),
-                   new JReturn (JExpr.FALSE));
-      jEqualsParam = jEquals.body ().decl (JMod.FINAL, jClass, "rhs", jEqualsArg.castTo (jClass));
+      if (bHasFields)
+      {
+        jEquals = jClass.method (JMod.PUBLIC, cm.BOOLEAN, "equals");
+        jEquals.annotate (Override.class);
+        final JVar jEqualsArg = jEquals.param (JMod.FINAL, cm.ref (Object.class), "o");
+        jEquals.body ()._if (jEqualsArg.eq (JExpr._this ()), new JReturn (JExpr.TRUE));
+        jEquals.body ()
+               ._if (jEqualsArg.eqNull ().cor (JExpr.invokeThis ("getClass").ne (jEqualsArg.invoke ("getClass"))),
+                     new JReturn (JExpr.FALSE));
+        jEqualsParam = jEquals.body ().decl (JMod.FINAL, jClass, "rhs", jEqualsArg.castTo (jClass));
 
-      jHashcode = jClass.method (JMod.PUBLIC, cm.INT, "hashCode");
-      jHashcode.annotate (Override.class);
-      jHashcodeInvocation = cm.ref (HashCodeGenerator.class)._new ().arg (JExpr._this ());
+        jHashcode = jClass.method (JMod.PUBLIC, cm.INT, "hashCode");
+        jHashcode.annotate (Override.class);
+        jHashcodeInvocation = cm.ref (HashCodeGenerator.class)._new ().arg (JExpr._this ());
+
+        jToString = jClass.method (JMod.PUBLIC, cm.ref (String.class), "toString");
+        jToString.annotate (Override.class);
+        jToStringInvocation = cm.ref (ToStringGenerator.class)._new ().arg (JExpr._this ());
+      }
+      else
+      {
+        jEquals = null;
+        jHashcode = null;
+        jToString = null;
+      }
     }
 
     for (final JDMField aField : aClass.fields ())
@@ -330,27 +367,31 @@ public class JDMCodeGenerator
       if (m_bUseBusinessObject)
       {
         final JVar jC1Arg = jCtor1.param (JMod.FINAL, jFieldType, sVarName);
-        final JVar jC2Arg = jCtor2.param (JMod.FINAL, jFieldType, sVarName);
         if (!bIsPrimitive)
         {
           if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
-          {
             jC1Arg.annotate (Nullable.class);
-            jC2Arg.annotate (Nullable.class);
-          }
           else
-          {
             jC1Arg.annotate (Nonnull.class);
-            jC2Arg.annotate (Nonnull.class);
-          }
           if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
-          {
             jC1Arg.annotate (Nonempty.class);
-            jC2Arg.annotate (Nonempty.class);
-          }
         }
         jC1CallsC2.arg (jC1Arg);
-        jCtor2.body ().add (JExpr.invoke (aField.getMethodSetterName ()).arg (jC2Arg));
+
+        if (jCtor2 != null)
+        {
+          final JVar jC2Arg = jCtor2.param (JMod.FINAL, jFieldType, sVarName);
+          if (!bIsPrimitive)
+          {
+            if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+              jC2Arg.annotate (Nullable.class);
+            else
+              jC2Arg.annotate (Nonnull.class);
+            if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+              jC2Arg.annotate (Nonempty.class);
+          }
+          jCtor2.body ().add (JExpr.invoke (aField.getMethodSetterName ()).arg (jC2Arg));
+        }
       }
       else
       {
@@ -365,19 +406,29 @@ public class JDMCodeGenerator
             jC2Arg.annotate (Nonempty.class);
         }
         jCtor2.body ().add (JExpr.invoke (aField.getMethodSetterName ()).arg (jC2Arg));
+
         jCtor3.body ()
               .add (JExpr.invoke (aField.getMethodSetterName ())
                          .arg (jC3Arg.invoke (aField.getMethodGetterName (eMultiplicity.isOpenEnded ()))));
 
-        jEquals.body ()
-               ._if (cm.ref (EqualsHelper.class)
-                       .staticInvoke ("equals")
-                       .arg (jField)
-                       .arg (jEqualsParam.ref (jField))
-                       .not (),
-                     new JReturn (JExpr.FALSE));
-        jHashcodeInvocation = jHashcodeInvocation.invoke ("append").arg (jField);
+        if (jEquals != null)
+          jEquals.body ()
+                 ._if (cm.ref (EqualsHelper.class)
+                         .staticInvoke ("equals")
+                         .arg (jField)
+                         .arg (jEqualsParam.ref (jField))
+                         .not (),
+                       new JReturn (JExpr.FALSE));
+
+        if (jHashcodeInvocation != null)
+          jHashcodeInvocation = jHashcodeInvocation.invoke ("append").arg (jField);
       }
+
+      // toString
+      if (jToStringInvocation != null)
+        jToStringInvocation = jToStringInvocation.invoke ("append")
+                                                 .arg (JExpr.lit (aField.getFieldName ()))
+                                                 .arg (jField);
 
       // Getter
       {
@@ -477,10 +528,13 @@ public class JDMCodeGenerator
       }
     }
 
+    // Finalize methods
     if (jEquals != null)
       jEquals.body ()._return (JExpr.TRUE);
     if (jHashcode != null)
       jHashcode.body ()._return (jHashcodeInvocation.invoke ("getHashCode"));
+    if (jToString != null)
+      jToString.body ()._return (jToStringInvocation.invoke ("getToString"));
   }
 
   public void createMainJavaClasses (@Nonnull final JCodeModel cm, @Nonnull final ICommonsList <JDMClass> aClasses)
@@ -751,6 +805,9 @@ public class JDMCodeGenerator
       final File aSrcMainJava = new File (aDestDir, "src/main/java");
       final File aSrcMainResources = new File (aDestDir, "src/main/resources");
 
+      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcMainJava);
+      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcMainResources);
+
       final JCodeModel cm = new JCodeModel ();
 
       // Create all classes
@@ -767,6 +824,9 @@ public class JDMCodeGenerator
     {
       final File aSrcTestJava = new File (aDestDir, "src/test/java");
       final File aSrcTestResources = new File (aDestDir, "src/test/resources");
+
+      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcTestJava);
+      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcTestResources);
 
       final JCodeModel cm = new JCodeModel ();
 

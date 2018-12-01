@@ -1,78 +1,53 @@
-package com.helger.aufnahme.simple;
+package com.helger.aufnahme.businessobj;
 
 import com.helger.commons.ValueEnforcer;
-import com.helger.commons.equals.EqualsHelper;
-import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
 import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
+import com.helger.photon.security.object.StubObject;
+import com.helger.tenancy.AbstractBusinessObject;
 import javax.annotation.Nonnull;
 
 
 /**
- * <p>Default implementation of {@link com.helger.aufnahme.simple.IReservat}</p>
+ * <p>Default implementation of {@link com.helger.aufnahme.businessobj.IExReservatBO}</p>
  * <p>This class was initially automatically created</p>
  * 
  * 
  * @author JDMCodeGenerator
  */
-public class Reservat
-  implements IReservat
+public class ExReservatBO
+  extends AbstractBusinessObject
+  implements IExReservatBO
 {
-  public static final ObjectType OT = new ObjectType("Reservat");
+  public static final ObjectType OT = new ObjectType("ExReservatBO");
   private int m_nRNr;
   private String m_sName;
   private int m_nAreaSize;
 
-  public Reservat() {
-  }
-
-  public Reservat(final int nRNr,
+  public ExReservatBO(final int nRNr,
     @Nonnull
     final String sName, final int nAreaSize) {
+    this(StubObject.createForCurrentUser(), nRNr, sName, nAreaSize);
+  }
+
+  protected ExReservatBO(final StubObject aStubObject, final int nRNr,
+    @Nonnull
+    final String sName, final int nAreaSize) {
+    super(aStubObject);
     setRNr(nRNr);
     setName(sName);
     setAreaSize(nAreaSize);
   }
 
-  public Reservat(
-    @Nonnull
-    final IReservat aOther) {
-    ValueEnforcer.notNull(aOther, "Other");
-    setRNr(aOther.getRNr());
-    setName(aOther.getName());
-    setAreaSize(aOther.getAreaSize());
-  }
-
-  @Override
-  public boolean equals(final Object o) {
-    if (o == this) {
-      return true;
-    }
-    if ((o == null)||(this.getClass()!= o.getClass())) {
-      return false;
-    }
-    final Reservat rhs = ((Reservat) o);
-    if (!EqualsHelper.equals(m_nRNr, rhs.m_nRNr)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_sName, rhs.m_sName)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_nAreaSize, rhs.m_nAreaSize)) {
-      return false;
-    }
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    return new HashCodeGenerator(this).append(m_nRNr).append(m_sName).append(m_nAreaSize).getHashCode();
+  @Nonnull
+  public final ObjectType getObjectType() {
+    return OT;
   }
 
   @Override
   public String toString() {
-    return new ToStringGenerator(this).append("RNr", m_nRNr).append("name", m_sName).append("areaSize", m_nAreaSize).getToString();
+    return ToStringGenerator.getDerived(super.toString()).append("RNr", m_nRNr).append("name", m_sName).append("areaSize", m_nAreaSize).getToString();
   }
 
   public final int getRNr() {

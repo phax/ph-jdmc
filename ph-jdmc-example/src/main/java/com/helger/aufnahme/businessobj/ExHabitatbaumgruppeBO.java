@@ -1,4 +1,4 @@
-package com.helger.aufnahme.simple;
+package com.helger.aufnahme.businessobj;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -8,28 +8,30 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.equals.EqualsHelper;
-import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
 import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
+import com.helger.photon.security.object.StubObject;
+import com.helger.tenancy.AbstractBusinessObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
 /**
- * <p>Default implementation of {@link com.helger.aufnahme.simple.IHabitatbaumgruppe}</p>
+ * <p>Default implementation of {@link com.helger.aufnahme.businessobj.IExHabitatbaumgruppeBO}</p>
  * <p>This class was initially automatically created</p>
  * 
  * 
  * @author JDMCodeGenerator
  */
-public class Habitatbaumgruppe
-  implements IHabitatbaumgruppe
+public class ExHabitatbaumgruppeBO
+  extends AbstractBusinessObject
+  implements IExHabitatbaumgruppeBO
 {
-  public static final ObjectType OT = new ObjectType("Habitatbaumgruppe");
+  public static final ObjectType OT = new ObjectType("ExHabitatbaumgruppeBO");
   private int m_nHBGNr;
   private final ICommonsList<File> m_aPics = new CommonsArrayList<>();
-  private final ICommonsList<IBiotopbaum> m_aHBGzBB = new CommonsArrayList<>();
+  private final ICommonsList<IExBiotopbaumBO> m_aHBGzBB = new CommonsArrayList<>();
   private LocalDate m_aDate;
   private String m_sStandort;
   private boolean m_bOneLevel;
@@ -37,31 +39,48 @@ public class Habitatbaumgruppe
   private boolean m_bClosedCrown;
   private boolean m_bNoSun;
   private boolean m_bHomogen;
-  private EExposition m_eExposition;
+  private ExEExpositionBO m_eExposition;
   private String m_sHanglage;
   private int m_nAreaSize;
   private boolean m_bOnlyBB;
   private String m_sBeschreibung;
 
-  public Habitatbaumgruppe() {
-  }
-
-  public Habitatbaumgruppe(final int nHBGNr,
+  public ExHabitatbaumgruppeBO(final int nHBGNr,
     @Nonnull
     @Nonempty
     final ICommonsList<File> aPics,
     @Nonnull
-    final ICommonsList<IBiotopbaum> aHBGzBB,
+    final ICommonsList<IExBiotopbaumBO> aHBGzBB,
     @Nonnull
     final LocalDate aDate,
     @Nonnull
     final String sStandort, final boolean bOneLevel, final boolean bLight, final boolean bClosedCrown, final boolean bNoSun, final boolean bHomogen,
     @Nonnull
-    final EExposition eExposition,
+    final ExEExpositionBO eExposition,
     @Nullable
     final String sHanglage, final int nAreaSize, final boolean bOnlyBB,
     @Nonnull
     final String sBeschreibung) {
+    this(StubObject.createForCurrentUser(), nHBGNr, aPics, aHBGzBB, aDate, sStandort, bOneLevel, bLight, bClosedCrown, bNoSun, bHomogen, eExposition, sHanglage, nAreaSize, bOnlyBB, sBeschreibung);
+  }
+
+  protected ExHabitatbaumgruppeBO(final StubObject aStubObject, final int nHBGNr,
+    @Nonnull
+    @Nonempty
+    final ICommonsList<File> aPics,
+    @Nonnull
+    final ICommonsList<IExBiotopbaumBO> aHBGzBB,
+    @Nonnull
+    final LocalDate aDate,
+    @Nonnull
+    final String sStandort, final boolean bOneLevel, final boolean bLight, final boolean bClosedCrown, final boolean bNoSun, final boolean bHomogen,
+    @Nonnull
+    final ExEExpositionBO eExposition,
+    @Nullable
+    final String sHanglage, final int nAreaSize, final boolean bOnlyBB,
+    @Nonnull
+    final String sBeschreibung) {
+    super(aStubObject);
     setHBGNr(nHBGNr);
     setPics(aPics);
     setHBGzBB(aHBGzBB);
@@ -79,92 +98,14 @@ public class Habitatbaumgruppe
     setBeschreibung(sBeschreibung);
   }
 
-  public Habitatbaumgruppe(
-    @Nonnull
-    final IHabitatbaumgruppe aOther) {
-    ValueEnforcer.notNull(aOther, "Other");
-    setHBGNr(aOther.getHBGNr());
-    setPics(aOther.pics());
-    setHBGzBB(aOther.hBGzBB());
-    setDate(aOther.getDate());
-    setStandort(aOther.getStandort());
-    setOneLevel(aOther.isOneLevel());
-    setLight(aOther.isLight());
-    setClosedCrown(aOther.isClosedCrown());
-    setNoSun(aOther.isNoSun());
-    setHomogen(aOther.isHomogen());
-    setExposition(aOther.getExposition());
-    setHanglage(aOther.getHanglage());
-    setAreaSize(aOther.getAreaSize());
-    setOnlyBB(aOther.isOnlyBB());
-    setBeschreibung(aOther.getBeschreibung());
-  }
-
-  @Override
-  public boolean equals(final Object o) {
-    if (o == this) {
-      return true;
-    }
-    if ((o == null)||(this.getClass()!= o.getClass())) {
-      return false;
-    }
-    final Habitatbaumgruppe rhs = ((Habitatbaumgruppe) o);
-    if (!EqualsHelper.equals(m_nHBGNr, rhs.m_nHBGNr)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_aPics, rhs.m_aPics)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_aHBGzBB, rhs.m_aHBGzBB)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_aDate, rhs.m_aDate)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_sStandort, rhs.m_sStandort)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_bOneLevel, rhs.m_bOneLevel)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_bLight, rhs.m_bLight)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_bClosedCrown, rhs.m_bClosedCrown)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_bNoSun, rhs.m_bNoSun)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_bHomogen, rhs.m_bHomogen)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_eExposition, rhs.m_eExposition)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_sHanglage, rhs.m_sHanglage)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_nAreaSize, rhs.m_nAreaSize)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_bOnlyBB, rhs.m_bOnlyBB)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_sBeschreibung, rhs.m_sBeschreibung)) {
-      return false;
-    }
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    return new HashCodeGenerator(this).append(m_nHBGNr).append(m_aPics).append(m_aHBGzBB).append(m_aDate).append(m_sStandort).append(m_bOneLevel).append(m_bLight).append(m_bClosedCrown).append(m_bNoSun).append(m_bHomogen).append(m_eExposition).append(m_sHanglage).append(m_nAreaSize).append(m_bOnlyBB).append(m_sBeschreibung).getHashCode();
+  @Nonnull
+  public final ObjectType getObjectType() {
+    return OT;
   }
 
   @Override
   public String toString() {
-    return new ToStringGenerator(this).append("HBGNr", m_nHBGNr).append("pics", m_aPics).append("HBGzBB", m_aHBGzBB).append("date", m_aDate).append("Standort", m_sStandort).append("oneLevel", m_bOneLevel).append("light", m_bLight).append("closedCrown", m_bClosedCrown).append("noSun", m_bNoSun).append("homogen", m_bHomogen).append("exposition", m_eExposition).append("Hanglage", m_sHanglage).append("areaSize", m_nAreaSize).append("onlyBB", m_bOnlyBB).append("Beschreibung", m_sBeschreibung).getToString();
+    return ToStringGenerator.getDerived(super.toString()).append("HBGNr", m_nHBGNr).append("pics", m_aPics).append("HBGzBB", m_aHBGzBB).append("date", m_aDate).append("Standort", m_sStandort).append("oneLevel", m_bOneLevel).append("light", m_bLight).append("closedCrown", m_bClosedCrown).append("noSun", m_bNoSun).append("homogen", m_bHomogen).append("exposition", m_eExposition).append("Hanglage", m_sHanglage).append("areaSize", m_nAreaSize).append("onlyBB", m_bOnlyBB).append("Beschreibung", m_sBeschreibung).getToString();
   }
 
   public final int getHBGNr() {
@@ -204,17 +145,17 @@ public class Habitatbaumgruppe
 
   @Nonnull
   @ReturnsMutableObject
-  public final ICommonsList<IBiotopbaum> hBGzBB() {
+  public final ICommonsList<IExBiotopbaumBO> hBGzBB() {
     return m_aHBGzBB;
   }
 
   @Nonnull
   final EChange setHBGzBB(
     @Nonnull
-    final ICommonsList<IBiotopbaum> aHBGzBB) {
+    final ICommonsList<IExBiotopbaumBO> aHBGzBB) {
     ValueEnforcer.notNull(aHBGzBB, "HBGzBB");
     // Ensure the same implementation type
-    final ICommonsList<IBiotopbaum> aRealList = new CommonsArrayList<>(aHBGzBB);
+    final ICommonsList<IExBiotopbaumBO> aRealList = new CommonsArrayList<>(aHBGzBB);
     if (aRealList.equals(m_aHBGzBB)) {
       return EChange.UNCHANGED;
     }
@@ -322,14 +263,14 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  public final EExposition getExposition() {
+  public final ExEExpositionBO getExposition() {
     return m_eExposition;
   }
 
   @Nonnull
   final EChange setExposition(
     @Nonnull
-    final EExposition eExposition) {
+    final ExEExpositionBO eExposition) {
     ValueEnforcer.notNull(eExposition, "Exposition");
     if (eExposition.equals(m_eExposition)) {
       return EChange.UNCHANGED;

@@ -4,6 +4,7 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.equals.EqualsHelper;
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
+import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
 
@@ -37,6 +38,7 @@ public class CaveType
   public CaveType(
     @Nonnull
     final ICaveType aOther) {
+    ValueEnforcer.notNull(aOther, "Other");
     setClazz(aOther.getClazz());
     setType(aOther.getType());
   }
@@ -62,6 +64,11 @@ public class CaveType
   @Override
   public int hashCode() {
     return new HashCodeGenerator(this).append(m_eClazz).append(m_eType).getHashCode();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringGenerator(this).append("clazz", m_eClazz).append("type", m_eType).getToString();
   }
 
   @Nonnull

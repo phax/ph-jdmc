@@ -65,6 +65,8 @@ public class JDMProcessor
   private static final Logger LOGGER = LoggerFactory.getLogger (JDMProcessor.class);
 
   private final String m_sDestinationPackageName;
+  private String m_sClassNamePrefix = null;
+  private String m_sClassNameSuffix = null;
   private final JDMContext m_aContext = new JDMContext ();
   private final ICommonsList <AbstractJDMClassType> m_aTypes = new CommonsArrayList <> ();
 
@@ -78,6 +80,32 @@ public class JDMProcessor
   public final String getDestinationPackageName ()
   {
     return m_sDestinationPackageName;
+  }
+
+  @Nullable
+  public final String getClassNamePrefix ()
+  {
+    return m_sClassNamePrefix;
+  }
+
+  @Nonnull
+  public final JDMProcessor setClassNamePrefix (@Nullable final String sClassNamePrefix)
+  {
+    m_sClassNamePrefix = sClassNamePrefix;
+    return this;
+  }
+
+  @Nullable
+  public final String getClassNameSuffix ()
+  {
+    return m_sClassNameSuffix;
+  }
+
+  @Nonnull
+  public final JDMProcessor setClassNameSuffix (@Nullable final String sClassNameSuffix)
+  {
+    m_sClassNameSuffix = sClassNameSuffix;
+    return this;
   }
 
   @Nonnull
@@ -126,18 +154,32 @@ public class JDMProcessor
     return aJson.getAsObject ();
   }
 
+  @Nonnull
+  private String _getAdoptedTypeName (@Nonnull final String sTypeName)
+  {
+    String ret = sTypeName;
+    if (StringHelper.hasText (m_sClassNamePrefix))
+      ret = m_sClassNamePrefix + ret;
+    if (StringHelper.hasText (m_sClassNameSuffix))
+      ret = ret + m_sClassNameSuffix;
+    return ret;
+  }
+
   @Nullable
   public JDMClass readClassDef (@Nonnull final File aSrcFile)
   {
     ValueEnforcer.notNull (aSrcFile, "SrcFile");
 
+    // Basic parsing
     final IJsonObject aJsonObj = _parseJson (aSrcFile);
     if (aJsonObj == null)
       return null;
 
-    final String sLocalClassName = FilenameHelper.getBaseName (aSrcFile);
+    // Build class
+    final String sLocalClassName = _getAdoptedTypeName (FilenameHelper.getBaseName (aSrcFile));
     final JDMClass ret = new JDMClass (m_sDestinationPackageName, sLocalClassName);
 
+    // Read all fields
     for (final Map.Entry <String, IJson> aFieldEntry : aJsonObj)
     {
       final String sFieldName = aFieldEntry.getKey ();
@@ -219,7 +261,12 @@ public class JDMProcessor
         LOGGER.error ("The field definition of '" + sFieldName + "' has no typename");
         return null;
       }
-      final JDMType aType = m_aContext.types ().findType (sEffectiveTypeName);
+      JDMType aType = m_aContext.types ().findType (sEffectiveTypeName);
+      if (aType == null)
+      {
+        // Is the type part of the compilation?
+        aType = m_aContext.types ().findType (_getAdoptedTypeName (sEffectiveTypeName));
+      }
       if (aType == null)
       {
         LOGGER.error ("The typename '" + sEffectiveTypeName + "' is unknown");
@@ -344,11 +391,13 @@ public class JDMProcessor
       // Add the field with all constraints
       ret.fields ().add (new JDMField (sFieldName, aType, eMultiplicity, sComment, aConstraints));
     }
-    if (ret.fields ().isEmpty ())
-    {
-      LOGGER.error ("No fields found");
-      return null;
-    }
+
+    if (false)
+      if (ret.fields ().isEmpty ())
+      {
+        LOGGER.error ("No fields found");
+        return null;
+      }
 
     // Upon success, register this type
     m_aContext.types ().registerType (ret, cm -> JExpr._null ());
@@ -366,9 +415,11 @@ public class JDMProcessor
     if (aJsonObj == null)
       return null;
 
-    final String sLocalClassName = FilenameHelper.getBaseName (aSrcFile);
+    // Build class
+    final String sLocalClassName = _getAdoptedTypeName (FilenameHelper.getBaseName (aSrcFile));
     final JDMEnum ret = new JDMEnum (m_sDestinationPackageName, sLocalClassName);
 
+    // Read all enum entries
     for (final Map.Entry <String, IJson> aFieldEntry : aJsonObj)
     {
       final String sEnumConstantName = aFieldEntry.getKey ();

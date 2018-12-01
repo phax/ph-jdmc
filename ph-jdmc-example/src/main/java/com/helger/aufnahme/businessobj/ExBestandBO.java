@@ -1,4 +1,4 @@
-package com.helger.aufnahme.simple;
+package com.helger.aufnahme.businessobj;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -8,49 +8,48 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.equals.EqualsHelper;
-import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
 import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
+import com.helger.photon.security.object.StubObject;
+import com.helger.tenancy.AbstractBusinessObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
 /**
- * <p>Default implementation of {@link com.helger.aufnahme.simple.IBestand}</p>
+ * <p>Default implementation of {@link com.helger.aufnahme.businessobj.IExBestandBO}</p>
  * <p>This class was initially automatically created</p>
  * 
  * 
  * @author JDMCodeGenerator
  */
-public class Bestand
-  implements IBestand
+public class ExBestandBO
+  extends AbstractBusinessObject
+  implements IExBestandBO
 {
-  public static final ObjectType OT = new ObjectType("Bestand");
+  public static final ObjectType OT = new ObjectType("ExBestandBO");
   private int m_nBNr;
   private final ICommonsList<File> m_aPics = new CommonsArrayList<>();
   private LocalDate m_aDate;
   private String m_sVerortung;
-  private final ICommonsList<IHabitatbaumgruppe> m_aBZHBG = new CommonsArrayList<>();
+  private final ICommonsList<IExHabitatbaumgruppeBO> m_aBZHBG = new CommonsArrayList<>();
   private int m_nAreaSize;
   private String m_sBeschreib;
   private boolean m_bSameAge;
   private boolean m_bOneLevel;
-  private EStockType m_eStockType;
+  private ExEStockTypeBO m_eStockType;
   private String m_sUsageDescription;
   private String m_sGesellschaft;
   private boolean m_bKronenschluss;
   private boolean m_bLightWoods;
   private boolean m_bUnterwuchs;
-  private EStockDeadwood m_eTotSteh;
+  private ExEStockDeadwoodBO m_eTotSteh;
   private String m_sTotStehBesch;
-  private EStockDeadwood m_eTotLieg;
+  private ExEStockDeadwoodBO m_eTotLieg;
   private String m_sTotLiegBesch;
 
-  public Bestand() {
-  }
-
-  public Bestand(final int nBNr,
+  public ExBestandBO(final int nBNr,
     @Nonnull
     @Nonempty
     final ICommonsList<File> aPics,
@@ -59,23 +58,53 @@ public class Bestand
     @Nullable
     final String sVerortung,
     @Nonnull
-    final ICommonsList<IHabitatbaumgruppe> aBZHBG, final int nAreaSize,
+    final ICommonsList<IExHabitatbaumgruppeBO> aBZHBG, final int nAreaSize,
     @Nonnull
     final String sBeschreib, final boolean bSameAge, final boolean bOneLevel,
     @Nonnull
-    final EStockType eStockType,
+    final ExEStockTypeBO eStockType,
     @Nonnull
     final String sUsageDescription,
     @Nonnull
     final String sGesellschaft, final boolean bKronenschluss, final boolean bLightWoods, final boolean bUnterwuchs,
     @Nonnull
-    final EStockDeadwood eTotSteh,
+    final ExEStockDeadwoodBO eTotSteh,
     @Nonnull
     final String sTotStehBesch,
     @Nonnull
-    final EStockDeadwood eTotLieg,
+    final ExEStockDeadwoodBO eTotLieg,
     @Nonnull
     final String sTotLiegBesch) {
+    this(StubObject.createForCurrentUser(), nBNr, aPics, aDate, sVerortung, aBZHBG, nAreaSize, sBeschreib, bSameAge, bOneLevel, eStockType, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
+  }
+
+  protected ExBestandBO(final StubObject aStubObject, final int nBNr,
+    @Nonnull
+    @Nonempty
+    final ICommonsList<File> aPics,
+    @Nonnull
+    final LocalDate aDate,
+    @Nullable
+    final String sVerortung,
+    @Nonnull
+    final ICommonsList<IExHabitatbaumgruppeBO> aBZHBG, final int nAreaSize,
+    @Nonnull
+    final String sBeschreib, final boolean bSameAge, final boolean bOneLevel,
+    @Nonnull
+    final ExEStockTypeBO eStockType,
+    @Nonnull
+    final String sUsageDescription,
+    @Nonnull
+    final String sGesellschaft, final boolean bKronenschluss, final boolean bLightWoods, final boolean bUnterwuchs,
+    @Nonnull
+    final ExEStockDeadwoodBO eTotSteh,
+    @Nonnull
+    final String sTotStehBesch,
+    @Nonnull
+    final ExEStockDeadwoodBO eTotLieg,
+    @Nonnull
+    final String sTotLiegBesch) {
+    super(aStubObject);
     setBNr(nBNr);
     setPics(aPics);
     setDate(aDate);
@@ -97,108 +126,14 @@ public class Bestand
     setTotLiegBesch(sTotLiegBesch);
   }
 
-  public Bestand(
-    @Nonnull
-    final IBestand aOther) {
-    ValueEnforcer.notNull(aOther, "Other");
-    setBNr(aOther.getBNr());
-    setPics(aOther.pics());
-    setDate(aOther.getDate());
-    setVerortung(aOther.getVerortung());
-    setBZHBG(aOther.bZHBG());
-    setAreaSize(aOther.getAreaSize());
-    setBeschreib(aOther.getBeschreib());
-    setSameAge(aOther.isSameAge());
-    setOneLevel(aOther.isOneLevel());
-    setStockType(aOther.getStockType());
-    setUsageDescription(aOther.getUsageDescription());
-    setGesellschaft(aOther.getGesellschaft());
-    setKronenschluss(aOther.isKronenschluss());
-    setLightWoods(aOther.isLightWoods());
-    setUnterwuchs(aOther.isUnterwuchs());
-    setTotSteh(aOther.getTotSteh());
-    setTotStehBesch(aOther.getTotStehBesch());
-    setTotLieg(aOther.getTotLieg());
-    setTotLiegBesch(aOther.getTotLiegBesch());
-  }
-
-  @Override
-  public boolean equals(final Object o) {
-    if (o == this) {
-      return true;
-    }
-    if ((o == null)||(this.getClass()!= o.getClass())) {
-      return false;
-    }
-    final Bestand rhs = ((Bestand) o);
-    if (!EqualsHelper.equals(m_nBNr, rhs.m_nBNr)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_aPics, rhs.m_aPics)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_aDate, rhs.m_aDate)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_sVerortung, rhs.m_sVerortung)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_aBZHBG, rhs.m_aBZHBG)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_nAreaSize, rhs.m_nAreaSize)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_sBeschreib, rhs.m_sBeschreib)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_bSameAge, rhs.m_bSameAge)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_bOneLevel, rhs.m_bOneLevel)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_eStockType, rhs.m_eStockType)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_sUsageDescription, rhs.m_sUsageDescription)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_sGesellschaft, rhs.m_sGesellschaft)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_bKronenschluss, rhs.m_bKronenschluss)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_bLightWoods, rhs.m_bLightWoods)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_bUnterwuchs, rhs.m_bUnterwuchs)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_eTotSteh, rhs.m_eTotSteh)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_sTotStehBesch, rhs.m_sTotStehBesch)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_eTotLieg, rhs.m_eTotLieg)) {
-      return false;
-    }
-    if (!EqualsHelper.equals(m_sTotLiegBesch, rhs.m_sTotLiegBesch)) {
-      return false;
-    }
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    return new HashCodeGenerator(this).append(m_nBNr).append(m_aPics).append(m_aDate).append(m_sVerortung).append(m_aBZHBG).append(m_nAreaSize).append(m_sBeschreib).append(m_bSameAge).append(m_bOneLevel).append(m_eStockType).append(m_sUsageDescription).append(m_sGesellschaft).append(m_bKronenschluss).append(m_bLightWoods).append(m_bUnterwuchs).append(m_eTotSteh).append(m_sTotStehBesch).append(m_eTotLieg).append(m_sTotLiegBesch).getHashCode();
+  @Nonnull
+  public final ObjectType getObjectType() {
+    return OT;
   }
 
   @Override
   public String toString() {
-    return new ToStringGenerator(this).append("BNr", m_nBNr).append("pics", m_aPics).append("date", m_aDate).append("Verortung", m_sVerortung).append("BZHBG", m_aBZHBG).append("areaSize", m_nAreaSize).append("Beschreib", m_sBeschreib).append("sameAge", m_bSameAge).append("oneLevel", m_bOneLevel).append("stockType", m_eStockType).append("usageDescription", m_sUsageDescription).append("Gesellschaft", m_sGesellschaft).append("Kronenschluss", m_bKronenschluss).append("lightWoods", m_bLightWoods).append("Unterwuchs", m_bUnterwuchs).append("TotSteh", m_eTotSteh).append("TotStehBesch", m_sTotStehBesch).append("TotLieg", m_eTotLieg).append("TotLiegBesch", m_sTotLiegBesch).getToString();
+    return ToStringGenerator.getDerived(super.toString()).append("BNr", m_nBNr).append("pics", m_aPics).append("date", m_aDate).append("Verortung", m_sVerortung).append("BZHBG", m_aBZHBG).append("areaSize", m_nAreaSize).append("Beschreib", m_sBeschreib).append("sameAge", m_bSameAge).append("oneLevel", m_bOneLevel).append("stockType", m_eStockType).append("usageDescription", m_sUsageDescription).append("Gesellschaft", m_sGesellschaft).append("Kronenschluss", m_bKronenschluss).append("lightWoods", m_bLightWoods).append("Unterwuchs", m_bUnterwuchs).append("TotSteh", m_eTotSteh).append("TotStehBesch", m_sTotStehBesch).append("TotLieg", m_eTotLieg).append("TotLiegBesch", m_sTotLiegBesch).getToString();
   }
 
   public final int getBNr() {
@@ -271,17 +206,17 @@ public class Bestand
 
   @Nonnull
   @ReturnsMutableObject
-  public final ICommonsList<IHabitatbaumgruppe> bZHBG() {
+  public final ICommonsList<IExHabitatbaumgruppeBO> bZHBG() {
     return m_aBZHBG;
   }
 
   @Nonnull
   final EChange setBZHBG(
     @Nonnull
-    final ICommonsList<IHabitatbaumgruppe> aBZHBG) {
+    final ICommonsList<IExHabitatbaumgruppeBO> aBZHBG) {
     ValueEnforcer.notNull(aBZHBG, "BZHBG");
     // Ensure the same implementation type
-    final ICommonsList<IHabitatbaumgruppe> aRealList = new CommonsArrayList<>(aBZHBG);
+    final ICommonsList<IExHabitatbaumgruppeBO> aRealList = new CommonsArrayList<>(aBZHBG);
     if (aRealList.equals(m_aBZHBG)) {
       return EChange.UNCHANGED;
     }
@@ -346,14 +281,14 @@ public class Bestand
   }
 
   @Nonnull
-  public final EStockType getStockType() {
+  public final ExEStockTypeBO getStockType() {
     return m_eStockType;
   }
 
   @Nonnull
   final EChange setStockType(
     @Nonnull
-    final EStockType eStockType) {
+    final ExEStockTypeBO eStockType) {
     ValueEnforcer.notNull(eStockType, "StockType");
     if (eStockType.equals(m_eStockType)) {
       return EChange.UNCHANGED;
@@ -436,14 +371,14 @@ public class Bestand
   }
 
   @Nonnull
-  public final EStockDeadwood getTotSteh() {
+  public final ExEStockDeadwoodBO getTotSteh() {
     return m_eTotSteh;
   }
 
   @Nonnull
   final EChange setTotSteh(
     @Nonnull
-    final EStockDeadwood eTotSteh) {
+    final ExEStockDeadwoodBO eTotSteh) {
     ValueEnforcer.notNull(eTotSteh, "TotSteh");
     if (eTotSteh.equals(m_eTotSteh)) {
       return EChange.UNCHANGED;
@@ -470,14 +405,14 @@ public class Bestand
   }
 
   @Nonnull
-  public final EStockDeadwood getTotLieg() {
+  public final ExEStockDeadwoodBO getTotLieg() {
     return m_eTotLieg;
   }
 
   @Nonnull
   final EChange setTotLieg(
     @Nonnull
-    final EStockDeadwood eTotLieg) {
+    final ExEStockDeadwoodBO eTotLieg) {
     ValueEnforcer.notNull(eTotLieg, "TotLieg");
     if (eTotLieg.equals(m_eTotLieg)) {
       return EChange.UNCHANGED;

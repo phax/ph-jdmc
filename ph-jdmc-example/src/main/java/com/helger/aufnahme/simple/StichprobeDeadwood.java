@@ -4,6 +4,7 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.equals.EqualsHelper;
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
+import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
 
@@ -41,6 +42,7 @@ public class StichprobeDeadwood
   public StichprobeDeadwood(
     @Nonnull
     final IStichprobeDeadwood aOther) {
+    ValueEnforcer.notNull(aOther, "Other");
     setDoD(aOther.getDoD());
     setTreeKind(aOther.getTreeKind());
     setLength(aOther.getLength());
@@ -74,6 +76,11 @@ public class StichprobeDeadwood
   @Override
   public int hashCode() {
     return new HashCodeGenerator(this).append(m_eDoD).append(m_eTreeKind).append(m_nLength).append(m_nBHD).getHashCode();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringGenerator(this).append("DoD", m_eDoD).append("treeKind", m_eTreeKind).append("length", m_nLength).append("BHD", m_nBHD).getToString();
   }
 
   @Nonnull

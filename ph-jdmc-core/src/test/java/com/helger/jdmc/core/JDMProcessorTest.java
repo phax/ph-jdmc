@@ -97,6 +97,10 @@ public final class JDMProcessorTest
     assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "Stichprobe.jdm"));
     assertNotNull (aClass);
+
+    // Test only
+    aClass = p.readClassDef (new File (aSrcDir, "Leergut.jdm"));
+    assertNotNull (aClass);
   }
 
   private static final File DIR_EXAMPLE_SRC = new File ("../ph-jdmc-example");
@@ -113,6 +117,7 @@ public final class JDMProcessorTest
   public void testBusinessObject () throws IOException
   {
     final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.businessobj");
+    p.setClassNamePrefix ("Ex").setClassNameSuffix ("BO");
     _applyTestJDM (p);
     new JDMCodeGenerator (p).setUseBusinessObject (true).createCode (DIR_EXAMPLE_SRC);
   }

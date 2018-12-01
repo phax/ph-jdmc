@@ -4,6 +4,7 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.equals.EqualsHelper;
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
+import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
 
@@ -35,6 +36,7 @@ public class TrunkSize
   public TrunkSize(
     @Nonnull
     final ITrunkSize aOther) {
+    ValueEnforcer.notNull(aOther, "Other");
     setBHD(aOther.getBHD());
     setHeight(aOther.getHeight());
   }
@@ -60,6 +62,11 @@ public class TrunkSize
   @Override
   public int hashCode() {
     return new HashCodeGenerator(this).append(m_nBHD).append(m_eHeight).getHashCode();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringGenerator(this).append("BHD", m_nBHD).append("height", m_eHeight).getToString();
   }
 
   public final int getBHD() {

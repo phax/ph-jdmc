@@ -4,6 +4,7 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.equals.EqualsHelper;
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.state.EChange;
+import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.Nonnull;
 
@@ -39,6 +40,7 @@ public class BiotopbaumDecompositionDegree
   public BiotopbaumDecompositionDegree(
     @Nonnull
     final IBiotopbaumDecompositionDegree aOther) {
+    ValueEnforcer.notNull(aOther, "Other");
     setType(aOther.getType());
     setEnabled(aOther.isEnabled());
     setLength(aOther.getLength());
@@ -72,6 +74,11 @@ public class BiotopbaumDecompositionDegree
   @Override
   public int hashCode() {
     return new HashCodeGenerator(this).append(m_eType).append(m_bEnabled).append(m_nLength).append(m_nBHD).getHashCode();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringGenerator(this).append("type", m_eType).append("enabled", m_bEnabled).append("length", m_nLength).append("BHD", m_nBHD).getToString();
   }
 
   @Nonnull
