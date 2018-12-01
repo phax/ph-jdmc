@@ -6,22 +6,22 @@ import org.junit.Test;
 
 
 /**
- * This is the test class for class {@link com.helger.aufnahme.businessobj.ExEVitalityBO}
+ * This is the test class for class {@link com.helger.aufnahme.businessobj.EExCaveTypeBO}
  * This class was initially automatically created
  * 
  * 
  * @author JDMCodeGenerator
  */
-public final class ExEVitalityBOTest {
+public final class EExCaveTypeBOTest {
 
   @Test
   public void testBasic() {
-    for (final ExEVitalityBO e: ExEVitalityBO.values()) {
+    for (final EExCaveTypeBO e: EExCaveTypeBO.values()) {
       Assert.assertTrue(StringHelper.hasText(e.getID()));
       Assert.assertTrue(StringHelper.hasText(e.getDisplayName()));
-      Assert.assertSame(e, ExEVitalityBO.getFromIDOrNull(e.getID()));
-      Assert.assertSame(e, ExEVitalityBO.getFromIDOrDefault(e.getID(), null));
-      Assert.assertSame(e, ExEVitalityBO.getFromIDOrThrow(e.getID()));
+      Assert.assertSame(e, EExCaveTypeBO.getFromIDOrNull(e.getID()));
+      Assert.assertSame(e, EExCaveTypeBO.getFromIDOrDefault(e.getID(), null));
+      Assert.assertSame(e, EExCaveTypeBO.getFromIDOrThrow(e.getID()));
     }
   }
 }

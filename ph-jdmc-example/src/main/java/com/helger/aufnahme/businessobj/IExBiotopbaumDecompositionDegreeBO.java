@@ -22,7 +22,7 @@ public interface IExBiotopbaumDecompositionDegreeBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExEDecompositionDegreeClassBO getType();
+  EExDecompositionDegreeClassBO getType();
 
   /**
    * Get the value of enabled.

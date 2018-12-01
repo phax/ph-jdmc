@@ -22,17 +22,17 @@ public class ExTrunkSizeBO
 {
   public static final ObjectType OT = new ObjectType("ExTrunkSizeBO");
   private int m_nBHD;
-  private ExETreeHeightBO m_eHeight;
+  private EExTreeHeightBO m_eHeight;
 
   public ExTrunkSizeBO(final int nBHD,
     @Nonnull
-    final ExETreeHeightBO eHeight) {
+    final EExTreeHeightBO eHeight) {
     this(StubObject.createForCurrentUser(), nBHD, eHeight);
   }
 
   protected ExTrunkSizeBO(final StubObject aStubObject, final int nBHD,
     @Nonnull
-    final ExETreeHeightBO eHeight) {
+    final EExTreeHeightBO eHeight) {
     super(aStubObject);
     setBHD(nBHD);
     setHeight(eHeight);
@@ -62,14 +62,14 @@ public class ExTrunkSizeBO
   }
 
   @Nonnull
-  public final ExETreeHeightBO getHeight() {
+  public final EExTreeHeightBO getHeight() {
     return m_eHeight;
   }
 
   @Nonnull
   final EChange setHeight(
     @Nonnull
-    final ExETreeHeightBO eHeight) {
+    final EExTreeHeightBO eHeight) {
     ValueEnforcer.notNull(eHeight, "Height");
     if (eHeight.equals(m_eHeight)) {
       return EChange.UNCHANGED;

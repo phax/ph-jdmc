@@ -21,22 +21,22 @@ public class ExCaveTypeBO
   implements IExCaveTypeBO
 {
   public static final ObjectType OT = new ObjectType("ExCaveTypeBO");
-  private ExECaveClassBO m_eClazz;
-  private ExECaveTypeBO m_eType;
+  private EExCaveClassBO m_eClazz;
+  private EExCaveTypeBO m_eType;
 
   public ExCaveTypeBO(
     @Nonnull
-    final ExECaveClassBO eClazz,
+    final EExCaveClassBO eClazz,
     @Nonnull
-    final ExECaveTypeBO eType) {
+    final EExCaveTypeBO eType) {
     this(StubObject.createForCurrentUser(), eClazz, eType);
   }
 
   protected ExCaveTypeBO(final StubObject aStubObject,
     @Nonnull
-    final ExECaveClassBO eClazz,
+    final EExCaveClassBO eClazz,
     @Nonnull
-    final ExECaveTypeBO eType) {
+    final EExCaveTypeBO eType) {
     super(aStubObject);
     setClazz(eClazz);
     setType(eType);
@@ -53,14 +53,14 @@ public class ExCaveTypeBO
   }
 
   @Nonnull
-  public final ExECaveClassBO getClazz() {
+  public final EExCaveClassBO getClazz() {
     return m_eClazz;
   }
 
   @Nonnull
   final EChange setClazz(
     @Nonnull
-    final ExECaveClassBO eClazz) {
+    final EExCaveClassBO eClazz) {
     ValueEnforcer.notNull(eClazz, "Clazz");
     if (eClazz.equals(m_eClazz)) {
       return EChange.UNCHANGED;
@@ -70,14 +70,14 @@ public class ExCaveTypeBO
   }
 
   @Nonnull
-  public final ExECaveTypeBO getType() {
+  public final EExCaveTypeBO getType() {
     return m_eType;
   }
 
   @Nonnull
   final EChange setType(
     @Nonnull
-    final ExECaveTypeBO eType) {
+    final EExCaveTypeBO eType) {
     ValueEnforcer.notNull(eType, "Type");
     if (eType.equals(m_eType)) {
       return EChange.UNCHANGED;

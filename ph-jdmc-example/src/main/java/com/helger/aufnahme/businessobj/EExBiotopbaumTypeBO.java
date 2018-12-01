@@ -14,23 +14,18 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
-public enum ExEStockTypeBO
+public enum EExBiotopbaumTypeBO
   implements IHasID<String> , IHasDisplayName
 {
-  _0("0", "keine Bestockung, aktuelle Schlagfl\u00e4che"),
-  _1("1", "sp\u00e4rliche Verj\u00fcngung"),
-  _2("2", "Jungwuchs (Verj\u00fcngung bis 1,3m)"),
-  _3("3", "Dickung (beginnender Kronenschluss \u00fcber 1,3m; Holz <10 cm BHD"),
-  _4("4", "Stangenholz (10-20 cm BHD)"),
-  _5("5", "Baumholz (\u00fcber 20 cm BHD)"),
-  _6("6", "Altholz (hiebsreif)"),
-  _7("7", "Altholz verlichtet (schwach bestockt)"),
-  _8("8", "Plenterwald (alle Bestandsklassem kommen auf kleinster Fl\u00e4che vor)"),
-  OTHER("other", "Sonstiges");
+  TOTHOLZ("dead", "Totholz (eindeutig)"),
+  SPECIAL("special", "Sonderstrukturen"),
+  TREE("tree", "m\u00e4chtiger Baum  / Uraltbaum (BHD)"),
+  ALTERNATIVE("alt", "Anw\u00e4rter/Alternative f\u00fcr Netzwerk"),
+  OTHER("other", "sonstiger Biotopbaum");
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ExEStockTypeBO(
+  private EExBiotopbaumTypeBO(
     @Nonnull
     @Nonempty
     final String sID,
@@ -54,25 +49,25 @@ public enum ExEStockTypeBO
   }
 
   @Nullable
-  public static ExEStockTypeBO getFromIDOrNull(
+  public static EExBiotopbaumTypeBO getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ExEStockTypeBO.class, sID);
+    return EnumHelper.getFromIDOrNull(EExBiotopbaumTypeBO.class, sID);
   }
 
   @Nullable
-  public static ExEStockTypeBO getFromIDOrDefault(
+  public static EExBiotopbaumTypeBO getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ExEStockTypeBO eDefault) {
-    return EnumHelper.getFromIDOrDefault(ExEStockTypeBO.class, sID, eDefault);
+    final EExBiotopbaumTypeBO eDefault) {
+    return EnumHelper.getFromIDOrDefault(EExBiotopbaumTypeBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ExEStockTypeBO getFromIDOrThrow(
+  public static EExBiotopbaumTypeBO getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ExEStockTypeBO.class, sID);
+    return EnumHelper.getFromIDOrThrow(EExBiotopbaumTypeBO.class, sID);
   }
 }

@@ -22,7 +22,7 @@ public interface IExBiotopbaumDeadwoodBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExEDeadwoodCategoryBO getType();
+  EExDeadwoodCategoryBO getType();
 
   /**
    * Get the value of enabled.

@@ -14,16 +14,16 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
-public enum ExETreeHeightBO
+public enum EExCaveClassBO
   implements IHasID<String> , IHasDisplayName
 {
-  ONE("1", "Klasse 1"),
-  TWO("2", "Klasse 2"),
-  THREE("3", "Klasse 3");
+  ONE("1", "I"),
+  TWO("2", "II"),
+  THREE("3", "III");
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ExETreeHeightBO(
+  private EExCaveClassBO(
     @Nonnull
     @Nonempty
     final String sID,
@@ -47,25 +47,25 @@ public enum ExETreeHeightBO
   }
 
   @Nullable
-  public static ExETreeHeightBO getFromIDOrNull(
+  public static EExCaveClassBO getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ExETreeHeightBO.class, sID);
+    return EnumHelper.getFromIDOrNull(EExCaveClassBO.class, sID);
   }
 
   @Nullable
-  public static ExETreeHeightBO getFromIDOrDefault(
+  public static EExCaveClassBO getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ExETreeHeightBO eDefault) {
-    return EnumHelper.getFromIDOrDefault(ExETreeHeightBO.class, sID, eDefault);
+    final EExCaveClassBO eDefault) {
+    return EnumHelper.getFromIDOrDefault(EExCaveClassBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ExETreeHeightBO getFromIDOrThrow(
+  public static EExCaveClassBO getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ExETreeHeightBO.class, sID);
+    return EnumHelper.getFromIDOrThrow(EExCaveClassBO.class, sID);
   }
 }

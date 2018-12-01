@@ -32,9 +32,9 @@ public class ExBiotopbaumBO
   private int m_nBBNr;
   private final ICommonsList<File> m_aPics = new CommonsArrayList<>();
   private LocalDate m_aDate;
-  private final ICommonsList<ExEBiotopbaumTypeBO> m_eType = new CommonsArrayList<>();
+  private final ICommonsList<EExBiotopbaumTypeBO> m_eType = new CommonsArrayList<>();
   private String m_sLocation;
-  private ExEExpositionBO m_eExposition;
+  private EExExpositionBO m_eExposition;
   private String m_sHanglage;
   private boolean m_bEinschichtig;
   private boolean m_bSolitary;
@@ -44,11 +44,11 @@ public class ExBiotopbaumBO
   private boolean m_bUeberSun;
   private boolean m_bHomogene;
   private String m_sBeschreibung;
-  private ExETreeKindBO m_eTreeKind;
+  private EExTreeKindBO m_eTreeKind;
   private final ICommonsList<IExCaveTypeBO> m_aCaves = new CommonsArrayList<>();
   private final ICommonsList<IExTrunkSizeBO> m_aTrunk = new CommonsArrayList<>();
-  private ExEVitalityBO m_eVitality;
-  private final ICommonsList<ExESpecialStructureBO> m_eSpecialStructure = new CommonsArrayList<>();
+  private EExVitalityBO m_eVitality;
+  private final ICommonsList<EExSpecialStructureBO> m_eSpecialStructure = new CommonsArrayList<>();
   private String m_sOtherSpecial;
   private boolean m_bAspirant;
   private String m_sAspirantDesc;
@@ -65,26 +65,26 @@ public class ExBiotopbaumBO
     final LocalDate aDate,
     @Nonnull
     @Nonempty
-    final ICommonsList<ExEBiotopbaumTypeBO> eType,
+    final ICommonsList<EExBiotopbaumTypeBO> eType,
     @Nullable
     final String sLocation,
     @Nonnull
-    final ExEExpositionBO eExposition,
+    final EExExpositionBO eExposition,
     @Nullable
     final String sHanglage, final boolean bEinschichtig, final boolean bSolitary, final boolean bLightLocation, final boolean bClosedCrown, final boolean bNoSun, final boolean bUeberSun, final boolean bHomogene,
     @Nonnull
     final String sBeschreibung,
     @Nonnull
-    final ExETreeKindBO eTreeKind,
+    final EExTreeKindBO eTreeKind,
     @Nonnull
     final ICommonsList<IExCaveTypeBO> aCaves,
     @Nonnull
     @Nonempty
     final ICommonsList<IExTrunkSizeBO> aTrunk,
     @Nonnull
-    final ExEVitalityBO eVitality,
+    final EExVitalityBO eVitality,
     @Nonnull
-    final ICommonsList<ExESpecialStructureBO> eSpecialStructure,
+    final ICommonsList<EExSpecialStructureBO> eSpecialStructure,
     @Nullable
     final String sOtherSpecial, final boolean bAspirant,
     @Nullable
@@ -106,26 +106,26 @@ public class ExBiotopbaumBO
     final LocalDate aDate,
     @Nonnull
     @Nonempty
-    final ICommonsList<ExEBiotopbaumTypeBO> eType,
+    final ICommonsList<EExBiotopbaumTypeBO> eType,
     @Nullable
     final String sLocation,
     @Nonnull
-    final ExEExpositionBO eExposition,
+    final EExExpositionBO eExposition,
     @Nullable
     final String sHanglage, final boolean bEinschichtig, final boolean bSolitary, final boolean bLightLocation, final boolean bClosedCrown, final boolean bNoSun, final boolean bUeberSun, final boolean bHomogene,
     @Nonnull
     final String sBeschreibung,
     @Nonnull
-    final ExETreeKindBO eTreeKind,
+    final EExTreeKindBO eTreeKind,
     @Nonnull
     final ICommonsList<IExCaveTypeBO> aCaves,
     @Nonnull
     @Nonempty
     final ICommonsList<IExTrunkSizeBO> aTrunk,
     @Nonnull
-    final ExEVitalityBO eVitality,
+    final EExVitalityBO eVitality,
     @Nonnull
-    final ICommonsList<ExESpecialStructureBO> eSpecialStructure,
+    final ICommonsList<EExSpecialStructureBO> eSpecialStructure,
     @Nullable
     final String sOtherSpecial, final boolean bAspirant,
     @Nullable
@@ -231,7 +231,7 @@ public class ExBiotopbaumBO
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  public final ICommonsList<ExEBiotopbaumTypeBO> type() {
+  public final ICommonsList<EExBiotopbaumTypeBO> type() {
     return m_eType;
   }
 
@@ -239,10 +239,10 @@ public class ExBiotopbaumBO
   final EChange setType(
     @Nonnull
     @Nonempty
-    final ICommonsList<ExEBiotopbaumTypeBO> eType) {
+    final ICommonsList<EExBiotopbaumTypeBO> eType) {
     ValueEnforcer.notEmpty(eType, "Type");
     // Ensure the same implementation type
-    final ICommonsList<ExEBiotopbaumTypeBO> aRealList = new CommonsArrayList<>(eType);
+    final ICommonsList<EExBiotopbaumTypeBO> aRealList = new CommonsArrayList<>(eType);
     if (aRealList.equals(m_eType)) {
       return EChange.UNCHANGED;
     }
@@ -267,14 +267,14 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  public final ExEExpositionBO getExposition() {
+  public final EExExpositionBO getExposition() {
     return m_eExposition;
   }
 
   @Nonnull
   final EChange setExposition(
     @Nonnull
-    final ExEExpositionBO eExposition) {
+    final EExExpositionBO eExposition) {
     ValueEnforcer.notNull(eExposition, "Exposition");
     if (eExposition.equals(m_eExposition)) {
       return EChange.UNCHANGED;
@@ -408,14 +408,14 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  public final ExETreeKindBO getTreeKind() {
+  public final EExTreeKindBO getTreeKind() {
     return m_eTreeKind;
   }
 
   @Nonnull
   final EChange setTreeKind(
     @Nonnull
-    final ExETreeKindBO eTreeKind) {
+    final EExTreeKindBO eTreeKind) {
     ValueEnforcer.notNull(eTreeKind, "TreeKind");
     if (eTreeKind.equals(m_eTreeKind)) {
       return EChange.UNCHANGED;
@@ -467,14 +467,14 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  public final ExEVitalityBO getVitality() {
+  public final EExVitalityBO getVitality() {
     return m_eVitality;
   }
 
   @Nonnull
   final EChange setVitality(
     @Nonnull
-    final ExEVitalityBO eVitality) {
+    final EExVitalityBO eVitality) {
     ValueEnforcer.notNull(eVitality, "Vitality");
     if (eVitality.equals(m_eVitality)) {
       return EChange.UNCHANGED;
@@ -485,17 +485,17 @@ public class ExBiotopbaumBO
 
   @Nonnull
   @ReturnsMutableObject
-  public final ICommonsList<ExESpecialStructureBO> specialStructure() {
+  public final ICommonsList<EExSpecialStructureBO> specialStructure() {
     return m_eSpecialStructure;
   }
 
   @Nonnull
   final EChange setSpecialStructure(
     @Nonnull
-    final ICommonsList<ExESpecialStructureBO> eSpecialStructure) {
+    final ICommonsList<EExSpecialStructureBO> eSpecialStructure) {
     ValueEnforcer.notNull(eSpecialStructure, "SpecialStructure");
     // Ensure the same implementation type
-    final ICommonsList<ExESpecialStructureBO> aRealList = new CommonsArrayList<>(eSpecialStructure);
+    final ICommonsList<EExSpecialStructureBO> aRealList = new CommonsArrayList<>(eSpecialStructure);
     if (aRealList.equals(m_eSpecialStructure)) {
       return EChange.UNCHANGED;
     }

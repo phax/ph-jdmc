@@ -22,7 +22,7 @@ public interface IExStichprobeDeadwoodBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExEDecompositionDegreeClassBO getDoD();
+  EExDecompositionDegreeClassBO getDoD();
 
   /**
    * Baumart laut Aufnahmeblatt
@@ -31,7 +31,7 @@ public interface IExStichprobeDeadwoodBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExETreeKindBO getTreeKind();
+  EExTreeKindBO getTreeKind();
 
   /**
    * Länge in cm

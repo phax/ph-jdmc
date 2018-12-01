@@ -38,15 +38,15 @@ public class ExBestandBO
   private String m_sBeschreib;
   private boolean m_bSameAge;
   private boolean m_bOneLevel;
-  private ExEStockTypeBO m_eStockType;
+  private EExStockTypeBO m_eStockType;
   private String m_sUsageDescription;
   private String m_sGesellschaft;
   private boolean m_bKronenschluss;
   private boolean m_bLightWoods;
   private boolean m_bUnterwuchs;
-  private ExEStockDeadwoodBO m_eTotSteh;
+  private EExStockDeadwoodBO m_eTotSteh;
   private String m_sTotStehBesch;
-  private ExEStockDeadwoodBO m_eTotLieg;
+  private EExStockDeadwoodBO m_eTotLieg;
   private String m_sTotLiegBesch;
 
   public ExBestandBO(final int nBNr,
@@ -62,17 +62,17 @@ public class ExBestandBO
     @Nonnull
     final String sBeschreib, final boolean bSameAge, final boolean bOneLevel,
     @Nonnull
-    final ExEStockTypeBO eStockType,
+    final EExStockTypeBO eStockType,
     @Nonnull
     final String sUsageDescription,
     @Nonnull
     final String sGesellschaft, final boolean bKronenschluss, final boolean bLightWoods, final boolean bUnterwuchs,
     @Nonnull
-    final ExEStockDeadwoodBO eTotSteh,
+    final EExStockDeadwoodBO eTotSteh,
     @Nonnull
     final String sTotStehBesch,
     @Nonnull
-    final ExEStockDeadwoodBO eTotLieg,
+    final EExStockDeadwoodBO eTotLieg,
     @Nonnull
     final String sTotLiegBesch) {
     this(StubObject.createForCurrentUser(), nBNr, aPics, aDate, sVerortung, aBZHBG, nAreaSize, sBeschreib, bSameAge, bOneLevel, eStockType, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
@@ -91,17 +91,17 @@ public class ExBestandBO
     @Nonnull
     final String sBeschreib, final boolean bSameAge, final boolean bOneLevel,
     @Nonnull
-    final ExEStockTypeBO eStockType,
+    final EExStockTypeBO eStockType,
     @Nonnull
     final String sUsageDescription,
     @Nonnull
     final String sGesellschaft, final boolean bKronenschluss, final boolean bLightWoods, final boolean bUnterwuchs,
     @Nonnull
-    final ExEStockDeadwoodBO eTotSteh,
+    final EExStockDeadwoodBO eTotSteh,
     @Nonnull
     final String sTotStehBesch,
     @Nonnull
-    final ExEStockDeadwoodBO eTotLieg,
+    final EExStockDeadwoodBO eTotLieg,
     @Nonnull
     final String sTotLiegBesch) {
     super(aStubObject);
@@ -281,14 +281,14 @@ public class ExBestandBO
   }
 
   @Nonnull
-  public final ExEStockTypeBO getStockType() {
+  public final EExStockTypeBO getStockType() {
     return m_eStockType;
   }
 
   @Nonnull
   final EChange setStockType(
     @Nonnull
-    final ExEStockTypeBO eStockType) {
+    final EExStockTypeBO eStockType) {
     ValueEnforcer.notNull(eStockType, "StockType");
     if (eStockType.equals(m_eStockType)) {
       return EChange.UNCHANGED;
@@ -371,14 +371,14 @@ public class ExBestandBO
   }
 
   @Nonnull
-  public final ExEStockDeadwoodBO getTotSteh() {
+  public final EExStockDeadwoodBO getTotSteh() {
     return m_eTotSteh;
   }
 
   @Nonnull
   final EChange setTotSteh(
     @Nonnull
-    final ExEStockDeadwoodBO eTotSteh) {
+    final EExStockDeadwoodBO eTotSteh) {
     ValueEnforcer.notNull(eTotSteh, "TotSteh");
     if (eTotSteh.equals(m_eTotSteh)) {
       return EChange.UNCHANGED;
@@ -405,14 +405,14 @@ public class ExBestandBO
   }
 
   @Nonnull
-  public final ExEStockDeadwoodBO getTotLieg() {
+  public final EExStockDeadwoodBO getTotLieg() {
     return m_eTotLieg;
   }
 
   @Nonnull
   final EChange setTotLieg(
     @Nonnull
-    final ExEStockDeadwoodBO eTotLieg) {
+    final EExStockDeadwoodBO eTotLieg) {
     ValueEnforcer.notNull(eTotLieg, "TotLieg");
     if (eTotLieg.equals(m_eTotLieg)) {
       return EChange.UNCHANGED;

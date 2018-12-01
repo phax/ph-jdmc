@@ -39,7 +39,7 @@ public class ExHabitatbaumgruppeBO
   private boolean m_bClosedCrown;
   private boolean m_bNoSun;
   private boolean m_bHomogen;
-  private ExEExpositionBO m_eExposition;
+  private EExExpositionBO m_eExposition;
   private String m_sHanglage;
   private int m_nAreaSize;
   private boolean m_bOnlyBB;
@@ -56,7 +56,7 @@ public class ExHabitatbaumgruppeBO
     @Nonnull
     final String sStandort, final boolean bOneLevel, final boolean bLight, final boolean bClosedCrown, final boolean bNoSun, final boolean bHomogen,
     @Nonnull
-    final ExEExpositionBO eExposition,
+    final EExExpositionBO eExposition,
     @Nullable
     final String sHanglage, final int nAreaSize, final boolean bOnlyBB,
     @Nonnull
@@ -75,7 +75,7 @@ public class ExHabitatbaumgruppeBO
     @Nonnull
     final String sStandort, final boolean bOneLevel, final boolean bLight, final boolean bClosedCrown, final boolean bNoSun, final boolean bHomogen,
     @Nonnull
-    final ExEExpositionBO eExposition,
+    final EExExpositionBO eExposition,
     @Nullable
     final String sHanglage, final int nAreaSize, final boolean bOnlyBB,
     @Nonnull
@@ -263,14 +263,14 @@ public class ExHabitatbaumgruppeBO
   }
 
   @Nonnull
-  public final ExEExpositionBO getExposition() {
+  public final EExExpositionBO getExposition() {
     return m_eExposition;
   }
 
   @Nonnull
   final EChange setExposition(
     @Nonnull
-    final ExEExpositionBO eExposition) {
+    final EExExpositionBO eExposition) {
     ValueEnforcer.notNull(eExposition, "Exposition");
     if (eExposition.equals(m_eExposition)) {
       return EChange.UNCHANGED;

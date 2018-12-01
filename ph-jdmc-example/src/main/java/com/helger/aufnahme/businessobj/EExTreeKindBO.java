@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
-public enum ExETreeKindBO
+public enum EExTreeKindBO
   implements IHasID<String> , IHasDisplayName
 {
   Bergahorn("Bergahorn", "Bergahorn"),
@@ -43,7 +43,7 @@ public enum ExETreeKindBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ExETreeKindBO(
+  private EExTreeKindBO(
     @Nonnull
     @Nonempty
     final String sID,
@@ -67,25 +67,25 @@ public enum ExETreeKindBO
   }
 
   @Nullable
-  public static ExETreeKindBO getFromIDOrNull(
+  public static EExTreeKindBO getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ExETreeKindBO.class, sID);
+    return EnumHelper.getFromIDOrNull(EExTreeKindBO.class, sID);
   }
 
   @Nullable
-  public static ExETreeKindBO getFromIDOrDefault(
+  public static EExTreeKindBO getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ExETreeKindBO eDefault) {
-    return EnumHelper.getFromIDOrDefault(ExETreeKindBO.class, sID, eDefault);
+    final EExTreeKindBO eDefault) {
+    return EnumHelper.getFromIDOrDefault(EExTreeKindBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ExETreeKindBO getFromIDOrThrow(
+  public static EExTreeKindBO getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ExETreeKindBO.class, sID);
+    return EnumHelper.getFromIDOrThrow(EExTreeKindBO.class, sID);
   }
 }

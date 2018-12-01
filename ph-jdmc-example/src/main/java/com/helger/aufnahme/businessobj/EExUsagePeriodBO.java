@@ -14,16 +14,16 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
-public enum ExECaveClassBO
+public enum EExUsagePeriodBO
   implements IHasID<String> , IHasDisplayName
 {
-  ONE("1", "I"),
-  TWO("2", "II"),
-  THREE("3", "III");
+  NONE("none", "keine"),
+  HISTORIC("historic", "historisch"),
+  CURRENT("current", "aktuell");
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ExECaveClassBO(
+  private EExUsagePeriodBO(
     @Nonnull
     @Nonempty
     final String sID,
@@ -47,25 +47,25 @@ public enum ExECaveClassBO
   }
 
   @Nullable
-  public static ExECaveClassBO getFromIDOrNull(
+  public static EExUsagePeriodBO getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ExECaveClassBO.class, sID);
+    return EnumHelper.getFromIDOrNull(EExUsagePeriodBO.class, sID);
   }
 
   @Nullable
-  public static ExECaveClassBO getFromIDOrDefault(
+  public static EExUsagePeriodBO getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ExECaveClassBO eDefault) {
-    return EnumHelper.getFromIDOrDefault(ExECaveClassBO.class, sID, eDefault);
+    final EExUsagePeriodBO eDefault) {
+    return EnumHelper.getFromIDOrDefault(EExUsagePeriodBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ExECaveClassBO getFromIDOrThrow(
+  public static EExUsagePeriodBO getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ExECaveClassBO.class, sID);
+    return EnumHelper.getFromIDOrThrow(EExUsagePeriodBO.class, sID);
   }
 }

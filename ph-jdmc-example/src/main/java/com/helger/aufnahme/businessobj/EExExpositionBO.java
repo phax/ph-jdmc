@@ -14,16 +14,23 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
-public enum ExEUsagePeriodBO
+public enum EExExpositionBO
   implements IHasID<String> , IHasDisplayName
 {
+  N("n", "Norden"),
+  NO("ne", "Nordosten"),
+  O("e", "Osten"),
+  SO("se", "S\u00fcdosten"),
+  S("s", "S\u00fcden"),
+  SW("sw", "S\u00fcdwesten"),
+  W("w", "Westen"),
+  NW("nw", "Nordwesten"),
   NONE("none", "keine"),
-  HISTORIC("historic", "historisch"),
-  CURRENT("current", "aktuell");
+  VIA_GIS("gis", "\u00fcber GIS bestimmen");
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ExEUsagePeriodBO(
+  private EExExpositionBO(
     @Nonnull
     @Nonempty
     final String sID,
@@ -47,25 +54,25 @@ public enum ExEUsagePeriodBO
   }
 
   @Nullable
-  public static ExEUsagePeriodBO getFromIDOrNull(
+  public static EExExpositionBO getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ExEUsagePeriodBO.class, sID);
+    return EnumHelper.getFromIDOrNull(EExExpositionBO.class, sID);
   }
 
   @Nullable
-  public static ExEUsagePeriodBO getFromIDOrDefault(
+  public static EExExpositionBO getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ExEUsagePeriodBO eDefault) {
-    return EnumHelper.getFromIDOrDefault(ExEUsagePeriodBO.class, sID, eDefault);
+    final EExExpositionBO eDefault) {
+    return EnumHelper.getFromIDOrDefault(EExExpositionBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ExEUsagePeriodBO getFromIDOrThrow(
+  public static EExExpositionBO getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ExEUsagePeriodBO.class, sID);
+    return EnumHelper.getFromIDOrThrow(EExExpositionBO.class, sID);
   }
 }

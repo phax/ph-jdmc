@@ -6,22 +6,22 @@ import org.junit.Test;
 
 
 /**
- * This is the test class for class {@link com.helger.aufnahme.businessobj.ExETreeKindBO}
+ * This is the test class for class {@link com.helger.aufnahme.businessobj.EExTreeKindBO}
  * This class was initially automatically created
  * 
  * 
  * @author JDMCodeGenerator
  */
-public final class ExETreeKindBOTest {
+public final class EExTreeKindBOTest {
 
   @Test
   public void testBasic() {
-    for (final ExETreeKindBO e: ExETreeKindBO.values()) {
+    for (final EExTreeKindBO e: EExTreeKindBO.values()) {
       Assert.assertTrue(StringHelper.hasText(e.getID()));
       Assert.assertTrue(StringHelper.hasText(e.getDisplayName()));
-      Assert.assertSame(e, ExETreeKindBO.getFromIDOrNull(e.getID()));
-      Assert.assertSame(e, ExETreeKindBO.getFromIDOrDefault(e.getID(), null));
-      Assert.assertSame(e, ExETreeKindBO.getFromIDOrThrow(e.getID()));
+      Assert.assertSame(e, EExTreeKindBO.getFromIDOrNull(e.getID()));
+      Assert.assertSame(e, EExTreeKindBO.getFromIDOrDefault(e.getID(), null));
+      Assert.assertSame(e, EExTreeKindBO.getFromIDOrThrow(e.getID()));
     }
   }
 }

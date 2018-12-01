@@ -266,6 +266,11 @@ public class JDMProcessor
       {
         // Is the type part of the compilation?
         aType = m_aContext.types ().findType (_getAdoptedTypeName (sEffectiveTypeName));
+        if (aType == null)
+        {
+          // Is the type part of the compilation?
+          aType = m_aContext.types ().findType (_getAdoptedEnumName (sEffectiveTypeName));
+        }
       }
       if (aType == null)
       {
@@ -406,6 +411,18 @@ public class JDMProcessor
     return ret;
   }
 
+  @Nonnull
+  private String _getAdoptedEnumName (@Nonnull final String sTypeName)
+  {
+    String ret = sTypeName;
+    if (ret.length () >= 2 && ret.charAt (0) == 'E' && Character.isUpperCase (ret.charAt (1)))
+    {
+      // Cut leading "E" from "EType" but not from "Example"
+      ret = ret.substring (1);
+    }
+    return "E" + _getAdoptedTypeName (ret);
+  }
+
   @Nullable
   public JDMEnum readEnumDef (@Nonnull final File aSrcFile)
   {
@@ -416,7 +433,7 @@ public class JDMProcessor
       return null;
 
     // Build class
-    final String sLocalClassName = _getAdoptedTypeName (FilenameHelper.getBaseName (aSrcFile));
+    final String sLocalClassName = _getAdoptedEnumName (FilenameHelper.getBaseName (aSrcFile));
     final JDMEnum ret = new JDMEnum (m_sDestinationPackageName, sLocalClassName);
 
     // Read all enum entries

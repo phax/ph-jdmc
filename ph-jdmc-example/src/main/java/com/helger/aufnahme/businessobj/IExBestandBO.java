@@ -112,7 +112,7 @@ public interface IExBestandBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExEStockTypeBO getStockType();
+  EExStockTypeBO getStockType();
 
   /**
    * Beschreibung Nutzungsspuren
@@ -163,7 +163,7 @@ public interface IExBestandBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExEStockDeadwoodBO getTotSteh();
+  EExStockDeadwoodBO getTotSteh();
 
   /**
    * Beschreibung Totholz stehend (geklumpt, Art, Herkunft, Zersetzungsgrade)
@@ -181,7 +181,7 @@ public interface IExBestandBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExEStockDeadwoodBO getTotLieg();
+  EExStockDeadwoodBO getTotLieg();
 
   /**
    * Beschreibung Totholz liegend (geklumpt, Art, Herkunft, Zersetzungsgrade)

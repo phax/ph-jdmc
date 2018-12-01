@@ -14,18 +14,17 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
-public enum ExEDecompositionDegreeClassBO
+public enum EExVitalityBO
   implements IHasID<String> , IHasDisplayName
 {
-  CLASS0("c0", "Klasse 0"),
-  CLASS1("c1", "Klasse 1"),
-  CLASS2("c2", "Klasse 2"),
-  CLASS3("c3", "Klasse 3"),
-  CLASS4("c4", "Klasse 4");
+  ONE("1", "vital (ganzheitlich gesund)"),
+  TWO("2", "verminderte Vitalit\u00e4t"),
+  THREE("3", "eindeutig absterbend"),
+  FOUR("4", "tot");
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ExEDecompositionDegreeClassBO(
+  private EExVitalityBO(
     @Nonnull
     @Nonempty
     final String sID,
@@ -49,25 +48,25 @@ public enum ExEDecompositionDegreeClassBO
   }
 
   @Nullable
-  public static ExEDecompositionDegreeClassBO getFromIDOrNull(
+  public static EExVitalityBO getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ExEDecompositionDegreeClassBO.class, sID);
+    return EnumHelper.getFromIDOrNull(EExVitalityBO.class, sID);
   }
 
   @Nullable
-  public static ExEDecompositionDegreeClassBO getFromIDOrDefault(
+  public static EExVitalityBO getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ExEDecompositionDegreeClassBO eDefault) {
-    return EnumHelper.getFromIDOrDefault(ExEDecompositionDegreeClassBO.class, sID, eDefault);
+    final EExVitalityBO eDefault) {
+    return EnumHelper.getFromIDOrDefault(EExVitalityBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ExEDecompositionDegreeClassBO getFromIDOrThrow(
+  public static EExVitalityBO getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ExEDecompositionDegreeClassBO.class, sID);
+    return EnumHelper.getFromIDOrThrow(EExVitalityBO.class, sID);
   }
 }

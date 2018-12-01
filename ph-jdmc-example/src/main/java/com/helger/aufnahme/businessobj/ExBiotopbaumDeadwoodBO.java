@@ -21,20 +21,20 @@ public class ExBiotopbaumDeadwoodBO
   implements IExBiotopbaumDeadwoodBO
 {
   public static final ObjectType OT = new ObjectType("ExBiotopbaumDeadwoodBO");
-  private ExEDeadwoodCategoryBO m_eType;
+  private EExDeadwoodCategoryBO m_eType;
   private boolean m_bEnabled;
   private int m_nLength;
   private int m_nBHD;
 
   public ExBiotopbaumDeadwoodBO(
     @Nonnull
-    final ExEDeadwoodCategoryBO eType, final boolean bEnabled, final int nLength, final int nBHD) {
+    final EExDeadwoodCategoryBO eType, final boolean bEnabled, final int nLength, final int nBHD) {
     this(StubObject.createForCurrentUser(), eType, bEnabled, nLength, nBHD);
   }
 
   protected ExBiotopbaumDeadwoodBO(final StubObject aStubObject,
     @Nonnull
-    final ExEDeadwoodCategoryBO eType, final boolean bEnabled, final int nLength, final int nBHD) {
+    final EExDeadwoodCategoryBO eType, final boolean bEnabled, final int nLength, final int nBHD) {
     super(aStubObject);
     setType(eType);
     setEnabled(bEnabled);
@@ -53,14 +53,14 @@ public class ExBiotopbaumDeadwoodBO
   }
 
   @Nonnull
-  public final ExEDeadwoodCategoryBO getType() {
+  public final EExDeadwoodCategoryBO getType() {
     return m_eType;
   }
 
   @Nonnull
   final EChange setType(
     @Nonnull
-    final ExEDeadwoodCategoryBO eType) {
+    final EExDeadwoodCategoryBO eType) {
     ValueEnforcer.notNull(eType, "Type");
     if (eType.equals(m_eType)) {
       return EChange.UNCHANGED;

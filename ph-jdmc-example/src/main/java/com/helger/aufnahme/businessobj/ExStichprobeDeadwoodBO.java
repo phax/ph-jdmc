@@ -21,24 +21,24 @@ public class ExStichprobeDeadwoodBO
   implements IExStichprobeDeadwoodBO
 {
   public static final ObjectType OT = new ObjectType("ExStichprobeDeadwoodBO");
-  private ExEDecompositionDegreeClassBO m_eDoD;
-  private ExETreeKindBO m_eTreeKind;
+  private EExDecompositionDegreeClassBO m_eDoD;
+  private EExTreeKindBO m_eTreeKind;
   private int m_nLength;
   private int m_nBHD;
 
   public ExStichprobeDeadwoodBO(
     @Nonnull
-    final ExEDecompositionDegreeClassBO eDoD,
+    final EExDecompositionDegreeClassBO eDoD,
     @Nonnull
-    final ExETreeKindBO eTreeKind, final int nLength, final int nBHD) {
+    final EExTreeKindBO eTreeKind, final int nLength, final int nBHD) {
     this(StubObject.createForCurrentUser(), eDoD, eTreeKind, nLength, nBHD);
   }
 
   protected ExStichprobeDeadwoodBO(final StubObject aStubObject,
     @Nonnull
-    final ExEDecompositionDegreeClassBO eDoD,
+    final EExDecompositionDegreeClassBO eDoD,
     @Nonnull
-    final ExETreeKindBO eTreeKind, final int nLength, final int nBHD) {
+    final EExTreeKindBO eTreeKind, final int nLength, final int nBHD) {
     super(aStubObject);
     setDoD(eDoD);
     setTreeKind(eTreeKind);
@@ -57,14 +57,14 @@ public class ExStichprobeDeadwoodBO
   }
 
   @Nonnull
-  public final ExEDecompositionDegreeClassBO getDoD() {
+  public final EExDecompositionDegreeClassBO getDoD() {
     return m_eDoD;
   }
 
   @Nonnull
   final EChange setDoD(
     @Nonnull
-    final ExEDecompositionDegreeClassBO eDoD) {
+    final EExDecompositionDegreeClassBO eDoD) {
     ValueEnforcer.notNull(eDoD, "DoD");
     if (eDoD.equals(m_eDoD)) {
       return EChange.UNCHANGED;
@@ -74,14 +74,14 @@ public class ExStichprobeDeadwoodBO
   }
 
   @Nonnull
-  public final ExETreeKindBO getTreeKind() {
+  public final EExTreeKindBO getTreeKind() {
     return m_eTreeKind;
   }
 
   @Nonnull
   final EChange setTreeKind(
     @Nonnull
-    final ExETreeKindBO eTreeKind) {
+    final EExTreeKindBO eTreeKind) {
     ValueEnforcer.notNull(eTreeKind, "TreeKind");
     if (eTreeKind.equals(m_eTreeKind)) {
       return EChange.UNCHANGED;

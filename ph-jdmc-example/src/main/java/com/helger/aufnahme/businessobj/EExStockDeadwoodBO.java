@@ -14,17 +14,18 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
-public enum ExEVitalityBO
+public enum EExStockDeadwoodBO
   implements IHasID<String> , IHasDisplayName
 {
-  ONE("1", "vital (ganzheitlich gesund)"),
-  TWO("2", "verminderte Vitalit\u00e4t"),
-  THREE("3", "eindeutig absterbend"),
-  FOUR("4", "tot");
+  _0("0", "keines"),
+  _1("1", "wenig"),
+  _2("2", "mittel"),
+  _3("3", "viel"),
+  _4("4", "sehr viel");
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ExEVitalityBO(
+  private EExStockDeadwoodBO(
     @Nonnull
     @Nonempty
     final String sID,
@@ -48,25 +49,25 @@ public enum ExEVitalityBO
   }
 
   @Nullable
-  public static ExEVitalityBO getFromIDOrNull(
+  public static EExStockDeadwoodBO getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ExEVitalityBO.class, sID);
+    return EnumHelper.getFromIDOrNull(EExStockDeadwoodBO.class, sID);
   }
 
   @Nullable
-  public static ExEVitalityBO getFromIDOrDefault(
+  public static EExStockDeadwoodBO getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ExEVitalityBO eDefault) {
-    return EnumHelper.getFromIDOrDefault(ExEVitalityBO.class, sID, eDefault);
+    final EExStockDeadwoodBO eDefault) {
+    return EnumHelper.getFromIDOrDefault(EExStockDeadwoodBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ExEVitalityBO getFromIDOrThrow(
+  public static EExStockDeadwoodBO getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ExEVitalityBO.class, sID);
+    return EnumHelper.getFromIDOrThrow(EExStockDeadwoodBO.class, sID);
   }
 }

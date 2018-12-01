@@ -34,7 +34,7 @@ public class ExStichprobeBO
   private final ICommonsList<File> m_aPics = new CommonsArrayList<>();
   private LocalDate m_aDate;
   private int m_nSize;
-  private ExEExpositionBO m_eExposition;
+  private EExExpositionBO m_eExposition;
   private String m_sHanglage;
   private String m_sGesellschaft;
   private double m_dBKL0;
@@ -66,7 +66,7 @@ public class ExStichprobeBO
     @Nonnull
     final LocalDate aDate, final int nSize,
     @Nonnull
-    final ExEExpositionBO eExposition,
+    final EExExpositionBO eExposition,
     @Nullable
     final String sHanglage,
     @Nonnull
@@ -97,7 +97,7 @@ public class ExStichprobeBO
     @Nonnull
     final LocalDate aDate, final int nSize,
     @Nonnull
-    final ExEExpositionBO eExposition,
+    final EExExpositionBO eExposition,
     @Nullable
     final String sHanglage,
     @Nonnull
@@ -239,14 +239,14 @@ public class ExStichprobeBO
   }
 
   @Nonnull
-  public final ExEExpositionBO getExposition() {
+  public final EExExpositionBO getExposition() {
     return m_eExposition;
   }
 
   @Nonnull
   final EChange setExposition(
     @Nonnull
-    final ExEExpositionBO eExposition) {
+    final EExExpositionBO eExposition) {
     ValueEnforcer.notNull(eExposition, "Exposition");
     if (eExposition.equals(m_eExposition)) {
       return EChange.UNCHANGED;

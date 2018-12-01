@@ -58,7 +58,7 @@ public interface IExBiotopbaumBO
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  ICommonsList<ExEBiotopbaumTypeBO> type();
+  ICommonsList<EExBiotopbaumTypeBO> type();
 
   /**
    * allg. Beschreibung des Standorts
@@ -80,7 +80,7 @@ public interface IExBiotopbaumBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExEExpositionBO getExposition();
+  EExExpositionBO getExposition();
 
   /**
    * Angabe von Neigungen: keine, Angabe von Neigungen, Freitext
@@ -167,7 +167,7 @@ public interface IExBiotopbaumBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExETreeKindBO getTreeKind();
+  EExTreeKindBO getTreeKind();
 
   /**
    * Höhlentyp und Anzahl mit Klasseneinteilung (Checkbox, mehrere möglich; dann noch Klassenangaben; C22-35 im Aufnahmemanual)
@@ -197,7 +197,7 @@ public interface IExBiotopbaumBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExEVitalityBO getVitality();
+  EExVitalityBO getVitality();
 
   /**
    * Baum-Sonderstrukturen (Mehrfachnennung möglich)
@@ -207,7 +207,7 @@ public interface IExBiotopbaumBO
    */
   @Nonnull
   @ReturnsMutableObject
-  ICommonsList<ExESpecialStructureBO> specialStructure();
+  ICommonsList<EExSpecialStructureBO> specialStructure();
 
   /**
    * Sonstige Sonderstrukturen inkl. Beschreibung

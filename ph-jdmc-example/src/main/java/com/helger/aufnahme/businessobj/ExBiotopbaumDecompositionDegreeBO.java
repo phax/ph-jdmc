@@ -21,20 +21,20 @@ public class ExBiotopbaumDecompositionDegreeBO
   implements IExBiotopbaumDecompositionDegreeBO
 {
   public static final ObjectType OT = new ObjectType("ExBiotopbaumDecompositionDegreeBO");
-  private ExEDecompositionDegreeClassBO m_eType;
+  private EExDecompositionDegreeClassBO m_eType;
   private boolean m_bEnabled;
   private int m_nLength;
   private int m_nBHD;
 
   public ExBiotopbaumDecompositionDegreeBO(
     @Nonnull
-    final ExEDecompositionDegreeClassBO eType, final boolean bEnabled, final int nLength, final int nBHD) {
+    final EExDecompositionDegreeClassBO eType, final boolean bEnabled, final int nLength, final int nBHD) {
     this(StubObject.createForCurrentUser(), eType, bEnabled, nLength, nBHD);
   }
 
   protected ExBiotopbaumDecompositionDegreeBO(final StubObject aStubObject,
     @Nonnull
-    final ExEDecompositionDegreeClassBO eType, final boolean bEnabled, final int nLength, final int nBHD) {
+    final EExDecompositionDegreeClassBO eType, final boolean bEnabled, final int nLength, final int nBHD) {
     super(aStubObject);
     setType(eType);
     setEnabled(bEnabled);
@@ -53,14 +53,14 @@ public class ExBiotopbaumDecompositionDegreeBO
   }
 
   @Nonnull
-  public final ExEDecompositionDegreeClassBO getType() {
+  public final EExDecompositionDegreeClassBO getType() {
     return m_eType;
   }
 
   @Nonnull
   final EChange setType(
     @Nonnull
-    final ExEDecompositionDegreeClassBO eType) {
+    final EExDecompositionDegreeClassBO eType) {
     ValueEnforcer.notNull(eType, "Type");
     if (eType.equals(m_eType)) {
       return EChange.UNCHANGED;

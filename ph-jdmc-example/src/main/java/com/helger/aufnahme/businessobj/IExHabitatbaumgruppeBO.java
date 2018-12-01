@@ -115,7 +115,7 @@ public interface IExHabitatbaumgruppeBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExEExpositionBO getExposition();
+  EExExpositionBO getExposition();
 
   /**
    * Angabe von Neigungen: keine, Angabe von Neigungen, Freitext

@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
-public enum ExECaveTypeBO
+public enum EExCaveTypeBO
   implements IHasID<String> , IHasDisplayName
 {
   _1("1", "abstehende Rinde /  Rindentasche"),
@@ -31,7 +31,7 @@ public enum ExECaveTypeBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ExECaveTypeBO(
+  private EExCaveTypeBO(
     @Nonnull
     @Nonempty
     final String sID,
@@ -55,25 +55,25 @@ public enum ExECaveTypeBO
   }
 
   @Nullable
-  public static ExECaveTypeBO getFromIDOrNull(
+  public static EExCaveTypeBO getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ExECaveTypeBO.class, sID);
+    return EnumHelper.getFromIDOrNull(EExCaveTypeBO.class, sID);
   }
 
   @Nullable
-  public static ExECaveTypeBO getFromIDOrDefault(
+  public static EExCaveTypeBO getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ExECaveTypeBO eDefault) {
-    return EnumHelper.getFromIDOrDefault(ExECaveTypeBO.class, sID, eDefault);
+    final EExCaveTypeBO eDefault) {
+    return EnumHelper.getFromIDOrDefault(EExCaveTypeBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ExECaveTypeBO getFromIDOrThrow(
+  public static EExCaveTypeBO getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ExECaveTypeBO.class, sID);
+    return EnumHelper.getFromIDOrThrow(EExCaveTypeBO.class, sID);
   }
 }

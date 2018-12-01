@@ -14,16 +14,23 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
-public enum ExEUsageTypeBO
+public enum EExStockTypeBO
   implements IHasID<String> , IHasDisplayName
 {
-  Hochwald("high", "Hochwald"),
-  Mittelwald("med", "Mittelwald"),
-  Niederwald("low", "Niederwald");
+  _0("0", "keine Bestockung, aktuelle Schlagfl\u00e4che"),
+  _1("1", "sp\u00e4rliche Verj\u00fcngung"),
+  _2("2", "Jungwuchs (Verj\u00fcngung bis 1,3m)"),
+  _3("3", "Dickung (beginnender Kronenschluss \u00fcber 1,3m; Holz <10 cm BHD"),
+  _4("4", "Stangenholz (10-20 cm BHD)"),
+  _5("5", "Baumholz (\u00fcber 20 cm BHD)"),
+  _6("6", "Altholz (hiebsreif)"),
+  _7("7", "Altholz verlichtet (schwach bestockt)"),
+  _8("8", "Plenterwald (alle Bestandsklassem kommen auf kleinster Fl\u00e4che vor)"),
+  OTHER("other", "Sonstiges");
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ExEUsageTypeBO(
+  private EExStockTypeBO(
     @Nonnull
     @Nonempty
     final String sID,
@@ -47,25 +54,25 @@ public enum ExEUsageTypeBO
   }
 
   @Nullable
-  public static ExEUsageTypeBO getFromIDOrNull(
+  public static EExStockTypeBO getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ExEUsageTypeBO.class, sID);
+    return EnumHelper.getFromIDOrNull(EExStockTypeBO.class, sID);
   }
 
   @Nullable
-  public static ExEUsageTypeBO getFromIDOrDefault(
+  public static EExStockTypeBO getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ExEUsageTypeBO eDefault) {
-    return EnumHelper.getFromIDOrDefault(ExEUsageTypeBO.class, sID, eDefault);
+    final EExStockTypeBO eDefault) {
+    return EnumHelper.getFromIDOrDefault(EExStockTypeBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ExEUsageTypeBO getFromIDOrThrow(
+  public static EExStockTypeBO getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ExEUsageTypeBO.class, sID);
+    return EnumHelper.getFromIDOrThrow(EExStockTypeBO.class, sID);
   }
 }

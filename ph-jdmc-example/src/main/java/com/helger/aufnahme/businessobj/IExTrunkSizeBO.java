@@ -30,5 +30,5 @@ public interface IExTrunkSizeBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExETreeHeightBO getHeight();
+  EExTreeHeightBO getHeight();
 }

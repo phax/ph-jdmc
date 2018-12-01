@@ -14,18 +14,16 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
-public enum ExEBiotopbaumTypeBO
+public enum EExUsageTypeBO
   implements IHasID<String> , IHasDisplayName
 {
-  TOTHOLZ("dead", "Totholz (eindeutig)"),
-  SPECIAL("special", "Sonderstrukturen"),
-  TREE("tree", "m\u00e4chtiger Baum  / Uraltbaum (BHD)"),
-  ALTERNATIVE("alt", "Anw\u00e4rter/Alternative f\u00fcr Netzwerk"),
-  OTHER("other", "sonstiger Biotopbaum");
+  Hochwald("high", "Hochwald"),
+  Mittelwald("med", "Mittelwald"),
+  Niederwald("low", "Niederwald");
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ExEBiotopbaumTypeBO(
+  private EExUsageTypeBO(
     @Nonnull
     @Nonempty
     final String sID,
@@ -49,25 +47,25 @@ public enum ExEBiotopbaumTypeBO
   }
 
   @Nullable
-  public static ExEBiotopbaumTypeBO getFromIDOrNull(
+  public static EExUsageTypeBO getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ExEBiotopbaumTypeBO.class, sID);
+    return EnumHelper.getFromIDOrNull(EExUsageTypeBO.class, sID);
   }
 
   @Nullable
-  public static ExEBiotopbaumTypeBO getFromIDOrDefault(
+  public static EExUsageTypeBO getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ExEBiotopbaumTypeBO eDefault) {
-    return EnumHelper.getFromIDOrDefault(ExEBiotopbaumTypeBO.class, sID, eDefault);
+    final EExUsageTypeBO eDefault) {
+    return EnumHelper.getFromIDOrDefault(EExUsageTypeBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ExEBiotopbaumTypeBO getFromIDOrThrow(
+  public static EExUsageTypeBO getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ExEBiotopbaumTypeBO.class, sID);
+    return EnumHelper.getFromIDOrThrow(EExUsageTypeBO.class, sID);
   }
 }

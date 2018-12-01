@@ -22,7 +22,7 @@ public interface IExCaveTypeBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExECaveClassBO getClazz();
+  EExCaveClassBO getClazz();
 
   /**
    * Get the value of type.
@@ -31,5 +31,5 @@ public interface IExCaveTypeBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExECaveTypeBO getType();
+  EExCaveTypeBO getType();
 }

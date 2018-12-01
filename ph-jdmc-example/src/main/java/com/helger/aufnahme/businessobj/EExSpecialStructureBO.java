@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
-public enum ExESpecialStructureBO
+public enum EExSpecialStructureBO
   implements IHasID<String> , IHasDisplayName
 {
   _1("1", "mit Pilzbefall (z.B. Konsolen) (Anzahl)"),
@@ -43,7 +43,7 @@ public enum ExESpecialStructureBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ExESpecialStructureBO(
+  private EExSpecialStructureBO(
     @Nonnull
     @Nonempty
     final String sID,
@@ -67,25 +67,25 @@ public enum ExESpecialStructureBO
   }
 
   @Nullable
-  public static ExESpecialStructureBO getFromIDOrNull(
+  public static EExSpecialStructureBO getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ExESpecialStructureBO.class, sID);
+    return EnumHelper.getFromIDOrNull(EExSpecialStructureBO.class, sID);
   }
 
   @Nullable
-  public static ExESpecialStructureBO getFromIDOrDefault(
+  public static EExSpecialStructureBO getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ExESpecialStructureBO eDefault) {
-    return EnumHelper.getFromIDOrDefault(ExESpecialStructureBO.class, sID, eDefault);
+    final EExSpecialStructureBO eDefault) {
+    return EnumHelper.getFromIDOrDefault(EExSpecialStructureBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ExESpecialStructureBO getFromIDOrThrow(
+  public static EExSpecialStructureBO getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ExESpecialStructureBO.class, sID);
+    return EnumHelper.getFromIDOrThrow(EExSpecialStructureBO.class, sID);
   }
 }

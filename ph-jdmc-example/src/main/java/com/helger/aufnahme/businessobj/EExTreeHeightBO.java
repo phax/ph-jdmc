@@ -14,18 +14,16 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
-public enum ExEStockDeadwoodBO
+public enum EExTreeHeightBO
   implements IHasID<String> , IHasDisplayName
 {
-  _0("0", "keines"),
-  _1("1", "wenig"),
-  _2("2", "mittel"),
-  _3("3", "viel"),
-  _4("4", "sehr viel");
+  ONE("1", "Klasse 1"),
+  TWO("2", "Klasse 2"),
+  THREE("3", "Klasse 3");
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ExEStockDeadwoodBO(
+  private EExTreeHeightBO(
     @Nonnull
     @Nonempty
     final String sID,
@@ -49,25 +47,25 @@ public enum ExEStockDeadwoodBO
   }
 
   @Nullable
-  public static ExEStockDeadwoodBO getFromIDOrNull(
+  public static EExTreeHeightBO getFromIDOrNull(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrNull(ExEStockDeadwoodBO.class, sID);
+    return EnumHelper.getFromIDOrNull(EExTreeHeightBO.class, sID);
   }
 
   @Nullable
-  public static ExEStockDeadwoodBO getFromIDOrDefault(
+  public static EExTreeHeightBO getFromIDOrDefault(
     @Nullable
     final String sID,
     @Nullable
-    final ExEStockDeadwoodBO eDefault) {
-    return EnumHelper.getFromIDOrDefault(ExEStockDeadwoodBO.class, sID, eDefault);
+    final EExTreeHeightBO eDefault) {
+    return EnumHelper.getFromIDOrDefault(EExTreeHeightBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ExEStockDeadwoodBO getFromIDOrThrow(
+  public static EExTreeHeightBO getFromIDOrThrow(
     @Nullable
     final String sID) {
-    return EnumHelper.getFromIDOrThrow(ExEStockDeadwoodBO.class, sID);
+    return EnumHelper.getFromIDOrThrow(EExTreeHeightBO.class, sID);
   }
 }

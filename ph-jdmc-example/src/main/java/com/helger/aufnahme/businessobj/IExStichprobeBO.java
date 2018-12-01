@@ -73,7 +73,7 @@ public interface IExStichprobeBO
    *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ExEExpositionBO getExposition();
+  EExExpositionBO getExposition();
 
   /**
    * Angabe von Neigungen
