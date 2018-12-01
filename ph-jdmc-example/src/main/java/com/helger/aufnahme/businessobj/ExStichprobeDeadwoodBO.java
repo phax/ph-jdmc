@@ -34,7 +34,9 @@ public class ExStichprobeDeadwoodBO
     this(StubObject.createForCurrentUser(), eDoD, eTreeKind, nLength, nBHD);
   }
 
-  protected ExStichprobeDeadwoodBO(final StubObject aStubObject,
+  protected ExStichprobeDeadwoodBO(
+    @Nonnull
+    final StubObject aStubObject,
     @Nonnull
     final EExDecompositionDegreeClassBO eDoD,
     @Nonnull

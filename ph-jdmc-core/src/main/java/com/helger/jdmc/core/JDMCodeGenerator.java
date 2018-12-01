@@ -263,6 +263,7 @@ public class JDMCodeGenerator
 
       jCtor2 = jClass.constructor (JMod.PROTECTED);
       final JVar jC2Stub = jCtor2.param (JMod.FINAL, jSO, "aStubObject");
+      jC2Stub.annotate (Nonnull.class);
       jCtor2.body ().add (JInvocation._super ().arg (jC2Stub));
 
       jCtor3 = null;

@@ -32,7 +32,9 @@ public class ExCaveTypeBO
     this(StubObject.createForCurrentUser(), eClazz, eType);
   }
 
-  protected ExCaveTypeBO(final StubObject aStubObject,
+  protected ExCaveTypeBO(
+    @Nonnull
+    final StubObject aStubObject,
     @Nonnull
     final EExCaveClassBO eClazz,
     @Nonnull

@@ -31,7 +31,9 @@ public class ExReservatBO
     this(StubObject.createForCurrentUser(), nRNr, sName, nAreaSize);
   }
 
-  protected ExReservatBO(final StubObject aStubObject, final int nRNr,
+  protected ExReservatBO(
+    @Nonnull
+    final StubObject aStubObject, final int nRNr,
     @Nonnull
     final String sName, final int nAreaSize) {
     super(aStubObject);

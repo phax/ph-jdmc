@@ -78,7 +78,9 @@ public class ExBestandBO
     this(StubObject.createForCurrentUser(), nBNr, aPics, aDate, sVerortung, aBZHBG, nAreaSize, sBeschreib, bSameAge, bOneLevel, eStockType, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
   }
 
-  protected ExBestandBO(final StubObject aStubObject, final int nBNr,
+  protected ExBestandBO(
+    @Nonnull
+    final StubObject aStubObject, final int nBNr,
     @Nonnull
     @Nonempty
     final ICommonsList<File> aPics,

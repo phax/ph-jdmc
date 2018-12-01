@@ -32,7 +32,9 @@ public class ExBiotopbaumDeadwoodBO
     this(StubObject.createForCurrentUser(), eType, bEnabled, nLength, nBHD);
   }
 
-  protected ExBiotopbaumDeadwoodBO(final StubObject aStubObject,
+  protected ExBiotopbaumDeadwoodBO(
+    @Nonnull
+    final StubObject aStubObject,
     @Nonnull
     final EExDeadwoodCategoryBO eType, final boolean bEnabled, final int nLength, final int nBHD) {
     super(aStubObject);

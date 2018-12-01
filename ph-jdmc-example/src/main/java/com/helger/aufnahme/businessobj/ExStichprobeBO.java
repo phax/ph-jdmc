@@ -88,7 +88,9 @@ public class ExStichprobeBO
     this(StubObject.createForCurrentUser(), nStichNr, aStichNrzR, aPics, aDate, nSize, eExposition, sHanglage, sGesellschaft, dBKL0, dBKL1, dBKL2, dBKL3, dBKL4, dBKL5, dBKL6, dBKL7, dBKL8, dBKL9, sUsage, sUsageDesc, aTrees, sDesc, bSameAge, bOneLevel, aTotSteh, aTotLieg1, aTotLieg2);
   }
 
-  protected ExStichprobeBO(final StubObject aStubObject, final int nStichNr,
+  protected ExStichprobeBO(
+    @Nonnull
+    final StubObject aStubObject, final int nStichNr,
     @Nonnull
     final IExReservatBO aStichNrzR,
     @Nonnull

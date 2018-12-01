@@ -32,7 +32,9 @@ public class ExBiotopbaumDecompositionDegreeBO
     this(StubObject.createForCurrentUser(), eType, bEnabled, nLength, nBHD);
   }
 
-  protected ExBiotopbaumDecompositionDegreeBO(final StubObject aStubObject,
+  protected ExBiotopbaumDecompositionDegreeBO(
+    @Nonnull
+    final StubObject aStubObject,
     @Nonnull
     final EExDecompositionDegreeClassBO eType, final boolean bEnabled, final int nLength, final int nBHD) {
     super(aStubObject);

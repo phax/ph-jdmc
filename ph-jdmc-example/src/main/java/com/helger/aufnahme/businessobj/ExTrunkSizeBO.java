@@ -30,7 +30,9 @@ public class ExTrunkSizeBO
     this(StubObject.createForCurrentUser(), nBHD, eHeight);
   }
 
-  protected ExTrunkSizeBO(final StubObject aStubObject, final int nBHD,
+  protected ExTrunkSizeBO(
+    @Nonnull
+    final StubObject aStubObject, final int nBHD,
     @Nonnull
     final EExTreeHeightBO eHeight) {
     super(aStubObject);

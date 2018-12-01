@@ -23,7 +23,9 @@ public class ExLeergutBO
     this(StubObject.createForCurrentUser());
   }
 
-  protected ExLeergutBO(final StubObject aStubObject) {
+  protected ExLeergutBO(
+    @Nonnull
+    final StubObject aStubObject) {
     super(aStubObject);
   }
 

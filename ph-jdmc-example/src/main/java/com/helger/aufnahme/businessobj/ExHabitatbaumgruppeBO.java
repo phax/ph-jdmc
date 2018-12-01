@@ -64,7 +64,9 @@ public class ExHabitatbaumgruppeBO
     this(StubObject.createForCurrentUser(), nHBGNr, aPics, aHBGzBB, aDate, sStandort, bOneLevel, bLight, bClosedCrown, bNoSun, bHomogen, eExposition, sHanglage, nAreaSize, bOnlyBB, sBeschreibung);
   }
 
-  protected ExHabitatbaumgruppeBO(final StubObject aStubObject, final int nHBGNr,
+  protected ExHabitatbaumgruppeBO(
+    @Nonnull
+    final StubObject aStubObject, final int nHBGNr,
     @Nonnull
     @Nonempty
     final ICommonsList<File> aPics,

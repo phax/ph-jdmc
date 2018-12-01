@@ -98,7 +98,9 @@ public class ExBiotopbaumBO
     this(StubObject.createForCurrentUser(), nBBNr, aPics, aDate, eType, sLocation, eExposition, sHanglage, bEinschichtig, bSolitary, bLightLocation, bClosedCrown, bNoSun, bUeberSun, bHomogene, sBeschreibung, eTreeKind, aCaves, aTrunk, eVitality, eSpecialStructure, sOtherSpecial, bAspirant, sAspirantDesc, bMarked, sMarkedDesc, aDeadwoodCats, aDeadwoodDoD);
   }
 
-  protected ExBiotopbaumBO(final StubObject aStubObject, final int nBBNr,
+  protected ExBiotopbaumBO(
+    @Nonnull
+    final StubObject aStubObject, final int nBBNr,
     @Nonnull
     @Nonempty
     final ICommonsList<File> aPics,
