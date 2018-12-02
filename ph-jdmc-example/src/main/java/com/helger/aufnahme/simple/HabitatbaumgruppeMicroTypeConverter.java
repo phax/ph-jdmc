@@ -2,6 +2,7 @@ package com.helger.aufnahme.simple;
 
 import java.io.File;
 import java.time.LocalDate;
+import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.xml.microdom.IMicroElement;
 import com.helger.xml.microdom.MicroElement;
@@ -19,7 +20,7 @@ import javax.annotation.Nullable;
  * @author JDMCodeGenerator
  */
 public class HabitatbaumgruppeMicroTypeConverter
-  extends IMicroTypeConverter<Habitatbaumgruppe>
+  implements IMicroTypeConverter<Habitatbaumgruppe>
 {
   private static final String ATTR_HBGNR = "hbgnr";
   private static final String ELEMENT_PICS = "pics";
@@ -70,22 +71,20 @@ public class HabitatbaumgruppeMicroTypeConverter
   public Habitatbaumgruppe convertToNative(
     @Nonnull
     final IMicroElement aElement) {
-    final int nHBGNr = aElement.getAttributeValueWithConversion(ATTR_HBGNR, int.class);
-    // TODO File::pics
-    final ICommonsList<File> aPics;
-    // TODO Biotopbaum::HBGzBB
-    final ICommonsList<Biotopbaum> aHBGzBB;
+    final int nHBGNr = aElement.getAttributeValueAsInt(ATTR_HBGNR, -1);
+    final ICommonsList<File> aPics = new CommonsArrayList<>();
+    final ICommonsList<Biotopbaum> aHBGzBB = new CommonsArrayList<>();
     final LocalDate aDate = aElement.getAttributeValueWithConversion(ATTR_DATE, LocalDate.class);
     final String sStandort = MicroHelper.getChildTextContent(aElement, ELEMENT_STANDORT);
-    final boolean bOneLevel = aElement.getAttributeValueWithConversion(ATTR_ONELEVEL, boolean.class);
-    final boolean bLight = aElement.getAttributeValueWithConversion(ATTR_LIGHT, boolean.class);
-    final boolean bClosedCrown = aElement.getAttributeValueWithConversion(ATTR_CLOSEDCROWN, boolean.class);
-    final boolean bNoSun = aElement.getAttributeValueWithConversion(ATTR_NOSUN, boolean.class);
-    final boolean bHomogen = aElement.getAttributeValueWithConversion(ATTR_HOMOGEN, boolean.class);
+    final boolean bOneLevel = aElement.getAttributeValueAsBool(ATTR_ONELEVEL, false);
+    final boolean bLight = aElement.getAttributeValueAsBool(ATTR_LIGHT, false);
+    final boolean bClosedCrown = aElement.getAttributeValueAsBool(ATTR_CLOSEDCROWN, false);
+    final boolean bNoSun = aElement.getAttributeValueAsBool(ATTR_NOSUN, false);
+    final boolean bHomogen = aElement.getAttributeValueAsBool(ATTR_HOMOGEN, false);
     final EExposition eExposition = EExposition.getFromIDOrNull(aElement.getAttributeValue(ATTR_EXPOSITION));
     final String sHanglage = MicroHelper.getChildTextContent(aElement, ELEMENT_HANGLAGE);
-    final int nAreaSize = aElement.getAttributeValueWithConversion(ATTR_AREASIZE, int.class);
-    final boolean bOnlyBB = aElement.getAttributeValueWithConversion(ATTR_ONLYBB, boolean.class);
+    final int nAreaSize = aElement.getAttributeValueAsInt(ATTR_AREASIZE, -1);
+    final boolean bOnlyBB = aElement.getAttributeValueAsBool(ATTR_ONLYBB, false);
     final String sBeschreibung = MicroHelper.getChildTextContent(aElement, ELEMENT_BESCHREIBUNG);
     return new Habitatbaumgruppe(nHBGNr, aPics, aHBGzBB, aDate, sStandort, bOneLevel, bLight, bClosedCrown, bNoSun, bHomogen, eExposition, sHanglage, nAreaSize, bOnlyBB, sBeschreibung);
   }

@@ -2,6 +2,7 @@ package com.helger.aufnahme.simple;
 
 import java.io.File;
 import java.time.LocalDate;
+import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.xml.microdom.IMicroElement;
 import com.helger.xml.microdom.MicroElement;
@@ -19,7 +20,7 @@ import javax.annotation.Nullable;
  * @author JDMCodeGenerator
  */
 public class BestandMicroTypeConverter
-  extends IMicroTypeConverter<Bestand>
+  implements IMicroTypeConverter<Bestand>
 {
   private static final String ATTR_BNR = "bnr";
   private static final String ELEMENT_PICS = "pics";
@@ -78,23 +79,21 @@ public class BestandMicroTypeConverter
   public Bestand convertToNative(
     @Nonnull
     final IMicroElement aElement) {
-    final int nBNr = aElement.getAttributeValueWithConversion(ATTR_BNR, int.class);
-    // TODO File::pics
-    final ICommonsList<File> aPics;
+    final int nBNr = aElement.getAttributeValueAsInt(ATTR_BNR, -1);
+    final ICommonsList<File> aPics = new CommonsArrayList<>();
     final LocalDate aDate = aElement.getAttributeValueWithConversion(ATTR_DATE, LocalDate.class);
     final String sVerortung = MicroHelper.getChildTextContent(aElement, ELEMENT_VERORTUNG);
-    // TODO Habitatbaumgruppe::BZHBG
-    final ICommonsList<Habitatbaumgruppe> aBZHBG;
-    final int nAreaSize = aElement.getAttributeValueWithConversion(ATTR_AREASIZE, int.class);
+    final ICommonsList<Habitatbaumgruppe> aBZHBG = new CommonsArrayList<>();
+    final int nAreaSize = aElement.getAttributeValueAsInt(ATTR_AREASIZE, -1);
     final String sBeschreib = MicroHelper.getChildTextContent(aElement, ELEMENT_BESCHREIB);
-    final boolean bSameAge = aElement.getAttributeValueWithConversion(ATTR_SAMEAGE, boolean.class);
-    final boolean bOneLevel = aElement.getAttributeValueWithConversion(ATTR_ONELEVEL, boolean.class);
+    final boolean bSameAge = aElement.getAttributeValueAsBool(ATTR_SAMEAGE, false);
+    final boolean bOneLevel = aElement.getAttributeValueAsBool(ATTR_ONELEVEL, false);
     final EStockType eStockType = EStockType.getFromIDOrNull(aElement.getAttributeValue(ATTR_STOCKTYPE));
     final String sUsageDescription = MicroHelper.getChildTextContent(aElement, ELEMENT_USAGEDESCRIPTION);
     final String sGesellschaft = MicroHelper.getChildTextContent(aElement, ELEMENT_GESELLSCHAFT);
-    final boolean bKronenschluss = aElement.getAttributeValueWithConversion(ATTR_KRONENSCHLUSS, boolean.class);
-    final boolean bLightWoods = aElement.getAttributeValueWithConversion(ATTR_LIGHTWOODS, boolean.class);
-    final boolean bUnterwuchs = aElement.getAttributeValueWithConversion(ATTR_UNTERWUCHS, boolean.class);
+    final boolean bKronenschluss = aElement.getAttributeValueAsBool(ATTR_KRONENSCHLUSS, false);
+    final boolean bLightWoods = aElement.getAttributeValueAsBool(ATTR_LIGHTWOODS, false);
+    final boolean bUnterwuchs = aElement.getAttributeValueAsBool(ATTR_UNTERWUCHS, false);
     final EStockDeadwood eTotSteh = EStockDeadwood.getFromIDOrNull(aElement.getAttributeValue(ATTR_TOT_STEH));
     final String sTotStehBesch = MicroHelper.getChildTextContent(aElement, ELEMENT_TOT_STEH_BESCH);
     final EStockDeadwood eTotLieg = EStockDeadwood.getFromIDOrNull(aElement.getAttributeValue(ATTR_TOT_LIEG));

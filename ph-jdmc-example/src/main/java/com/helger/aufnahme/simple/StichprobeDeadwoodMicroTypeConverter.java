@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
  * @author JDMCodeGenerator
  */
 public class StichprobeDeadwoodMicroTypeConverter
-  extends IMicroTypeConverter<StichprobeDeadwood>
+  implements IMicroTypeConverter<StichprobeDeadwood>
 {
   private static final String ATTR_DOD = "dod";
   private static final String ATTR_TREEKIND = "treekind";
@@ -44,8 +44,8 @@ public class StichprobeDeadwoodMicroTypeConverter
     final IMicroElement aElement) {
     final EDecompositionDegreeClass eDoD = EDecompositionDegreeClass.getFromIDOrNull(aElement.getAttributeValue(ATTR_DOD));
     final ETreeKind eTreeKind = ETreeKind.getFromIDOrNull(aElement.getAttributeValue(ATTR_TREEKIND));
-    final int nLength = aElement.getAttributeValueWithConversion(ATTR_LENGTH, int.class);
-    final int nBHD = aElement.getAttributeValueWithConversion(ATTR_BHD, int.class);
+    final int nLength = aElement.getAttributeValueAsInt(ATTR_LENGTH, -1);
+    final int nBHD = aElement.getAttributeValueAsInt(ATTR_BHD, -1);
     return new StichprobeDeadwood(eDoD, eTreeKind, nLength, nBHD);
   }
 }

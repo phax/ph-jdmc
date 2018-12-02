@@ -97,7 +97,7 @@ final class JDMHelperMicroTypeConverter
     if (aSettings.isUseBusinessObject ())
       jClass._extends (cm.ref (AbstractBusinessObjectMicroTypeConverter.class).narrow (jDomainClass));
     else
-      jClass._extends (cm.ref (IMicroTypeConverter.class).narrow (jDomainClass));
+      jClass._implements (cm.ref (IMicroTypeConverter.class).narrow (jDomainClass));
     jClass.javadoc ()
           .add ("<p>Default MicroTypeConverter implementation of {@link " + aClass.getFQInterfaceName () + "}</p>\n");
     jClass.javadoc ().add ("<p>This class was initially automatically created</p>\n");
@@ -202,72 +202,68 @@ final class JDMHelperMicroTypeConverter
       // To Native
       {
         // List or field?
-        AbstractJType jFieldType = cm.ref (aField.getType ().getJavaFQCN (eMultiplicity));
-        IJExpression aFieldInit = null;
-        boolean bFieldIsFinal = false;
+        AbstractJType jFieldType = cm.ref (aField.getType (), eMultiplicity);
+        IJExpression aInit = null;
         if (eMultiplicity.isOpenEnded ())
         {
           jFieldType = cm.ref (ICommonsList.class).narrow (jFieldType);
-          aFieldInit = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ();
-          bFieldIsFinal = true;
-        }
-
-        IJExpression aInit = null;
-        if (bIsElement)
-        {
-          if (_isString (aField.getType ()))
-          {
-            aInit = cm.ref (MicroHelper.class)
-                      .staticInvoke ("getChildTextContent")
-                      .arg (jToNativeElement)
-                      .arg (jFieldName);
-          }
+          aInit = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ();
         }
         else
-        {
-          // Attribute
-          if (aField.getType ().isEnum ())
-            aInit = cm.ref (aField.getType ().getFQCN ())
-                      .staticInvoke ("getFromIDOrNull")
-                      .arg (jToNativeElement.invoke ("getAttributeValue").arg (jFieldName));
+          if (bIsElement)
+          {
+            if (_isString (aField.getType ()))
+            {
+              aInit = cm.ref (MicroHelper.class)
+                        .staticInvoke ("getChildTextContent")
+                        .arg (jToNativeElement)
+                        .arg (jFieldName);
+            }
+          }
           else
-            if (jFieldType.equals (cm.BOOLEAN))
-              aInit = jToNativeElement.invoke ("getAttributeValueAsBool").arg (jFieldName).arg (JExpr.FALSE);
+          {
+            // Attribute
+            if (aField.getType ().isEnum ())
+              aInit = cm.ref (aField.getType ().getFQCN ())
+                        .staticInvoke ("getFromIDOrNull")
+                        .arg (jToNativeElement.invoke ("getAttributeValue").arg (jFieldName));
             else
-              if (jFieldType == cm.BYTE)
-                aInit = jToNativeElement.invoke ("getAttributeValueAsInt").arg (jFieldName).arg (-1).castTo (cm.BYTE);
+              if (jFieldType == cm.BOOLEAN)
+                aInit = jToNativeElement.invoke ("getAttributeValueAsBool").arg (jFieldName).arg (JExpr.FALSE);
               else
-                if (jFieldType == cm.DOUBLE)
-                  aInit = jToNativeElement.invoke ("getAttributeValueAsDouble")
-                                          .arg (jFieldName)
-                                          .arg (cm.ref (Double.class).staticRef ("NaN"));
+                if (jFieldType == cm.BYTE)
+                  aInit = jToNativeElement.invoke ("getAttributeValueAsInt").arg (jFieldName).arg (-1).castTo (cm.BYTE);
                 else
-                  if (jFieldType == cm.FLOAT)
-                    aInit = jToNativeElement.invoke ("getAttributeValueAsFloat")
+                  if (jFieldType == cm.DOUBLE)
+                    aInit = jToNativeElement.invoke ("getAttributeValueAsDouble")
                                             .arg (jFieldName)
-                                            .arg (cm.ref (Float.class).staticRef ("NaN"));
+                                            .arg (cm.ref (Double.class).staticRef ("NaN"));
                   else
-                    if (jFieldType == cm.INT)
-                      aInit = jToNativeElement.invoke ("getAttributeValueAsInt").arg (jFieldName).arg (-1);
+                    if (jFieldType == cm.FLOAT)
+                      aInit = jToNativeElement.invoke ("getAttributeValueAsFloat")
+                                              .arg (jFieldName)
+                                              .arg (cm.ref (Float.class).staticRef ("NaN"));
                     else
-                      if (jFieldType == cm.LONG)
-                        aInit = jToNativeElement.invoke ("getAttributeValueAsLong").arg (jFieldName).arg (-1);
+                      if (jFieldType == cm.INT)
+                        aInit = jToNativeElement.invoke ("getAttributeValueAsInt").arg (jFieldName).arg (-1);
                       else
-                        if (jFieldType == cm.SHORT)
-                          aInit = jToNativeElement.invoke ("getAttributeValueAsInt")
-                                                  .arg (jFieldName)
-                                                  .arg (-1)
-                                                  .castTo (cm.SHORT);
+                        if (jFieldType == cm.LONG)
+                          aInit = jToNativeElement.invoke ("getAttributeValueAsLong").arg (jFieldName).arg (-1);
                         else
-                          aInit = jToNativeElement.invoke ("getAttributeValueWithConversion")
-                                                  .arg (jFieldName)
-                                                  .arg (JExpr.dotclass (jFieldType));
+                          if (jFieldType == cm.SHORT)
+                            aInit = jToNativeElement.invoke ("getAttributeValueAsInt")
+                                                    .arg (jFieldName)
+                                                    .arg (-1)
+                                                    .castTo (cm.SHORT);
+                          else
+                            aInit = jToNativeElement.invoke ("getAttributeValueWithConversion")
+                                                    .arg (jFieldName)
+                                                    .arg (JExpr.dotClass (jFieldType));
 
-        }
+          }
 
         if (aInit == null)
-          jToNative.body ()
-                   .addSingleLineComment ("TODO " + aField.getType ().getShortName () + "::" + aField.getFieldName ());
+          jToNative.body ().addSingleLineComment ("TODO " + jFieldType.fullName () + "::" + aField.getFieldName ());
 
         final JVar jVar = jToNative.body ()
                                    .decl (JMod.FINAL,

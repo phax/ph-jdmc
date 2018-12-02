@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
  * @author JDMCodeGenerator
  */
 public class BiotopbaumDecompositionDegreeMicroTypeConverter
-  extends IMicroTypeConverter<BiotopbaumDecompositionDegree>
+  implements IMicroTypeConverter<BiotopbaumDecompositionDegree>
 {
   private static final String ATTR_TYPE = "type";
   private static final String ATTR_ENABLED = "enabled";
@@ -43,9 +43,9 @@ public class BiotopbaumDecompositionDegreeMicroTypeConverter
     @Nonnull
     final IMicroElement aElement) {
     final EDecompositionDegreeClass eType = EDecompositionDegreeClass.getFromIDOrNull(aElement.getAttributeValue(ATTR_TYPE));
-    final boolean bEnabled = aElement.getAttributeValueWithConversion(ATTR_ENABLED, boolean.class);
-    final int nLength = aElement.getAttributeValueWithConversion(ATTR_LENGTH, int.class);
-    final int nBHD = aElement.getAttributeValueWithConversion(ATTR_BHD, int.class);
+    final boolean bEnabled = aElement.getAttributeValueAsBool(ATTR_ENABLED, false);
+    final int nLength = aElement.getAttributeValueAsInt(ATTR_LENGTH, -1);
+    final int nBHD = aElement.getAttributeValueAsInt(ATTR_BHD, -1);
     return new BiotopbaumDecompositionDegree(eType, bEnabled, nLength, nBHD);
   }
 }

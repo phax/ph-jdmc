@@ -44,9 +44,9 @@ public class ExBiotopbaumDeadwoodBOMicroTypeConverter
     @Nonnull
     final IMicroElement aElement) {
     final EExDeadwoodCategoryBO eType = EExDeadwoodCategoryBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_TYPE));
-    final boolean bEnabled = aElement.getAttributeValueWithConversion(ATTR_ENABLED, boolean.class);
-    final int nLength = aElement.getAttributeValueWithConversion(ATTR_LENGTH, int.class);
-    final int nBHD = aElement.getAttributeValueWithConversion(ATTR_BHD, int.class);
+    final boolean bEnabled = aElement.getAttributeValueAsBool(ATTR_ENABLED, false);
+    final int nLength = aElement.getAttributeValueAsInt(ATTR_LENGTH, -1);
+    final int nBHD = aElement.getAttributeValueAsInt(ATTR_BHD, -1);
     return new ExBiotopbaumDeadwoodBO(super.getStubObject(aElement), eType, bEnabled, nLength, nBHD);
   }
 }

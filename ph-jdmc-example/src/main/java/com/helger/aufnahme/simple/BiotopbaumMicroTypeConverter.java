@@ -2,6 +2,7 @@ package com.helger.aufnahme.simple;
 
 import java.io.File;
 import java.time.LocalDate;
+import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.xml.microdom.IMicroElement;
 import com.helger.xml.microdom.MicroElement;
@@ -19,7 +20,7 @@ import javax.annotation.Nullable;
  * @author JDMCodeGenerator
  */
 public class BiotopbaumMicroTypeConverter
-  extends IMicroTypeConverter<Biotopbaum>
+  implements IMicroTypeConverter<Biotopbaum>
 {
   private static final String ATTR_BBNR = "bbnr";
   private static final String ELEMENT_PICS = "pics";
@@ -102,40 +103,33 @@ public class BiotopbaumMicroTypeConverter
   public Biotopbaum convertToNative(
     @Nonnull
     final IMicroElement aElement) {
-    final int nBBNr = aElement.getAttributeValueWithConversion(ATTR_BBNR, int.class);
-    // TODO File::pics
-    final ICommonsList<File> aPics;
+    final int nBBNr = aElement.getAttributeValueAsInt(ATTR_BBNR, -1);
+    final ICommonsList<File> aPics = new CommonsArrayList<>();
     final LocalDate aDate = aElement.getAttributeValueWithConversion(ATTR_DATE, LocalDate.class);
-    // TODO EBiotopbaumType::type
-    final ICommonsList<EBiotopbaumType> eType;
+    final ICommonsList<EBiotopbaumType> eType = new CommonsArrayList<>();
     final String sLocation = MicroHelper.getChildTextContent(aElement, ELEMENT_LOCATION);
     final EExposition eExposition = EExposition.getFromIDOrNull(aElement.getAttributeValue(ATTR_EXPOSITION));
     final String sHanglage = MicroHelper.getChildTextContent(aElement, ELEMENT_HANGLAGE);
-    final boolean bEinschichtig = aElement.getAttributeValueWithConversion(ATTR_EINSCHICHTIG, boolean.class);
-    final boolean bSolitary = aElement.getAttributeValueWithConversion(ATTR_SOLITARY, boolean.class);
-    final boolean bLightLocation = aElement.getAttributeValueWithConversion(ATTR_LIGHTLOCATION, boolean.class);
-    final boolean bClosedCrown = aElement.getAttributeValueWithConversion(ATTR_CLOSEDCROWN, boolean.class);
-    final boolean bNoSun = aElement.getAttributeValueWithConversion(ATTR_NOSUN, boolean.class);
-    final boolean bUeberSun = aElement.getAttributeValueWithConversion(ATTR_UEBERSUN, boolean.class);
-    final boolean bHomogene = aElement.getAttributeValueWithConversion(ATTR_HOMOGENE, boolean.class);
+    final boolean bEinschichtig = aElement.getAttributeValueAsBool(ATTR_EINSCHICHTIG, false);
+    final boolean bSolitary = aElement.getAttributeValueAsBool(ATTR_SOLITARY, false);
+    final boolean bLightLocation = aElement.getAttributeValueAsBool(ATTR_LIGHTLOCATION, false);
+    final boolean bClosedCrown = aElement.getAttributeValueAsBool(ATTR_CLOSEDCROWN, false);
+    final boolean bNoSun = aElement.getAttributeValueAsBool(ATTR_NOSUN, false);
+    final boolean bUeberSun = aElement.getAttributeValueAsBool(ATTR_UEBERSUN, false);
+    final boolean bHomogene = aElement.getAttributeValueAsBool(ATTR_HOMOGENE, false);
     final String sBeschreibung = MicroHelper.getChildTextContent(aElement, ELEMENT_BESCHREIBUNG);
     final ETreeKind eTreeKind = ETreeKind.getFromIDOrNull(aElement.getAttributeValue(ATTR_TREEKIND));
-    // TODO CaveType::caves
-    final ICommonsList<CaveType> aCaves;
-    // TODO TrunkSize::trunk
-    final ICommonsList<TrunkSize> aTrunk;
+    final ICommonsList<CaveType> aCaves = new CommonsArrayList<>();
+    final ICommonsList<TrunkSize> aTrunk = new CommonsArrayList<>();
     final EVitality eVitality = EVitality.getFromIDOrNull(aElement.getAttributeValue(ATTR_VITALITY));
-    // TODO ESpecialStructure::specialStructure
-    final ICommonsList<ESpecialStructure> eSpecialStructure;
+    final ICommonsList<ESpecialStructure> eSpecialStructure = new CommonsArrayList<>();
     final String sOtherSpecial = MicroHelper.getChildTextContent(aElement, ELEMENT_OTHERSPECIAL);
-    final boolean bAspirant = aElement.getAttributeValueWithConversion(ATTR_ASPIRANT, boolean.class);
+    final boolean bAspirant = aElement.getAttributeValueAsBool(ATTR_ASPIRANT, false);
     final String sAspirantDesc = MicroHelper.getChildTextContent(aElement, ELEMENT_ASPIRANTDESC);
-    final boolean bMarked = aElement.getAttributeValueWithConversion(ATTR_MARKED, boolean.class);
+    final boolean bMarked = aElement.getAttributeValueAsBool(ATTR_MARKED, false);
     final String sMarkedDesc = MicroHelper.getChildTextContent(aElement, ELEMENT_MARKEDDESC);
-    // TODO BiotopbaumDeadwood::deadwoodCats
-    final ICommonsList<BiotopbaumDeadwood> aDeadwoodCats;
-    // TODO BiotopbaumDecompositionDegree::deadwoodDoD
-    final ICommonsList<BiotopbaumDecompositionDegree> aDeadwoodDoD;
+    final ICommonsList<BiotopbaumDeadwood> aDeadwoodCats = new CommonsArrayList<>();
+    final ICommonsList<BiotopbaumDecompositionDegree> aDeadwoodDoD = new CommonsArrayList<>();
     return new Biotopbaum(nBBNr, aPics, aDate, eType, sLocation, eExposition, sHanglage, bEinschichtig, bSolitary, bLightLocation, bClosedCrown, bNoSun, bUeberSun, bHomogene, sBeschreibung, eTreeKind, aCaves, aTrunk, eVitality, eSpecialStructure, sOtherSpecial, bAspirant, sAspirantDesc, bMarked, sMarkedDesc, aDeadwoodCats, aDeadwoodDoD);
   }
 }

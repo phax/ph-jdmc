@@ -2,6 +2,7 @@ package com.helger.aufnahme.businessobj;
 
 import java.io.File;
 import java.time.LocalDate;
+import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.photon.security.object.AbstractBusinessObjectMicroTypeConverter;
 import com.helger.xml.microdom.IMicroElement;
@@ -79,23 +80,21 @@ public class ExBestandBOMicroTypeConverter
   public ExBestandBO convertToNative(
     @Nonnull
     final IMicroElement aElement) {
-    final int nBNr = aElement.getAttributeValueWithConversion(ATTR_BNR, int.class);
-    // TODO File::pics
-    final ICommonsList<File> aPics;
+    final int nBNr = aElement.getAttributeValueAsInt(ATTR_BNR, -1);
+    final ICommonsList<File> aPics = new CommonsArrayList<>();
     final LocalDate aDate = aElement.getAttributeValueWithConversion(ATTR_DATE, LocalDate.class);
     final String sVerortung = MicroHelper.getChildTextContent(aElement, ELEMENT_VERORTUNG);
-    // TODO ExHabitatbaumgruppeBO::BZHBG
-    final ICommonsList<ExHabitatbaumgruppeBO> aBZHBG;
-    final int nAreaSize = aElement.getAttributeValueWithConversion(ATTR_AREASIZE, int.class);
+    final ICommonsList<ExHabitatbaumgruppeBO> aBZHBG = new CommonsArrayList<>();
+    final int nAreaSize = aElement.getAttributeValueAsInt(ATTR_AREASIZE, -1);
     final String sBeschreib = MicroHelper.getChildTextContent(aElement, ELEMENT_BESCHREIB);
-    final boolean bSameAge = aElement.getAttributeValueWithConversion(ATTR_SAMEAGE, boolean.class);
-    final boolean bOneLevel = aElement.getAttributeValueWithConversion(ATTR_ONELEVEL, boolean.class);
+    final boolean bSameAge = aElement.getAttributeValueAsBool(ATTR_SAMEAGE, false);
+    final boolean bOneLevel = aElement.getAttributeValueAsBool(ATTR_ONELEVEL, false);
     final EExStockTypeBO eStockType = EExStockTypeBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_STOCKTYPE));
     final String sUsageDescription = MicroHelper.getChildTextContent(aElement, ELEMENT_USAGEDESCRIPTION);
     final String sGesellschaft = MicroHelper.getChildTextContent(aElement, ELEMENT_GESELLSCHAFT);
-    final boolean bKronenschluss = aElement.getAttributeValueWithConversion(ATTR_KRONENSCHLUSS, boolean.class);
-    final boolean bLightWoods = aElement.getAttributeValueWithConversion(ATTR_LIGHTWOODS, boolean.class);
-    final boolean bUnterwuchs = aElement.getAttributeValueWithConversion(ATTR_UNTERWUCHS, boolean.class);
+    final boolean bKronenschluss = aElement.getAttributeValueAsBool(ATTR_KRONENSCHLUSS, false);
+    final boolean bLightWoods = aElement.getAttributeValueAsBool(ATTR_LIGHTWOODS, false);
+    final boolean bUnterwuchs = aElement.getAttributeValueAsBool(ATTR_UNTERWUCHS, false);
     final EExStockDeadwoodBO eTotSteh = EExStockDeadwoodBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_TOT_STEH));
     final String sTotStehBesch = MicroHelper.getChildTextContent(aElement, ELEMENT_TOT_STEH_BESCH);
     final EExStockDeadwoodBO eTotLieg = EExStockDeadwoodBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_TOT_LIEG));

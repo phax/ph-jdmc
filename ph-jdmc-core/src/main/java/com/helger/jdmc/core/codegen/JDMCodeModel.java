@@ -4,14 +4,15 @@ import javax.annotation.Nonnull;
 
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JCodeModel;
+import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMType;
 
 public class JDMCodeModel extends JCodeModel
 {
   @Nonnull
-  public AbstractJType ref (@Nonnull final JDMType aType)
+  public AbstractJType ref (@Nonnull final JDMType aType, @Nonnull final EJDMMultiplicity eMultiplicity)
   {
-    if (aType.isPrimitive ())
+    if (aType.isJavaPrimitive (eMultiplicity))
     {
       final String sShortName = aType.getShortName ();
       if ("boolean".equals (sShortName))

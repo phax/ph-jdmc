@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
  * @author JDMCodeGenerator
  */
 public class LeergutMicroTypeConverter
-  extends IMicroTypeConverter<Leergut>
+  implements IMicroTypeConverter<Leergut>
 {
 
   @Nonnull

@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
  * @author JDMCodeGenerator
  */
 public class CaveTypeMicroTypeConverter
-  extends IMicroTypeConverter<CaveType>
+  implements IMicroTypeConverter<CaveType>
 {
   private static final String ATTR_CLAZZ = "clazz";
   private static final String ATTR_TYPE = "type";

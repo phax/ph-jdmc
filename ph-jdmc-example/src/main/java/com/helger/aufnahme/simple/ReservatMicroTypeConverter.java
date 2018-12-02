@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
  * @author JDMCodeGenerator
  */
 public class ReservatMicroTypeConverter
-  extends IMicroTypeConverter<Reservat>
+  implements IMicroTypeConverter<Reservat>
 {
   private static final String ATTR_RNR = "rnr";
   private static final String ELEMENT_NAME = "name";
@@ -41,9 +41,9 @@ public class ReservatMicroTypeConverter
   public Reservat convertToNative(
     @Nonnull
     final IMicroElement aElement) {
-    final int nRNr = aElement.getAttributeValueWithConversion(ATTR_RNR, int.class);
+    final int nRNr = aElement.getAttributeValueAsInt(ATTR_RNR, -1);
     final String sName = MicroHelper.getChildTextContent(aElement, ELEMENT_NAME);
-    final int nAreaSize = aElement.getAttributeValueWithConversion(ATTR_AREASIZE, int.class);
+    final int nAreaSize = aElement.getAttributeValueAsInt(ATTR_AREASIZE, -1);
     return new Reservat(nRNr, sName, nAreaSize);
   }
 }

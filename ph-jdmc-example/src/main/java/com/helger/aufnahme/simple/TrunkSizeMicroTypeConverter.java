@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
  * @author JDMCodeGenerator
  */
 public class TrunkSizeMicroTypeConverter
-  extends IMicroTypeConverter<TrunkSize>
+  implements IMicroTypeConverter<TrunkSize>
 {
   private static final String ATTR_BHD = "bhd";
   private static final String ATTR_HEIGHT = "height";
@@ -38,7 +38,7 @@ public class TrunkSizeMicroTypeConverter
   public TrunkSize convertToNative(
     @Nonnull
     final IMicroElement aElement) {
-    final int nBHD = aElement.getAttributeValueWithConversion(ATTR_BHD, int.class);
+    final int nBHD = aElement.getAttributeValueAsInt(ATTR_BHD, -1);
     final ETreeHeight eHeight = ETreeHeight.getFromIDOrNull(aElement.getAttributeValue(ATTR_HEIGHT));
     return new TrunkSize(nBHD, eHeight);
   }

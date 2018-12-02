@@ -555,7 +555,7 @@ public class JDMCodeGenerator
       for (final JDMType aType : CollectionHelper.getSorted (m_aProcessor.getContext ().types ().getTypes (),
                                                              Comparator.comparing (JDMType::getClassName)))
       {
-        final JVar aVar = jMethod.body ().decl (cm.ref (aType), "var" + nCount);
+        final JVar aVar = jMethod.body ().decl (cm.ref (aType, EJDMMultiplicity.MANDATORY), "var" + nCount);
         jMethod.body ().assign (aVar, aType.createTestValue (cm));
         if (!aType.isPrimitive () && aType.isImmutable ())
           jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotNull").arg (aVar));

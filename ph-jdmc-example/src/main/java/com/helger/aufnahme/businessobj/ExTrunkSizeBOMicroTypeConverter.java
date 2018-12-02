@@ -39,7 +39,7 @@ public class ExTrunkSizeBOMicroTypeConverter
   public ExTrunkSizeBO convertToNative(
     @Nonnull
     final IMicroElement aElement) {
-    final int nBHD = aElement.getAttributeValueWithConversion(ATTR_BHD, int.class);
+    final int nBHD = aElement.getAttributeValueAsInt(ATTR_BHD, -1);
     final EExTreeHeightBO eHeight = EExTreeHeightBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_HEIGHT));
     return new ExTrunkSizeBO(super.getStubObject(aElement), nBHD, eHeight);
   }

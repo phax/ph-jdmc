@@ -199,7 +199,7 @@ public class JDMType implements Serializable
 
   public boolean isJavaPrimitive (@Nonnull final EJDMMultiplicity eMultiplicity)
   {
-    return isPrimitive () && eMultiplicity.isMin1 ();
+    return isPrimitive () && eMultiplicity.isMin1 () && eMultiplicity.isMax1 ();
   }
 
   @Nonnull

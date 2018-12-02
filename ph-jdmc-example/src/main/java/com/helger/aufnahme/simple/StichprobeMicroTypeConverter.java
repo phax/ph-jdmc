@@ -2,6 +2,7 @@ package com.helger.aufnahme.simple;
 
 import java.io.File;
 import java.time.LocalDate;
+import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.xml.microdom.IMicroElement;
 import com.helger.xml.microdom.MicroElement;
@@ -19,7 +20,7 @@ import javax.annotation.Nullable;
  * @author JDMCodeGenerator
  */
 public class StichprobeMicroTypeConverter
-  extends IMicroTypeConverter<Stichprobe>
+  implements IMicroTypeConverter<Stichprobe>
 {
   private static final String ATTR_STICHNR = "stichnr";
   private static final String ELEMENT_STICHNRZR = "stichnrzr";
@@ -94,39 +95,34 @@ public class StichprobeMicroTypeConverter
   public Stichprobe convertToNative(
     @Nonnull
     final IMicroElement aElement) {
-    final int nStichNr = aElement.getAttributeValueWithConversion(ATTR_STICHNR, int.class);
-    // TODO Reservat::StichNrzR
+    final int nStichNr = aElement.getAttributeValueAsInt(ATTR_STICHNR, -1);
+    // TODO com.helger.aufnahme.simple.Reservat::StichNrzR
     final Reservat aStichNrzR;
-    // TODO File::pics
-    final ICommonsList<File> aPics;
+    final ICommonsList<File> aPics = new CommonsArrayList<>();
     final LocalDate aDate = aElement.getAttributeValueWithConversion(ATTR_DATE, LocalDate.class);
-    final int nSize = aElement.getAttributeValueWithConversion(ATTR_SIZE, int.class);
+    final int nSize = aElement.getAttributeValueAsInt(ATTR_SIZE, -1);
     final EExposition eExposition = EExposition.getFromIDOrNull(aElement.getAttributeValue(ATTR_EXPOSITION));
     final String sHanglage = MicroHelper.getChildTextContent(aElement, ELEMENT_HANGLAGE);
     final String sGesellschaft = MicroHelper.getChildTextContent(aElement, ELEMENT_GESELLSCHAFT);
-    final double dBKL0 = aElement.getAttributeValueWithConversion(ATTR_BKL0, double.class);
-    final double dBKL1 = aElement.getAttributeValueWithConversion(ATTR_BKL1, double.class);
-    final double dBKL2 = aElement.getAttributeValueWithConversion(ATTR_BKL2, double.class);
-    final double dBKL3 = aElement.getAttributeValueWithConversion(ATTR_BKL3, double.class);
-    final double dBKL4 = aElement.getAttributeValueWithConversion(ATTR_BKL4, double.class);
-    final double dBKL5 = aElement.getAttributeValueWithConversion(ATTR_BKL5, double.class);
-    final double dBKL6 = aElement.getAttributeValueWithConversion(ATTR_BKL6, double.class);
-    final double dBKL7 = aElement.getAttributeValueWithConversion(ATTR_BKL7, double.class);
-    final double dBKL8 = aElement.getAttributeValueWithConversion(ATTR_BKL8, double.class);
-    final double dBKL9 = aElement.getAttributeValueWithConversion(ATTR_BKL9, double.class);
+    final double dBKL0 = aElement.getAttributeValueAsDouble(ATTR_BKL0, Double.NaN);
+    final double dBKL1 = aElement.getAttributeValueAsDouble(ATTR_BKL1, Double.NaN);
+    final double dBKL2 = aElement.getAttributeValueAsDouble(ATTR_BKL2, Double.NaN);
+    final double dBKL3 = aElement.getAttributeValueAsDouble(ATTR_BKL3, Double.NaN);
+    final double dBKL4 = aElement.getAttributeValueAsDouble(ATTR_BKL4, Double.NaN);
+    final double dBKL5 = aElement.getAttributeValueAsDouble(ATTR_BKL5, Double.NaN);
+    final double dBKL6 = aElement.getAttributeValueAsDouble(ATTR_BKL6, Double.NaN);
+    final double dBKL7 = aElement.getAttributeValueAsDouble(ATTR_BKL7, Double.NaN);
+    final double dBKL8 = aElement.getAttributeValueAsDouble(ATTR_BKL8, Double.NaN);
+    final double dBKL9 = aElement.getAttributeValueAsDouble(ATTR_BKL9, Double.NaN);
     final String sUsage = MicroHelper.getChildTextContent(aElement, ELEMENT_USAGE);
     final String sUsageDesc = MicroHelper.getChildTextContent(aElement, ELEMENT_USAGEDESC);
-    // TODO Biotopbaum::trees
-    final ICommonsList<Biotopbaum> aTrees;
+    final ICommonsList<Biotopbaum> aTrees = new CommonsArrayList<>();
     final String sDesc = MicroHelper.getChildTextContent(aElement, ELEMENT_DESC);
-    final boolean bSameAge = aElement.getAttributeValueWithConversion(ATTR_SAMEAGE, boolean.class);
-    final boolean bOneLevel = aElement.getAttributeValueWithConversion(ATTR_ONELEVEL, boolean.class);
-    // TODO StichprobeDeadwood::TotSteh
-    final ICommonsList<StichprobeDeadwood> aTotSteh;
-    // TODO StichprobeDeadwood::TotLieg1
-    final ICommonsList<StichprobeDeadwood> aTotLieg1;
-    // TODO StichprobeDeadwood::TotLieg2
-    final ICommonsList<StichprobeDeadwood> aTotLieg2;
+    final boolean bSameAge = aElement.getAttributeValueAsBool(ATTR_SAMEAGE, false);
+    final boolean bOneLevel = aElement.getAttributeValueAsBool(ATTR_ONELEVEL, false);
+    final ICommonsList<StichprobeDeadwood> aTotSteh = new CommonsArrayList<>();
+    final ICommonsList<StichprobeDeadwood> aTotLieg1 = new CommonsArrayList<>();
+    final ICommonsList<StichprobeDeadwood> aTotLieg2 = new CommonsArrayList<>();
     return new Stichprobe(nStichNr, aStichNrzR, aPics, aDate, nSize, eExposition, sHanglage, sGesellschaft, dBKL0, dBKL1, dBKL2, dBKL3, dBKL4, dBKL5, dBKL6, dBKL7, dBKL8, dBKL9, sUsage, sUsageDesc, aTrees, sDesc, bSameAge, bOneLevel, aTotSteh, aTotLieg1, aTotLieg2);
   }
 }

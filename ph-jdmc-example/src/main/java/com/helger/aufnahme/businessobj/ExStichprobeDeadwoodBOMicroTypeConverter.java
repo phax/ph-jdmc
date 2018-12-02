@@ -45,8 +45,8 @@ public class ExStichprobeDeadwoodBOMicroTypeConverter
     final IMicroElement aElement) {
     final EExDecompositionDegreeClassBO eDoD = EExDecompositionDegreeClassBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_DOD));
     final EExTreeKindBO eTreeKind = EExTreeKindBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_TREEKIND));
-    final int nLength = aElement.getAttributeValueWithConversion(ATTR_LENGTH, int.class);
-    final int nBHD = aElement.getAttributeValueWithConversion(ATTR_BHD, int.class);
+    final int nLength = aElement.getAttributeValueAsInt(ATTR_LENGTH, -1);
+    final int nBHD = aElement.getAttributeValueAsInt(ATTR_BHD, -1);
     return new ExStichprobeDeadwoodBO(super.getStubObject(aElement), eDoD, eTreeKind, nLength, nBHD);
   }
 }
