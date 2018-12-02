@@ -20,14 +20,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +34,9 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.CollectionHelper;
 import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.collection.impl.ICommonsOrderedSet;
 import com.helger.commons.io.file.FileOperationManager;
-import com.helger.jcodemodel.AbstractJClass;
+import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.EClassType;
 import com.helger.jcodemodel.JAnnotationUse;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
@@ -44,6 +44,7 @@ import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JVar;
+import com.helger.jcodemodel.fmt.JTextFile;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 import com.helger.jdmc.core.JDMProcessor;
@@ -52,7 +53,6 @@ import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMEnum;
 import com.helger.jdmc.core.datamodel.JDMType;
-import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
 
 @NotThreadSafe
 public class JDMCodeGenerator
@@ -78,9 +78,9 @@ public class JDMCodeGenerator
 
   public void createMainJavaClasses (@Nonnull final JDMCodeModel cm, @Nonnull final ICommonsList <JDMClass> aClasses)
   {
-    for (final JDMClass aClass : aClasses)
+    try
     {
-      try
+      for (final JDMClass aClass : aClasses)
       {
         final JDefinedClass jInterface = JDMCodeGenBase.createMainJavaInterface (m_aProcessor, m_aSettings, cm, aClass);
         final JDefinedClass jDomainClass = JDMCodeGenBase.createMainJavaClass (m_aProcessor,
@@ -90,10 +90,11 @@ public class JDMCodeGenerator
                                                                                jInterface);
         JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings, cm, aClass, jDomainClass);
       }
-      catch (final JClassAlreadyExistsException ex)
-      {
-        throw new IllegalStateException (ex);
-      }
+      JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterRegistrarClass (cm, aClasses);
+    }
+    catch (final JClassAlreadyExistsException ex)
+    {
+      throw new IllegalStateException (ex);
     }
   }
 
@@ -162,6 +163,14 @@ public class JDMCodeGenerator
 
       // Create all enums
       JDMCodeGenEnum.createMainJavaEnums (cm, aEnums);
+
+      // Create all resources before writing
+      for (final Map.Entry <String, ICommonsOrderedSet <String>> aEntry : cm.spiImplMap ().getAll ())
+      {
+        final String sContent = StringHelper.getImploded ('\n', aEntry.getValue ()) + "\n";
+        cm._package ("META-INF.services")
+          .addResourceFile (JTextFile.createFully (aEntry.getKey (), StandardCharsets.UTF_8, sContent));
+      }
 
       new JCMWriter (cm).setCharset (StandardCharsets.UTF_8)
                         .setIndentString ("  ")

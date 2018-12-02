@@ -3,6 +3,7 @@ package com.helger.jdmc.core.codegen;
 import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JCodeModel;
@@ -15,11 +16,19 @@ import com.helger.jdmc.core.datamodel.JDMType;
 final class JDMCodeModel extends JCodeModel
 {
   private final JDMProcessor m_aProcessor;
+  private final SPIImplMap m_aSPIImplMap = new SPIImplMap ();
 
   public JDMCodeModel (@Nonnull final JDMProcessor aProcessor)
   {
     ValueEnforcer.notNull (aProcessor, "Processor");
     m_aProcessor = aProcessor;
+  }
+
+  @Nonnull
+  @ReturnsMutableObject
+  public SPIImplMap spiImplMap ()
+  {
+    return m_aSPIImplMap;
   }
 
   @Nonnull

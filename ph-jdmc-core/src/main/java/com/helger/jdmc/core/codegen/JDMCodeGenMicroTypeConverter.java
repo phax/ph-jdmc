@@ -20,7 +20,9 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
+import com.helger.commons.annotation.IsSPIImplementation;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.jcodemodel.AbstractJType;
@@ -36,6 +38,7 @@ import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JVar;
+import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMField;
@@ -44,6 +47,8 @@ import com.helger.photon.security.object.AbstractBusinessObjectMicroTypeConverte
 import com.helger.xml.microdom.IMicroElement;
 import com.helger.xml.microdom.MicroElement;
 import com.helger.xml.microdom.convert.IMicroTypeConverter;
+import com.helger.xml.microdom.convert.IMicroTypeConverterRegistrarSPI;
+import com.helger.xml.microdom.convert.IMicroTypeConverterRegistry;
 import com.helger.xml.microdom.convert.MicroTypeConverter;
 import com.helger.xml.microdom.util.MicroHelper;
 
@@ -74,18 +79,18 @@ final class JDMCodeGenMicroTypeConverter
       // Enums are always attributes
       return false;
     }
-    if (!aField.getType ().isPredefined ())
-    {
-      // Nested, created types, are always elements, except for enums
-      return true;
-    }
     if (_isString (aField.getType ()))
     {
       // Special predefined types that should be elements
       return true;
     }
+    if (!aField.getType ().isPredefined ())
+    {
+      // Nested, created types, are always elements, except for enums
+      return true;
+    }
 
-    // Assume attribute
+    // Assume attribute (e.g. LocalDate etc.)
     return false;
   }
 
@@ -327,5 +332,34 @@ final class JDMCodeGenMicroTypeConverter
         jInvRet.arg (aVar);
       jToNative.body ()._return (jInvRet);
     }
+  }
+
+  static void createMainMicroTypeConverterRegistrarClass (@Nonnull final JDMCodeModel cm,
+                                                          @Nonnull final ICommonsList <JDMClass> aClasses) throws JClassAlreadyExistsException
+  {
+    final JDefinedClass jClass = cm._class (JMod.PUBLIC | JMod.FINAL,
+                                            AbstractJDMClassType.getFQCN (aClasses.getFirst ().getPackageName (),
+                                                                          "MicroTypeConverterRegistrar"),
+                                            EClassType.CLASS);
+    jClass._implements (cm.ref (IMicroTypeConverterRegistrarSPI.class));
+    jClass.javadoc ().add ("<p>Default MicroTypeConverter registrar of this project</p>\n");
+    jClass.javadoc ().add ("<p>This class was initially automatically created</p>\n");
+    jClass.javadoc ().addAuthor ().add (JDMCodeGenerator.AUTHOR);
+
+    jClass.annotate (Immutable.class);
+    jClass.annotate (IsSPIImplementation.class);
+
+    final JMethod jMethod = jClass.method (JMod.PUBLIC, cm.VOID, "registerMicroTypeConverter");
+    final JVar jParam = jMethod.param (JMod.FINAL, cm.ref (IMicroTypeConverterRegistry.class), "aRegistry");
+    jParam.annotate (Nonnull.class);
+
+    for (final JDMClass aClass : aClasses)
+    {
+      jMethod.body ()
+             .add (jParam.invoke ("registerMicroElementTypeConverter")
+                         .arg (cm.ref (aClass.getFQClassName ()).dotclass ())
+                         .arg (cm.ref (aClass.getFQMicroTypeConverterClassName ())._new ()));
+    }
+    cm.spiImplMap ().register (IMicroTypeConverterRegistrarSPI.class, jClass.fullName ());
   }
 }
