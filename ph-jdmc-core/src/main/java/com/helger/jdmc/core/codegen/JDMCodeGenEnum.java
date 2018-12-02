@@ -47,9 +47,9 @@ import com.helger.jdmc.core.datamodel.JDMEnumConstant;
  *
  * @author Philip Helger
  */
-final class JDMHelperEnum
+final class JDMCodeGenEnum
 {
-  private JDMHelperEnum ()
+  private JDMCodeGenEnum ()
   {}
 
   static void createMainJavaEnums (@Nonnull final JDMCodeModel cm, @Nonnull final ICommonsList <JDMEnum> aEnums)

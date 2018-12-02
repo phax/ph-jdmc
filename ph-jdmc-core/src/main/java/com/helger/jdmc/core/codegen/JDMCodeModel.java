@@ -2,6 +2,7 @@ package com.helger.jdmc.core.codegen;
 
 import javax.annotation.Nonnull;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JCodeModel;
@@ -11,12 +12,13 @@ import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMType;
 
-public class JDMCodeModel extends JCodeModel
+final class JDMCodeModel extends JCodeModel
 {
   private final JDMProcessor m_aProcessor;
 
   public JDMCodeModel (@Nonnull final JDMProcessor aProcessor)
   {
+    ValueEnforcer.notNull (aProcessor, "Processor");
     m_aProcessor = aProcessor;
   }
 

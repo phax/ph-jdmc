@@ -522,10 +522,9 @@ public class JDMCodeGenerator
       {
         final JDefinedClass jInterface = _createMainJavaInterface (cm, aClass);
         final JDefinedClass jDomainClass = _createMainJavaClass (cm, aClass, jInterface);
-        JDMHelperMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings,
+        JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings,
                                                                        cm,
                                                                        aClass,
-                                                                       jInterface,
                                                                        jDomainClass);
       }
       catch (final JClassAlreadyExistsException ex)
@@ -643,7 +642,7 @@ public class JDMCodeGenerator
       createMainJavaClasses (cm, aClasses);
 
       // Create all enums
-      JDMHelperEnum.createMainJavaEnums (cm, aEnums);
+      JDMCodeGenEnum.createMainJavaEnums (cm, aEnums);
 
       new JCMWriter (cm).setCharset (StandardCharsets.UTF_8)
                         .setIndentString ("  ")
@@ -665,7 +664,7 @@ public class JDMCodeGenerator
       createTestJavaClasses (cm, aClasses);
 
       // Create all enums
-      JDMHelperEnum.createTestJavaEnums (cm, aEnums);
+      JDMCodeGenEnum.createTestJavaEnums (cm, aEnums);
 
       new JCMWriter (cm).setCharset (StandardCharsets.UTF_8)
                         .setIndentString ("  ")

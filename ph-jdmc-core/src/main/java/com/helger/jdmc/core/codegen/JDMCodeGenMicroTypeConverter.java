@@ -47,9 +47,9 @@ import com.helger.xml.microdom.convert.IMicroTypeConverter;
 import com.helger.xml.microdom.convert.MicroTypeConverter;
 import com.helger.xml.microdom.util.MicroHelper;
 
-final class JDMHelperMicroTypeConverter
+final class JDMCodeGenMicroTypeConverter
 {
-  private JDMHelperMicroTypeConverter ()
+  private JDMCodeGenMicroTypeConverter ()
   {}
 
   private static boolean _isString (@Nonnull final JDMType aType)
@@ -92,7 +92,6 @@ final class JDMHelperMicroTypeConverter
   static void createMainMicroTypeConverterClass (@Nonnull final JDMCodeGenSettings aSettings,
                                                  @Nonnull final JDMCodeModel cm,
                                                  @Nonnull final JDMClass aClass,
-                                                 @Nonnull final JDefinedClass jInterface,
                                                  @Nonnull final JDefinedClass jDomainClass) throws JClassAlreadyExistsException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC, aClass.getFQMicroTypeConverterClassName (), EClassType.CLASS);
