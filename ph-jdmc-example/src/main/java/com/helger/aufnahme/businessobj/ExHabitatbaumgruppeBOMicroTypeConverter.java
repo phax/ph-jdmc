@@ -7,6 +7,7 @@ import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.photon.security.object.AbstractBusinessObjectMicroTypeConverter;
 import com.helger.xml.microdom.IMicroElement;
 import com.helger.xml.microdom.MicroElement;
+import com.helger.xml.microdom.convert.MicroTypeConverter;
 import com.helger.xml.microdom.util.MicroHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,8 +50,18 @@ public class ExHabitatbaumgruppeBOMicroTypeConverter
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     super.setObjectFields(aValue, aElement);
     aElement.setAttribute(ATTR_HBGNR, aValue.getHBGNr());
-    // TODO File::pics
-    // TODO ExBiotopbaumBO::HBGzBB
+    for (final File aItem: aValue.pics()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
+    }
+    for (final File aItem: aValue.pics()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
+    }
+    for (final IExBiotopbaumBO aItem: aValue.hBGzBB()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_HBGZBB));
+    }
+    for (final IExBiotopbaumBO aItem: aValue.hBGzBB()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_HBGZBB));
+    }
     aElement.setAttributeWithConversion(ATTR_DATE, aValue.getDate());
     aElement.appendElement(sNamespaceURI, ELEMENT_STANDORT).appendText(aValue.getStandort());
     aElement.setAttribute(ATTR_ONELEVEL, aValue.isOneLevel());
@@ -74,7 +85,13 @@ public class ExHabitatbaumgruppeBOMicroTypeConverter
     final IMicroElement aElement) {
     final int nHBGNr = aElement.getAttributeValueAsInt(ATTR_HBGNR, -1);
     final ICommonsList<File> aPics = new CommonsArrayList<>();
-    final ICommonsList<ExBiotopbaumBO> aHBGzBB = new CommonsArrayList<>();
+    for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_PICS)) {
+      aPics.add(MicroTypeConverter.convertToNative(aChild, File.class));
+    }
+    final ICommonsList<IExBiotopbaumBO> aHBGzBB = new CommonsArrayList<>();
+    for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_HBGZBB)) {
+      aHBGzBB.add(MicroTypeConverter.convertToNative(aChild, IExBiotopbaumBO.class));
+    }
     final LocalDate aDate = aElement.getAttributeValueWithConversion(ATTR_DATE, LocalDate.class);
     final String sStandort = MicroHelper.getChildTextContent(aElement, ELEMENT_STANDORT);
     final boolean bOneLevel = aElement.getAttributeValueAsBool(ATTR_ONELEVEL, false);

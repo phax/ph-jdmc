@@ -7,6 +7,7 @@ import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.xml.microdom.IMicroElement;
 import com.helger.xml.microdom.MicroElement;
 import com.helger.xml.microdom.convert.IMicroTypeConverter;
+import com.helger.xml.microdom.convert.MicroTypeConverter;
 import com.helger.xml.microdom.util.MicroHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,12 +53,22 @@ public class BestandMicroTypeConverter
     final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     aElement.setAttribute(ATTR_BNR, aValue.getBNr());
-    // TODO File::pics
+    for (final File aItem: aValue.pics()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
+    }
+    for (final File aItem: aValue.pics()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
+    }
     aElement.setAttributeWithConversion(ATTR_DATE, aValue.getDate());
     if (aValue.hasVerortung()) {
       aElement.appendElement(sNamespaceURI, ELEMENT_VERORTUNG).appendText(aValue.getVerortung());
     }
-    // TODO Habitatbaumgruppe::BZHBG
+    for (final IHabitatbaumgruppe aItem: aValue.bZHBG()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_BZHBG));
+    }
+    for (final IHabitatbaumgruppe aItem: aValue.bZHBG()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_BZHBG));
+    }
     aElement.setAttribute(ATTR_AREASIZE, aValue.getAreaSize());
     aElement.appendElement(sNamespaceURI, ELEMENT_BESCHREIB).appendText(aValue.getBeschreib());
     aElement.setAttribute(ATTR_SAMEAGE, aValue.isSameAge());
@@ -81,9 +92,15 @@ public class BestandMicroTypeConverter
     final IMicroElement aElement) {
     final int nBNr = aElement.getAttributeValueAsInt(ATTR_BNR, -1);
     final ICommonsList<File> aPics = new CommonsArrayList<>();
+    for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_PICS)) {
+      aPics.add(MicroTypeConverter.convertToNative(aChild, File.class));
+    }
     final LocalDate aDate = aElement.getAttributeValueWithConversion(ATTR_DATE, LocalDate.class);
     final String sVerortung = MicroHelper.getChildTextContent(aElement, ELEMENT_VERORTUNG);
-    final ICommonsList<Habitatbaumgruppe> aBZHBG = new CommonsArrayList<>();
+    final ICommonsList<IHabitatbaumgruppe> aBZHBG = new CommonsArrayList<>();
+    for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_BZHBG)) {
+      aBZHBG.add(MicroTypeConverter.convertToNative(aChild, IHabitatbaumgruppe.class));
+    }
     final int nAreaSize = aElement.getAttributeValueAsInt(ATTR_AREASIZE, -1);
     final String sBeschreib = MicroHelper.getChildTextContent(aElement, ELEMENT_BESCHREIB);
     final boolean bSameAge = aElement.getAttributeValueAsBool(ATTR_SAMEAGE, false);

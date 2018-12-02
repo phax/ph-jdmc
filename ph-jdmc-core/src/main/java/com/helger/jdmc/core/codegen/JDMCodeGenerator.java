@@ -47,7 +47,6 @@ import com.helger.commons.string.StringHelper;
 import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
 import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JAnnotationUse;
@@ -98,6 +97,20 @@ public class JDMCodeGenerator
   }
 
   @Nonnull
+  private AbstractJClass _resolveType (@Nonnull final JDMCodeModel cm, @Nonnull final String sType)
+  {
+    final AbstractJDMClassType aExistingClass = m_aProcessor.findTypeByName (sType);
+    String sRealType = sType;
+    if (aExistingClass != null && aExistingClass instanceof JDMClass)
+    {
+      // It's one of our created classes - add an "I" prefix
+      sRealType = aExistingClass.getFQInterfaceName ();
+    }
+
+    return cm.ref (sRealType);
+  }
+
+  @Nonnull
   private JDefinedClass _createMainJavaInterface (@Nonnull final JDMCodeModel cm,
                                                   @Nonnull final JDMClass aClass) throws JClassAlreadyExistsException
   {
@@ -114,30 +127,18 @@ public class JDMCodeGenerator
     {
       final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
       final boolean bIsPrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
+      final boolean bIsStringType = "String".equals (aField.getType ().getShortName ());
+
       // Create getter
 
-      // Find type name
-      final String sJavaTypeName1 = aField.getType ().getJavaFQCN (eMultiplicity);
-      final String sJavaTypeName2;
-      final AbstractJDMClassType aExistingClass = m_aProcessor.findTypeByName (sJavaTypeName1);
-      if (aExistingClass != null && aExistingClass instanceof JDMClass)
-      {
-        // It's one of our created classes - add an "I" prefix
-        sJavaTypeName2 = aExistingClass.getFQInterfaceName ();
-      }
-      else
-        sJavaTypeName2 = sJavaTypeName1;
-
       // List or field?
-      AbstractJType jReturnType = cm.ref (sJavaTypeName2);
+      AbstractJClass jReturnType = _resolveType (cm, aField.getType ().getJavaFQCN (eMultiplicity));
       if (eMultiplicity.isOpenEnded ())
         jReturnType = cm.ref (ICommonsList.class).narrow (jReturnType);
 
       final JMethod aMethodGet = jInterface.method (0,
                                                     jReturnType,
                                                     aField.getMethodGetterName (eMultiplicity.isOpenEnded ()));
-
-      final boolean bIsStringType = "String".equals (sJavaTypeName2);
 
       // Annotations
       if (!bIsPrimitive)
@@ -320,7 +321,7 @@ public class JDMCodeGenerator
         sJavaTypeName2 = sJavaTypeName1;
 
       // List or field?
-      AbstractJType jFieldType = cm.ref (sJavaTypeName2);
+      AbstractJClass jFieldType = cm.ref (sJavaTypeName2);
       IJExpression aFieldInit = null;
       boolean bFieldIsFinal = false;
       if (eMultiplicity.isOpenEnded ())
@@ -636,7 +637,7 @@ public class JDMCodeGenerator
       FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcMainJava);
       FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcMainResources);
 
-      final JDMCodeModel cm = new JDMCodeModel ();
+      final JDMCodeModel cm = new JDMCodeModel (m_aProcessor);
 
       // Create all classes
       createMainJavaClasses (cm, aClasses);
@@ -656,7 +657,7 @@ public class JDMCodeGenerator
       FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcTestJava);
       FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcTestResources);
 
-      final JDMCodeModel cm = new JDMCodeModel ();
+      final JDMCodeModel cm = new JDMCodeModel (m_aProcessor);
 
       createTestJavaSelfTest (cm);
 

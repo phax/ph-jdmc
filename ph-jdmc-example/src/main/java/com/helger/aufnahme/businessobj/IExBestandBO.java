@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.string.StringHelper;
 import com.helger.tenancy.IBusinessObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -59,7 +60,7 @@ public interface IExBestandBO
   String getVerortung();
 
   default boolean hasVerortung() {
-    return (getVerortung()!= null);
+    return StringHelper.hasText(getVerortung());
   }
 
   /**

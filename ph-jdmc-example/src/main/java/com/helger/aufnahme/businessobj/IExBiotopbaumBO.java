@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.string.StringHelper;
 import com.helger.tenancy.IBusinessObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -70,7 +71,7 @@ public interface IExBiotopbaumBO
   String getLocation();
 
   default boolean hasLocation() {
-    return (getLocation()!= null);
+    return StringHelper.hasText(getLocation());
   }
 
   /**
@@ -92,7 +93,7 @@ public interface IExBiotopbaumBO
   String getHanglage();
 
   default boolean hasHanglage() {
-    return (getHanglage()!= null);
+    return StringHelper.hasText(getHanglage());
   }
 
   /**
@@ -219,7 +220,7 @@ public interface IExBiotopbaumBO
   String getOtherSpecial();
 
   default boolean hasOtherSpecial() {
-    return (getOtherSpecial()!= null);
+    return StringHelper.hasText(getOtherSpecial());
   }
 
   /**
@@ -240,7 +241,7 @@ public interface IExBiotopbaumBO
   String getAspirantDesc();
 
   default boolean hasAspirantDesc() {
-    return (getAspirantDesc()!= null);
+    return StringHelper.hasText(getAspirantDesc());
   }
 
   /**
@@ -261,7 +262,7 @@ public interface IExBiotopbaumBO
   String getMarkedDesc();
 
   default boolean hasMarkedDesc() {
-    return (getMarkedDesc()!= null);
+    return StringHelper.hasText(getMarkedDesc());
   }
 
   /**

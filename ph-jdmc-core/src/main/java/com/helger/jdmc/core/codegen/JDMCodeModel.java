@@ -2,13 +2,37 @@ package com.helger.jdmc.core.codegen;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JCodeModel;
+import com.helger.jdmc.core.JDMProcessor;
+import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
+import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMType;
 
 public class JDMCodeModel extends JCodeModel
 {
+  private final JDMProcessor m_aProcessor;
+
+  public JDMCodeModel (@Nonnull final JDMProcessor aProcessor)
+  {
+    m_aProcessor = aProcessor;
+  }
+
+  @Nonnull
+  public AbstractJClass ref (@Nonnull final JDMType aType)
+  {
+    String sTypeName = aType.getFQCN ();
+    final AbstractJDMClassType aExistingClass = m_aProcessor.findTypeByName (sTypeName);
+    if (aExistingClass != null && aExistingClass instanceof JDMClass)
+    {
+      // It's one of our created classes - add an "I" prefix
+      sTypeName = aExistingClass.getFQInterfaceName ();
+    }
+    return super.ref (sTypeName);
+  }
+
   @Nonnull
   public AbstractJType ref (@Nonnull final JDMType aType, @Nonnull final EJDMMultiplicity eMultiplicity)
   {
@@ -34,6 +58,6 @@ public class JDMCodeModel extends JCodeModel
       throw new IllegalStateException ("Unexpected primitive type " + sShortName);
     }
 
-    return super.ref (aType.getFQCN ());
+    return ref (aType);
   }
 }

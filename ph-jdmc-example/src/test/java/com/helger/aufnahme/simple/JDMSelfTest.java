@@ -35,7 +35,7 @@ public final class JDMSelfTest {
     "cast"
   })
   public void testSetterAndGetter() {
-    Bestand var0;
+    IBestand var0;
     var0 = null;
     BigDecimal var1;
     var1 = MathHelper.toBigDecimal("12.3456");
@@ -43,11 +43,11 @@ public final class JDMSelfTest {
     BigInteger var2;
     var2 = MathHelper.toBigInteger("7890");
     Assert.assertNotNull(var2);
-    Biotopbaum var3;
+    IBiotopbaum var3;
     var3 = null;
-    BiotopbaumDeadwood var4;
+    IBiotopbaumDeadwood var4;
     var4 = null;
-    BiotopbaumDecompositionDegree var5;
+    IBiotopbaumDecompositionDegree var5;
     var5 = null;
     Boolean var6;
     var6 = Boolean.TRUE;
@@ -59,7 +59,7 @@ public final class JDMSelfTest {
     Byte var9;
     var9 = Byte.valueOf(((byte) 0));
     Assert.assertNotNull(var9);
-    CaveType var10;
+    ICaveType var10;
     var10 = null;
     Character var11;
     var11 = Character.valueOf(' ');
@@ -127,14 +127,14 @@ public final class JDMSelfTest {
     Float var33;
     var33 = Float.valueOf(0.0F);
     Assert.assertNotNull(var33);
-    Habitatbaumgruppe var34;
+    IHabitatbaumgruppe var34;
     var34 = null;
     int var35;
     var35 = 0;
     Integer var36;
     var36 = Integer.valueOf(0);
     Assert.assertNotNull(var36);
-    Leergut var37;
+    ILeergut var37;
     var37 = null;
     LocalDate var38;
     var38 = PDTFactory.getCurrentLocalDate();
@@ -159,7 +159,7 @@ public final class JDMSelfTest {
     QName var45;
     var45 = new QName("urn:example", "elem");
     Assert.assertNotNull(var45);
-    Reservat var46;
+    IReservat var46;
     var46 = null;
     Serializable var47;
     var47 = ((Serializable)"object");
@@ -169,14 +169,14 @@ public final class JDMSelfTest {
     Assert.assertNotNull(var48);
     short var49;
     var49 = 0;
-    Stichprobe var50;
+    IStichprobe var50;
     var50 = null;
-    StichprobeDeadwood var51;
+    IStichprobeDeadwood var51;
     var51 = null;
     String var52;
     var52 = "foo";
     Assert.assertNotNull(var52);
-    TrunkSize var53;
+    ITrunkSize var53;
     var53 = null;
     ZonedDateTime var54;
     var54 = PDTFactory.getCurrentZonedDateTime();

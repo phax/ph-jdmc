@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.string.StringHelper;
 import com.helger.tenancy.IBusinessObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -85,7 +86,7 @@ public interface IExStichprobeBO
   String getHanglage();
 
   default boolean hasHanglage() {
-    return (getHanglage()!= null);
+    return StringHelper.hasText(getHanglage());
   }
 
   /**

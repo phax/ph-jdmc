@@ -7,6 +7,7 @@ import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.xml.microdom.IMicroElement;
 import com.helger.xml.microdom.MicroElement;
 import com.helger.xml.microdom.convert.IMicroTypeConverter;
+import com.helger.xml.microdom.convert.MicroTypeConverter;
 import com.helger.xml.microdom.util.MicroHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -60,9 +61,19 @@ public class BiotopbaumMicroTypeConverter
     final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     aElement.setAttribute(ATTR_BBNR, aValue.getBBNr());
-    // TODO File::pics
+    for (final File aItem: aValue.pics()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
+    }
+    for (final File aItem: aValue.pics()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
+    }
     aElement.setAttributeWithConversion(ATTR_DATE, aValue.getDate());
-    // TODO EBiotopbaumType::type
+    for (final EBiotopbaumType aItem: aValue.type()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TYPE));
+    }
+    for (final EBiotopbaumType aItem: aValue.type()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TYPE));
+    }
     if (aValue.hasLocation()) {
       aElement.appendElement(sNamespaceURI, ELEMENT_LOCATION).appendText(aValue.getLocation());
     }
@@ -79,10 +90,25 @@ public class BiotopbaumMicroTypeConverter
     aElement.setAttribute(ATTR_HOMOGENE, aValue.isHomogene());
     aElement.appendElement(sNamespaceURI, ELEMENT_BESCHREIBUNG).appendText(aValue.getBeschreibung());
     aElement.setAttribute(ATTR_TREEKIND, aValue.getTreeKind().getID());
-    // TODO CaveType::caves
-    // TODO TrunkSize::trunk
+    for (final ICaveType aItem: aValue.caves()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_CAVES));
+    }
+    for (final ICaveType aItem: aValue.caves()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_CAVES));
+    }
+    for (final ITrunkSize aItem: aValue.trunk()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TRUNK));
+    }
+    for (final ITrunkSize aItem: aValue.trunk()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TRUNK));
+    }
     aElement.setAttribute(ATTR_VITALITY, aValue.getVitality().getID());
-    // TODO ESpecialStructure::specialStructure
+    for (final ESpecialStructure aItem: aValue.specialStructure()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_SPECIALSTRUCTURE));
+    }
+    for (final ESpecialStructure aItem: aValue.specialStructure()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_SPECIALSTRUCTURE));
+    }
     if (aValue.hasOtherSpecial()) {
       aElement.appendElement(sNamespaceURI, ELEMENT_OTHERSPECIAL).appendText(aValue.getOtherSpecial());
     }
@@ -94,8 +120,18 @@ public class BiotopbaumMicroTypeConverter
     if (aValue.hasMarkedDesc()) {
       aElement.appendElement(sNamespaceURI, ELEMENT_MARKEDDESC).appendText(aValue.getMarkedDesc());
     }
-    // TODO BiotopbaumDeadwood::deadwoodCats
-    // TODO BiotopbaumDecompositionDegree::deadwoodDoD
+    for (final IBiotopbaumDeadwood aItem: aValue.deadwoodCats()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_DEADWOODCATS));
+    }
+    for (final IBiotopbaumDeadwood aItem: aValue.deadwoodCats()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_DEADWOODCATS));
+    }
+    for (final IBiotopbaumDecompositionDegree aItem: aValue.deadwoodDoD()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_DEADWOODDOD));
+    }
+    for (final IBiotopbaumDecompositionDegree aItem: aValue.deadwoodDoD()) {
+      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_DEADWOODDOD));
+    }
     return aElement;
   }
 
@@ -105,8 +141,14 @@ public class BiotopbaumMicroTypeConverter
     final IMicroElement aElement) {
     final int nBBNr = aElement.getAttributeValueAsInt(ATTR_BBNR, -1);
     final ICommonsList<File> aPics = new CommonsArrayList<>();
+    for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_PICS)) {
+      aPics.add(MicroTypeConverter.convertToNative(aChild, File.class));
+    }
     final LocalDate aDate = aElement.getAttributeValueWithConversion(ATTR_DATE, LocalDate.class);
     final ICommonsList<EBiotopbaumType> eType = new CommonsArrayList<>();
+    for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_TYPE)) {
+      eType.add(MicroTypeConverter.convertToNative(aChild, EBiotopbaumType.class));
+    }
     final String sLocation = MicroHelper.getChildTextContent(aElement, ELEMENT_LOCATION);
     final EExposition eExposition = EExposition.getFromIDOrNull(aElement.getAttributeValue(ATTR_EXPOSITION));
     final String sHanglage = MicroHelper.getChildTextContent(aElement, ELEMENT_HANGLAGE);
@@ -119,17 +161,32 @@ public class BiotopbaumMicroTypeConverter
     final boolean bHomogene = aElement.getAttributeValueAsBool(ATTR_HOMOGENE, false);
     final String sBeschreibung = MicroHelper.getChildTextContent(aElement, ELEMENT_BESCHREIBUNG);
     final ETreeKind eTreeKind = ETreeKind.getFromIDOrNull(aElement.getAttributeValue(ATTR_TREEKIND));
-    final ICommonsList<CaveType> aCaves = new CommonsArrayList<>();
-    final ICommonsList<TrunkSize> aTrunk = new CommonsArrayList<>();
+    final ICommonsList<ICaveType> aCaves = new CommonsArrayList<>();
+    for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_CAVES)) {
+      aCaves.add(MicroTypeConverter.convertToNative(aChild, ICaveType.class));
+    }
+    final ICommonsList<ITrunkSize> aTrunk = new CommonsArrayList<>();
+    for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_TRUNK)) {
+      aTrunk.add(MicroTypeConverter.convertToNative(aChild, ITrunkSize.class));
+    }
     final EVitality eVitality = EVitality.getFromIDOrNull(aElement.getAttributeValue(ATTR_VITALITY));
     final ICommonsList<ESpecialStructure> eSpecialStructure = new CommonsArrayList<>();
+    for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_SPECIALSTRUCTURE)) {
+      eSpecialStructure.add(MicroTypeConverter.convertToNative(aChild, ESpecialStructure.class));
+    }
     final String sOtherSpecial = MicroHelper.getChildTextContent(aElement, ELEMENT_OTHERSPECIAL);
     final boolean bAspirant = aElement.getAttributeValueAsBool(ATTR_ASPIRANT, false);
     final String sAspirantDesc = MicroHelper.getChildTextContent(aElement, ELEMENT_ASPIRANTDESC);
     final boolean bMarked = aElement.getAttributeValueAsBool(ATTR_MARKED, false);
     final String sMarkedDesc = MicroHelper.getChildTextContent(aElement, ELEMENT_MARKEDDESC);
-    final ICommonsList<BiotopbaumDeadwood> aDeadwoodCats = new CommonsArrayList<>();
-    final ICommonsList<BiotopbaumDecompositionDegree> aDeadwoodDoD = new CommonsArrayList<>();
+    final ICommonsList<IBiotopbaumDeadwood> aDeadwoodCats = new CommonsArrayList<>();
+    for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_DEADWOODCATS)) {
+      aDeadwoodCats.add(MicroTypeConverter.convertToNative(aChild, IBiotopbaumDeadwood.class));
+    }
+    final ICommonsList<IBiotopbaumDecompositionDegree> aDeadwoodDoD = new CommonsArrayList<>();
+    for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_DEADWOODDOD)) {
+      aDeadwoodDoD.add(MicroTypeConverter.convertToNative(aChild, IBiotopbaumDecompositionDegree.class));
+    }
     return new Biotopbaum(nBBNr, aPics, aDate, eType, sLocation, eExposition, sHanglage, bEinschichtig, bSolitary, bLightLocation, bClosedCrown, bNoSun, bUeberSun, bHomogene, sBeschreibung, eTreeKind, aCaves, aTrunk, eVitality, eSpecialStructure, sOtherSpecial, bAspirant, sAspirantDesc, bMarked, sMarkedDesc, aDeadwoodCats, aDeadwoodDoD);
   }
 }
