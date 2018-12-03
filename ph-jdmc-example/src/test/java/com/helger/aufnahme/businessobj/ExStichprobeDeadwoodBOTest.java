@@ -23,6 +23,9 @@ public final class ExStichprobeDeadwoodBOTest {
   public void testSetterAndGetter() {
     ExStichprobeDeadwoodBO x = new ExStichprobeDeadwoodBO(EExDecompositionDegreeClassBO.CLASS0, EExTreeKindBO.Bergahorn, 8, 8);
     Assert.assertTrue(StringHelper.hasText(x.toString()));
+    ExStichprobeDeadwoodBO y = new ExStichprobeDeadwoodBO(EExDecompositionDegreeClassBO.CLASS0, EExTreeKindBO.Bergahorn, 8, 8);
+    Assert.assertTrue(StringHelper.hasText(y.toString()));
+    Assert.assertNotSame(x, y);
     x.setDoD(EExDecompositionDegreeClassBO.CLASS0);
     x.setTreeKind(EExTreeKindBO.Bergahorn);
     Assert.assertFalse(x.setLength(8).isChanged());

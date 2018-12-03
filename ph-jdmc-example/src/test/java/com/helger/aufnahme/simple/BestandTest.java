@@ -46,10 +46,16 @@ public final class BestandTest {
   public void testSetterAndGetter() {
     Bestand x = new Bestand(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), "foo", new CommonsArrayList<>(new Habitatbaumgruppe()), 8, "foo", true, true, EStockType._0, "foo", "foo", true, true, true, EStockDeadwood._0, "foo", EStockDeadwood._0, "foo");
     Assert.assertTrue(StringHelper.hasText(x.toString()));
-    Bestand y = new Bestand(x);
+    Bestand y = new Bestand(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), "foo", new CommonsArrayList<>(new Habitatbaumgruppe()), 8, "foo", true, true, EStockType._0, "foo", "foo", true, true, true, EStockDeadwood._0, "foo", EStockDeadwood._0, "foo");
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
     Assert.assertEquals(x, y);
+    Assert.assertEquals(x.hashCode(), y.hashCode());
+    Bestand z = new Bestand(x);
+    Assert.assertTrue(StringHelper.hasText(z.toString()));
+    Assert.assertNotSame(x, z);
+    Assert.assertEquals(x, z);
+    Assert.assertEquals(x.hashCode(), z.hashCode());
     Assert.assertFalse(x.setBNr(8).isChanged());
     Assert.assertFalse(x.setPics(new CommonsArrayList<>(new File("file.txt"))).isChanged());
     Assert.assertFalse(x.setDate(PDTFactory.getCurrentLocalDate()).isChanged());

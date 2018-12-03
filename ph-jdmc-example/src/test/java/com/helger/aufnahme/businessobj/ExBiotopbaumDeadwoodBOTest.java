@@ -23,6 +23,9 @@ public final class ExBiotopbaumDeadwoodBOTest {
   public void testSetterAndGetter() {
     ExBiotopbaumDeadwoodBO x = new ExBiotopbaumDeadwoodBO(EExDeadwoodCategoryBO.CLASS1, true, 8, 8);
     Assert.assertTrue(StringHelper.hasText(x.toString()));
+    ExBiotopbaumDeadwoodBO y = new ExBiotopbaumDeadwoodBO(EExDeadwoodCategoryBO.CLASS1, true, 8, 8);
+    Assert.assertTrue(StringHelper.hasText(y.toString()));
+    Assert.assertNotSame(x, y);
     x.setType(EExDeadwoodCategoryBO.CLASS1);
     Assert.assertFalse(x.setEnabled(true).isChanged());
     Assert.assertFalse(x.setLength(8).isChanged());

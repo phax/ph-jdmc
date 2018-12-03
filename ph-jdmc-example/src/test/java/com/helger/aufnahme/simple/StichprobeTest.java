@@ -54,10 +54,16 @@ public final class StichprobeTest {
   public void testSetterAndGetter() {
     Stichprobe x = new Stichprobe(8, new Reservat(), new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), 8, EExposition.N, "foo", "foo", 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, "foo", "foo", new CommonsArrayList<>(new Biotopbaum()), "foo", true, true, new CommonsArrayList<>(new StichprobeDeadwood()), new CommonsArrayList<>(new StichprobeDeadwood()), new CommonsArrayList<>(new StichprobeDeadwood()));
     Assert.assertTrue(StringHelper.hasText(x.toString()));
-    Stichprobe y = new Stichprobe(x);
+    Stichprobe y = new Stichprobe(8, new Reservat(), new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), 8, EExposition.N, "foo", "foo", 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, "foo", "foo", new CommonsArrayList<>(new Biotopbaum()), "foo", true, true, new CommonsArrayList<>(new StichprobeDeadwood()), new CommonsArrayList<>(new StichprobeDeadwood()), new CommonsArrayList<>(new StichprobeDeadwood()));
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
     Assert.assertEquals(x, y);
+    Assert.assertEquals(x.hashCode(), y.hashCode());
+    Stichprobe z = new Stichprobe(x);
+    Assert.assertTrue(StringHelper.hasText(z.toString()));
+    Assert.assertNotSame(x, z);
+    Assert.assertEquals(x, z);
+    Assert.assertEquals(x.hashCode(), z.hashCode());
     Assert.assertFalse(x.setStichNr(8).isChanged());
     Assert.assertFalse(x.setStichNrzR(new Reservat()).isChanged());
     Assert.assertFalse(x.setPics(new CommonsArrayList<>(new File("file.txt"))).isChanged());

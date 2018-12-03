@@ -28,10 +28,16 @@ public final class StichprobeDeadwoodTest {
   public void testSetterAndGetter() {
     StichprobeDeadwood x = new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8);
     Assert.assertTrue(StringHelper.hasText(x.toString()));
-    StichprobeDeadwood y = new StichprobeDeadwood(x);
+    StichprobeDeadwood y = new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
     Assert.assertEquals(x, y);
+    Assert.assertEquals(x.hashCode(), y.hashCode());
+    StichprobeDeadwood z = new StichprobeDeadwood(x);
+    Assert.assertTrue(StringHelper.hasText(z.toString()));
+    Assert.assertNotSame(x, z);
+    Assert.assertEquals(x, z);
+    Assert.assertEquals(x.hashCode(), z.hashCode());
     Assert.assertFalse(x.setDoD(EDecompositionDegreeClass.CLASS0).isChanged());
     Assert.assertFalse(x.setTreeKind(ETreeKind.Bergahorn).isChanged());
     Assert.assertFalse(x.setLength(8).isChanged());

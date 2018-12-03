@@ -23,6 +23,9 @@ public final class ExReservatBOTest {
   public void testSetterAndGetter() {
     ExReservatBO x = new ExReservatBO(8, "foo", 8);
     Assert.assertTrue(StringHelper.hasText(x.toString()));
+    ExReservatBO y = new ExReservatBO(8, "foo", 8);
+    Assert.assertTrue(StringHelper.hasText(y.toString()));
+    Assert.assertNotSame(x, y);
     Assert.assertFalse(x.setRNr(8).isChanged());
     Assert.assertFalse(x.setName("foo").isChanged());
     Assert.assertFalse(x.setAreaSize(8).isChanged());

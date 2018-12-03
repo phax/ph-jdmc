@@ -23,5 +23,8 @@ public final class ExLeergutBOTest {
   public void testSetterAndGetter() {
     ExLeergutBO x = new ExLeergutBO();
     Assert.assertTrue(StringHelper.hasText(x.toString()));
+    ExLeergutBO y = new ExLeergutBO();
+    Assert.assertTrue(StringHelper.hasText(y.toString()));
+    Assert.assertNotSame(x, y);
   }
 }

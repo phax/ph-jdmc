@@ -23,6 +23,9 @@ public final class ExCaveTypeBOTest {
   public void testSetterAndGetter() {
     ExCaveTypeBO x = new ExCaveTypeBO(EExCaveClassBO.ONE, EExCaveTypeBO._1);
     Assert.assertTrue(StringHelper.hasText(x.toString()));
+    ExCaveTypeBO y = new ExCaveTypeBO(EExCaveClassBO.ONE, EExCaveTypeBO._1);
+    Assert.assertTrue(StringHelper.hasText(y.toString()));
+    Assert.assertNotSame(x, y);
     x.setClazz(EExCaveClassBO.ONE);
     x.setType(EExCaveTypeBO._1);
   }

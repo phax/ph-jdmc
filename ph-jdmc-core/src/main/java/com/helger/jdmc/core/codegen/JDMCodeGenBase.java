@@ -565,16 +565,39 @@ public class JDMCodeGenBase
                  .add (cm.ref (Assert.class)
                          .staticInvoke ("assertTrue")
                          .arg (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (jX.invoke ("toString"))));
-          if (!aSettings.isUseBusinessObject () && aClass.fields ().isNotEmpty ())
           {
-            // Copy ctor
-            final JVar jY = jMethod.body ().decl (jClass, "y", jClass._new ().arg (jX));
+            // Empty ctor again
+            final JVar jY = jMethod.body ().decl (jClass, "y", aNew);
             jMethod.body ()
                    .add (cm.ref (Assert.class)
                            .staticInvoke ("assertTrue")
                            .arg (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (jY.invoke ("toString"))));
             jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotSame").arg (jX).arg (jY));
-            jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertEquals").arg (jX).arg (jY));
+            if (!aSettings.isUseBusinessObject ())
+            {
+              jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertEquals").arg (jX).arg (jY));
+              jMethod.body ()
+                     .add (cm.ref (Assert.class)
+                             .staticInvoke ("assertEquals")
+                             .arg (jX.invoke ("hashCode"))
+                             .arg (jY.invoke ("hashCode")));
+            }
+          }
+          if (!aSettings.isUseBusinessObject () && aClass.fields ().isNotEmpty ())
+          {
+            // Copy ctor
+            final JVar jZ = jMethod.body ().decl (jClass, "z", jClass._new ().arg (jX));
+            jMethod.body ()
+                   .add (cm.ref (Assert.class)
+                           .staticInvoke ("assertTrue")
+                           .arg (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (jZ.invoke ("toString"))));
+            jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotSame").arg (jX).arg (jZ));
+            jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertEquals").arg (jX).arg (jZ));
+            jMethod.body ()
+                   .add (cm.ref (Assert.class)
+                           .staticInvoke ("assertEquals")
+                           .arg (jX.invoke ("hashCode"))
+                           .arg (jZ.invoke ("hashCode")));
           }
 
           // Invoke all setters

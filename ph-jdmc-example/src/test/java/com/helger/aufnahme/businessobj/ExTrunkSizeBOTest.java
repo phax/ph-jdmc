@@ -23,6 +23,9 @@ public final class ExTrunkSizeBOTest {
   public void testSetterAndGetter() {
     ExTrunkSizeBO x = new ExTrunkSizeBO(8, EExTreeHeightBO.ONE);
     Assert.assertTrue(StringHelper.hasText(x.toString()));
+    ExTrunkSizeBO y = new ExTrunkSizeBO(8, EExTreeHeightBO.ONE);
+    Assert.assertTrue(StringHelper.hasText(y.toString()));
+    Assert.assertNotSame(x, y);
     Assert.assertFalse(x.setBHD(8).isChanged());
     x.setHeight(EExTreeHeightBO.ONE);
   }

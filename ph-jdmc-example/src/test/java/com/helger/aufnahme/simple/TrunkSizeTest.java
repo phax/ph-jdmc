@@ -26,10 +26,16 @@ public final class TrunkSizeTest {
   public void testSetterAndGetter() {
     TrunkSize x = new TrunkSize(8, ETreeHeight.ONE);
     Assert.assertTrue(StringHelper.hasText(x.toString()));
-    TrunkSize y = new TrunkSize(x);
+    TrunkSize y = new TrunkSize(8, ETreeHeight.ONE);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
     Assert.assertEquals(x, y);
+    Assert.assertEquals(x.hashCode(), y.hashCode());
+    TrunkSize z = new TrunkSize(x);
+    Assert.assertTrue(StringHelper.hasText(z.toString()));
+    Assert.assertNotSame(x, z);
+    Assert.assertEquals(x, z);
+    Assert.assertEquals(x.hashCode(), z.hashCode());
     Assert.assertFalse(x.setBHD(8).isChanged());
     Assert.assertFalse(x.setHeight(ETreeHeight.ONE).isChanged());
   }

@@ -26,10 +26,16 @@ public final class CaveTypeTest {
   public void testSetterAndGetter() {
     CaveType x = new CaveType(ECaveClass.ONE, ECaveType._1);
     Assert.assertTrue(StringHelper.hasText(x.toString()));
-    CaveType y = new CaveType(x);
+    CaveType y = new CaveType(ECaveClass.ONE, ECaveType._1);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
     Assert.assertEquals(x, y);
+    Assert.assertEquals(x.hashCode(), y.hashCode());
+    CaveType z = new CaveType(x);
+    Assert.assertTrue(StringHelper.hasText(z.toString()));
+    Assert.assertNotSame(x, z);
+    Assert.assertEquals(x, z);
+    Assert.assertEquals(x.hashCode(), z.hashCode());
     Assert.assertFalse(x.setClazz(ECaveClass.ONE).isChanged());
     Assert.assertFalse(x.setType(ECaveType._1).isChanged());
   }

@@ -27,10 +27,16 @@ public final class ReservatTest {
   public void testSetterAndGetter() {
     Reservat x = new Reservat(8, "foo", 8);
     Assert.assertTrue(StringHelper.hasText(x.toString()));
-    Reservat y = new Reservat(x);
+    Reservat y = new Reservat(8, "foo", 8);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
     Assert.assertEquals(x, y);
+    Assert.assertEquals(x.hashCode(), y.hashCode());
+    Reservat z = new Reservat(x);
+    Assert.assertTrue(StringHelper.hasText(z.toString()));
+    Assert.assertNotSame(x, z);
+    Assert.assertEquals(x, z);
+    Assert.assertEquals(x.hashCode(), z.hashCode());
     Assert.assertFalse(x.setRNr(8).isChanged());
     Assert.assertFalse(x.setName("foo").isChanged());
     Assert.assertFalse(x.setAreaSize(8).isChanged());

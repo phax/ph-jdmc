@@ -42,10 +42,16 @@ public final class HabitatbaumgruppeTest {
   public void testSetterAndGetter() {
     Habitatbaumgruppe x = new Habitatbaumgruppe(8, new CommonsArrayList<>(new File("file.txt")), new CommonsArrayList<>(new Biotopbaum()), PDTFactory.getCurrentLocalDate(), "foo", true, true, true, true, true, EExposition.N, "foo", 8, true, "foo");
     Assert.assertTrue(StringHelper.hasText(x.toString()));
-    Habitatbaumgruppe y = new Habitatbaumgruppe(x);
+    Habitatbaumgruppe y = new Habitatbaumgruppe(8, new CommonsArrayList<>(new File("file.txt")), new CommonsArrayList<>(new Biotopbaum()), PDTFactory.getCurrentLocalDate(), "foo", true, true, true, true, true, EExposition.N, "foo", 8, true, "foo");
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
     Assert.assertEquals(x, y);
+    Assert.assertEquals(x.hashCode(), y.hashCode());
+    Habitatbaumgruppe z = new Habitatbaumgruppe(x);
+    Assert.assertTrue(StringHelper.hasText(z.toString()));
+    Assert.assertNotSame(x, z);
+    Assert.assertEquals(x, z);
+    Assert.assertEquals(x.hashCode(), z.hashCode());
     Assert.assertFalse(x.setHBGNr(8).isChanged());
     Assert.assertFalse(x.setPics(new CommonsArrayList<>(new File("file.txt"))).isChanged());
     Assert.assertFalse(x.setHBGzBB(new CommonsArrayList<>(new Biotopbaum())).isChanged());

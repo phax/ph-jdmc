@@ -23,6 +23,9 @@ public final class ExBiotopbaumDecompositionDegreeBOTest {
   public void testSetterAndGetter() {
     ExBiotopbaumDecompositionDegreeBO x = new ExBiotopbaumDecompositionDegreeBO(EExDecompositionDegreeClassBO.CLASS0, true, 8, 8);
     Assert.assertTrue(StringHelper.hasText(x.toString()));
+    ExBiotopbaumDecompositionDegreeBO y = new ExBiotopbaumDecompositionDegreeBO(EExDecompositionDegreeClassBO.CLASS0, true, 8, 8);
+    Assert.assertTrue(StringHelper.hasText(y.toString()));
+    Assert.assertNotSame(x, y);
     x.setType(EExDecompositionDegreeClassBO.CLASS0);
     Assert.assertFalse(x.setEnabled(true).isChanged());
     Assert.assertFalse(x.setLength(8).isChanged());
