@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -246,36 +247,33 @@ public class JDMCodeGenBase
       else
         jCtor2 = null;
 
-      jCtor3 = jClass.constructor (JMod.PUBLIC);
-      jC3Arg = jCtor3.param (JMod.FINAL, jInterface, "aOther");
-      jC3Arg.annotate (Nonnull.class);
-      jCtor3.body ().add (cm.ref (ValueEnforcer.class).staticInvoke ("notNull").arg (jC3Arg).arg ("Other"));
-
       if (bHasFields)
       {
-        jEquals = jClass.method (JMod.PUBLIC, cm.BOOLEAN, "equals");
-        jEquals.annotate (Override.class);
-        final JVar jEqualsArg = jEquals.param (JMod.FINAL, cm.ref (Object.class), "o");
-        jEquals.body ()._if (jEqualsArg.eq (JExpr._this ()), new JReturn (JExpr.TRUE));
-        jEquals.body ()
-               ._if (jEqualsArg.eqNull ().cor (JExpr.invokeThis ("getClass").ne (jEqualsArg.invoke ("getClass"))),
-                     new JReturn (JExpr.FALSE));
-        jEqualsParam = jEquals.body ().decl (JMod.FINAL, jClass, "rhs", jEqualsArg.castTo (jClass));
-
-        jHashcode = jClass.method (JMod.PUBLIC, cm.INT, "hashCode");
-        jHashcode.annotate (Override.class);
-        jHashcodeInvocation = cm.ref (HashCodeGenerator.class)._new ().arg (JExpr._this ());
-
-        jToString = jClass.method (JMod.PUBLIC, cm.ref (String.class), "toString");
-        jToString.annotate (Override.class);
-        jToStringInvocation = cm.ref (ToStringGenerator.class)._new ().arg (JExpr._this ());
+        jCtor3 = jClass.constructor (JMod.PUBLIC);
+        jC3Arg = jCtor3.param (JMod.FINAL, jInterface, "aOther");
+        jC3Arg.annotate (Nonnull.class);
+        jCtor3.body ().add (cm.ref (ValueEnforcer.class).staticInvoke ("notNull").arg (jC3Arg).arg ("Other"));
       }
       else
-      {
-        jEquals = null;
-        jHashcode = null;
-        jToString = null;
-      }
+        jCtor3 = null;
+
+      jEquals = jClass.method (JMod.PUBLIC, cm.BOOLEAN, "equals");
+      jEquals.annotate (Override.class);
+      final JVar jEqualsArg = jEquals.param (JMod.FINAL, cm.ref (Object.class), "o");
+      jEquals.body ()._if (jEqualsArg.eq (JExpr._this ()), new JReturn (JExpr.TRUE));
+      jEquals.body ()
+             ._if (jEqualsArg.eqNull ().cor (JExpr.invokeThis ("getClass").ne (jEqualsArg.invoke ("getClass"))),
+                   new JReturn (JExpr.FALSE));
+      if (bHasFields)
+        jEqualsParam = jEquals.body ().decl (JMod.FINAL, jClass, "rhs", jEqualsArg.castTo (jClass));
+
+      jHashcode = jClass.method (JMod.PUBLIC, cm.INT, "hashCode");
+      jHashcode.annotate (Override.class);
+      jHashcodeInvocation = cm.ref (HashCodeGenerator.class)._new ().arg (JExpr._this ());
+
+      jToString = jClass.method (JMod.PUBLIC, cm.ref (String.class), "toString");
+      jToString.annotate (Override.class);
+      jToStringInvocation = cm.ref (ToStringGenerator.class)._new ().arg (JExpr._this ());
     }
 
     for (final JDMField aField : aClass.fields ())
@@ -517,17 +515,81 @@ public class JDMCodeGenBase
           jRule.annotate (Rule.class);
         }
 
-        if (aSettings.isUseBusinessObject ())
+        if (!aSettings.isUseBusinessObject ())
         {
-          // TODO
+          final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testDefaultCtor");
+          jMethod.annotate (Test.class);
+          final JVar jObj = jMethod.body ().decl (jClass, "x", jClass._new ());
+          jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertEquals").arg (jObj).arg (jClass._new ()));
+
+          for (final JDMField aField : aClass.fields ())
+          {
+            final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+            final boolean bIsOpenEnded = eMultiplicity.isOpenEnded ();
+            if (aField.getType ().isJavaPrimitive (eMultiplicity))
+            {
+              // No testing
+              jMethod.body ().add (jObj.invoke (aField.getMethodGetterName (bIsOpenEnded)));
+            }
+            else
+            {
+              if (bIsOpenEnded)
+                jMethod.body ()
+                       .add (cm.ref (Assert.class)
+                               .staticInvoke ("assertNotNull")
+                               .arg (jObj.invoke (aField.getMethodGetterName (bIsOpenEnded))));
+              else
+                jMethod.body ()
+                       .add (cm.ref (Assert.class)
+                               .staticInvoke ("assertNull")
+                               .arg (jObj.invoke (aField.getMethodGetterName (bIsOpenEnded))));
+            }
+          }
         }
-        else
+
         {
           final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testSetterAndGetter");
           jMethod.annotate (Test.class);
-          jMethod.body ().decl (jClass, "x", jClass._new ());
 
-          // TODO
+          // Ctor with all params
+          JInvocation aNew = jClass._new ();
+          for (final JDMField aField : aClass.fields ())
+          {
+            IJExpression aTestVal = aField.getType ().createTestValue (cm, aSettings);
+            if (aField.getMultiplicity ().isOpenEnded ())
+              aTestVal = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ().arg (aTestVal);
+            aNew = aNew.arg (aTestVal);
+          }
+          final JVar jX = jMethod.body ().decl (jClass, "x", aNew);
+          jMethod.body ()
+                 .add (cm.ref (Assert.class)
+                         .staticInvoke ("assertTrue")
+                         .arg (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (jX.invoke ("toString"))));
+          if (!aSettings.isUseBusinessObject () && aClass.fields ().isNotEmpty ())
+          {
+            // Copy ctor
+            final JVar jY = jMethod.body ().decl (jClass, "y", jClass._new ().arg (jX));
+            jMethod.body ()
+                   .add (cm.ref (Assert.class)
+                           .staticInvoke ("assertTrue")
+                           .arg (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (jY.invoke ("toString"))));
+            jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotSame").arg (jX).arg (jY));
+            jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertEquals").arg (jX).arg (jY));
+          }
+
+          // Invoke all setters
+          for (final JDMField aField : aClass.fields ())
+          {
+            IJExpression aTestVal = aField.getType ().createTestValue (cm, aSettings);
+            if (aField.getMultiplicity ().isOpenEnded ())
+              aTestVal = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ().arg (aTestVal);
+
+            final JInvocation jSet = jX.invoke (aField.getMethodSetterName ()).arg (aTestVal);
+            if (aSettings.isUseBusinessObject () && !aField.getType ().isPredefined ())
+              jMethod.body ().add (jSet);
+            else
+              jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertFalse").arg (jSet.invoke ("isChanged")));
+          }
         }
       }
       catch (final JClassAlreadyExistsException ex)

@@ -1,5 +1,7 @@
 package com.helger.aufnahme.simple;
 
+import com.helger.commons.string.StringHelper;
+import org.junit.Assert;
 import org.junit.Test;
 
 
@@ -13,7 +15,26 @@ import org.junit.Test;
 public final class StichprobeDeadwoodTest {
 
   @Test
-  public void testSetterAndGetter() {
+  public void testDefaultCtor() {
     StichprobeDeadwood x = new StichprobeDeadwood();
+    Assert.assertEquals(x, new StichprobeDeadwood());
+    Assert.assertNull(x.getDoD());
+    Assert.assertNull(x.getTreeKind());
+    x.getLength();
+    x.getBHD();
+  }
+
+  @Test
+  public void testSetterAndGetter() {
+    StichprobeDeadwood x = new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8);
+    Assert.assertTrue(StringHelper.hasText(x.toString()));
+    StichprobeDeadwood y = new StichprobeDeadwood(x);
+    Assert.assertTrue(StringHelper.hasText(y.toString()));
+    Assert.assertNotSame(x, y);
+    Assert.assertEquals(x, y);
+    Assert.assertFalse(x.setDoD(EDecompositionDegreeClass.CLASS0).isChanged());
+    Assert.assertFalse(x.setTreeKind(ETreeKind.Bergahorn).isChanged());
+    Assert.assertFalse(x.setLength(8).isChanged());
+    Assert.assertFalse(x.setBHD(8).isChanged());
   }
 }

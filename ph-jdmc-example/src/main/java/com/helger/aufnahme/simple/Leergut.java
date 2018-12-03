@@ -1,8 +1,8 @@
 package com.helger.aufnahme.simple;
 
-import com.helger.commons.ValueEnforcer;
+import com.helger.commons.hashcode.HashCodeGenerator;
+import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 
@@ -22,9 +22,24 @@ public class Leergut
   public Leergut() {
   }
 
-  public Leergut(
-    @Nonnull
-    final ILeergut aOther) {
-    ValueEnforcer.notNull(aOther, "Other");
+  @Override
+  public boolean equals(final Object o) {
+    if (o == this) {
+      return true;
+    }
+    if ((o == null)||(this.getClass()!= o.getClass())) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeGenerator(this).getHashCode();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringGenerator(this).getToString();
   }
 }

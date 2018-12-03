@@ -25,7 +25,8 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.lang.ClassHelper;
 import com.helger.jcodemodel.IJExpression;
-import com.helger.jcodemodel.JCodeModel;
+import com.helger.jdmc.core.codegen.JDMCodeGenSettings;
+import com.helger.jdmc.core.codegen.JDMCodeModel;
 
 /**
  * Single type.
@@ -212,9 +213,9 @@ public class JDMType implements Serializable
   }
 
   @Nonnull
-  public IJExpression createTestValue (@Nonnull final JCodeModel cm)
+  public IJExpression createTestValue (@Nonnull final JDMCodeModel cm, @Nonnull final JDMCodeGenSettings cs)
   {
-    return m_aTestValueFactory.createTestValue (cm);
+    return m_aTestValueFactory.createTestValue (cm, cs);
   }
 
   @Nonnull

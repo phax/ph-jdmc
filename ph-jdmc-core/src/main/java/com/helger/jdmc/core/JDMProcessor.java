@@ -39,12 +39,14 @@ import com.helger.commons.io.resource.FileSystemResource;
 import com.helger.commons.lang.GenericReflection;
 import com.helger.commons.regex.RegExHelper;
 import com.helger.commons.string.StringHelper;
-import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JJavaName;
 import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
 import com.helger.jdmc.core.datamodel.EJDMBaseType;
 import com.helger.jdmc.core.datamodel.EJDMConstraintType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
+import com.helger.jdmc.core.datamodel.IJDMTypeResolver;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMConstraint;
 import com.helger.jdmc.core.datamodel.JDMContext;
@@ -60,7 +62,7 @@ import com.helger.json.parser.handler.CollectingJsonParserHandler;
 import com.helger.json.serialize.JsonReader;
 
 @NotThreadSafe
-public class JDMProcessor
+public class JDMProcessor implements IJDMTypeResolver
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (JDMProcessor.class);
 
@@ -405,7 +407,18 @@ public class JDMProcessor
       }
 
     // Upon success, register this type
-    m_aContext.types ().registerType (ret, cm -> JExpr._null ());
+    m_aContext.types ().registerType (ret, (cm, cs) -> {
+      JInvocation aNew = cm.ref (ret.getFQClassName ())._new ();
+      if (cs.isUseBusinessObject ())
+        for (final JDMField aField : ret.fields ())
+        {
+          IJExpression aTestVal = aField.getType ().createTestValue (cm, cs);
+          if (aField.getMultiplicity ().isOpenEnded ())
+            aTestVal = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ().arg (aTestVal);
+          aNew = aNew.arg (aTestVal);
+        }
+      return aNew;
+    });
     m_aTypes.add (ret);
 
     return ret;
@@ -525,8 +538,8 @@ public class JDMProcessor
     // Upon success, register this type
     m_aContext.types ()
               .registerType (ret,
-                             cm -> cm.ref (ret.getFQClassName ())
-                                     .staticRef (ret.enumConstants ().getFirst ().getName ()));
+                             (cm, cs) -> cm.ref (ret.getFQClassName ())
+                                           .staticRef (ret.enumConstants ().getFirst ().getName ()));
     m_aTypes.add (ret);
 
     return ret;

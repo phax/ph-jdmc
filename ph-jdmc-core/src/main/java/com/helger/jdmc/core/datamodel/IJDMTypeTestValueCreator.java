@@ -21,10 +21,11 @@ import java.io.Serializable;
 import javax.annotation.Nonnull;
 
 import com.helger.jcodemodel.IJExpression;
-import com.helger.jcodemodel.JCodeModel;
+import com.helger.jdmc.core.codegen.JDMCodeGenSettings;
+import com.helger.jdmc.core.codegen.JDMCodeModel;
 
 public interface IJDMTypeTestValueCreator extends Serializable
 {
   @Nonnull
-  IJExpression createTestValue (@Nonnull JCodeModel cm);
+  IJExpression createTestValue (@Nonnull JDMCodeModel cm, @Nonnull JDMCodeGenSettings cs);
 }

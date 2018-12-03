@@ -1,5 +1,7 @@
 package com.helger.aufnahme.simple;
 
+import com.helger.commons.string.StringHelper;
+import org.junit.Assert;
 import org.junit.Test;
 
 
@@ -13,7 +15,14 @@ import org.junit.Test;
 public final class LeergutTest {
 
   @Test
+  public void testDefaultCtor() {
+    Leergut x = new Leergut();
+    Assert.assertEquals(x, new Leergut());
+  }
+
+  @Test
   public void testSetterAndGetter() {
     Leergut x = new Leergut();
+    Assert.assertTrue(StringHelper.hasText(x.toString()));
   }
 }

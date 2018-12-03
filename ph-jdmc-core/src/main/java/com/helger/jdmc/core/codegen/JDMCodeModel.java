@@ -7,18 +7,18 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jdmc.core.JDMProcessor;
 import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
+import com.helger.jdmc.core.datamodel.IJDMTypeResolver;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMType;
 
-final class JDMCodeModel extends JCodeModel
+public final class JDMCodeModel extends JCodeModel
 {
-  private final JDMProcessor m_aProcessor;
+  private final IJDMTypeResolver m_aProcessor;
   private final SPIImplMap m_aSPIImplMap = new SPIImplMap ();
 
-  public JDMCodeModel (@Nonnull final JDMProcessor aProcessor)
+  public JDMCodeModel (@Nonnull final IJDMTypeResolver aProcessor)
   {
     ValueEnforcer.notNull (aProcessor, "Processor");
     m_aProcessor = aProcessor;
@@ -26,7 +26,7 @@ final class JDMCodeModel extends JCodeModel
 
   @Nonnull
   @ReturnsMutableObject
-  public SPIImplMap spiImplMap ()
+  public final SPIImplMap spiImplMap ()
   {
     return m_aSPIImplMap;
   }

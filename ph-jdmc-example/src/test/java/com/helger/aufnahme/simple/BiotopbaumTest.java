@@ -1,5 +1,10 @@
 package com.helger.aufnahme.simple;
 
+import java.io.File;
+import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.datetime.PDTFactory;
+import com.helger.commons.string.StringHelper;
+import org.junit.Assert;
 import org.junit.Test;
 
 
@@ -13,7 +18,72 @@ import org.junit.Test;
 public final class BiotopbaumTest {
 
   @Test
-  public void testSetterAndGetter() {
+  public void testDefaultCtor() {
     Biotopbaum x = new Biotopbaum();
+    Assert.assertEquals(x, new Biotopbaum());
+    x.getBBNr();
+    Assert.assertNotNull(x.pics());
+    Assert.assertNull(x.getDate());
+    Assert.assertNotNull(x.type());
+    Assert.assertNull(x.getLocation());
+    Assert.assertNull(x.getExposition());
+    Assert.assertNull(x.getHanglage());
+    x.isEinschichtig();
+    x.isSolitary();
+    x.isLightLocation();
+    x.isClosedCrown();
+    x.isNoSun();
+    x.isUeberSun();
+    x.isHomogene();
+    Assert.assertNull(x.getBeschreibung());
+    Assert.assertNull(x.getTreeKind());
+    Assert.assertNotNull(x.caves());
+    Assert.assertNotNull(x.trunk());
+    Assert.assertNull(x.getVitality());
+    Assert.assertNotNull(x.specialStructure());
+    Assert.assertNull(x.getOtherSpecial());
+    x.isAspirant();
+    Assert.assertNull(x.getAspirantDesc());
+    x.isMarked();
+    Assert.assertNull(x.getMarkedDesc());
+    Assert.assertNotNull(x.deadwoodCats());
+    Assert.assertNotNull(x.deadwoodDoD());
+  }
+
+  @Test
+  public void testSetterAndGetter() {
+    Biotopbaum x = new Biotopbaum(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), new CommonsArrayList<>(EBiotopbaumType.TOTHOLZ), "foo", EExposition.N, "foo", true, true, true, true, true, true, true, "foo", ETreeKind.Bergahorn, new CommonsArrayList<>(new CaveType()), new CommonsArrayList<>(new TrunkSize()), EVitality.ONE, new CommonsArrayList<>(ESpecialStructure._1), "foo", true, "foo", true, "foo", new CommonsArrayList<>(new BiotopbaumDeadwood()), new CommonsArrayList<>(new BiotopbaumDecompositionDegree()));
+    Assert.assertTrue(StringHelper.hasText(x.toString()));
+    Biotopbaum y = new Biotopbaum(x);
+    Assert.assertTrue(StringHelper.hasText(y.toString()));
+    Assert.assertNotSame(x, y);
+    Assert.assertEquals(x, y);
+    Assert.assertFalse(x.setBBNr(8).isChanged());
+    Assert.assertFalse(x.setPics(new CommonsArrayList<>(new File("file.txt"))).isChanged());
+    Assert.assertFalse(x.setDate(PDTFactory.getCurrentLocalDate()).isChanged());
+    Assert.assertFalse(x.setType(new CommonsArrayList<>(EBiotopbaumType.TOTHOLZ)).isChanged());
+    Assert.assertFalse(x.setLocation("foo").isChanged());
+    Assert.assertFalse(x.setExposition(EExposition.N).isChanged());
+    Assert.assertFalse(x.setHanglage("foo").isChanged());
+    Assert.assertFalse(x.setEinschichtig(true).isChanged());
+    Assert.assertFalse(x.setSolitary(true).isChanged());
+    Assert.assertFalse(x.setLightLocation(true).isChanged());
+    Assert.assertFalse(x.setClosedCrown(true).isChanged());
+    Assert.assertFalse(x.setNoSun(true).isChanged());
+    Assert.assertFalse(x.setUeberSun(true).isChanged());
+    Assert.assertFalse(x.setHomogene(true).isChanged());
+    Assert.assertFalse(x.setBeschreibung("foo").isChanged());
+    Assert.assertFalse(x.setTreeKind(ETreeKind.Bergahorn).isChanged());
+    Assert.assertFalse(x.setCaves(new CommonsArrayList<>(new CaveType())).isChanged());
+    Assert.assertFalse(x.setTrunk(new CommonsArrayList<>(new TrunkSize())).isChanged());
+    Assert.assertFalse(x.setVitality(EVitality.ONE).isChanged());
+    Assert.assertFalse(x.setSpecialStructure(new CommonsArrayList<>(ESpecialStructure._1)).isChanged());
+    Assert.assertFalse(x.setOtherSpecial("foo").isChanged());
+    Assert.assertFalse(x.setAspirant(true).isChanged());
+    Assert.assertFalse(x.setAspirantDesc("foo").isChanged());
+    Assert.assertFalse(x.setMarked(true).isChanged());
+    Assert.assertFalse(x.setMarkedDesc("foo").isChanged());
+    Assert.assertFalse(x.setDeadwoodCats(new CommonsArrayList<>(new BiotopbaumDeadwood())).isChanged());
+    Assert.assertFalse(x.setDeadwoodDoD(new CommonsArrayList<>(new BiotopbaumDecompositionDegree())).isChanged());
   }
 }

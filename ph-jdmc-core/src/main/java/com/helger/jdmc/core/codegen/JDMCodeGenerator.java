@@ -26,7 +26,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +55,7 @@ import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMEnum;
 import com.helger.jdmc.core.datamodel.JDMType;
+import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
 
 @NotThreadSafe
 public class JDMCodeGenerator
@@ -98,7 +101,7 @@ public class JDMCodeGenerator
     }
   }
 
-  public void createTestJavaSelfTest (@Nonnull final JDMCodeModel cm)
+  public void createTestJavaSelfTest (@Nonnull final JDMCodeGenSettings aSettings, @Nonnull final JDMCodeModel cm)
   {
     try
     {
@@ -110,6 +113,16 @@ public class JDMCodeGenerator
       jTestClass.javadoc ().add ("This class was initially automatically created\n");
       jTestClass.javadoc ().addAuthor ().add (AUTHOR);
 
+      if (aSettings.isUseBusinessObject ())
+      {
+        // JUnit 4 test rule
+        final JVar jRule = jTestClass.field (JMod.PUBLIC | JMod.FINAL,
+                                             cm.ref (TestRule.class),
+                                             "m_aRule",
+                                             cm.ref (PhotonBasicWebTestRule.class)._new ());
+        jRule.annotate (Rule.class);
+      }
+
       final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testSetterAndGetter");
       jMethod.annotate (Test.class);
       jMethod.annotate (SuppressWarnings.class)
@@ -120,7 +133,7 @@ public class JDMCodeGenerator
                                                              Comparator.comparing (JDMType::getClassName)))
       {
         final JVar aVar = jMethod.body ().decl (cm.ref (aType, EJDMMultiplicity.MANDATORY), "var" + nCount);
-        jMethod.body ().assign (aVar, aType.createTestValue (cm));
+        jMethod.body ().assign (aVar, aType.createTestValue (cm, aSettings));
         if (!aType.isPrimitive () && aType.isImmutable ())
           jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotNull").arg (aVar));
 
@@ -186,7 +199,7 @@ public class JDMCodeGenerator
 
       final JDMCodeModel cm = new JDMCodeModel (m_aProcessor);
 
-      createTestJavaSelfTest (cm);
+      createTestJavaSelfTest (m_aSettings, cm);
 
       // Create all classes
       JDMCodeGenBase.createTestJavaClasses (m_aSettings, cm, aClasses);
