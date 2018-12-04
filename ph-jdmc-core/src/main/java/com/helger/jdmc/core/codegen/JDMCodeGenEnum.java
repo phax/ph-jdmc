@@ -52,154 +52,136 @@ final class JDMCodeGenEnum
   private JDMCodeGenEnum ()
   {}
 
-  static void createMainJavaEnums (@Nonnull final JDMCodeModel cm, @Nonnull final ICommonsList <JDMEnum> aEnums)
+  static void createMainJavaEnums (@Nonnull final JDMCodeModel cm,
+                                   @Nonnull final ICommonsList <JDMEnum> aEnums) throws JClassAlreadyExistsException
   {
     final AbstractJType jString = cm.ref (String.class);
     for (final JDMEnum aEnum : aEnums)
     {
-      try
+      final JDefinedClass jEnum = cm._class (JMod.PUBLIC, aEnum.getFQClassName (), EClassType.ENUM);
+      jEnum._implements (cm.ref (IHasID.class).narrow (jString));
+      jEnum._implements (cm.ref (IHasDisplayName.class));
+      jEnum.javadoc ().add ("This class was initially automatically created\n");
+      jEnum.javadoc ().addAuthor ().add (JDMCodeGenerator.AUTHOR);
+
+      for (final JDMEnumConstant aEnumConstant : aEnum.enumConstants ())
       {
-        final JDefinedClass jEnum = cm._class (JMod.PUBLIC, aEnum.getFQClassName (), EClassType.ENUM);
-        jEnum._implements (cm.ref (IHasID.class).narrow (jString));
-        jEnum._implements (cm.ref (IHasDisplayName.class));
-        jEnum.javadoc ().add ("This class was initially automatically created\n");
-        jEnum.javadoc ().addAuthor ().add (JDMCodeGenerator.AUTHOR);
-
-        for (final JDMEnumConstant aEnumConstant : aEnum.enumConstants ())
-        {
-          final JEnumConstant jEnumConstant = jEnum.enumConstant (aEnumConstant.getName ())
-                                                   .arg (JExpr.lit (aEnumConstant.getID ()))
-                                                   .arg (JExpr.lit (aEnumConstant.getDisplayName ()));
-          if (aEnumConstant.hasComment ())
-            jEnumConstant.javadoc ().add (aEnumConstant.getComment ());
-        }
-
-        final JVar jFieldID = jEnum.field (JMod.PRIVATE | JMod.FINAL, jString, "m_sID");
-        final JVar jFieldDisplayName = jEnum.field (JMod.PRIVATE | JMod.FINAL, jString, "m_sDisplayName");
-
-        {
-          final JMethod jMethod = jEnum.constructor (JMod.PRIVATE);
-          final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
-          jID.annotate (Nonnull.class);
-          jID.annotate (Nonempty.class);
-          final JVar jDisplayName = jMethod.param (JMod.FINAL, jString, "sDisplayName");
-          jDisplayName.annotate (Nonnull.class);
-          jDisplayName.annotate (Nonempty.class);
-          jMethod.body ().assign (jFieldID, jID);
-          jMethod.body ().assign (jFieldDisplayName, jDisplayName);
-        }
-
-        {
-          final JMethod jMethod = jEnum.method (JMod.PUBLIC, jString, "getID");
-          jMethod.annotate (Nonnull.class);
-          jMethod.annotate (Nonempty.class);
-          jMethod.body ()._return (jFieldID);
-        }
-
-        {
-          final JMethod jMethod = jEnum.method (JMod.PUBLIC, jString, "getDisplayName");
-          jMethod.annotate (Nonnull.class);
-          jMethod.annotate (Nonempty.class);
-          jMethod.body ()._return (jFieldDisplayName);
-        }
-
-        {
-          final JMethod jMethod = jEnum.method (JMod.PUBLIC | JMod.STATIC, jEnum, "getFromIDOrNull");
-          jMethod.annotate (Nullable.class);
-          final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
-          jID.annotate (Nullable.class);
-          jMethod.body ()
-                 ._return (cm.ref (EnumHelper.class)
-                             .staticInvoke ("getFromIDOrNull")
-                             .arg (jEnum.dotclass ())
-                             .arg (jID));
-        }
-
-        {
-          final JMethod jMethod = jEnum.method (JMod.PUBLIC | JMod.STATIC, jEnum, "getFromIDOrDefault");
-          jMethod.annotate (Nullable.class);
-          final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
-          jID.annotate (Nullable.class);
-          final JVar jDefault = jMethod.param (JMod.FINAL, jEnum, "eDefault");
-          jDefault.annotate (Nullable.class);
-          jMethod.body ()
-                 ._return (cm.ref (EnumHelper.class)
-                             .staticInvoke ("getFromIDOrDefault")
-                             .arg (jEnum.dotclass ())
-                             .arg (jID)
-                             .arg (jDefault));
-        }
-
-        {
-          final JMethod jMethod = jEnum.method (JMod.PUBLIC | JMod.STATIC, jEnum, "getFromIDOrThrow");
-          jMethod.annotate (Nonnull.class);
-          final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
-          jID.annotate (Nullable.class);
-          jMethod.body ()
-                 ._return (cm.ref (EnumHelper.class)
-                             .staticInvoke ("getFromIDOrThrow")
-                             .arg (jEnum.dotclass ())
-                             .arg (jID));
-        }
+        final JEnumConstant jEnumConstant = jEnum.enumConstant (aEnumConstant.getName ())
+                                                 .arg (JExpr.lit (aEnumConstant.getID ()))
+                                                 .arg (JExpr.lit (aEnumConstant.getDisplayName ()));
+        if (aEnumConstant.hasComment ())
+          jEnumConstant.javadoc ().add (aEnumConstant.getComment ());
       }
-      catch (final JClassAlreadyExistsException ex)
+
+      final JVar jFieldID = jEnum.field (JMod.PRIVATE | JMod.FINAL, jString, "m_sID");
+      final JVar jFieldDisplayName = jEnum.field (JMod.PRIVATE | JMod.FINAL, jString, "m_sDisplayName");
+
       {
-        throw new IllegalStateException (ex);
+        final JMethod jMethod = jEnum.constructor (JMod.PRIVATE);
+        final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
+        jID.annotate (Nonnull.class);
+        jID.annotate (Nonempty.class);
+        final JVar jDisplayName = jMethod.param (JMod.FINAL, jString, "sDisplayName");
+        jDisplayName.annotate (Nonnull.class);
+        jDisplayName.annotate (Nonempty.class);
+        jMethod.body ().assign (jFieldID, jID);
+        jMethod.body ().assign (jFieldDisplayName, jDisplayName);
+      }
+
+      {
+        final JMethod jMethod = jEnum.method (JMod.PUBLIC, jString, "getID");
+        jMethod.annotate (Nonnull.class);
+        jMethod.annotate (Nonempty.class);
+        jMethod.body ()._return (jFieldID);
+      }
+
+      {
+        final JMethod jMethod = jEnum.method (JMod.PUBLIC, jString, "getDisplayName");
+        jMethod.annotate (Nonnull.class);
+        jMethod.annotate (Nonempty.class);
+        jMethod.body ()._return (jFieldDisplayName);
+      }
+
+      {
+        final JMethod jMethod = jEnum.method (JMod.PUBLIC | JMod.STATIC, jEnum, "getFromIDOrNull");
+        jMethod.annotate (Nullable.class);
+        final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
+        jID.annotate (Nullable.class);
+        jMethod.body ()
+               ._return (cm.ref (EnumHelper.class).staticInvoke ("getFromIDOrNull").arg (jEnum.dotclass ()).arg (jID));
+      }
+
+      {
+        final JMethod jMethod = jEnum.method (JMod.PUBLIC | JMod.STATIC, jEnum, "getFromIDOrDefault");
+        jMethod.annotate (Nullable.class);
+        final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
+        jID.annotate (Nullable.class);
+        final JVar jDefault = jMethod.param (JMod.FINAL, jEnum, "eDefault");
+        jDefault.annotate (Nullable.class);
+        jMethod.body ()
+               ._return (cm.ref (EnumHelper.class)
+                           .staticInvoke ("getFromIDOrDefault")
+                           .arg (jEnum.dotclass ())
+                           .arg (jID)
+                           .arg (jDefault));
+      }
+
+      {
+        final JMethod jMethod = jEnum.method (JMod.PUBLIC | JMod.STATIC, jEnum, "getFromIDOrThrow");
+        jMethod.annotate (Nonnull.class);
+        final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
+        jID.annotate (Nullable.class);
+        jMethod.body ()
+               ._return (cm.ref (EnumHelper.class).staticInvoke ("getFromIDOrThrow").arg (jEnum.dotclass ()).arg (jID));
       }
     }
   }
 
-  static void createTestJavaEnums (@Nonnull final JDMCodeModel cm, @Nonnull final ICommonsList <JDMEnum> aEnums)
+  static void createTestJavaEnums (@Nonnull final JDMCodeModel cm,
+                                   @Nonnull final ICommonsList <JDMEnum> aEnums) throws JClassAlreadyExistsException
   {
     for (final JDMEnum aEnum : aEnums)
     {
-      try
-      {
-        final AbstractJClass jEnum = cm.ref (aEnum.getFQClassName ());
-        final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
-                                                    aEnum.getFQTestClassName (),
-                                                    EClassType.CLASS);
-        jTestClass.javadoc ().add ("This is the test class for class {@link " + aEnum.getFQClassName () + "}\n");
-        jTestClass.javadoc ().add ("This class was initially automatically created\n");
-        jTestClass.javadoc ().addAuthor ().add (JDMCodeGenerator.AUTHOR);
+      final AbstractJClass jEnum = cm.ref (aEnum.getFQClassName ());
+      final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
+                                                  aEnum.getFQTestClassName (),
+                                                  EClassType.CLASS);
+      jTestClass.javadoc ().add ("This is the test class for class {@link " + aEnum.getFQClassName () + "}\n");
+      jTestClass.javadoc ().add ("This class was initially automatically created\n");
+      jTestClass.javadoc ().addAuthor ().add (JDMCodeGenerator.AUTHOR);
 
-        final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testBasic");
-        jMethod.annotate (Test.class);
-        final JForEach jForEach = jMethod.body ().forEach (JMod.FINAL, jEnum, "e", jEnum.staticInvoke ("values"));
-        jForEach.body ()
-                .add (cm.ref (Assert.class)
-                        .staticInvoke ("assertTrue")
-                        .arg (cm.ref (StringHelper.class)
-                                .staticInvoke ("hasText")
-                                .arg (jForEach.var ().invoke ("getID"))));
-        jForEach.body ()
-                .add (cm.ref (Assert.class)
-                        .staticInvoke ("assertTrue")
-                        .arg (cm.ref (StringHelper.class)
-                                .staticInvoke ("hasText")
-                                .arg (jForEach.var ().invoke ("getDisplayName"))));
-        jForEach.body ()
-                .add (cm.ref (Assert.class)
-                        .staticInvoke ("assertSame")
-                        .arg (jForEach.var ())
-                        .arg (jEnum.staticInvoke ("getFromIDOrNull").arg (jForEach.var ().invoke ("getID"))));
-        jForEach.body ()
-                .add (cm.ref (Assert.class)
-                        .staticInvoke ("assertSame")
-                        .arg (jForEach.var ())
-                        .arg (jEnum.staticInvoke ("getFromIDOrDefault")
-                                   .arg (jForEach.var ().invoke ("getID"))
-                                   .argNull ()));
-        jForEach.body ()
-                .add (cm.ref (Assert.class)
-                        .staticInvoke ("assertSame")
-                        .arg (jForEach.var ())
-                        .arg (jEnum.staticInvoke ("getFromIDOrThrow").arg (jForEach.var ().invoke ("getID"))));
-      }
-      catch (final JClassAlreadyExistsException ex)
-      {
-        throw new IllegalStateException (ex);
-      }
+      final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testBasic");
+      jMethod.annotate (Test.class);
+      final JForEach jForEach = jMethod.body ().forEach (JMod.FINAL, jEnum, "e", jEnum.staticInvoke ("values"));
+      jForEach.body ()
+              .add (cm.ref (Assert.class)
+                      .staticInvoke ("assertTrue")
+                      .arg (cm.ref (StringHelper.class)
+                              .staticInvoke ("hasText")
+                              .arg (jForEach.var ().invoke ("getID"))));
+      jForEach.body ()
+              .add (cm.ref (Assert.class)
+                      .staticInvoke ("assertTrue")
+                      .arg (cm.ref (StringHelper.class)
+                              .staticInvoke ("hasText")
+                              .arg (jForEach.var ().invoke ("getDisplayName"))));
+      jForEach.body ()
+              .add (cm.ref (Assert.class)
+                      .staticInvoke ("assertSame")
+                      .arg (jForEach.var ())
+                      .arg (jEnum.staticInvoke ("getFromIDOrNull").arg (jForEach.var ().invoke ("getID"))));
+      jForEach.body ()
+              .add (cm.ref (Assert.class)
+                      .staticInvoke ("assertSame")
+                      .arg (jForEach.var ())
+                      .arg (jEnum.staticInvoke ("getFromIDOrDefault")
+                                 .arg (jForEach.var ().invoke ("getID"))
+                                 .argNull ()));
+      jForEach.body ()
+              .add (cm.ref (Assert.class)
+                      .staticInvoke ("assertSame")
+                      .arg (jForEach.var ())
+                      .arg (jEnum.staticInvoke ("getFromIDOrThrow").arg (jForEach.var ().invoke ("getID"))));
     }
   }
 }

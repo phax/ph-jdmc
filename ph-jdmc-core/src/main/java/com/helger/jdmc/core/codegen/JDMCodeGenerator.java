@@ -79,70 +79,57 @@ public class JDMCodeGenerator
     return m_aSettings;
   }
 
-  public void createMainJavaClasses (@Nonnull final JDMCodeModel cm, @Nonnull final ICommonsList <JDMClass> aClasses)
+  public void createMainJavaClasses (@Nonnull final JDMCodeModel cm,
+                                     @Nonnull final ICommonsList <JDMClass> aClasses) throws JClassAlreadyExistsException
   {
-    try
+    for (final JDMClass aClass : aClasses)
     {
-      for (final JDMClass aClass : aClasses)
-      {
-        final JDefinedClass jInterface = JDMCodeGenBase.createMainJavaInterface (m_aProcessor, m_aSettings, cm, aClass);
-        final JDefinedClass jDomainClass = JDMCodeGenBase.createMainJavaClass (m_aProcessor,
-                                                                               m_aSettings,
-                                                                               cm,
-                                                                               aClass,
-                                                                               jInterface);
-        JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings, cm, aClass, jDomainClass);
-      }
-      JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterRegistrarClass (cm, aClasses);
-    }
-    catch (final JClassAlreadyExistsException ex)
-    {
-      throw new IllegalStateException (ex);
+      final JDefinedClass jInterface = JDMCodeGenBase.createMainJavaInterface (m_aProcessor, m_aSettings, cm, aClass);
+      final JDefinedClass jDomainClass = JDMCodeGenBase.createMainJavaClass (m_aProcessor,
+                                                                             m_aSettings,
+                                                                             cm,
+                                                                             aClass,
+                                                                             jInterface);
+      JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings, cm, aClass, jDomainClass);
     }
   }
 
-  public void createTestJavaSelfTest (@Nonnull final JDMCodeGenSettings aSettings, @Nonnull final JDMCodeModel cm)
+  public void createTestJavaSelfTest (@Nonnull final JDMCodeGenSettings aSettings,
+                                      @Nonnull final JDMCodeModel cm) throws JClassAlreadyExistsException
   {
-    try
+    final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
+                                                AbstractJDMClassType.getFQCN (m_aProcessor.getDestinationPackageName (),
+                                                                              "JDMSelfTest"),
+                                                EClassType.CLASS);
+    jTestClass.javadoc ().add ("This is the self-test class of JDM\n");
+    jTestClass.javadoc ().add ("This class was initially automatically created\n");
+    jTestClass.javadoc ().addAuthor ().add (AUTHOR);
+
+    if (aSettings.isUseBusinessObject ())
     {
-      final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
-                                                  AbstractJDMClassType.getFQCN (m_aProcessor.getDestinationPackageName (),
-                                                                                "JDMSelfTest"),
-                                                  EClassType.CLASS);
-      jTestClass.javadoc ().add ("This is the self-test class of JDM\n");
-      jTestClass.javadoc ().add ("This class was initially automatically created\n");
-      jTestClass.javadoc ().addAuthor ().add (AUTHOR);
-
-      if (aSettings.isUseBusinessObject ())
-      {
-        // JUnit 4 test rule
-        final JVar jRule = jTestClass.field (JMod.PUBLIC | JMod.FINAL,
-                                             cm.ref (TestRule.class),
-                                             "m_aRule",
-                                             cm.ref (PhotonBasicWebTestRule.class)._new ());
-        jRule.annotate (Rule.class);
-      }
-
-      final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testSetterAndGetter");
-      jMethod.annotate (Test.class);
-      jMethod.annotate (SuppressWarnings.class)
-             .paramArray (JAnnotationUse.SPECIAL_KEY_VALUE, new String [] { "unused", "cast" });
-
-      int nCount = 0;
-      for (final JDMType aType : CollectionHelper.getSorted (m_aProcessor.getContext ().types ().getTypes (),
-                                                             Comparator.comparing (JDMType::getClassName)))
-      {
-        final JVar aVar = jMethod.body ().decl (cm.ref (aType, EJDMMultiplicity.MANDATORY), "var" + nCount);
-        jMethod.body ().assign (aVar, aType.createTestValue (cm, aSettings));
-        if (!aType.isPrimitive () && aType.isImmutable ())
-          jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotNull").arg (aVar));
-
-        ++nCount;
-      }
+      // JUnit 4 test rule
+      final JVar jRule = jTestClass.field (JMod.PUBLIC | JMod.FINAL,
+                                           cm.ref (TestRule.class),
+                                           "m_aRule",
+                                           cm.ref (PhotonBasicWebTestRule.class)._new ());
+      jRule.annotate (Rule.class);
     }
-    catch (final JClassAlreadyExistsException ex)
+
+    final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testSetterAndGetter");
+    jMethod.annotate (Test.class);
+    jMethod.annotate (SuppressWarnings.class)
+           .paramArray (JAnnotationUse.SPECIAL_KEY_VALUE, new String [] { "unused", "cast" });
+
+    int nCount = 0;
+    for (final JDMType aType : CollectionHelper.getSorted (m_aProcessor.getContext ().types ().getTypes (),
+                                                           Comparator.comparing (JDMType::getClassName)))
     {
-      throw new IllegalStateException (ex);
+      final JVar aVar = jMethod.body ().decl (cm.ref (aType, EJDMMultiplicity.MANDATORY), "var" + nCount);
+      jMethod.body ().assign (aVar, aType.createTestValue (cm, aSettings));
+      if (!aType.isPrimitive () && aType.isImmutable ())
+        jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotNull").arg (aVar));
+
+      ++nCount;
     }
   }
 
@@ -172,6 +159,7 @@ public class JDMCodeGenerator
     final ICommonsList <JDMClass> aClasses = m_aProcessor.getAllReadClasses ();
     final ICommonsList <JDMEnum> aEnums = m_aProcessor.getAllReadEnums ();
 
+    try
     {
       final File aSrcMainJava = new File (aDestDir, "src/main/java");
       final File aSrcMainResources = new File (aDestDir, "src/main/resources");
@@ -189,6 +177,11 @@ public class JDMCodeGenerator
       // Create all enums
       JDMCodeGenEnum.createMainJavaEnums (cm, aEnums);
 
+      // create for all
+      JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterRegistrarClass (cm,
+                                                                               true ? aClasses
+                                                                                    : m_aProcessor.getAllTypes ());
+
       // Create all resources as last thing before writing
       _createMetaInfServices (cm);
 
@@ -196,7 +189,12 @@ public class JDMCodeGenerator
                         .setIndentString ("  ")
                         .build (aSrcMainJava, aSrcMainResources, (IProgressTracker) null);
     }
+    catch (final JClassAlreadyExistsException ex)
+    {
+      throw new IllegalStateException (ex);
+    }
 
+    try
     {
       final File aSrcTestJava = new File (aDestDir, "src/test/java");
       final File aSrcTestResources = new File (aDestDir, "src/test/resources");
@@ -222,6 +220,10 @@ public class JDMCodeGenerator
       new JCMWriter (cm).setCharset (StandardCharsets.UTF_8)
                         .setIndentString ("  ")
                         .build (aSrcTestJava, aSrcTestResources, (IProgressTracker) null);
+    }
+    catch (final JClassAlreadyExistsException ex)
+    {
+      throw new IllegalStateException (ex);
     }
 
     LOGGER.info ("Done creating code in " + aDestDir.getAbsolutePath ());

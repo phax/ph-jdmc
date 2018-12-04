@@ -544,6 +544,12 @@ public class JDMProcessor implements IJDMTypeResolver
     return ret;
   }
 
+  @Nonnull
+  public ICommonsList <AbstractJDMClassType> getAllTypes ()
+  {
+    return m_aTypes.getClone ();
+  }
+
   @Nullable
   public AbstractJDMClassType findTypeByName (@Nonnull final String sFQCN)
   {

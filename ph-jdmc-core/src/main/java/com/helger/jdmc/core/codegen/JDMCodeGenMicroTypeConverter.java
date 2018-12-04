@@ -335,7 +335,7 @@ final class JDMCodeGenMicroTypeConverter
   }
 
   static void createMainMicroTypeConverterRegistrarClass (@Nonnull final JDMCodeModel cm,
-                                                          @Nonnull final ICommonsList <JDMClass> aClasses) throws JClassAlreadyExistsException
+                                                          @Nonnull final ICommonsList <? extends AbstractJDMClassType> aClasses) throws JClassAlreadyExistsException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC | JMod.FINAL,
                                             AbstractJDMClassType.getFQCN (aClasses.getFirst ().getPackageName (),
@@ -353,7 +353,7 @@ final class JDMCodeGenMicroTypeConverter
     final JVar jParam = jMethod.param (JMod.FINAL, cm.ref (IMicroTypeConverterRegistry.class), "aRegistry");
     jParam.annotate (Nonnull.class);
 
-    for (final JDMClass aClass : aClasses)
+    for (final AbstractJDMClassType aClass : aClasses)
     {
       jMethod.body ()
              .add (jParam.invoke ("registerMicroElementTypeConverter")
