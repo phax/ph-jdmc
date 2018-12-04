@@ -146,6 +146,16 @@ public class JDMCodeGenerator
     }
   }
 
+  private static void _createMetaInfServices (@Nonnull final JDMCodeModel cm)
+  {
+    for (final Map.Entry <String, ICommonsOrderedSet <String>> aEntry : cm.spiImplMap ().getAll ())
+    {
+      final String sContent = StringHelper.getImploded ('\n', aEntry.getValue ()) + "\n";
+      cm._package ("META-INF.services")
+        .addResourceFile (JTextFile.createFully (aEntry.getKey (), StandardCharsets.UTF_8, sContent));
+    }
+  }
+
   /**
    * Run the main code creation
    *
@@ -170,6 +180,8 @@ public class JDMCodeGenerator
       FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcMainResources);
 
       final JDMCodeModel cm = new JDMCodeModel (m_aProcessor);
+      if (m_aSettings.isReadExistingSPIFiles ())
+        cm.spiImplMap ().readInitial (aSrcMainResources);
 
       // Create all classes
       createMainJavaClasses (cm, aClasses);
@@ -177,13 +189,8 @@ public class JDMCodeGenerator
       // Create all enums
       JDMCodeGenEnum.createMainJavaEnums (cm, aEnums);
 
-      // Create all resources before writing
-      for (final Map.Entry <String, ICommonsOrderedSet <String>> aEntry : cm.spiImplMap ().getAll ())
-      {
-        final String sContent = StringHelper.getImploded ('\n', aEntry.getValue ()) + "\n";
-        cm._package ("META-INF.services")
-          .addResourceFile (JTextFile.createFully (aEntry.getKey (), StandardCharsets.UTF_8, sContent));
-      }
+      // Create all resources as last thing before writing
+      _createMetaInfServices (cm);
 
       new JCMWriter (cm).setCharset (StandardCharsets.UTF_8)
                         .setIndentString ("  ")
@@ -198,6 +205,8 @@ public class JDMCodeGenerator
       FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcTestResources);
 
       final JDMCodeModel cm = new JDMCodeModel (m_aProcessor);
+      if (m_aSettings.isReadExistingSPIFiles ())
+        cm.spiImplMap ().readInitial (aSrcTestResources);
 
       createTestJavaSelfTest (m_aSettings, cm);
 
@@ -206,6 +215,9 @@ public class JDMCodeGenerator
 
       // Create all enums
       JDMCodeGenEnum.createTestJavaEnums (cm, aEnums);
+
+      // Create all resources as last thing before writing
+      _createMetaInfServices (cm);
 
       new JCMWriter (cm).setCharset (StandardCharsets.UTF_8)
                         .setIndentString ("  ")

@@ -107,23 +107,24 @@ public final class JDMProcessorTest
   private static final File DIR_EXAMPLE_SRC = new File ("../ph-jdmc-example");
 
   @Test
-  public void testSimple () throws IOException
+  public void testCodeCreation () throws IOException
   {
-    final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.simple");
-    _applyTestJDM (p);
-    final JDMCodeGenerator cg = new JDMCodeGenerator (p);
-    cg.settings ().setUseBusinessObject (false);
-    cg.createCode (DIR_EXAMPLE_SRC);
-  }
-
-  @Test
-  public void testBusinessObject () throws IOException
-  {
-    final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.businessobj");
-    p.setClassNamePrefix ("Ex").setClassNameSuffix ("BO");
-    _applyTestJDM (p);
-    final JDMCodeGenerator cg = new JDMCodeGenerator (p);
-    cg.settings ().setUseBusinessObject (true).setSetterArePackagePrivate (true);
-    cg.createCode (DIR_EXAMPLE_SRC);
+    // Order is important here
+    {
+      final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.simple");
+      _applyTestJDM (p);
+      final JDMCodeGenerator cg = new JDMCodeGenerator (p);
+      cg.settings ().setUseBusinessObject (false);
+      cg.createCode (DIR_EXAMPLE_SRC);
+    }
+    // Second run - read SPI now
+    {
+      final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.businessobj");
+      p.setClassNamePrefix ("Ex").setClassNameSuffix ("BO");
+      _applyTestJDM (p);
+      final JDMCodeGenerator cg = new JDMCodeGenerator (p);
+      cg.settings ().setUseBusinessObject (true).setSetterArePackagePrivate (true).setReadExistingSPIFiles (true);
+      cg.createCode (DIR_EXAMPLE_SRC);
+    }
   }
 }

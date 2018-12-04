@@ -26,6 +26,7 @@ public final class JDMCodeGenSettings implements Serializable
 {
   private boolean m_bUseBusinessObject = false;
   private boolean m_bSetterArePackagePrivate = true;
+  private boolean m_bReadExistingSPIFiles = false;
 
   public boolean isUseBusinessObject ()
   {
@@ -65,6 +66,26 @@ public final class JDMCodeGenSettings implements Serializable
   public JDMCodeGenSettings setSetterArePackagePrivate (final boolean bSetterArePackagePrivate)
   {
     m_bSetterArePackagePrivate = bSetterArePackagePrivate;
+    return this;
+  }
+
+  public boolean isReadExistingSPIFiles ()
+  {
+    return m_bReadExistingSPIFiles;
+  }
+
+  /**
+   * Should existing SPI META-INF/services files be read or not. By default this
+   * does not happen.
+   *
+   * @param bReadExistingSPIFiles
+   *        <code>true</code> to read them, <code>false</code> if not.
+   * @return this for chaining
+   */
+  @Nonnull
+  public JDMCodeGenSettings setReadExistingSPIFiles (final boolean bReadExistingSPIFiles)
+  {
+    m_bReadExistingSPIFiles = bReadExistingSPIFiles;
     return this;
   }
 }
