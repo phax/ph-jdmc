@@ -53,12 +53,6 @@ public class ExHabitatbaumgruppeBOMicroTypeConverter
     for (final File aItem: aValue.pics()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
     }
-    for (final File aItem: aValue.pics()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
-    }
-    for (final IExBiotopbaumBO aItem: aValue.hBGzBB()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_HBGZBB));
-    }
     for (final IExBiotopbaumBO aItem: aValue.hBGzBB()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_HBGZBB));
     }

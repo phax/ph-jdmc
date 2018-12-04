@@ -65,9 +65,6 @@ public class StichprobeMicroTypeConverter
     for (final File aItem: aValue.pics()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
     }
-    for (final File aItem: aValue.pics()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
-    }
     aElement.setAttributeWithConversion(ATTR_DATE, aValue.getDate());
     aElement.setAttribute(ATTR_SIZE, aValue.getSize());
     aElement.setAttribute(ATTR_EXPOSITION, aValue.getExposition().getID());
@@ -90,26 +87,14 @@ public class StichprobeMicroTypeConverter
     for (final IBiotopbaum aItem: aValue.trees()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TREES));
     }
-    for (final IBiotopbaum aItem: aValue.trees()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TREES));
-    }
     aElement.appendElement(sNamespaceURI, ELEMENT_DESC).appendText(aValue.getDesc());
     aElement.setAttribute(ATTR_SAMEAGE, aValue.isSameAge());
     aElement.setAttribute(ATTR_ONELEVEL, aValue.isOneLevel());
     for (final IStichprobeDeadwood aItem: aValue.totSteh()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TOT_STEH));
     }
-    for (final IStichprobeDeadwood aItem: aValue.totSteh()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TOT_STEH));
-    }
     for (final IStichprobeDeadwood aItem: aValue.totLieg1()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TOT_LIEG_1));
-    }
-    for (final IStichprobeDeadwood aItem: aValue.totLieg1()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TOT_LIEG_1));
-    }
-    for (final IStichprobeDeadwood aItem: aValue.totLieg2()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TOT_LIEG_2));
     }
     for (final IStichprobeDeadwood aItem: aValue.totLieg2()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TOT_LIEG_2));

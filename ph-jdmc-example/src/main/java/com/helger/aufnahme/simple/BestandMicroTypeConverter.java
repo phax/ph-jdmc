@@ -56,15 +56,9 @@ public class BestandMicroTypeConverter
     for (final File aItem: aValue.pics()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
     }
-    for (final File aItem: aValue.pics()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
-    }
     aElement.setAttributeWithConversion(ATTR_DATE, aValue.getDate());
     if (aValue.hasVerortung()) {
       aElement.appendElement(sNamespaceURI, ELEMENT_VERORTUNG).appendText(aValue.getVerortung());
-    }
-    for (final IHabitatbaumgruppe aItem: aValue.bZHBG()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_BZHBG));
     }
     for (final IHabitatbaumgruppe aItem: aValue.bZHBG()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_BZHBG));

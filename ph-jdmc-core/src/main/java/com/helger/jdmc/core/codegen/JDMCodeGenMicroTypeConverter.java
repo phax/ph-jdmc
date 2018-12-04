@@ -37,6 +37,7 @@ import com.helger.jcodemodel.JForEach;
 import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
+import com.helger.jcodemodel.JMods;
 import com.helger.jcodemodel.JVar;
 import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
@@ -158,11 +159,10 @@ final class JDMCodeGenMicroTypeConverter
           final IJStatement aExec;
           if (bIsOpenEnded)
           {
-            final JForEach jForEach = jToMicroElement.body ()
-                                                     .forEach (JMod.FINAL,
-                                                               cm.ref (aField.getType ()),
-                                                               "aItem",
-                                                               jToObj.invoke (aField.getMethodGetterName (bIsOpenEnded)));
+            final JForEach jForEach = new JForEach (JMods.forVar (JMod.FINAL),
+                                                    cm.ref (aField.getType ()),
+                                                    "aItem",
+                                                    jToObj.invoke (aField.getMethodGetterName (bIsOpenEnded)));
             jForEach.body ()
                     .add (jElement.invoke ("appendChild")
                                   .arg (cm.ref (MicroTypeConverter.class)

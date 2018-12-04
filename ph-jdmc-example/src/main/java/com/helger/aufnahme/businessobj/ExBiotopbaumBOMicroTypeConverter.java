@@ -65,13 +65,7 @@ public class ExBiotopbaumBOMicroTypeConverter
     for (final File aItem: aValue.pics()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
     }
-    for (final File aItem: aValue.pics()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
-    }
     aElement.setAttributeWithConversion(ATTR_DATE, aValue.getDate());
-    for (final EExBiotopbaumTypeBO aItem: aValue.type()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TYPE));
-    }
     for (final EExBiotopbaumTypeBO aItem: aValue.type()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TYPE));
     }
@@ -94,19 +88,10 @@ public class ExBiotopbaumBOMicroTypeConverter
     for (final IExCaveTypeBO aItem: aValue.caves()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_CAVES));
     }
-    for (final IExCaveTypeBO aItem: aValue.caves()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_CAVES));
-    }
-    for (final IExTrunkSizeBO aItem: aValue.trunk()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TRUNK));
-    }
     for (final IExTrunkSizeBO aItem: aValue.trunk()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TRUNK));
     }
     aElement.setAttribute(ATTR_VITALITY, aValue.getVitality().getID());
-    for (final EExSpecialStructureBO aItem: aValue.specialStructure()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_SPECIALSTRUCTURE));
-    }
     for (final EExSpecialStructureBO aItem: aValue.specialStructure()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_SPECIALSTRUCTURE));
     }
@@ -123,12 +108,6 @@ public class ExBiotopbaumBOMicroTypeConverter
     }
     for (final IExBiotopbaumDeadwoodBO aItem: aValue.deadwoodCats()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_DEADWOODCATS));
-    }
-    for (final IExBiotopbaumDeadwoodBO aItem: aValue.deadwoodCats()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_DEADWOODCATS));
-    }
-    for (final IExBiotopbaumDecompositionDegreeBO aItem: aValue.deadwoodDoD()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_DEADWOODDOD));
     }
     for (final IExBiotopbaumDecompositionDegreeBO aItem: aValue.deadwoodDoD()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_DEADWOODDOD));
