@@ -409,14 +409,13 @@ public class JDMProcessor implements IJDMTypeResolver
     // Upon success, register this type
     m_aContext.types ().registerType (ret, (cm, cs) -> {
       JInvocation aNew = cm.ref (ret.getFQClassName ())._new ();
-      if (cs.isUseBusinessObject ())
-        for (final JDMField aField : ret.fields ())
-        {
-          IJExpression aTestVal = aField.getType ().createTestValue (cm, cs);
-          if (aField.getMultiplicity ().isOpenEnded ())
-            aTestVal = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ().arg (aTestVal);
-          aNew = aNew.arg (aTestVal);
-        }
+      for (final JDMField aField : ret.fields ())
+      {
+        IJExpression aTestVal = aField.getType ().createTestValue (cm, cs);
+        if (aField.getMultiplicity ().isOpenEnded ())
+          aTestVal = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ().arg (aTestVal);
+        aNew = aNew.arg (aTestVal);
+      }
       return aNew;
     });
     m_aTypes.add (ret);

@@ -3,7 +3,9 @@ package com.helger.aufnahme.simple;
 import java.io.File;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.datetime.PDTFactory;
+import com.helger.commons.mock.CommonsTestHelper;
 import com.helger.commons.string.StringHelper;
+import com.helger.xml.mock.XMLTestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -52,18 +54,22 @@ public final class BiotopbaumTest {
 
   @Test
   public void testSetterAndGetter() {
-    Biotopbaum x = new Biotopbaum(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), new CommonsArrayList<>(EBiotopbaumType.TOTHOLZ), "foo", EExposition.N, "foo", true, true, true, true, true, true, true, "foo", ETreeKind.Bergahorn, new CommonsArrayList<>(new CaveType()), new CommonsArrayList<>(new TrunkSize()), EVitality.ONE, new CommonsArrayList<>(ESpecialStructure._1), "foo", true, "foo", true, "foo", new CommonsArrayList<>(new BiotopbaumDeadwood()), new CommonsArrayList<>(new BiotopbaumDecompositionDegree()));
+    Biotopbaum x = new Biotopbaum(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), new CommonsArrayList<>(EBiotopbaumType.TOTHOLZ), "foo", EExposition.N, "foo", true, true, true, true, true, true, true, "foo", ETreeKind.Bergahorn, new CommonsArrayList<>(new CaveType(ECaveClass.ONE, ECaveType._1)), new CommonsArrayList<>(new TrunkSize(8, ETreeHeight.ONE)), EVitality.ONE, new CommonsArrayList<>(ESpecialStructure._1), "foo", true, "foo", true, "foo", new CommonsArrayList<>(new BiotopbaumDeadwood(EDeadwoodCategory.CLASS1, true, 8, 8)), new CommonsArrayList<>(new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8)));
     Assert.assertTrue(StringHelper.hasText(x.toString()));
-    Biotopbaum y = new Biotopbaum(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), new CommonsArrayList<>(EBiotopbaumType.TOTHOLZ), "foo", EExposition.N, "foo", true, true, true, true, true, true, true, "foo", ETreeKind.Bergahorn, new CommonsArrayList<>(new CaveType()), new CommonsArrayList<>(new TrunkSize()), EVitality.ONE, new CommonsArrayList<>(ESpecialStructure._1), "foo", true, "foo", true, "foo", new CommonsArrayList<>(new BiotopbaumDeadwood()), new CommonsArrayList<>(new BiotopbaumDecompositionDegree()));
+    Biotopbaum y = new Biotopbaum(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), new CommonsArrayList<>(EBiotopbaumType.TOTHOLZ), "foo", EExposition.N, "foo", true, true, true, true, true, true, true, "foo", ETreeKind.Bergahorn, new CommonsArrayList<>(new CaveType(ECaveClass.ONE, ECaveType._1)), new CommonsArrayList<>(new TrunkSize(8, ETreeHeight.ONE)), EVitality.ONE, new CommonsArrayList<>(ESpecialStructure._1), "foo", true, "foo", true, "foo", new CommonsArrayList<>(new BiotopbaumDeadwood(EDeadwoodCategory.CLASS1, true, 8, 8)), new CommonsArrayList<>(new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8)));
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
     Assert.assertEquals(x, y);
     Assert.assertEquals(x.hashCode(), y.hashCode());
+    CommonsTestHelper.testDefaultImplementationWithEqualContentObject(x, y);
+    // Test copy ctor
     Biotopbaum z = new Biotopbaum(x);
     Assert.assertTrue(StringHelper.hasText(z.toString()));
     Assert.assertNotSame(x, z);
     Assert.assertEquals(x, z);
     Assert.assertEquals(x.hashCode(), z.hashCode());
+    CommonsTestHelper.testDefaultImplementationWithEqualContentObject(x, z);
+    // Test all setters
     Assert.assertFalse(x.setBBNr(8).isChanged());
     Assert.assertFalse(x.setPics(new CommonsArrayList<>(new File("file.txt"))).isChanged());
     Assert.assertFalse(x.setDate(PDTFactory.getCurrentLocalDate()).isChanged());
@@ -80,8 +86,8 @@ public final class BiotopbaumTest {
     Assert.assertFalse(x.setHomogene(true).isChanged());
     Assert.assertFalse(x.setBeschreibung("foo").isChanged());
     Assert.assertFalse(x.setTreeKind(ETreeKind.Bergahorn).isChanged());
-    Assert.assertFalse(x.setCaves(new CommonsArrayList<>(new CaveType())).isChanged());
-    Assert.assertFalse(x.setTrunk(new CommonsArrayList<>(new TrunkSize())).isChanged());
+    Assert.assertFalse(x.setCaves(new CommonsArrayList<>(new CaveType(ECaveClass.ONE, ECaveType._1))).isChanged());
+    Assert.assertFalse(x.setTrunk(new CommonsArrayList<>(new TrunkSize(8, ETreeHeight.ONE))).isChanged());
     Assert.assertFalse(x.setVitality(EVitality.ONE).isChanged());
     Assert.assertFalse(x.setSpecialStructure(new CommonsArrayList<>(ESpecialStructure._1)).isChanged());
     Assert.assertFalse(x.setOtherSpecial("foo").isChanged());
@@ -89,7 +95,9 @@ public final class BiotopbaumTest {
     Assert.assertFalse(x.setAspirantDesc("foo").isChanged());
     Assert.assertFalse(x.setMarked(true).isChanged());
     Assert.assertFalse(x.setMarkedDesc("foo").isChanged());
-    Assert.assertFalse(x.setDeadwoodCats(new CommonsArrayList<>(new BiotopbaumDeadwood())).isChanged());
-    Assert.assertFalse(x.setDeadwoodDoD(new CommonsArrayList<>(new BiotopbaumDecompositionDegree())).isChanged());
+    Assert.assertFalse(x.setDeadwoodCats(new CommonsArrayList<>(new BiotopbaumDeadwood(EDeadwoodCategory.CLASS1, true, 8, 8))).isChanged());
+    Assert.assertFalse(x.setDeadwoodDoD(new CommonsArrayList<>(new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8))).isChanged());
+    // Check XML conversion
+    XMLTestHelper.testMicroTypeConversion(x);
   }
 }

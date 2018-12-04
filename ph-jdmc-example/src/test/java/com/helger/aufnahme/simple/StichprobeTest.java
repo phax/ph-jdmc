@@ -3,7 +3,9 @@ package com.helger.aufnahme.simple;
 import java.io.File;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.datetime.PDTFactory;
+import com.helger.commons.mock.CommonsTestHelper;
 import com.helger.commons.string.StringHelper;
+import com.helger.xml.mock.XMLTestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -52,20 +54,24 @@ public final class StichprobeTest {
 
   @Test
   public void testSetterAndGetter() {
-    Stichprobe x = new Stichprobe(8, new Reservat(), new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), 8, EExposition.N, "foo", "foo", 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, "foo", "foo", new CommonsArrayList<>(new Biotopbaum()), "foo", true, true, new CommonsArrayList<>(new StichprobeDeadwood()), new CommonsArrayList<>(new StichprobeDeadwood()), new CommonsArrayList<>(new StichprobeDeadwood()));
+    Stichprobe x = new Stichprobe(8, new Reservat(8, "foo", 8), new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), 8, EExposition.N, "foo", "foo", 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, "foo", "foo", new CommonsArrayList<>(new Biotopbaum(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), new CommonsArrayList<>(EBiotopbaumType.TOTHOLZ), "foo", EExposition.N, "foo", true, true, true, true, true, true, true, "foo", ETreeKind.Bergahorn, new CommonsArrayList<>(new CaveType(ECaveClass.ONE, ECaveType._1)), new CommonsArrayList<>(new TrunkSize(8, ETreeHeight.ONE)), EVitality.ONE, new CommonsArrayList<>(ESpecialStructure._1), "foo", true, "foo", true, "foo", new CommonsArrayList<>(new BiotopbaumDeadwood(EDeadwoodCategory.CLASS1, true, 8, 8)), new CommonsArrayList<>(new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8)))), "foo", true, true, new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8)), new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8)), new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8)));
     Assert.assertTrue(StringHelper.hasText(x.toString()));
-    Stichprobe y = new Stichprobe(8, new Reservat(), new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), 8, EExposition.N, "foo", "foo", 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, "foo", "foo", new CommonsArrayList<>(new Biotopbaum()), "foo", true, true, new CommonsArrayList<>(new StichprobeDeadwood()), new CommonsArrayList<>(new StichprobeDeadwood()), new CommonsArrayList<>(new StichprobeDeadwood()));
+    Stichprobe y = new Stichprobe(8, new Reservat(8, "foo", 8), new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), 8, EExposition.N, "foo", "foo", 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, "foo", "foo", new CommonsArrayList<>(new Biotopbaum(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), new CommonsArrayList<>(EBiotopbaumType.TOTHOLZ), "foo", EExposition.N, "foo", true, true, true, true, true, true, true, "foo", ETreeKind.Bergahorn, new CommonsArrayList<>(new CaveType(ECaveClass.ONE, ECaveType._1)), new CommonsArrayList<>(new TrunkSize(8, ETreeHeight.ONE)), EVitality.ONE, new CommonsArrayList<>(ESpecialStructure._1), "foo", true, "foo", true, "foo", new CommonsArrayList<>(new BiotopbaumDeadwood(EDeadwoodCategory.CLASS1, true, 8, 8)), new CommonsArrayList<>(new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8)))), "foo", true, true, new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8)), new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8)), new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8)));
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
     Assert.assertEquals(x, y);
     Assert.assertEquals(x.hashCode(), y.hashCode());
+    CommonsTestHelper.testDefaultImplementationWithEqualContentObject(x, y);
+    // Test copy ctor
     Stichprobe z = new Stichprobe(x);
     Assert.assertTrue(StringHelper.hasText(z.toString()));
     Assert.assertNotSame(x, z);
     Assert.assertEquals(x, z);
     Assert.assertEquals(x.hashCode(), z.hashCode());
+    CommonsTestHelper.testDefaultImplementationWithEqualContentObject(x, z);
+    // Test all setters
     Assert.assertFalse(x.setStichNr(8).isChanged());
-    Assert.assertFalse(x.setStichNrzR(new Reservat()).isChanged());
+    Assert.assertFalse(x.setStichNrzR(new Reservat(8, "foo", 8)).isChanged());
     Assert.assertFalse(x.setPics(new CommonsArrayList<>(new File("file.txt"))).isChanged());
     Assert.assertFalse(x.setDate(PDTFactory.getCurrentLocalDate()).isChanged());
     Assert.assertFalse(x.setSize(8).isChanged());
@@ -84,12 +90,14 @@ public final class StichprobeTest {
     Assert.assertFalse(x.setBKL9(4.0).isChanged());
     Assert.assertFalse(x.setUsage("foo").isChanged());
     Assert.assertFalse(x.setUsageDesc("foo").isChanged());
-    Assert.assertFalse(x.setTrees(new CommonsArrayList<>(new Biotopbaum())).isChanged());
+    Assert.assertFalse(x.setTrees(new CommonsArrayList<>(new Biotopbaum(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), new CommonsArrayList<>(EBiotopbaumType.TOTHOLZ), "foo", EExposition.N, "foo", true, true, true, true, true, true, true, "foo", ETreeKind.Bergahorn, new CommonsArrayList<>(new CaveType(ECaveClass.ONE, ECaveType._1)), new CommonsArrayList<>(new TrunkSize(8, ETreeHeight.ONE)), EVitality.ONE, new CommonsArrayList<>(ESpecialStructure._1), "foo", true, "foo", true, "foo", new CommonsArrayList<>(new BiotopbaumDeadwood(EDeadwoodCategory.CLASS1, true, 8, 8)), new CommonsArrayList<>(new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8))))).isChanged());
     Assert.assertFalse(x.setDesc("foo").isChanged());
     Assert.assertFalse(x.setSameAge(true).isChanged());
     Assert.assertFalse(x.setOneLevel(true).isChanged());
-    Assert.assertFalse(x.setTotSteh(new CommonsArrayList<>(new StichprobeDeadwood())).isChanged());
-    Assert.assertFalse(x.setTotLieg1(new CommonsArrayList<>(new StichprobeDeadwood())).isChanged());
-    Assert.assertFalse(x.setTotLieg2(new CommonsArrayList<>(new StichprobeDeadwood())).isChanged());
+    Assert.assertFalse(x.setTotSteh(new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8))).isChanged());
+    Assert.assertFalse(x.setTotLieg1(new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8))).isChanged());
+    Assert.assertFalse(x.setTotLieg2(new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8))).isChanged());
+    // Check XML conversion
+    XMLTestHelper.testMicroTypeConversion(x);
   }
 }

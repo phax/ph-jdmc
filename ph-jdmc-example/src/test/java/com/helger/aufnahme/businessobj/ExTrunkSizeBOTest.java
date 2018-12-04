@@ -2,6 +2,7 @@ package com.helger.aufnahme.businessobj;
 
 import com.helger.commons.string.StringHelper;
 import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
+import com.helger.xml.mock.XMLTestHelper;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,7 +27,10 @@ public final class ExTrunkSizeBOTest {
     ExTrunkSizeBO y = new ExTrunkSizeBO(8, EExTreeHeightBO.ONE);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Test all setters
     Assert.assertFalse(x.setBHD(8).isChanged());
     x.setHeight(EExTreeHeightBO.ONE);
+    // Check XML conversion
+    XMLTestHelper.testMicroTypeConversion(x);
   }
 }

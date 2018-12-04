@@ -211,7 +211,7 @@ public class JDMCodeGenerator
       createTestJavaSelfTest (m_aSettings, cm);
 
       // Create all classes
-      JDMCodeGenBase.createTestJavaClasses (m_aSettings, cm, aClasses);
+      JDMCodeGenTest.createTestJavaClasses (m_aSettings, cm, aClasses);
 
       // Create all enums
       JDMCodeGenEnum.createTestJavaEnums (cm, aEnums);

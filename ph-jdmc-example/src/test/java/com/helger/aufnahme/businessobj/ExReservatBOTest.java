@@ -2,6 +2,7 @@ package com.helger.aufnahme.businessobj;
 
 import com.helger.commons.string.StringHelper;
 import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
+import com.helger.xml.mock.XMLTestHelper;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,8 +27,11 @@ public final class ExReservatBOTest {
     ExReservatBO y = new ExReservatBO(8, "foo", 8);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Test all setters
     Assert.assertFalse(x.setRNr(8).isChanged());
     Assert.assertFalse(x.setName("foo").isChanged());
     Assert.assertFalse(x.setAreaSize(8).isChanged());
+    // Check XML conversion
+    XMLTestHelper.testMicroTypeConversion(x);
   }
 }

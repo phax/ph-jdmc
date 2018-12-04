@@ -1,6 +1,8 @@
 package com.helger.aufnahme.simple;
 
+import com.helger.commons.mock.CommonsTestHelper;
 import com.helger.commons.string.StringHelper;
+import com.helger.xml.mock.XMLTestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,13 +34,19 @@ public final class ReservatTest {
     Assert.assertNotSame(x, y);
     Assert.assertEquals(x, y);
     Assert.assertEquals(x.hashCode(), y.hashCode());
+    CommonsTestHelper.testDefaultImplementationWithEqualContentObject(x, y);
+    // Test copy ctor
     Reservat z = new Reservat(x);
     Assert.assertTrue(StringHelper.hasText(z.toString()));
     Assert.assertNotSame(x, z);
     Assert.assertEquals(x, z);
     Assert.assertEquals(x.hashCode(), z.hashCode());
+    CommonsTestHelper.testDefaultImplementationWithEqualContentObject(x, z);
+    // Test all setters
     Assert.assertFalse(x.setRNr(8).isChanged());
     Assert.assertFalse(x.setName("foo").isChanged());
     Assert.assertFalse(x.setAreaSize(8).isChanged());
+    // Check XML conversion
+    XMLTestHelper.testMicroTypeConversion(x);
   }
 }

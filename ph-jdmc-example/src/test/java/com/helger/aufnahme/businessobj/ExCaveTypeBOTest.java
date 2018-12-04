@@ -2,6 +2,7 @@ package com.helger.aufnahme.businessobj;
 
 import com.helger.commons.string.StringHelper;
 import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
+import com.helger.xml.mock.XMLTestHelper;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,7 +27,10 @@ public final class ExCaveTypeBOTest {
     ExCaveTypeBO y = new ExCaveTypeBO(EExCaveClassBO.ONE, EExCaveTypeBO._1);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Test all setters
     x.setClazz(EExCaveClassBO.ONE);
     x.setType(EExCaveTypeBO._1);
+    // Check XML conversion
+    XMLTestHelper.testMicroTypeConversion(x);
   }
 }

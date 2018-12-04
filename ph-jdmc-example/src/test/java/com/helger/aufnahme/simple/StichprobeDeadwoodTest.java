@@ -1,6 +1,8 @@
 package com.helger.aufnahme.simple;
 
+import com.helger.commons.mock.CommonsTestHelper;
 import com.helger.commons.string.StringHelper;
+import com.helger.xml.mock.XMLTestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -33,14 +35,20 @@ public final class StichprobeDeadwoodTest {
     Assert.assertNotSame(x, y);
     Assert.assertEquals(x, y);
     Assert.assertEquals(x.hashCode(), y.hashCode());
+    CommonsTestHelper.testDefaultImplementationWithEqualContentObject(x, y);
+    // Test copy ctor
     StichprobeDeadwood z = new StichprobeDeadwood(x);
     Assert.assertTrue(StringHelper.hasText(z.toString()));
     Assert.assertNotSame(x, z);
     Assert.assertEquals(x, z);
     Assert.assertEquals(x.hashCode(), z.hashCode());
+    CommonsTestHelper.testDefaultImplementationWithEqualContentObject(x, z);
+    // Test all setters
     Assert.assertFalse(x.setDoD(EDecompositionDegreeClass.CLASS0).isChanged());
     Assert.assertFalse(x.setTreeKind(ETreeKind.Bergahorn).isChanged());
     Assert.assertFalse(x.setLength(8).isChanged());
     Assert.assertFalse(x.setBHD(8).isChanged());
+    // Check XML conversion
+    XMLTestHelper.testMicroTypeConversion(x);
   }
 }

@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZonedDateTime;
+import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.math.MathHelper;
 import com.helger.xml.serialize.read.DOMReader;
@@ -36,7 +37,7 @@ public final class JDMSelfTest {
   })
   public void testSetterAndGetter() {
     IBestand var0;
-    var0 = new Bestand();
+    var0 = new Bestand(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), "foo", new CommonsArrayList<>(new Habitatbaumgruppe(8, new CommonsArrayList<>(new File("file.txt")), new CommonsArrayList<>(new Biotopbaum(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), new CommonsArrayList<>(EBiotopbaumType.TOTHOLZ), "foo", EExposition.N, "foo", true, true, true, true, true, true, true, "foo", ETreeKind.Bergahorn, new CommonsArrayList<>(new CaveType(ECaveClass.ONE, ECaveType._1)), new CommonsArrayList<>(new TrunkSize(8, ETreeHeight.ONE)), EVitality.ONE, new CommonsArrayList<>(ESpecialStructure._1), "foo", true, "foo", true, "foo", new CommonsArrayList<>(new BiotopbaumDeadwood(EDeadwoodCategory.CLASS1, true, 8, 8)), new CommonsArrayList<>(new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8)))), PDTFactory.getCurrentLocalDate(), "foo", true, true, true, true, true, EExposition.N, "foo", 8, true, "foo")), 8, "foo", true, true, EStockType._0, "foo", "foo", true, true, true, EStockDeadwood._0, "foo", EStockDeadwood._0, "foo");
     BigDecimal var1;
     var1 = MathHelper.toBigDecimal("12.3456");
     Assert.assertNotNull(var1);
@@ -44,11 +45,11 @@ public final class JDMSelfTest {
     var2 = MathHelper.toBigInteger("7890");
     Assert.assertNotNull(var2);
     IBiotopbaum var3;
-    var3 = new Biotopbaum();
+    var3 = new Biotopbaum(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), new CommonsArrayList<>(EBiotopbaumType.TOTHOLZ), "foo", EExposition.N, "foo", true, true, true, true, true, true, true, "foo", ETreeKind.Bergahorn, new CommonsArrayList<>(new CaveType(ECaveClass.ONE, ECaveType._1)), new CommonsArrayList<>(new TrunkSize(8, ETreeHeight.ONE)), EVitality.ONE, new CommonsArrayList<>(ESpecialStructure._1), "foo", true, "foo", true, "foo", new CommonsArrayList<>(new BiotopbaumDeadwood(EDeadwoodCategory.CLASS1, true, 8, 8)), new CommonsArrayList<>(new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8)));
     IBiotopbaumDeadwood var4;
-    var4 = new BiotopbaumDeadwood();
+    var4 = new BiotopbaumDeadwood(EDeadwoodCategory.CLASS1, true, 8, 8);
     IBiotopbaumDecompositionDegree var5;
-    var5 = new BiotopbaumDecompositionDegree();
+    var5 = new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8);
     Boolean var6;
     var6 = Boolean.TRUE;
     Assert.assertNotNull(var6);
@@ -60,7 +61,7 @@ public final class JDMSelfTest {
     var9 = Byte.valueOf(((byte) 1));
     Assert.assertNotNull(var9);
     ICaveType var10;
-    var10 = new CaveType();
+    var10 = new CaveType(ECaveClass.ONE, ECaveType._1);
     Character var11;
     var11 = Character.valueOf(' ');
     Assert.assertNotNull(var11);
@@ -128,7 +129,7 @@ public final class JDMSelfTest {
     var33 = Float.valueOf(5.0F);
     Assert.assertNotNull(var33);
     IHabitatbaumgruppe var34;
-    var34 = new Habitatbaumgruppe();
+    var34 = new Habitatbaumgruppe(8, new CommonsArrayList<>(new File("file.txt")), new CommonsArrayList<>(new Biotopbaum(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), new CommonsArrayList<>(EBiotopbaumType.TOTHOLZ), "foo", EExposition.N, "foo", true, true, true, true, true, true, true, "foo", ETreeKind.Bergahorn, new CommonsArrayList<>(new CaveType(ECaveClass.ONE, ECaveType._1)), new CommonsArrayList<>(new TrunkSize(8, ETreeHeight.ONE)), EVitality.ONE, new CommonsArrayList<>(ESpecialStructure._1), "foo", true, "foo", true, "foo", new CommonsArrayList<>(new BiotopbaumDeadwood(EDeadwoodCategory.CLASS1, true, 8, 8)), new CommonsArrayList<>(new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8)))), PDTFactory.getCurrentLocalDate(), "foo", true, true, true, true, true, EExposition.N, "foo", 8, true, "foo");
     int var35;
     var35 = 8;
     Integer var36;
@@ -160,7 +161,7 @@ public final class JDMSelfTest {
     var45 = new QName("urn:example", "elem");
     Assert.assertNotNull(var45);
     IReservat var46;
-    var46 = new Reservat();
+    var46 = new Reservat(8, "foo", 8);
     Serializable var47;
     var47 = ((Serializable)"object");
     Assert.assertNotNull(var47);
@@ -170,14 +171,14 @@ public final class JDMSelfTest {
     short var49;
     var49 = 12;
     IStichprobe var50;
-    var50 = new Stichprobe();
+    var50 = new Stichprobe(8, new Reservat(8, "foo", 8), new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), 8, EExposition.N, "foo", "foo", 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, "foo", "foo", new CommonsArrayList<>(new Biotopbaum(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), new CommonsArrayList<>(EBiotopbaumType.TOTHOLZ), "foo", EExposition.N, "foo", true, true, true, true, true, true, true, "foo", ETreeKind.Bergahorn, new CommonsArrayList<>(new CaveType(ECaveClass.ONE, ECaveType._1)), new CommonsArrayList<>(new TrunkSize(8, ETreeHeight.ONE)), EVitality.ONE, new CommonsArrayList<>(ESpecialStructure._1), "foo", true, "foo", true, "foo", new CommonsArrayList<>(new BiotopbaumDeadwood(EDeadwoodCategory.CLASS1, true, 8, 8)), new CommonsArrayList<>(new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8)))), "foo", true, true, new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8)), new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8)), new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8)));
     IStichprobeDeadwood var51;
-    var51 = new StichprobeDeadwood();
+    var51 = new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8);
     String var52;
     var52 = "foo";
     Assert.assertNotNull(var52);
     ITrunkSize var53;
-    var53 = new TrunkSize();
+    var53 = new TrunkSize(8, ETreeHeight.ONE);
     ZonedDateTime var54;
     var54 = PDTFactory.getCurrentZonedDateTime();
     Assert.assertNotNull(var54);

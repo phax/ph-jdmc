@@ -1,6 +1,8 @@
 package com.helger.aufnahme.simple;
 
+import com.helger.commons.mock.CommonsTestHelper;
 import com.helger.commons.string.StringHelper;
+import com.helger.xml.mock.XMLTestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,5 +31,9 @@ public final class LeergutTest {
     Assert.assertNotSame(x, y);
     Assert.assertEquals(x, y);
     Assert.assertEquals(x.hashCode(), y.hashCode());
+    CommonsTestHelper.testDefaultImplementationWithEqualContentObject(x, y);
+    // Test all setters
+    // Check XML conversion
+    XMLTestHelper.testMicroTypeConversion(x);
   }
 }
