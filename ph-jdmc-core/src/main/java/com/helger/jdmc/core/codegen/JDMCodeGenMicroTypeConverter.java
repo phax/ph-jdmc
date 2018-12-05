@@ -29,6 +29,7 @@ import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJStatement;
+import com.helger.jcodemodel.JBlock;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
@@ -65,11 +66,12 @@ final class JDMCodeGenMicroTypeConverter
 
   private static boolean _isElement (@Nonnull final JDMField aField)
   {
-    if (aField.getMultiplicity ().isOpenEnded ())
-    {
-      // Lists are always elements
-      return true;
-    }
+    if (false)
+      if (aField.getMultiplicity ().isOpenEnded ())
+      {
+        // Lists are always elements
+        return true;
+      }
     if (aField.getType ().isPrimitive ())
     {
       // Primitive types are always attributes
@@ -80,14 +82,14 @@ final class JDMCodeGenMicroTypeConverter
       // Enums are always attributes
       return false;
     }
-    if (_isString (aField.getType ()))
-    {
-      // Special predefined types that should be elements
-      return true;
-    }
     if (!aField.getType ().isPredefined ())
     {
       // Nested, created types, are always elements, except for enums
+      return true;
+    }
+    if (_isString (aField.getType ()))
+    {
+      // Special predefined types that should be elements
       return true;
     }
 
@@ -146,7 +148,7 @@ final class JDMCodeGenMicroTypeConverter
       final boolean bIsElement = _isElement (aField);
       final JFieldVar jFieldName = jClass.field (JMod.PRIVATE | JMod.STATIC | JMod.FINAL,
                                                  cm.ref (String.class),
-                                                 (bIsElement ? "ELEMENT_" : "ATTR_") +
+                                                 (bIsOpenEnded || bIsElement ? "ELEMENT_" : "ATTR_") +
                                                                         aField.getOriginalFieldName ()
                                                                               .toUpperCase (Locale.ROOT),
                                                  JExpr.lit (aField.getFieldName ().toLowerCase (Locale.ROOT)));
@@ -154,76 +156,79 @@ final class JDMCodeGenMicroTypeConverter
       // To MicroElement
       {
         final boolean bHasHasMethod = !bIsPrimitive && eMultiplicity.isMin0 () && !bIsOpenEnded;
+
+        JBlock aExecBlock = jToMicroElement.body ();
+        IJExpression aSrcElement = jElement;
+        IJExpression aNameVar = jFieldName;
+        JVar aExecObj = jToObj;
+        IJExpression aValueProvider;
+        if (bIsOpenEnded)
+        {
+          final JForEach jForEach = new JForEach (JMods.forVar (JMod.FINAL),
+                                                  cm.ref (aField.getType ()),
+                                                  "aItem",
+                                                  jToObj.invoke (aField.getMethodGetterName (bIsOpenEnded)));
+          aExecBlock.add (jForEach);
+          aExecBlock = jForEach.body ();
+          aExecObj = jForEach.var ();
+
+          if (!bIsElement)
+          {
+            aSrcElement = jElement.invoke ("appendElement").arg (jToNS).arg (jFieldName);
+            aNameVar = JExpr.lit ("value");
+          }
+          aValueProvider = aExecObj;
+        }
+        else
+        {
+          aValueProvider = aExecObj.invoke (aField.getMethodGetterName (bIsOpenEnded));
+        }
+        final IJStatement aExec;
+
         if (bIsElement)
         {
-          final IJStatement aExec;
-          if (bIsOpenEnded)
+          if (_isString (aField.getType ()))
           {
-            final JForEach jForEach = new JForEach (JMods.forVar (JMod.FINAL),
-                                                    cm.ref (aField.getType ()),
-                                                    "aItem",
-                                                    jToObj.invoke (aField.getMethodGetterName (bIsOpenEnded)));
-            jForEach.body ()
-                    .add (jElement.invoke ("appendChild")
-                                  .arg (cm.ref (MicroTypeConverter.class)
-                                          .staticInvoke ("convertToMicroElement")
-                                          .arg (jForEach.var ())
-                                          .arg (jToNS)
-                                          .arg (jFieldName)));
-            aExec = jForEach;
+            aExec = aSrcElement.invoke ("appendElement")
+                               .arg (jToNS)
+                               .arg (aNameVar)
+                               .invoke ("appendText")
+                               .arg (aValueProvider);
           }
           else
-            if (_isString (aField.getType ()))
-            {
-              aExec = jElement.invoke ("appendElement")
-                              .arg (jToNS)
-                              .arg (jFieldName)
-                              .invoke ("appendText")
-                              .arg (jToObj.invoke (aField.getMethodGetterName (bIsOpenEnded)));
-            }
-            else
-            {
-              aExec = jElement.invoke ("appendChild")
-                              .arg (cm.ref (MicroTypeConverter.class)
-                                      .staticInvoke ("convertToMicroElement")
-                                      .arg (jToObj.invoke (aField.getMethodGetterName (bIsOpenEnded)))
-                                      .arg (jToNS)
-                                      .arg (jFieldName));
-            }
+          {
+            aExec = aSrcElement.invoke ("appendChild")
+                               .arg (cm.ref (MicroTypeConverter.class)
+                                       .staticInvoke ("convertToMicroElement")
+                                       .arg (aValueProvider)
+                                       .arg (jToNS)
+                                       .arg (aNameVar));
+          }
 
           if (bHasHasMethod)
-            jToMicroElement.body ()._if (jToObj.invoke (aField.getMethodHasName ()), aExec);
+            aExecBlock._if (aExecObj.invoke (aField.getMethodHasName ()), aExec);
           else
-            jToMicroElement.body ().add (aExec);
+            aExecBlock.add (aExec);
         }
         else
         {
           // attribute
           if (aField.getType ().isEnum ())
           {
-            final IJStatement aExec = jElement.invoke ("setAttribute")
-                                              .arg (jFieldName)
-                                              .arg (jToObj.invoke (aField.getMethodGetterName (bIsOpenEnded))
-                                                          .invoke ("getID"));
+            aExec = aSrcElement.invoke ("setAttribute").arg (aNameVar).arg (aValueProvider.invoke ("getID"));
             if (bHasHasMethod)
-              jToMicroElement.body ()._if (jToObj.invoke (aField.getMethodHasName ()), aExec);
+              aExecBlock._if (aExecObj.invoke (aField.getMethodHasName ()), aExec);
             else
-              jToMicroElement.body ().add (aExec);
+              aExecBlock.add (aExec);
           }
           else
             if (aField.getType ().isPrimitive ())
             {
-              jToMicroElement.body ()
-                             .add (jElement.invoke ("setAttribute")
-                                           .arg (jFieldName)
-                                           .arg (jToObj.invoke (aField.getMethodGetterName (bIsOpenEnded))));
+              aExecBlock.add (aSrcElement.invoke ("setAttribute").arg (aNameVar).arg (aValueProvider));
             }
             else
             {
-              jToMicroElement.body ()
-                             .add (jElement.invoke ("setAttributeWithConversion")
-                                           .arg (jFieldName)
-                                           .arg (jToObj.invoke (aField.getMethodGetterName (bIsOpenEnded))));
+              aExecBlock.add (aSrcElement.invoke ("setAttributeWithConversion").arg (aNameVar).arg (aValueProvider));
             }
         }
       }

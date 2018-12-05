@@ -63,11 +63,11 @@ public class ExBiotopbaumBOMicroTypeConverter
     super.setObjectFields(aValue, aElement);
     aElement.setAttribute(ATTR_BBNR, aValue.getBBNr());
     for (final File aItem: aValue.pics()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
+      aElement.appendElement(sNamespaceURI, ELEMENT_PICS).setAttributeWithConversion("value", aItem);
     }
     aElement.setAttributeWithConversion(ATTR_DATE, aValue.getDate());
     for (final EExBiotopbaumTypeBO aItem: aValue.type()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_TYPE));
+      aElement.appendElement(sNamespaceURI, ELEMENT_TYPE).setAttribute("value", aItem.getID());
     }
     if (aValue.hasLocation()) {
       aElement.appendElement(sNamespaceURI, ELEMENT_LOCATION).appendText(aValue.getLocation());
@@ -93,7 +93,7 @@ public class ExBiotopbaumBOMicroTypeConverter
     }
     aElement.setAttribute(ATTR_VITALITY, aValue.getVitality().getID());
     for (final EExSpecialStructureBO aItem: aValue.specialStructure()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_SPECIALSTRUCTURE));
+      aElement.appendElement(sNamespaceURI, ELEMENT_SPECIALSTRUCTURE).setAttribute("value", aItem.getID());
     }
     if (aValue.hasOtherSpecial()) {
       aElement.appendElement(sNamespaceURI, ELEMENT_OTHERSPECIAL).appendText(aValue.getOtherSpecial());

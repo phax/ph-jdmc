@@ -55,7 +55,7 @@ public class ExBestandBOMicroTypeConverter
     super.setObjectFields(aValue, aElement);
     aElement.setAttribute(ATTR_BNR, aValue.getBNr());
     for (final File aItem: aValue.pics()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
+      aElement.appendElement(sNamespaceURI, ELEMENT_PICS).setAttributeWithConversion("value", aItem);
     }
     aElement.setAttributeWithConversion(ATTR_DATE, aValue.getDate());
     if (aValue.hasVerortung()) {

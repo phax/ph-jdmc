@@ -64,7 +64,7 @@ public class ExStichprobeBOMicroTypeConverter
     aElement.setAttribute(ATTR_STICHNR, aValue.getStichNr());
     aElement.appendChild(MicroTypeConverter.convertToMicroElement(aValue.getStichNrzR(), sNamespaceURI, ELEMENT_STICHNRZR));
     for (final File aItem: aValue.pics()) {
-      aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_PICS));
+      aElement.appendElement(sNamespaceURI, ELEMENT_PICS).setAttributeWithConversion("value", aItem);
     }
     aElement.setAttributeWithConversion(ATTR_DATE, aValue.getDate());
     aElement.setAttribute(ATTR_SIZE, aValue.getSize());
