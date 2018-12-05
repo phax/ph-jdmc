@@ -31,6 +31,7 @@ import com.helger.commons.collection.impl.CommonsLinkedHashSet;
 import com.helger.commons.collection.impl.ICommonsOrderedSet;
 import com.helger.commons.io.file.FileSystemIterator;
 import com.helger.commons.io.file.SimpleFileIO;
+import com.helger.commons.string.StringHelper;
 
 @NotThreadSafe
 final class SPIImplMap
@@ -48,11 +49,14 @@ final class SPIImplMap
         // Filename = interface FQCN
         final String sKey = aFile.getName ();
         final ICommonsOrderedSet <String> aSet = new CommonsLinkedHashSet <> ();
-        SimpleFileIO.readFileLines (aFile, StandardCharsets.UTF_8, aSet::add);
+        SimpleFileIO.readFileLines (aFile, StandardCharsets.UTF_8, sLine -> {
+          final String sCleanLine = StringHelper.trim (sLine);
+          if (StringHelper.hasText (sCleanLine) && !sCleanLine.startsWith ("#"))
+            aSet.add (sCleanLine);
+        });
         if (aSet.isNotEmpty ())
           m_aMML.put (sKey, aSet);
       }
-
   }
 
   public void register (@Nonnull final Class <?> aInterface, @Nonnull @Nonempty final String sImplClass)
