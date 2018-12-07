@@ -89,6 +89,12 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      
+      <dependency>
+        <groupId>com.helger</groupId>
+        <artifactId>ph-jdmc-core</artifactId>
+        <version>${project.version}</version> 
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -107,5 +113,6 @@
   <modules>
     <module>ph-jdmc-core</module>
     <module>ph-jdmc-example</module>
+    <module>ph-jdmc-maven-plugin</module>
   </modules>
 </project>

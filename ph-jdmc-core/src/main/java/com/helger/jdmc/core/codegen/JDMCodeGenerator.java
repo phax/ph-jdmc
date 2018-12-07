@@ -37,7 +37,6 @@ import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.fmt.JTextFile;
 import com.helger.jcodemodel.writer.JCMWriter;
-import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 import com.helger.jdmc.core.JDMProcessor;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMEnum;
@@ -125,9 +124,10 @@ public class JDMCodeGenerator
       // Create all resources as last thing before writing
       _createMetaInfServices (cm);
 
-      new JCMWriter (cm).setCharset (StandardCharsets.UTF_8)
-                        .setIndentString ("  ")
-                        .build (aSrcMainJava, aSrcMainResources, (IProgressTracker) null);
+      new JCMWriter (cm).setCharset (m_aSettings.getCharset ())
+                        .setNewLine (m_aSettings.getNewLineMode ().getText ())
+                        .setIndentString (m_aSettings.getIndentString ())
+                        .build (aSrcMainJava, aSrcMainResources, m_aSettings.getProgressTracker ());
     }
     catch (final JClassAlreadyExistsException ex)
     {
@@ -161,9 +161,10 @@ public class JDMCodeGenerator
       // Create all resources as last thing before writing
       _createMetaInfServices (cm);
 
-      new JCMWriter (cm).setCharset (StandardCharsets.UTF_8)
-                        .setIndentString ("  ")
-                        .build (aSrcTestJava, aSrcTestResources, (IProgressTracker) null);
+      new JCMWriter (cm).setCharset (m_aSettings.getCharset ())
+                        .setNewLine (m_aSettings.getNewLineMode ().getText ())
+                        .setIndentString (m_aSettings.getIndentString ())
+                        .build (aSrcTestJava, aSrcTestResources, m_aSettings.getProgressTracker ());
     }
     catch (final JClassAlreadyExistsException ex)
     {

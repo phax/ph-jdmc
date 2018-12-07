@@ -17,9 +17,15 @@
 package com.helger.jdmc.core.codegen;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.system.ENewLineMode;
+import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 import com.helger.tenancy.IBusinessObject;
 
 public final class JDMCodeGenSettings implements Serializable
@@ -27,6 +33,10 @@ public final class JDMCodeGenSettings implements Serializable
   private boolean m_bUseBusinessObject = false;
   private boolean m_bSetterArePackagePrivate = true;
   private boolean m_bReadExistingSPIFiles = false;
+  private Charset m_aCharset = StandardCharsets.UTF_8;
+  private ENewLineMode m_eNewLineMode = ENewLineMode.DEFAULT;
+  private String m_sIndentString = "  ";
+  private IProgressTracker m_aProgressTracker;
 
   public boolean isUseBusinessObject ()
   {
@@ -86,6 +96,61 @@ public final class JDMCodeGenSettings implements Serializable
   public JDMCodeGenSettings setReadExistingSPIFiles (final boolean bReadExistingSPIFiles)
   {
     m_bReadExistingSPIFiles = bReadExistingSPIFiles;
+    return this;
+  }
+
+  @Nonnull
+  public Charset getCharset ()
+  {
+    return m_aCharset;
+  }
+
+  @Nonnull
+  public JDMCodeGenSettings setCharset (@Nonnull final Charset aCharset)
+  {
+    ValueEnforcer.notNull (aCharset, "Charset");
+    m_aCharset = aCharset;
+    return this;
+  }
+
+  @Nonnull
+  public ENewLineMode getNewLineMode ()
+  {
+    return m_eNewLineMode;
+  }
+
+  @Nonnull
+  public JDMCodeGenSettings setNewLineMode (@Nonnull final ENewLineMode eNewLineMode)
+  {
+    ValueEnforcer.notNull (eNewLineMode, "NewLineMode");
+    m_eNewLineMode = eNewLineMode;
+    return this;
+  }
+
+  @Nonnull
+  public String getIndentString ()
+  {
+    return m_sIndentString;
+  }
+
+  @Nonnull
+  public JDMCodeGenSettings setIndentString (@Nonnull final String sIndentString)
+  {
+    ValueEnforcer.notNull (sIndentString, "IndentString");
+    m_sIndentString = sIndentString;
+    return this;
+  }
+
+  @Nullable
+  public IProgressTracker getProgressTracker ()
+  {
+    return m_aProgressTracker;
+  }
+
+  @Nonnull
+  public JDMCodeGenSettings setProgressTracker (@Nullable final IProgressTracker aProgressTracker)
+  {
+    m_aProgressTracker = aProgressTracker;
     return this;
   }
 }

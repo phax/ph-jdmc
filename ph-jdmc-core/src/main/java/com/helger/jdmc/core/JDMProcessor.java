@@ -18,6 +18,7 @@ package com.helger.jdmc.core;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.function.Function;
@@ -67,6 +68,7 @@ public class JDMProcessor implements IJDMTypeResolver
   private static final Logger LOGGER = LoggerFactory.getLogger (JDMProcessor.class);
 
   private final String m_sDestinationPackageName;
+  private Charset m_aSourceCharset = StandardCharsets.UTF_8;
   private String m_sClassNamePrefix = null;
   private String m_sClassNameSuffix = null;
   private final JDMContext m_aContext = new JDMContext ();
@@ -82,6 +84,20 @@ public class JDMProcessor implements IJDMTypeResolver
   public final String getDestinationPackageName ()
   {
     return m_sDestinationPackageName;
+  }
+
+  @Nonnull
+  public final Charset getSourceCharset ()
+  {
+    return m_aSourceCharset;
+  }
+
+  @Nonnull
+  public final JDMProcessor setSourceCharset (@Nonnull final Charset aSourceCharset)
+  {
+    ValueEnforcer.notNull (aSourceCharset, "Charset");
+    m_aSourceCharset = aSourceCharset;
+    return this;
   }
 
   @Nullable
@@ -137,7 +153,7 @@ public class JDMProcessor implements IJDMTypeResolver
     LOGGER.info ("Parsing JSON '" + aSrcFile.getAbsolutePath () + "'");
 
     final CollectingJsonParserHandler aHandler = new CollectingJsonParserHandler ();
-    JsonReader.parseJson (new FileSystemResource (aSrcFile).getReader (StandardCharsets.UTF_8), aHandler, x -> {
+    JsonReader.parseJson (new FileSystemResource (aSrcFile).getReader (m_aSourceCharset), aHandler, x -> {
       x.setTrackPosition (true);
     }, ex -> LOGGER.error (ex.getMessage ()));
     final IJson aJson = aHandler.getJson ();
