@@ -19,43 +19,28 @@ package com.helger.jdmc.core.codegen;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.ReturnsMutableObject;
-import com.helger.commons.collection.CollectionHelper;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.collection.impl.ICommonsOrderedSet;
 import com.helger.commons.io.file.FileOperationManager;
 import com.helger.commons.string.StringHelper;
-import com.helger.jcodemodel.EClassType;
-import com.helger.jcodemodel.JAnnotationUse;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.fmt.JTextFile;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 import com.helger.jdmc.core.JDMProcessor;
-import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
-import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMEnum;
-import com.helger.jdmc.core.datamodel.JDMType;
-import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
 
 @NotThreadSafe
 public class JDMCodeGenerator
@@ -77,60 +62,6 @@ public class JDMCodeGenerator
   public final JDMCodeGenSettings settings ()
   {
     return m_aSettings;
-  }
-
-  public void createMainJavaClasses (@Nonnull final JDMCodeModel cm,
-                                     @Nonnull final ICommonsList <JDMClass> aClasses) throws JClassAlreadyExistsException
-  {
-    for (final JDMClass aClass : aClasses)
-    {
-      final JDefinedClass jInterface = JDMCodeGenBase.createMainJavaInterface (m_aProcessor, m_aSettings, cm, aClass);
-      final JDefinedClass jDomainClass = JDMCodeGenBase.createMainJavaClass (m_aProcessor,
-                                                                             m_aSettings,
-                                                                             cm,
-                                                                             aClass,
-                                                                             jInterface);
-      JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings, cm, aClass, jDomainClass);
-    }
-  }
-
-  public void createTestJavaSelfTest (@Nonnull final JDMCodeGenSettings aSettings,
-                                      @Nonnull final JDMCodeModel cm) throws JClassAlreadyExistsException
-  {
-    final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
-                                                AbstractJDMClassType.getFQCN (m_aProcessor.getDestinationPackageName (),
-                                                                              "JDMSelfTest"),
-                                                EClassType.CLASS);
-    jTestClass.javadoc ().add ("This is the self-test class of JDM\n");
-    jTestClass.javadoc ().add ("This class was initially automatically created\n");
-    jTestClass.javadoc ().addAuthor ().add (AUTHOR);
-
-    if (aSettings.isUseBusinessObject ())
-    {
-      // JUnit 4 test rule
-      final JVar jRule = jTestClass.field (JMod.PUBLIC | JMod.FINAL,
-                                           cm.ref (TestRule.class),
-                                           "m_aRule",
-                                           cm.ref (PhotonBasicWebTestRule.class)._new ());
-      jRule.annotate (Rule.class);
-    }
-
-    final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testSetterAndGetter");
-    jMethod.annotate (Test.class);
-    jMethod.annotate (SuppressWarnings.class)
-           .paramArray (JAnnotationUse.SPECIAL_KEY_VALUE, new String [] { "unused", "cast" });
-
-    int nCount = 0;
-    for (final JDMType aType : CollectionHelper.getSorted (m_aProcessor.getContext ().types ().getTypes (),
-                                                           Comparator.comparing (JDMType::getClassName)))
-    {
-      final JVar aVar = jMethod.body ().decl (cm.ref (aType, EJDMMultiplicity.MANDATORY), "var" + nCount);
-      jMethod.body ().assign (aVar, aType.createTestValue (cm, aSettings));
-      if (!aType.isPrimitive () && aType.isImmutable ())
-        jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotNull").arg (aVar));
-
-      ++nCount;
-    }
   }
 
   private static void _createMetaInfServices (@Nonnull final JDMCodeModel cm)
@@ -172,7 +103,16 @@ public class JDMCodeGenerator
         cm.spiImplMap ().readInitial (aSrcMainResources);
 
       // Create all classes
-      createMainJavaClasses (cm, aClasses);
+      for (final JDMClass aClass : aClasses)
+      {
+        final JDefinedClass jInterface = JDMCodeGenBase.createMainJavaInterface (m_aProcessor, m_aSettings, cm, aClass);
+        final JDefinedClass jDomainClass = JDMCodeGenBase.createMainJavaClass (m_aProcessor,
+                                                                               m_aSettings,
+                                                                               cm,
+                                                                               aClass,
+                                                                               jInterface);
+        JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings, cm, aClass, jDomainClass);
+      }
 
       // Create all enums
       JDMCodeGenEnum.createMainJavaEnums (cm, aEnums);
@@ -206,10 +146,14 @@ public class JDMCodeGenerator
       if (m_aSettings.isReadExistingSPIFiles ())
         cm.spiImplMap ().readInitial (aSrcTestResources);
 
-      createTestJavaSelfTest (m_aSettings, cm);
+      JDMCodeGenTest.createTestJavaSelfTest (m_aProcessor, m_aSettings, cm);
+      JDMCodeGenTest.createSPITest (m_aProcessor.getDestinationPackageName (), cm);
 
-      // Create all classes
-      JDMCodeGenTest.createTestJavaClasses (m_aSettings, cm, aClasses);
+      // Create test classes for all domain classes
+      for (final JDMClass aClass : aClasses)
+      {
+        JDMCodeGenTest.createTestJavaClass (m_aSettings, cm, aClass);
+      }
 
       // Create all enums
       JDMCodeGenEnum.createTestJavaEnums (cm, aEnums);

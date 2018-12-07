@@ -40,7 +40,7 @@ public final class JDMSelfTest {
     "unused",
     "cast"
   })
-  public void testSetterAndGetter() {
+  public void testMockValueCreation() {
     BigDecimal var0;
     var0 = MathHelper.toBigDecimal("12.3456");
     Assert.assertNotNull(var0);

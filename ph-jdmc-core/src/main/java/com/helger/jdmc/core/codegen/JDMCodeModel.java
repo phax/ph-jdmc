@@ -31,13 +31,13 @@ import com.helger.jdmc.core.datamodel.JDMType;
 
 public final class JDMCodeModel extends JCodeModel
 {
-  private final IJDMTypeResolver m_aProcessor;
+  private final IJDMTypeResolver m_aTypeResolver;
   private final SPIImplMap m_aSPIImplMap = new SPIImplMap ();
 
-  public JDMCodeModel (@Nonnull final IJDMTypeResolver aProcessor)
+  public JDMCodeModel (@Nonnull final IJDMTypeResolver aTypeResolver)
   {
-    ValueEnforcer.notNull (aProcessor, "Processor");
-    m_aProcessor = aProcessor;
+    ValueEnforcer.notNull (aTypeResolver, "Processor");
+    m_aTypeResolver = aTypeResolver;
   }
 
   @Nonnull
@@ -51,7 +51,7 @@ public final class JDMCodeModel extends JCodeModel
   public AbstractJClass ref (@Nonnull final JDMType aType)
   {
     String sTypeName = aType.getFQCN ();
-    final AbstractJDMClassType aExistingClass = m_aProcessor.findTypeByName (sTypeName);
+    final AbstractJDMClassType aExistingClass = m_aTypeResolver.findTypeByName (sTypeName);
     if (aExistingClass != null && aExistingClass instanceof JDMClass)
     {
       // It's one of our created classes - add an "I" prefix
