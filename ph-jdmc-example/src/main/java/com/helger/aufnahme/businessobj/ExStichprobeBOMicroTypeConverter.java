@@ -108,10 +108,10 @@ public class ExStichprobeBOMicroTypeConverter
     @Nonnull
     final IMicroElement aElement) {
     final int nStichNr = aElement.getAttributeValueAsInt(ATTR_STICHNR, -1);
-    final IExReservatBO aStichNrzR = MicroTypeConverter.convertToNative(aElement.getFirstChildElement(ELEMENT_STICHNRZR), IExReservatBO.class);
+    final IExReservatBO aStichNrzR = MicroTypeConverter.convertToNative(aElement.getFirstChildElement(ELEMENT_STICHNRZR), ExReservatBO.class);
     final ICommonsList<File> aPics = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_PICS)) {
-      aPics.add(MicroTypeConverter.convertToNative(aChild, File.class));
+      aPics.add(aChild.getAttributeValueWithConversion("value", File.class));
     }
     final LocalDate aDate = aElement.getAttributeValueWithConversion(ATTR_DATE, LocalDate.class);
     final int nSize = aElement.getAttributeValueAsInt(ATTR_SIZE, -1);
@@ -132,22 +132,22 @@ public class ExStichprobeBOMicroTypeConverter
     final String sUsageDesc = MicroHelper.getChildTextContent(aElement, ELEMENT_USAGEDESC);
     final ICommonsList<IExBiotopbaumBO> aTrees = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_TREES)) {
-      aTrees.add(MicroTypeConverter.convertToNative(aChild, IExBiotopbaumBO.class));
+      aTrees.add(MicroTypeConverter.convertToNative(aChild, ExBiotopbaumBO.class));
     }
     final String sDesc = MicroHelper.getChildTextContent(aElement, ELEMENT_DESC);
     final boolean bSameAge = aElement.getAttributeValueAsBool(ATTR_SAMEAGE, false);
     final boolean bOneLevel = aElement.getAttributeValueAsBool(ATTR_ONELEVEL, false);
     final ICommonsList<IExStichprobeDeadwoodBO> aTotSteh = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_TOT_STEH)) {
-      aTotSteh.add(MicroTypeConverter.convertToNative(aChild, IExStichprobeDeadwoodBO.class));
+      aTotSteh.add(MicroTypeConverter.convertToNative(aChild, ExStichprobeDeadwoodBO.class));
     }
     final ICommonsList<IExStichprobeDeadwoodBO> aTotLieg1 = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_TOT_LIEG_1)) {
-      aTotLieg1 .add(MicroTypeConverter.convertToNative(aChild, IExStichprobeDeadwoodBO.class));
+      aTotLieg1 .add(MicroTypeConverter.convertToNative(aChild, ExStichprobeDeadwoodBO.class));
     }
     final ICommonsList<IExStichprobeDeadwoodBO> aTotLieg2 = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_TOT_LIEG_2)) {
-      aTotLieg2 .add(MicroTypeConverter.convertToNative(aChild, IExStichprobeDeadwoodBO.class));
+      aTotLieg2 .add(MicroTypeConverter.convertToNative(aChild, ExStichprobeDeadwoodBO.class));
     }
     return new ExStichprobeBO(super.getStubObject(aElement), nStichNr, aStichNrzR, aPics, aDate, nSize, eExposition, sHanglage, sGesellschaft, dBKL0, dBKL1, dBKL2, dBKL3, dBKL4, dBKL5, dBKL6, dBKL7, dBKL8, dBKL9, sUsage, sUsageDesc, aTrees, sDesc, bSameAge, bOneLevel, aTotSteh, aTotLieg1, aTotLieg2);
   }

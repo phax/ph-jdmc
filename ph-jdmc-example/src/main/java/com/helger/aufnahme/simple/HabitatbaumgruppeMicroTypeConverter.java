@@ -79,11 +79,11 @@ public class HabitatbaumgruppeMicroTypeConverter
     final int nHBGNr = aElement.getAttributeValueAsInt(ATTR_HBGNR, -1);
     final ICommonsList<File> aPics = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_PICS)) {
-      aPics.add(MicroTypeConverter.convertToNative(aChild, File.class));
+      aPics.add(aChild.getAttributeValueWithConversion("value", File.class));
     }
     final ICommonsList<IBiotopbaum> aHBGzBB = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_HBGZBB)) {
-      aHBGzBB.add(MicroTypeConverter.convertToNative(aChild, IBiotopbaum.class));
+      aHBGzBB.add(MicroTypeConverter.convertToNative(aChild, Biotopbaum.class));
     }
     final LocalDate aDate = aElement.getAttributeValueWithConversion(ATTR_DATE, LocalDate.class);
     final String sStandort = MicroHelper.getChildTextContent(aElement, ELEMENT_STANDORT);

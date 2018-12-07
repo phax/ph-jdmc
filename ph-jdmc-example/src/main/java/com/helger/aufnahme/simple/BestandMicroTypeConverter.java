@@ -87,13 +87,13 @@ public class BestandMicroTypeConverter
     final int nBNr = aElement.getAttributeValueAsInt(ATTR_BNR, -1);
     final ICommonsList<File> aPics = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_PICS)) {
-      aPics.add(MicroTypeConverter.convertToNative(aChild, File.class));
+      aPics.add(aChild.getAttributeValueWithConversion("value", File.class));
     }
     final LocalDate aDate = aElement.getAttributeValueWithConversion(ATTR_DATE, LocalDate.class);
     final String sVerortung = MicroHelper.getChildTextContent(aElement, ELEMENT_VERORTUNG);
     final ICommonsList<IHabitatbaumgruppe> aBZHBG = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_BZHBG)) {
-      aBZHBG.add(MicroTypeConverter.convertToNative(aChild, IHabitatbaumgruppe.class));
+      aBZHBG.add(MicroTypeConverter.convertToNative(aChild, Habitatbaumgruppe.class));
     }
     final int nAreaSize = aElement.getAttributeValueAsInt(ATTR_AREASIZE, -1);
     final String sBeschreib = MicroHelper.getChildTextContent(aElement, ELEMENT_BESCHREIB);

@@ -152,10 +152,13 @@ public class JDMField
   @Nonempty
   public String getJavaVarName (@Nonnull final EJDMMultiplicity eMultiplicity)
   {
-    final char cPrefix = m_aType.isEnum () ? 'e'
-                                           : m_aType.isJavaPrimitive (eMultiplicity) ||
-                                             m_aType.getBaseType ().isString () ? m_aType.getBaseType ().getPrefix ()
-                                                                                : 'a';
+    final char cPrefix;
+    if (eMultiplicity.isOpenEnded ())
+      cPrefix = 'a';
+    else
+      cPrefix = m_aType.isEnum () ? 'e'
+                                  : m_aType.isJavaPrimitive (eMultiplicity) ||
+                                    m_aType.getBaseType ().isString () ? m_aType.getBaseType ().getPrefix () : 'a';
     return cPrefix + _getStartUC (m_sFieldName);
   }
 

@@ -34,7 +34,7 @@ public class ExBiotopbaumBO
   private int m_nBBNr;
   private final ICommonsList<File> m_aPics = new CommonsArrayList<>();
   private LocalDate m_aDate;
-  private final ICommonsList<EExBiotopbaumTypeBO> m_eType = new CommonsArrayList<>();
+  private final ICommonsList<EExBiotopbaumTypeBO> m_aType = new CommonsArrayList<>();
   private String m_sLocation;
   private EExExpositionBO m_eExposition;
   private String m_sHanglage;
@@ -50,7 +50,7 @@ public class ExBiotopbaumBO
   private final ICommonsList<IExCaveTypeBO> m_aCaves = new CommonsArrayList<>();
   private final ICommonsList<IExTrunkSizeBO> m_aTrunk = new CommonsArrayList<>();
   private EExVitalityBO m_eVitality;
-  private final ICommonsList<EExSpecialStructureBO> m_eSpecialStructure = new CommonsArrayList<>();
+  private final ICommonsList<EExSpecialStructureBO> m_aSpecialStructure = new CommonsArrayList<>();
   private String m_sOtherSpecial;
   private boolean m_bAspirant;
   private String m_sAspirantDesc;
@@ -67,7 +67,7 @@ public class ExBiotopbaumBO
     final LocalDate aDate,
     @Nonnull
     @Nonempty
-    final ICommonsList<EExBiotopbaumTypeBO> eType,
+    final ICommonsList<EExBiotopbaumTypeBO> aType,
     @Nullable
     final String sLocation,
     @Nonnull
@@ -86,7 +86,7 @@ public class ExBiotopbaumBO
     @Nonnull
     final EExVitalityBO eVitality,
     @Nonnull
-    final ICommonsList<EExSpecialStructureBO> eSpecialStructure,
+    final ICommonsList<EExSpecialStructureBO> aSpecialStructure,
     @Nullable
     final String sOtherSpecial, final boolean bAspirant,
     @Nullable
@@ -97,7 +97,7 @@ public class ExBiotopbaumBO
     final ICommonsList<IExBiotopbaumDeadwoodBO> aDeadwoodCats,
     @Nonnull
     final ICommonsList<IExBiotopbaumDecompositionDegreeBO> aDeadwoodDoD) {
-    this(StubObject.createForCurrentUser(), nBBNr, aPics, aDate, eType, sLocation, eExposition, sHanglage, bEinschichtig, bSolitary, bLightLocation, bClosedCrown, bNoSun, bUeberSun, bHomogene, sBeschreibung, eTreeKind, aCaves, aTrunk, eVitality, eSpecialStructure, sOtherSpecial, bAspirant, sAspirantDesc, bMarked, sMarkedDesc, aDeadwoodCats, aDeadwoodDoD);
+    this(StubObject.createForCurrentUser(), nBBNr, aPics, aDate, aType, sLocation, eExposition, sHanglage, bEinschichtig, bSolitary, bLightLocation, bClosedCrown, bNoSun, bUeberSun, bHomogene, sBeschreibung, eTreeKind, aCaves, aTrunk, eVitality, aSpecialStructure, sOtherSpecial, bAspirant, sAspirantDesc, bMarked, sMarkedDesc, aDeadwoodCats, aDeadwoodDoD);
   }
 
   protected ExBiotopbaumBO(
@@ -110,7 +110,7 @@ public class ExBiotopbaumBO
     final LocalDate aDate,
     @Nonnull
     @Nonempty
-    final ICommonsList<EExBiotopbaumTypeBO> eType,
+    final ICommonsList<EExBiotopbaumTypeBO> aType,
     @Nullable
     final String sLocation,
     @Nonnull
@@ -129,7 +129,7 @@ public class ExBiotopbaumBO
     @Nonnull
     final EExVitalityBO eVitality,
     @Nonnull
-    final ICommonsList<EExSpecialStructureBO> eSpecialStructure,
+    final ICommonsList<EExSpecialStructureBO> aSpecialStructure,
     @Nullable
     final String sOtherSpecial, final boolean bAspirant,
     @Nullable
@@ -144,7 +144,7 @@ public class ExBiotopbaumBO
     setBBNr(nBBNr);
     setPics(aPics);
     setDate(aDate);
-    setType(eType);
+    setType(aType);
     setLocation(sLocation);
     setExposition(eExposition);
     setHanglage(sHanglage);
@@ -160,7 +160,7 @@ public class ExBiotopbaumBO
     setCaves(aCaves);
     setTrunk(aTrunk);
     setVitality(eVitality);
-    setSpecialStructure(eSpecialStructure);
+    setSpecialStructure(aSpecialStructure);
     setOtherSpecial(sOtherSpecial);
     setAspirant(bAspirant);
     setAspirantDesc(sAspirantDesc);
@@ -177,7 +177,7 @@ public class ExBiotopbaumBO
 
   @Override
   public String toString() {
-    return ToStringGenerator.getDerived(super.toString()).append("BBNr", m_nBBNr).append("pics", m_aPics).append("date", m_aDate).append("type", m_eType).append("location", m_sLocation).append("exposition", m_eExposition).append("Hanglage", m_sHanglage).append("einschichtig", m_bEinschichtig).append("solitary", m_bSolitary).append("lightLocation", m_bLightLocation).append("closedCrown", m_bClosedCrown).append("noSun", m_bNoSun).append("ueberSun", m_bUeberSun).append("homogene", m_bHomogene).append("Beschreibung", m_sBeschreibung).append("treeKind", m_eTreeKind).append("caves", m_aCaves).append("trunk", m_aTrunk).append("vitality", m_eVitality).append("specialStructure", m_eSpecialStructure).append("otherSpecial", m_sOtherSpecial).append("aspirant", m_bAspirant).append("aspirantDesc", m_sAspirantDesc).append("marked", m_bMarked).append("markedDesc", m_sMarkedDesc).append("deadwoodCats", m_aDeadwoodCats).append("deadwoodDoD", m_aDeadwoodDoD).getToString();
+    return ToStringGenerator.getDerived(super.toString()).append("BBNr", m_nBBNr).append("pics", m_aPics).append("date", m_aDate).append("type", m_aType).append("location", m_sLocation).append("exposition", m_eExposition).append("Hanglage", m_sHanglage).append("einschichtig", m_bEinschichtig).append("solitary", m_bSolitary).append("lightLocation", m_bLightLocation).append("closedCrown", m_bClosedCrown).append("noSun", m_bNoSun).append("ueberSun", m_bUeberSun).append("homogene", m_bHomogene).append("Beschreibung", m_sBeschreibung).append("treeKind", m_eTreeKind).append("caves", m_aCaves).append("trunk", m_aTrunk).append("vitality", m_eVitality).append("specialStructure", m_aSpecialStructure).append("otherSpecial", m_sOtherSpecial).append("aspirant", m_bAspirant).append("aspirantDesc", m_sAspirantDesc).append("marked", m_bMarked).append("markedDesc", m_sMarkedDesc).append("deadwoodCats", m_aDeadwoodCats).append("deadwoodDoD", m_aDeadwoodDoD).getToString();
   }
 
   public final int getBBNr() {
@@ -236,21 +236,21 @@ public class ExBiotopbaumBO
   @Nonempty
   @ReturnsMutableObject
   public final ICommonsList<EExBiotopbaumTypeBO> type() {
-    return m_eType;
+    return m_aType;
   }
 
   @Nonnull
   final EChange setType(
     @Nonnull
     @Nonempty
-    final ICommonsList<EExBiotopbaumTypeBO> eType) {
-    ValueEnforcer.notEmpty(eType, "Type");
+    final ICommonsList<EExBiotopbaumTypeBO> aType) {
+    ValueEnforcer.notEmpty(aType, "Type");
     // Ensure the same implementation type
-    final ICommonsList<EExBiotopbaumTypeBO> aRealList = new CommonsArrayList<>(eType);
-    if (aRealList.equals(m_eType)) {
+    final ICommonsList<EExBiotopbaumTypeBO> aRealList = new CommonsArrayList<>(aType);
+    if (aRealList.equals(m_aType)) {
       return EChange.UNCHANGED;
     }
-    m_eType.setAll(aRealList);
+    m_aType.setAll(aRealList);
     return EChange.CHANGED;
   }
 
@@ -490,20 +490,20 @@ public class ExBiotopbaumBO
   @Nonnull
   @ReturnsMutableObject
   public final ICommonsList<EExSpecialStructureBO> specialStructure() {
-    return m_eSpecialStructure;
+    return m_aSpecialStructure;
   }
 
   @Nonnull
   final EChange setSpecialStructure(
     @Nonnull
-    final ICommonsList<EExSpecialStructureBO> eSpecialStructure) {
-    ValueEnforcer.notNull(eSpecialStructure, "SpecialStructure");
+    final ICommonsList<EExSpecialStructureBO> aSpecialStructure) {
+    ValueEnforcer.notNull(aSpecialStructure, "SpecialStructure");
     // Ensure the same implementation type
-    final ICommonsList<EExSpecialStructureBO> aRealList = new CommonsArrayList<>(eSpecialStructure);
-    if (aRealList.equals(m_eSpecialStructure)) {
+    final ICommonsList<EExSpecialStructureBO> aRealList = new CommonsArrayList<>(aSpecialStructure);
+    if (aRealList.equals(m_aSpecialStructure)) {
       return EChange.UNCHANGED;
     }
-    m_eSpecialStructure.setAll(aRealList);
+    m_aSpecialStructure.setAll(aRealList);
     return EChange.CHANGED;
   }
 

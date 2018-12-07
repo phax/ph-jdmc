@@ -66,12 +66,6 @@ final class JDMCodeGenMicroTypeConverter
 
   private static boolean _isElement (@Nonnull final JDMField aField)
   {
-    if (false)
-      if (aField.getMultiplicity ().isOpenEnded ())
-      {
-        // Lists are always elements
-        return true;
-      }
     if (aField.getType ().isPrimitive ())
     {
       // Primitive types are always attributes
@@ -158,9 +152,9 @@ final class JDMCodeGenMicroTypeConverter
         final boolean bHasHasMethod = !bIsPrimitive && eMultiplicity.isMin0 () && !bIsOpenEnded;
 
         JBlock aExecBlock = jToMicroElement.body ();
-        IJExpression aSrcElement = jElement;
-        IJExpression aNameVar = jFieldName;
-        JVar aExecObj = jToObj;
+        IJExpression jSrcElement = jElement;
+        IJExpression jRealName = jFieldName;
+        JVar jRealToObj = jToObj;
         IJExpression aValueProvider;
         if (bIsOpenEnded)
         {
@@ -170,18 +164,18 @@ final class JDMCodeGenMicroTypeConverter
                                                   jToObj.invoke (aField.getMethodGetterName (bIsOpenEnded)));
           aExecBlock.add (jForEach);
           aExecBlock = jForEach.body ();
-          aExecObj = jForEach.var ();
+          jRealToObj = jForEach.var ();
 
           if (!bIsElement)
           {
-            aSrcElement = jElement.invoke ("appendElement").arg (jToNS).arg (jFieldName);
-            aNameVar = JExpr.lit ("value");
+            jSrcElement = jElement.invoke ("appendElement").arg (jToNS).arg (jFieldName);
+            jRealName = JExpr.lit ("value");
           }
-          aValueProvider = aExecObj;
+          aValueProvider = jRealToObj;
         }
         else
         {
-          aValueProvider = aExecObj.invoke (aField.getMethodGetterName (bIsOpenEnded));
+          aValueProvider = jRealToObj.invoke (aField.getMethodGetterName (bIsOpenEnded));
         }
         final IJStatement aExec;
 
@@ -189,24 +183,24 @@ final class JDMCodeGenMicroTypeConverter
         {
           if (_isString (aField.getType ()))
           {
-            aExec = aSrcElement.invoke ("appendElement")
+            aExec = jSrcElement.invoke ("appendElement")
                                .arg (jToNS)
-                               .arg (aNameVar)
+                               .arg (jRealName)
                                .invoke ("appendText")
                                .arg (aValueProvider);
           }
           else
           {
-            aExec = aSrcElement.invoke ("appendChild")
+            aExec = jSrcElement.invoke ("appendChild")
                                .arg (cm.ref (MicroTypeConverter.class)
                                        .staticInvoke ("convertToMicroElement")
                                        .arg (aValueProvider)
                                        .arg (jToNS)
-                                       .arg (aNameVar));
+                                       .arg (jRealName));
           }
 
           if (bHasHasMethod)
-            aExecBlock._if (aExecObj.invoke (aField.getMethodHasName ()), aExec);
+            aExecBlock._if (jRealToObj.invoke (aField.getMethodHasName ()), aExec);
           else
             aExecBlock.add (aExec);
         }
@@ -215,20 +209,20 @@ final class JDMCodeGenMicroTypeConverter
           // attribute
           if (aField.getType ().isEnum ())
           {
-            aExec = aSrcElement.invoke ("setAttribute").arg (aNameVar).arg (aValueProvider.invoke ("getID"));
+            aExec = jSrcElement.invoke ("setAttribute").arg (jRealName).arg (aValueProvider.invoke ("getID"));
             if (bHasHasMethod)
-              aExecBlock._if (aExecObj.invoke (aField.getMethodHasName ()), aExec);
+              aExecBlock._if (jRealToObj.invoke (aField.getMethodHasName ()), aExec);
             else
               aExecBlock.add (aExec);
           }
           else
             if (aField.getType ().isPrimitive ())
             {
-              aExecBlock.add (aSrcElement.invoke ("setAttribute").arg (aNameVar).arg (aValueProvider));
+              aExecBlock.add (jSrcElement.invoke ("setAttribute").arg (jRealName).arg (aValueProvider));
             }
             else
             {
-              aExecBlock.add (aSrcElement.invoke ("setAttributeWithConversion").arg (aNameVar).arg (aValueProvider));
+              aExecBlock.add (jSrcElement.invoke ("setAttributeWithConversion").arg (jRealName).arg (aValueProvider));
             }
         }
       }
@@ -236,91 +230,117 @@ final class JDMCodeGenMicroTypeConverter
       // To Native
       {
         // List or field?
-        final AbstractJType jFieldElementType = cm.ref (aField.getType (), eMultiplicity);
-        AbstractJType jFieldType = jFieldElementType;
-        IJExpression aInit = null;
+        final AbstractJType jVarType = cm.ref (aField.getType (), eMultiplicity);
+        final JForEach jForEach;
+        final JVar jToNativeRealElement;
+        final IJExpression jRealName;
         if (bIsOpenEnded)
         {
-          jFieldType = cm.ref (ICommonsList.class).narrow (jFieldType);
-          aInit = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ();
+          jForEach = new JForEach (JMods.forVar (JMod.FINAL),
+                                   cm.ref (IMicroElement.class),
+                                   "aChild",
+                                   jToNativeElement.invoke ("getAllChildElements").arg (jFieldName));
+
+          jToNativeRealElement = jForEach.var ();
+          jRealName = JExpr.lit ("value");
         }
         else
-          if (bIsElement)
+        {
+          jForEach = null;
+          jToNativeRealElement = jToNativeElement;
+          jRealName = jFieldName;
+        }
+
+        final IJExpression jGetValue;
+        if (bIsElement)
+        {
+          if (_isString (aField.getType ()))
           {
-            if (_isString (aField.getType ()))
-            {
-              aInit = cm.ref (MicroHelper.class)
-                        .staticInvoke ("getChildTextContent")
-                        .arg (jToNativeElement)
-                        .arg (jFieldName);
-            }
+            if (bIsOpenEnded)
+              jGetValue = jToNativeRealElement.invoke ("getTextContent");
             else
-            {
-              aInit = cm.ref (MicroTypeConverter.class)
-                        .staticInvoke ("convertToNative")
-                        .arg (jToNativeElement.invoke ("getFirstChildElement").arg (jFieldName))
-                        .arg (JExpr.dotClass (jFieldElementType));
-            }
+              jGetValue = cm.ref (MicroHelper.class)
+                            .staticInvoke ("getChildTextContent")
+                            .arg (jToNativeRealElement)
+                            .arg (jRealName);
           }
           else
           {
-            // Attribute
-            if (aField.getType ().isEnum ())
-              aInit = cm.ref (aField.getType ().getFQCN ())
-                        .staticInvoke ("getFromIDOrNull")
-                        .arg (jToNativeElement.invoke ("getAttributeValue").arg (jFieldName));
+            final AbstractJType jFieldImplementationType = cm.ref (aField.getType ().getFQCN ());
+            if (bIsOpenEnded)
+              jGetValue = cm.ref (MicroTypeConverter.class)
+                            .staticInvoke ("convertToNative")
+                            .arg (jToNativeRealElement)
+                            .arg (JExpr.dotClass (jFieldImplementationType));
             else
-              if (jFieldType == cm.BOOLEAN)
-                aInit = jToNativeElement.invoke ("getAttributeValueAsBool").arg (jFieldName).arg (JExpr.FALSE);
-              else
-                if (jFieldType == cm.BYTE)
-                  aInit = jToNativeElement.invoke ("getAttributeValueAsInt").arg (jFieldName).arg (-1).castTo (cm.BYTE);
-                else
-                  if (jFieldType == cm.DOUBLE)
-                    aInit = jToNativeElement.invoke ("getAttributeValueAsDouble")
-                                            .arg (jFieldName)
-                                            .arg (cm.ref (Double.class).staticRef ("NaN"));
-                  else
-                    if (jFieldType == cm.FLOAT)
-                      aInit = jToNativeElement.invoke ("getAttributeValueAsFloat")
-                                              .arg (jFieldName)
-                                              .arg (cm.ref (Float.class).staticRef ("NaN"));
-                    else
-                      if (jFieldType == cm.INT)
-                        aInit = jToNativeElement.invoke ("getAttributeValueAsInt").arg (jFieldName).arg (-1);
-                      else
-                        if (jFieldType == cm.LONG)
-                          aInit = jToNativeElement.invoke ("getAttributeValueAsLong").arg (jFieldName).arg (-1);
-                        else
-                          if (jFieldType == cm.SHORT)
-                            aInit = jToNativeElement.invoke ("getAttributeValueAsInt")
-                                                    .arg (jFieldName)
-                                                    .arg (-1)
-                                                    .castTo (cm.SHORT);
-                          else
-                            aInit = jToNativeElement.invoke ("getAttributeValueWithConversion")
-                                                    .arg (jFieldName)
-                                                    .arg (JExpr.dotClass (jFieldType));
-
+              jGetValue = cm.ref (MicroTypeConverter.class)
+                            .staticInvoke ("convertToNative")
+                            .arg (jToNativeRealElement.invoke ("getFirstChildElement").arg (jRealName))
+                            .arg (JExpr.dotClass (jFieldImplementationType));
           }
+        }
+        else
+        {
+          // Attribute
+          if (aField.getType ().isEnum ())
+            jGetValue = cm.ref (aField.getType ().getFQCN ())
+                          .staticInvoke ("getFromIDOrNull")
+                          .arg (jToNativeRealElement.invoke ("getAttributeValue").arg (jRealName));
+          else
+            if (jVarType == cm.BOOLEAN)
+              jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsBool").arg (jRealName).arg (JExpr.FALSE);
+            else
+              if (jVarType == cm.BYTE)
+                jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsInt")
+                                                .arg (jRealName)
+                                                .arg (-1)
+                                                .castTo (cm.BYTE);
+              else
+                if (jVarType == cm.DOUBLE)
+                  jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsDouble")
+                                                  .arg (jRealName)
+                                                  .arg (cm.ref (Double.class).staticRef ("NaN"));
+                else
+                  if (jVarType == cm.FLOAT)
+                    jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsFloat")
+                                                    .arg (jRealName)
+                                                    .arg (cm.ref (Float.class).staticRef ("NaN"));
+                  else
+                    if (jVarType == cm.INT)
+                      jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsInt").arg (jRealName).arg (-1);
+                    else
+                      if (jVarType == cm.LONG)
+                        jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsLong").arg (jRealName).arg (-1);
+                      else
+                        if (jVarType == cm.SHORT)
+                          jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsInt")
+                                                          .arg (jRealName)
+                                                          .arg (-1)
+                                                          .castTo (cm.SHORT);
+                        else
+                          jGetValue = jToNativeRealElement.invoke ("getAttributeValueWithConversion")
+                                                          .arg (jRealName)
+                                                          .arg (JExpr.dotClass (jVarType));
 
-        final JVar jVar = jToNative.body ().decl (JMod.FINAL, jFieldType, aField.getJavaVarName (eMultiplicity), aInit);
-        aParamsToNative.add (jVar);
+        }
 
         if (bIsOpenEnded)
         {
-          final JForEach jForEach = jToNative.body ()
-                                             .forEach (JMod.FINAL,
-                                                       cm.ref (IMicroElement.class),
-                                                       "aChild",
-                                                       jToNativeElement.invoke ("getAllChildElements")
-                                                                       .arg (jFieldName));
-          jForEach.body ()
-                  .add (jVar.invoke ("add")
-                            .arg (cm.ref (MicroTypeConverter.class)
-                                    .staticInvoke ("convertToNative")
-                                    .arg (jForEach.var ())
-                                    .arg (JExpr.dotClass (jFieldElementType))));
+          final JVar jVar = jToNative.body ()
+                                     .decl (JMod.FINAL,
+                                            cm.ref (ICommonsList.class).narrow (jVarType),
+                                            aField.getJavaVarName (eMultiplicity),
+                                            cm.ref (CommonsArrayList.class).narrowEmpty ()._new ());
+          aParamsToNative.add (jVar);
+
+          jToNative.body ().add (jForEach);
+          jForEach.body ().add (jVar.invoke ("add").arg (jGetValue));
+        }
+        else
+        {
+          final JVar jVar = jToNative.body ()
+                                     .decl (JMod.FINAL, jVarType, aField.getJavaVarName (eMultiplicity), jGetValue);
+          aParamsToNative.add (jVar);
         }
       }
     }

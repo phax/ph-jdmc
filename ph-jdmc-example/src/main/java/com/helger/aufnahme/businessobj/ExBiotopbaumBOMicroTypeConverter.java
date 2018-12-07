@@ -122,12 +122,12 @@ public class ExBiotopbaumBOMicroTypeConverter
     final int nBBNr = aElement.getAttributeValueAsInt(ATTR_BBNR, -1);
     final ICommonsList<File> aPics = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_PICS)) {
-      aPics.add(MicroTypeConverter.convertToNative(aChild, File.class));
+      aPics.add(aChild.getAttributeValueWithConversion("value", File.class));
     }
     final LocalDate aDate = aElement.getAttributeValueWithConversion(ATTR_DATE, LocalDate.class);
-    final ICommonsList<EExBiotopbaumTypeBO> eType = new CommonsArrayList<>();
+    final ICommonsList<EExBiotopbaumTypeBO> aType = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_TYPE)) {
-      eType.add(MicroTypeConverter.convertToNative(aChild, EExBiotopbaumTypeBO.class));
+      aType.add(EExBiotopbaumTypeBO.getFromIDOrNull(aChild.getAttributeValue("value")));
     }
     final String sLocation = MicroHelper.getChildTextContent(aElement, ELEMENT_LOCATION);
     final EExExpositionBO eExposition = EExExpositionBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_EXPOSITION));
@@ -143,16 +143,16 @@ public class ExBiotopbaumBOMicroTypeConverter
     final EExTreeKindBO eTreeKind = EExTreeKindBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_TREEKIND));
     final ICommonsList<IExCaveTypeBO> aCaves = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_CAVES)) {
-      aCaves.add(MicroTypeConverter.convertToNative(aChild, IExCaveTypeBO.class));
+      aCaves.add(MicroTypeConverter.convertToNative(aChild, ExCaveTypeBO.class));
     }
     final ICommonsList<IExTrunkSizeBO> aTrunk = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_TRUNK)) {
-      aTrunk.add(MicroTypeConverter.convertToNative(aChild, IExTrunkSizeBO.class));
+      aTrunk.add(MicroTypeConverter.convertToNative(aChild, ExTrunkSizeBO.class));
     }
     final EExVitalityBO eVitality = EExVitalityBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_VITALITY));
-    final ICommonsList<EExSpecialStructureBO> eSpecialStructure = new CommonsArrayList<>();
+    final ICommonsList<EExSpecialStructureBO> aSpecialStructure = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_SPECIALSTRUCTURE)) {
-      eSpecialStructure.add(MicroTypeConverter.convertToNative(aChild, EExSpecialStructureBO.class));
+      aSpecialStructure.add(EExSpecialStructureBO.getFromIDOrNull(aChild.getAttributeValue("value")));
     }
     final String sOtherSpecial = MicroHelper.getChildTextContent(aElement, ELEMENT_OTHERSPECIAL);
     final boolean bAspirant = aElement.getAttributeValueAsBool(ATTR_ASPIRANT, false);
@@ -161,12 +161,12 @@ public class ExBiotopbaumBOMicroTypeConverter
     final String sMarkedDesc = MicroHelper.getChildTextContent(aElement, ELEMENT_MARKEDDESC);
     final ICommonsList<IExBiotopbaumDeadwoodBO> aDeadwoodCats = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_DEADWOODCATS)) {
-      aDeadwoodCats.add(MicroTypeConverter.convertToNative(aChild, IExBiotopbaumDeadwoodBO.class));
+      aDeadwoodCats.add(MicroTypeConverter.convertToNative(aChild, ExBiotopbaumDeadwoodBO.class));
     }
     final ICommonsList<IExBiotopbaumDecompositionDegreeBO> aDeadwoodDoD = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_DEADWOODDOD)) {
-      aDeadwoodDoD.add(MicroTypeConverter.convertToNative(aChild, IExBiotopbaumDecompositionDegreeBO.class));
+      aDeadwoodDoD.add(MicroTypeConverter.convertToNative(aChild, ExBiotopbaumDecompositionDegreeBO.class));
     }
-    return new ExBiotopbaumBO(super.getStubObject(aElement), nBBNr, aPics, aDate, eType, sLocation, eExposition, sHanglage, bEinschichtig, bSolitary, bLightLocation, bClosedCrown, bNoSun, bUeberSun, bHomogene, sBeschreibung, eTreeKind, aCaves, aTrunk, eVitality, eSpecialStructure, sOtherSpecial, bAspirant, sAspirantDesc, bMarked, sMarkedDesc, aDeadwoodCats, aDeadwoodDoD);
+    return new ExBiotopbaumBO(super.getStubObject(aElement), nBBNr, aPics, aDate, aType, sLocation, eExposition, sHanglage, bEinschichtig, bSolitary, bLightLocation, bClosedCrown, bNoSun, bUeberSun, bHomogene, sBeschreibung, eTreeKind, aCaves, aTrunk, eVitality, aSpecialStructure, sOtherSpecial, bAspirant, sAspirantDesc, bMarked, sMarkedDesc, aDeadwoodCats, aDeadwoodDoD);
   }
 }

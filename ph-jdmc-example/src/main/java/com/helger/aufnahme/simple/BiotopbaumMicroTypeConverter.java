@@ -121,12 +121,12 @@ public class BiotopbaumMicroTypeConverter
     final int nBBNr = aElement.getAttributeValueAsInt(ATTR_BBNR, -1);
     final ICommonsList<File> aPics = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_PICS)) {
-      aPics.add(MicroTypeConverter.convertToNative(aChild, File.class));
+      aPics.add(aChild.getAttributeValueWithConversion("value", File.class));
     }
     final LocalDate aDate = aElement.getAttributeValueWithConversion(ATTR_DATE, LocalDate.class);
-    final ICommonsList<EBiotopbaumType> eType = new CommonsArrayList<>();
+    final ICommonsList<EBiotopbaumType> aType = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_TYPE)) {
-      eType.add(MicroTypeConverter.convertToNative(aChild, EBiotopbaumType.class));
+      aType.add(EBiotopbaumType.getFromIDOrNull(aChild.getAttributeValue("value")));
     }
     final String sLocation = MicroHelper.getChildTextContent(aElement, ELEMENT_LOCATION);
     final EExposition eExposition = EExposition.getFromIDOrNull(aElement.getAttributeValue(ATTR_EXPOSITION));
@@ -142,16 +142,16 @@ public class BiotopbaumMicroTypeConverter
     final ETreeKind eTreeKind = ETreeKind.getFromIDOrNull(aElement.getAttributeValue(ATTR_TREEKIND));
     final ICommonsList<ICaveType> aCaves = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_CAVES)) {
-      aCaves.add(MicroTypeConverter.convertToNative(aChild, ICaveType.class));
+      aCaves.add(MicroTypeConverter.convertToNative(aChild, CaveType.class));
     }
     final ICommonsList<ITrunkSize> aTrunk = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_TRUNK)) {
-      aTrunk.add(MicroTypeConverter.convertToNative(aChild, ITrunkSize.class));
+      aTrunk.add(MicroTypeConverter.convertToNative(aChild, TrunkSize.class));
     }
     final EVitality eVitality = EVitality.getFromIDOrNull(aElement.getAttributeValue(ATTR_VITALITY));
-    final ICommonsList<ESpecialStructure> eSpecialStructure = new CommonsArrayList<>();
+    final ICommonsList<ESpecialStructure> aSpecialStructure = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_SPECIALSTRUCTURE)) {
-      eSpecialStructure.add(MicroTypeConverter.convertToNative(aChild, ESpecialStructure.class));
+      aSpecialStructure.add(ESpecialStructure.getFromIDOrNull(aChild.getAttributeValue("value")));
     }
     final String sOtherSpecial = MicroHelper.getChildTextContent(aElement, ELEMENT_OTHERSPECIAL);
     final boolean bAspirant = aElement.getAttributeValueAsBool(ATTR_ASPIRANT, false);
@@ -160,12 +160,12 @@ public class BiotopbaumMicroTypeConverter
     final String sMarkedDesc = MicroHelper.getChildTextContent(aElement, ELEMENT_MARKEDDESC);
     final ICommonsList<IBiotopbaumDeadwood> aDeadwoodCats = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_DEADWOODCATS)) {
-      aDeadwoodCats.add(MicroTypeConverter.convertToNative(aChild, IBiotopbaumDeadwood.class));
+      aDeadwoodCats.add(MicroTypeConverter.convertToNative(aChild, BiotopbaumDeadwood.class));
     }
     final ICommonsList<IBiotopbaumDecompositionDegree> aDeadwoodDoD = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_DEADWOODDOD)) {
-      aDeadwoodDoD.add(MicroTypeConverter.convertToNative(aChild, IBiotopbaumDecompositionDegree.class));
+      aDeadwoodDoD.add(MicroTypeConverter.convertToNative(aChild, BiotopbaumDecompositionDegree.class));
     }
-    return new Biotopbaum(nBBNr, aPics, aDate, eType, sLocation, eExposition, sHanglage, bEinschichtig, bSolitary, bLightLocation, bClosedCrown, bNoSun, bUeberSun, bHomogene, sBeschreibung, eTreeKind, aCaves, aTrunk, eVitality, eSpecialStructure, sOtherSpecial, bAspirant, sAspirantDesc, bMarked, sMarkedDesc, aDeadwoodCats, aDeadwoodDoD);
+    return new Biotopbaum(nBBNr, aPics, aDate, aType, sLocation, eExposition, sHanglage, bEinschichtig, bSolitary, bLightLocation, bClosedCrown, bNoSun, bUeberSun, bHomogene, sBeschreibung, eTreeKind, aCaves, aTrunk, eVitality, aSpecialStructure, sOtherSpecial, bAspirant, sAspirantDesc, bMarked, sMarkedDesc, aDeadwoodCats, aDeadwoodDoD);
   }
 }
