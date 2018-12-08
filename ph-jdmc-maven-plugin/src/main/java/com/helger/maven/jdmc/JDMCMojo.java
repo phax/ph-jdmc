@@ -32,6 +32,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.DirectoryScanner;
 
 import com.helger.commons.charset.CharsetHelper;
 import com.helger.commons.io.file.FileOperationManager;
@@ -147,8 +148,11 @@ public final class JDMCMojo extends AbstractMojo
   @Parameter (property = "newLineMode")
   private ENewLineMode newLineMode = ENewLineMode.DEFAULT;
 
-  public void setSourceDirectory (final File aDir)
+  public void setSourceDirectory (@Nonnull final File aDir) throws MojoExecutionException
   {
+    if (aDir == null)
+      throw new MojoExecutionException ("sourceDirectory may not be null");
+
     sourceDirectory = aDir;
     if (!sourceDirectory.isAbsolute ())
       sourceDirectory = new File (project.getBasedir (), aDir.getPath ());
@@ -156,8 +160,11 @@ public final class JDMCMojo extends AbstractMojo
       getLog ().error ("JDM source directory '" + sourceDirectory + "' does not exist!");
   }
 
-  public void setSourceEncoding (final String sSourceEncoding)
+  public void setSourceEncoding (final String sSourceEncoding) throws MojoExecutionException
   {
+    if (StringHelper.hasNoText (sSourceEncoding))
+      throw new MojoExecutionException ("sourceEncoding may not be empty");
+
     // Throws an exception on an illegal charset
     CharsetHelper.getCharsetFromName (sSourceEncoding);
     sourceEncoding = sSourceEncoding;
@@ -165,7 +172,6 @@ public final class JDMCMojo extends AbstractMojo
 
   public void setSourceEnumDefs (final List <String> aCollection)
   {
-    getLog ().info ("Using source enum definitions " + aCollection);
     sourceEnumDefs = new ArrayList <> ();
     if (aCollection != null)
     {
@@ -268,6 +274,11 @@ public final class JDMCMojo extends AbstractMojo
             newLineMode = ENewLineMode.DEFAULT;
   }
 
+  private static boolean _isWildcard (@Nonnull final String s)
+  {
+    return s.indexOf ('*') >= 0 || s.indexOf ('?') >= 0;
+  }
+
   public void execute () throws MojoExecutionException
   {
     // Read stuff
@@ -276,10 +287,36 @@ public final class JDMCMojo extends AbstractMojo
                                                          .setClassNameSuffix (classNameSuffix);
     if (sourceEnumDefs != null)
       for (final String sEnumDef : sourceEnumDefs)
-        p.readEnumDef (new File (sourceDirectory, sEnumDef));
+        if (_isWildcard (sEnumDef))
+        {
+          final DirectoryScanner aScanner = new DirectoryScanner ();
+          aScanner.setBasedir (sourceDirectory);
+          aScanner.setIncludes (new String [] { sEnumDef });
+          aScanner.setCaseSensitive (true);
+          aScanner.scan ();
+          final String [] aFilenames = aScanner.getIncludedFiles ();
+          if (aFilenames != null)
+            for (final String sFilename : aFilenames)
+              p.readEnumDef (new File (sourceDirectory, sFilename));
+        }
+        else
+          p.readEnumDef (new File (sourceDirectory, sEnumDef));
     if (sourceClassDefs != null)
       for (final String sClassDef : sourceClassDefs)
-        p.readClassDef (new File (sourceDirectory, sClassDef));
+        if (_isWildcard (sClassDef))
+        {
+          final DirectoryScanner aScanner = new DirectoryScanner ();
+          aScanner.setBasedir (sourceDirectory);
+          aScanner.setIncludes (new String [] { sClassDef });
+          aScanner.setCaseSensitive (true);
+          aScanner.scan ();
+          final String [] aFilenames = aScanner.getIncludedFiles ();
+          if (aFilenames != null)
+            for (final String sFilename : aFilenames)
+              p.readClassDef (new File (sourceDirectory, sFilename));
+        }
+        else
+          p.readClassDef (new File (sourceDirectory, sClassDef));
 
     // Start code generation
     final JDMCodeGenerator cg = new JDMCodeGenerator (p);
