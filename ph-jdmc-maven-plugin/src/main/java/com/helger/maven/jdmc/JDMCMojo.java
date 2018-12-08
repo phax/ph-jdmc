@@ -165,6 +165,7 @@ public final class JDMCMojo extends AbstractMojo
 
   public void setSourceEnumDef (final List <String> aCollection)
   {
+    getLog ().info ("Using source enum definitions " + aCollection);
     sourceEnumDef = new ArrayList <> ();
     if (aCollection != null)
     {
@@ -176,6 +177,7 @@ public final class JDMCMojo extends AbstractMojo
 
   public void setSourceClassDef (final List <String> aCollection)
   {
+    getLog ().info ("Using source class definitions " + aCollection);
     sourceClassDef = new ArrayList <> ();
     if (aCollection != null)
     {

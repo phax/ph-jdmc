@@ -246,7 +246,7 @@ public class JDMCodeGenTest
                              @Nonnull final JDMCodeModel cm) throws JClassAlreadyExistsException
   {
     final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
-                                                AbstractJDMClassType.getFQCN (sDestPackageName, "SPITest"),
+                                                AbstractJDMClassType.getFQCN (sDestPackageName, "JDMSPITest"),
                                                 EClassType.CLASS);
     jTestClass.javadoc ().add ("Test all SPI implementations of this project\n");
     jTestClass.javadoc ().add ("This class was initially automatically created\n");

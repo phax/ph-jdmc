@@ -115,14 +115,16 @@ public class JDMCodeGenerator
     ValueEnforcer.notNull (aDirTestJava, "DirTestJava");
     ValueEnforcer.notNull (aDirTestResources, "DirTestResources");
 
+    FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirMainJava);
+    FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirMainResources);
+    FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirTestJava);
+    FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirTestResources);
+
     final ICommonsList <JDMClass> aClasses = m_aProcessor.getAllReadClasses ();
     final ICommonsList <JDMEnum> aEnums = m_aProcessor.getAllReadEnums ();
 
     try
     {
-      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirMainJava);
-      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirMainResources);
-
       final JDMCodeModel cm = new JDMCodeModel (m_aProcessor);
       if (m_aSettings.isReadExistingSPIFiles ())
         cm.spiImplMap ().readInitial (aDirMainResources);
@@ -143,10 +145,10 @@ public class JDMCodeGenerator
       JDMCodeGenEnum.createMainJavaEnums (cm, aEnums);
 
       // create for all
-      JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterRegistrarClass (m_aProcessor.getDestinationPackageName (),
-                                                                               cm,
-                                                                               true ? aClasses
-                                                                                    : m_aProcessor.getAllTypes ());
+      if (aClasses.isNotEmpty ())
+        JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterRegistrarClass (m_aProcessor.getDestinationPackageName (),
+                                                                                 cm,
+                                                                                 aClasses);
 
       // Create all resources as last thing before writing
       _createMetaInfServices (cm);
@@ -163,15 +165,14 @@ public class JDMCodeGenerator
 
     try
     {
-      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirTestJava);
-      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirTestResources);
-
       final JDMCodeModel cm = new JDMCodeModel (m_aProcessor);
       if (m_aSettings.isReadExistingSPIFiles ())
         cm.spiImplMap ().readInitial (aDirTestResources);
 
       JDMCodeGenTest.createTestJavaSelfTest (m_aProcessor, m_aSettings, cm);
-      JDMCodeGenTest.createSPITest (m_aProcessor.getDestinationPackageName (), cm);
+
+      if (aClasses.isNotEmpty ())
+        JDMCodeGenTest.createSPITest (m_aProcessor.getDestinationPackageName (), cm);
 
       // Create test classes for all domain classes
       for (final JDMClass aClass : aClasses)
