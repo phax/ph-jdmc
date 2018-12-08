@@ -43,20 +43,22 @@ final class SPIImplMap
 
   public void readInitial (@Nonnull final File aSrcResources)
   {
-    for (final File aFile : new FileSystemIterator (aSrcResources, "META-INF/services"))
-      if (aFile.isFile ())
-      {
-        // Filename = interface FQCN
-        final String sKey = aFile.getName ();
-        final ICommonsOrderedSet <String> aSet = new CommonsLinkedHashSet <> ();
-        SimpleFileIO.readFileLines (aFile, StandardCharsets.UTF_8, sLine -> {
-          final String sCleanLine = StringHelper.trim (sLine);
-          if (StringHelper.hasText (sCleanLine) && !sCleanLine.startsWith ("#"))
-            aSet.add (sCleanLine);
-        });
-        if (aSet.isNotEmpty ())
-          m_aMML.put (sKey, aSet);
-      }
+    final File aServicesDir = new File (aSrcResources, "META-INF/services");
+    if (aServicesDir.isDirectory ())
+      for (final File aFile : new FileSystemIterator (aServicesDir))
+        if (aFile.isFile ())
+        {
+          // Filename = interface FQCN
+          final String sKey = aFile.getName ();
+          final ICommonsOrderedSet <String> aSet = new CommonsLinkedHashSet <> ();
+          SimpleFileIO.readFileLines (aFile, StandardCharsets.UTF_8, sLine -> {
+            final String sCleanLine = StringHelper.trim (sLine);
+            if (StringHelper.hasText (sCleanLine) && !sCleanLine.startsWith ("#"))
+              aSet.add (sCleanLine);
+          });
+          if (aSet.isNotEmpty ())
+            m_aMML.put (sKey, aSet);
+        }
   }
 
   public void register (@Nonnull final Class <?> aInterface, @Nonnull @Nonempty final String sImplClass)

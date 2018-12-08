@@ -104,7 +104,7 @@ public final class JDMProcessorTest
     assertNotNull (aClass);
   }
 
-  private static final File DIR_EXAMPLE_SRC = new File ("../ph-jdmc-example");
+  private static final File DIR_EXAMPLE = new File ("../ph-jdmc-example");
 
   @Test
   public void testCodeCreation () throws IOException
@@ -115,7 +115,7 @@ public final class JDMProcessorTest
       _applyTestJDM (p);
       final JDMCodeGenerator cg = new JDMCodeGenerator (p);
       cg.settings ().setUseBusinessObject (false);
-      cg.createCode (DIR_EXAMPLE_SRC);
+      cg.createCode (DIR_EXAMPLE);
     }
     // Second run - read SPI now
     {
@@ -124,7 +124,7 @@ public final class JDMProcessorTest
       _applyTestJDM (p);
       final JDMCodeGenerator cg = new JDMCodeGenerator (p);
       cg.settings ().setUseBusinessObject (true).setSetterArePackagePrivate (true).setReadExistingSPIFiles (true);
-      cg.createCode (DIR_EXAMPLE_SRC);
+      cg.createCode (DIR_EXAMPLE);
     }
   }
 }

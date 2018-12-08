@@ -117,7 +117,8 @@ public class JDMCodeGenerator
       JDMCodeGenEnum.createMainJavaEnums (cm, aEnums);
 
       // create for all
-      JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterRegistrarClass (cm,
+      JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterRegistrarClass (m_aProcessor.getDestinationPackageName (),
+                                                                               cm,
                                                                                true ? aClasses
                                                                                     : m_aProcessor.getAllTypes ());
 

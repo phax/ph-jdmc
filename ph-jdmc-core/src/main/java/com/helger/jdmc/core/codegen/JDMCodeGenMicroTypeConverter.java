@@ -359,11 +359,12 @@ final class JDMCodeGenMicroTypeConverter
     }
   }
 
-  static void createMainMicroTypeConverterRegistrarClass (@Nonnull final JDMCodeModel cm,
+  static void createMainMicroTypeConverterRegistrarClass (@Nonnull final String sDestPackageName,
+                                                          @Nonnull final JDMCodeModel cm,
                                                           @Nonnull final ICommonsList <? extends AbstractJDMClassType> aClasses) throws JClassAlreadyExistsException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC | JMod.FINAL,
-                                            AbstractJDMClassType.getFQCN (aClasses.getFirst ().getPackageName (),
+                                            AbstractJDMClassType.getFQCN (sDestPackageName,
                                                                           "MicroTypeConverterRegistrar"),
                                             EClassType.CLASS);
     jClass._implements (cm.ref (IMicroTypeConverterRegistrarSPI.class));

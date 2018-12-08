@@ -25,6 +25,8 @@ import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
@@ -35,14 +37,10 @@ import com.helger.commons.system.ENewLineMode;
 import com.helger.jdmc.core.JDMProcessor;
 import com.helger.jdmc.core.codegen.JDMCodeGenerator;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
- * @goal jdmc
- * @phase generate-sources
  * @description Convert JDM files to Java Code
  */
-@SuppressFBWarnings (value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" }, justification = "set via maven property")
+@Mojo (name = "jdmc", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
 public final class JDMCMojo extends AbstractMojo
 {
   /**
@@ -55,14 +53,14 @@ public final class JDMCMojo extends AbstractMojo
    * The directory where the JDM files reside. It must be an existing directory.
    * Defaults to <code>src/main/resources/jdmc</code>.
    */
-  @Parameter (property = "sourceDirectory", defaultValue = "${basedir}/src/main/resources/jdmc", required = true)
+  @Parameter (property = "sourceDirectory", defaultValue = "${basedir}/src/main/jdmc", required = true)
   private File sourceDirectory;
 
   /**
    * The encoding of the source JDM files to be used. Default is UTF-8.
    */
-  @Parameter (property = "sourceEncoding")
-  private Charset sourceEncoding = StandardCharsets.UTF_8;
+  @Parameter (property = "sourceEncoding", defaultValue = "${project.build.sourceEncoding}")
+  private String sourceEncoding = StandardCharsets.UTF_8.name ();
 
   /**
    * The list of source enum definitions, relative to the source directory.
@@ -111,13 +109,14 @@ public final class JDMCMojo extends AbstractMojo
    * The encoding of the created Java files. Defaults to UTF-8.
    */
   @Parameter (property = "targetEncoding")
-  private Charset targetEncoding = StandardCharsets.UTF_8;
+  private String targetEncoding = StandardCharsets.UTF_8.name ();
 
   /**
    * The target directory where the Java files should be written to. The
-   * directory should end with "src" following the Maven directory layout.
+   * directory should be the parent directory of "src" following the Maven
+   * directory layout.
    */
-  @Parameter (property = "targetDirectory", defaultValue = "${basedir}/src", required = true)
+  @Parameter (property = "targetDirectory", defaultValue = "${basedir}", required = true)
   private File targetDirectory;
 
   /**
@@ -141,7 +140,8 @@ public final class JDMCMojo extends AbstractMojo
   public void setSourceEncoding (final String sSourceEncoding)
   {
     // Throws an exception on an illegal charset
-    sourceEncoding = CharsetHelper.getCharsetFromName (sSourceEncoding);
+    CharsetHelper.getCharsetFromName (sSourceEncoding);
+    sourceEncoding = sSourceEncoding;
   }
 
   public void setSourceEnumDef (final List <String> aCollection)
@@ -204,7 +204,8 @@ public final class JDMCMojo extends AbstractMojo
   public void setTargetEncoding (final String sTargetEncoding)
   {
     // Throws an exception on an illegal charset
-    targetEncoding = CharsetHelper.getCharsetFromName (sTargetEncoding);
+    CharsetHelper.getCharsetFromName (sTargetEncoding);
+    targetEncoding = sTargetEncoding;
   }
 
   public void setNewLineMode (final String sNewLineMode)
@@ -227,7 +228,7 @@ public final class JDMCMojo extends AbstractMojo
   public void execute () throws MojoExecutionException
   {
     // Read stuff
-    final JDMProcessor p = new JDMProcessor (packageName).setSourceCharset (sourceEncoding)
+    final JDMProcessor p = new JDMProcessor (packageName).setSourceCharset (Charset.forName (sourceEncoding))
                                                          .setClassNamePrefix (classNamePrefix)
                                                          .setClassNameSuffix (classNameSuffix);
     if (sourceEnumDef != null)
@@ -243,7 +244,7 @@ public final class JDMCMojo extends AbstractMojo
       .setUseBusinessObject (useBusinessObject)
       .setSetterArePackagePrivate (settersPackagePrivate)
       .setReadExistingSPIFiles (true)
-      .setCharset (targetEncoding)
+      .setCharset (Charset.forName (targetEncoding))
       .setNewLineMode (newLineMode)
       .setIndentString ("  ");
     try
