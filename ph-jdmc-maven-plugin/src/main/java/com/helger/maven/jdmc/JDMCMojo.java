@@ -23,6 +23,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -112,12 +115,28 @@ public final class JDMCMojo extends AbstractMojo
   private String targetEncoding = StandardCharsets.UTF_8.name ();
 
   /**
-   * The target directory where the Java files should be written to. The
-   * directory should be the parent directory of "src" following the Maven
-   * directory layout.
+   * The target directory for "main" Java code.
    */
-  @Parameter (property = "targetDirectory", defaultValue = "${basedir}", required = true)
-  private File targetDirectory;
+  @Parameter (property = "targetMainJava", defaultValue = "${basedir}/src/main/java", required = true)
+  private File targetMainJava;
+
+  /**
+   * The target directory for "main" resource files.
+   */
+  @Parameter (property = "targetMainResources", defaultValue = "${basedir}/src/main/resources", required = true)
+  private File targetMainResources;
+
+  /**
+   * The target directory for "test" Java code.
+   */
+  @Parameter (property = "targetTestJava", defaultValue = "${basedir}/src/test/java", required = true)
+  private File targetTestJava;
+
+  /**
+   * The target directory for "test" resource files.
+   */
+  @Parameter (property = "targetTestResources", defaultValue = "${basedir}/src/test/resources", required = true)
+  private File targetTestResources;
 
   /**
    * The new line mode to be used for writing the files. Valid values are
@@ -191,14 +210,36 @@ public final class JDMCMojo extends AbstractMojo
     settersPackagePrivate = b;
   }
 
-  public void setTargetDirectory (final File aDir)
+  @Nonnull
+  private File _ensureTargetDirectory (@Nonnull final File aSrc)
   {
-    targetDirectory = aDir;
-    if (!targetDirectory.isAbsolute ())
-      targetDirectory = new File (project.getBasedir (), aDir.getPath ());
-    FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (targetDirectory);
-    if (!targetDirectory.exists ())
-      getLog ().error ("JDM target directory '" + sourceDirectory + "' does not exist!");
+    File ret = aSrc;
+    if (!ret.isAbsolute ())
+      ret = new File (project.getBasedir (), ret.getPath ());
+    FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (ret);
+    if (!ret.exists ())
+      getLog ().error ("JDM target directory '" + ret + "' does not exist!");
+    return ret;
+  }
+
+  public void setTargetMainJava (final File aDir)
+  {
+    targetMainJava = _ensureTargetDirectory (aDir);
+  }
+
+  public void setTargetMainResources (final File aDir)
+  {
+    targetMainResources = _ensureTargetDirectory (aDir);
+  }
+
+  public void setTargetTestJava (final File aDir)
+  {
+    targetTestJava = _ensureTargetDirectory (aDir);
+  }
+
+  public void setTargetTestResources (final File aDir)
+  {
+    targetTestResources = _ensureTargetDirectory (aDir);
   }
 
   public void setTargetEncoding (final String sTargetEncoding)
@@ -249,11 +290,29 @@ public final class JDMCMojo extends AbstractMojo
       .setIndentString ("  ");
     try
     {
-      cg.createCode (targetDirectory);
+      cg.createCode (targetMainJava, targetMainResources, targetTestJava, targetTestResources);
     }
     catch (final IOException ex)
     {
       throw new MojoExecutionException ("IO error in Java code generation", ex);
+    }
+
+    // Add output directories to project
+    project.addCompileSourceRoot (targetMainJava.getAbsolutePath ());
+    {
+      final Resource aResource = new Resource ();
+      aResource.setDirectory (targetMainResources.getAbsolutePath ());
+      aResource.addInclude ("**/*");
+      aResource.setFiltering (false);
+      project.addResource (aResource);
+    }
+    project.addTestCompileSourceRoot (targetTestJava.getAbsolutePath ());
+    {
+      final Resource aResource = new Resource ();
+      aResource.setDirectory (targetTestResources.getAbsolutePath ());
+      aResource.addInclude ("**/*");
+      aResource.setFiltering (false);
+      project.addTestResource (aResource);
     }
   }
 }

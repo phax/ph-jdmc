@@ -85,21 +85,47 @@ public class JDMCodeGenerator
   public void createCode (@Nonnull final File aDestDir) throws IOException
   {
     ValueEnforcer.notNull (aDestDir, "DestDir");
+    createCode (new File (aDestDir, "src/main/java"),
+                new File (aDestDir, "src/main/resources"),
+                new File (aDestDir, "src/test/java"),
+                new File (aDestDir, "src/test/resources"));
+  }
+
+  /**
+   * Run the main code creation
+   *
+   * @param aDirMainJava
+   *        The directory to create the "main" Java code in.
+   * @param aDirMainResources
+   *        The directory to create the "main" resources in.
+   * @param aDirTestJava
+   *        The directory to create the "test" Java code in.
+   * @param aDirTestResources
+   *        The directory to create the "test" resources in.
+   * @throws IOException
+   *         On write error
+   */
+  public void createCode (@Nonnull final File aDirMainJava,
+                          @Nonnull final File aDirMainResources,
+                          @Nonnull final File aDirTestJava,
+                          @Nonnull final File aDirTestResources) throws IOException
+  {
+    ValueEnforcer.notNull (aDirMainJava, "DirMainJava");
+    ValueEnforcer.notNull (aDirMainResources, "DirMainResources");
+    ValueEnforcer.notNull (aDirTestJava, "DirTestJava");
+    ValueEnforcer.notNull (aDirTestResources, "DirTestResources");
 
     final ICommonsList <JDMClass> aClasses = m_aProcessor.getAllReadClasses ();
     final ICommonsList <JDMEnum> aEnums = m_aProcessor.getAllReadEnums ();
 
     try
     {
-      final File aSrcMainJava = new File (aDestDir, "src/main/java");
-      final File aSrcMainResources = new File (aDestDir, "src/main/resources");
-
-      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcMainJava);
-      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcMainResources);
+      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirMainJava);
+      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirMainResources);
 
       final JDMCodeModel cm = new JDMCodeModel (m_aProcessor);
       if (m_aSettings.isReadExistingSPIFiles ())
-        cm.spiImplMap ().readInitial (aSrcMainResources);
+        cm.spiImplMap ().readInitial (aDirMainResources);
 
       // Create all classes
       for (final JDMClass aClass : aClasses)
@@ -128,7 +154,7 @@ public class JDMCodeGenerator
       new JCMWriter (cm).setCharset (m_aSettings.getCharset ())
                         .setNewLine (m_aSettings.getNewLineMode ().getText ())
                         .setIndentString (m_aSettings.getIndentString ())
-                        .build (aSrcMainJava, aSrcMainResources, m_aSettings.getProgressTracker ());
+                        .build (aDirMainJava, aDirMainResources, m_aSettings.getProgressTracker ());
     }
     catch (final JClassAlreadyExistsException ex)
     {
@@ -137,15 +163,12 @@ public class JDMCodeGenerator
 
     try
     {
-      final File aSrcTestJava = new File (aDestDir, "src/test/java");
-      final File aSrcTestResources = new File (aDestDir, "src/test/resources");
-
-      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcTestJava);
-      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aSrcTestResources);
+      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirTestJava);
+      FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirTestResources);
 
       final JDMCodeModel cm = new JDMCodeModel (m_aProcessor);
       if (m_aSettings.isReadExistingSPIFiles ())
-        cm.spiImplMap ().readInitial (aSrcTestResources);
+        cm.spiImplMap ().readInitial (aDirTestResources);
 
       JDMCodeGenTest.createTestJavaSelfTest (m_aProcessor, m_aSettings, cm);
       JDMCodeGenTest.createSPITest (m_aProcessor.getDestinationPackageName (), cm);
@@ -165,13 +188,13 @@ public class JDMCodeGenerator
       new JCMWriter (cm).setCharset (m_aSettings.getCharset ())
                         .setNewLine (m_aSettings.getNewLineMode ().getText ())
                         .setIndentString (m_aSettings.getIndentString ())
-                        .build (aSrcTestJava, aSrcTestResources, m_aSettings.getProgressTracker ());
+                        .build (aDirTestJava, aDirTestResources, m_aSettings.getProgressTracker ());
     }
     catch (final JClassAlreadyExistsException ex)
     {
       throw new IllegalStateException (ex);
     }
 
-    LOGGER.info ("Done creating code in " + aDestDir.getAbsolutePath ());
+    LOGGER.info ("Done creating code from JDM files");
   }
 }
