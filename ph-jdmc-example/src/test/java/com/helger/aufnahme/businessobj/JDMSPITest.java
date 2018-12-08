@@ -1,4 +1,4 @@
-package com.helger.aufnahme.simple;
+package com.helger.aufnahme.businessobj;
 
 import java.io.IOException;
 import com.helger.commons.mock.SPITestHelper;
@@ -12,7 +12,7 @@ import org.junit.Test;
  * 
  * @author JDMCodeGenerator
  */
-public final class SPITest {
+public final class JDMSPITest {
 
   @Test
   public void testSPI()

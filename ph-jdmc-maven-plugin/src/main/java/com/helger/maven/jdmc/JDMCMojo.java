@@ -68,14 +68,14 @@ public final class JDMCMojo extends AbstractMojo
   /**
    * The list of source enum definitions, relative to the source directory.
    */
-  @Parameter (property = "sourceEnumDef")
-  private List <String> sourceEnumDef;
+  @Parameter (property = "sourceEnumDefs")
+  private List <String> sourceEnumDefs;
 
   /**
    * The list of source class definitions, relative to the source directory.
    */
-  @Parameter (property = "sourceClassDef")
-  private List <String> sourceClassDef;
+  @Parameter (property = "sourceClassDefs")
+  private List <String> sourceClassDefs;
 
   /**
    * The fully qualified target package name of the created source files.
@@ -163,27 +163,27 @@ public final class JDMCMojo extends AbstractMojo
     sourceEncoding = sSourceEncoding;
   }
 
-  public void setSourceEnumDef (final List <String> aCollection)
+  public void setSourceEnumDefs (final List <String> aCollection)
   {
     getLog ().info ("Using source enum definitions " + aCollection);
-    sourceEnumDef = new ArrayList <> ();
+    sourceEnumDefs = new ArrayList <> ();
     if (aCollection != null)
     {
       for (final String sName : aCollection)
         if (StringHelper.hasText (sName))
-          sourceEnumDef.add (sName);
+          sourceEnumDefs.add (sName);
     }
   }
 
-  public void setSourceClassDef (final List <String> aCollection)
+  public void setSourceClassDefs (final List <String> aCollection)
   {
     getLog ().info ("Using source class definitions " + aCollection);
-    sourceClassDef = new ArrayList <> ();
+    sourceClassDefs = new ArrayList <> ();
     if (aCollection != null)
     {
       for (final String sName : aCollection)
         if (StringHelper.hasText (sName))
-          sourceClassDef.add (sName);
+          sourceClassDefs.add (sName);
     }
   }
 
@@ -274,11 +274,11 @@ public final class JDMCMojo extends AbstractMojo
     final JDMProcessor p = new JDMProcessor (packageName).setSourceCharset (Charset.forName (sourceEncoding))
                                                          .setClassNamePrefix (classNamePrefix)
                                                          .setClassNameSuffix (classNameSuffix);
-    if (sourceEnumDef != null)
-      for (final String sEnumDef : sourceEnumDef)
+    if (sourceEnumDefs != null)
+      for (final String sEnumDef : sourceEnumDefs)
         p.readEnumDef (new File (sourceDirectory, sEnumDef));
-    if (sourceClassDef != null)
-      for (final String sClassDef : sourceClassDef)
+    if (sourceClassDefs != null)
+      for (final String sClassDef : sourceClassDefs)
         p.readClassDef (new File (sourceDirectory, sClassDef));
 
     // Start code generation
