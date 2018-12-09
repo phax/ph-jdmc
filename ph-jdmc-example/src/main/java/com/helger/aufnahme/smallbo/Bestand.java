@@ -52,62 +52,47 @@ public class Bestand
   private String m_sTotLiegBesch;
 
   public Bestand(final int nBNr,
-    @Nonnull
-    @Nonempty
-    final ICommonsList<File> aPics,
-    @Nonnull
-    final LocalDate aDate,
-    @Nullable
-    final String sVerortung,
-    @Nonnull
-    final ICommonsList<IHabitatbaumgruppe> aBZHBG, final int nAreaSize,
-    @Nonnull
-    final String sBeschreib, final boolean bSameAge, final boolean bOneLevel,
-    @Nonnull
-    final EStockType eStockType,
-    @Nonnull
-    final String sUsageDescription,
-    @Nonnull
-    final String sGesellschaft, final boolean bKronenschluss, final boolean bLightWoods, final boolean bUnterwuchs,
-    @Nonnull
-    final EStockDeadwood eTotSteh,
-    @Nonnull
-    final String sTotStehBesch,
-    @Nonnull
-    final EStockDeadwood eTotLieg,
-    @Nonnull
-    final String sTotLiegBesch) {
+    @Nonnull @Nonempty final ICommonsList<File> aPics,
+    @Nonnull final LocalDate aDate,
+    @Nullable final String sVerortung,
+    @Nonnull final ICommonsList<IHabitatbaumgruppe> aBZHBG,
+    final int nAreaSize,
+    @Nonnull final String sBeschreib,
+    final boolean bSameAge,
+    final boolean bOneLevel,
+    @Nonnull final EStockType eStockType,
+    @Nonnull final String sUsageDescription,
+    @Nonnull final String sGesellschaft,
+    final boolean bKronenschluss,
+    final boolean bLightWoods,
+    final boolean bUnterwuchs,
+    @Nonnull final EStockDeadwood eTotSteh,
+    @Nonnull final String sTotStehBesch,
+    @Nonnull final EStockDeadwood eTotLieg,
+    @Nonnull final String sTotLiegBesch) {
     this(StubObject.createForCurrentUser(), nBNr, aPics, aDate, sVerortung, aBZHBG, nAreaSize, sBeschreib, bSameAge, bOneLevel, eStockType, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
   }
 
-  protected Bestand(
-    @Nonnull
-    final StubObject aStubObject, final int nBNr,
-    @Nonnull
-    @Nonempty
-    final ICommonsList<File> aPics,
-    @Nonnull
-    final LocalDate aDate,
-    @Nullable
-    final String sVerortung,
-    @Nonnull
-    final ICommonsList<IHabitatbaumgruppe> aBZHBG, final int nAreaSize,
-    @Nonnull
-    final String sBeschreib, final boolean bSameAge, final boolean bOneLevel,
-    @Nonnull
-    final EStockType eStockType,
-    @Nonnull
-    final String sUsageDescription,
-    @Nonnull
-    final String sGesellschaft, final boolean bKronenschluss, final boolean bLightWoods, final boolean bUnterwuchs,
-    @Nonnull
-    final EStockDeadwood eTotSteh,
-    @Nonnull
-    final String sTotStehBesch,
-    @Nonnull
-    final EStockDeadwood eTotLieg,
-    @Nonnull
-    final String sTotLiegBesch) {
+  protected Bestand(@Nonnull final StubObject aStubObject,
+    final int nBNr,
+    @Nonnull @Nonempty final ICommonsList<File> aPics,
+    @Nonnull final LocalDate aDate,
+    @Nullable final String sVerortung,
+    @Nonnull final ICommonsList<IHabitatbaumgruppe> aBZHBG,
+    final int nAreaSize,
+    @Nonnull final String sBeschreib,
+    final boolean bSameAge,
+    final boolean bOneLevel,
+    @Nonnull final EStockType eStockType,
+    @Nonnull final String sUsageDescription,
+    @Nonnull final String sGesellschaft,
+    final boolean bKronenschluss,
+    final boolean bLightWoods,
+    final boolean bUnterwuchs,
+    @Nonnull final EStockDeadwood eTotSteh,
+    @Nonnull final String sTotStehBesch,
+    @Nonnull final EStockDeadwood eTotLieg,
+    @Nonnull final String sTotLiegBesch) {
     super(aStubObject);
     setBNr(nBNr);
     setPics(aPics);
@@ -161,10 +146,7 @@ public class Bestand
   }
 
   @Nonnull
-  final EChange setPics(
-    @Nonnull
-    @Nonempty
-    final ICommonsList<File> aPics) {
+  final EChange setPics(@Nonnull @Nonempty final ICommonsList<File> aPics) {
     ValueEnforcer.notEmpty(aPics, "Pics");
     // Ensure the same implementation type
     final ICommonsList<File> aRealList = new CommonsArrayList<>(aPics);
@@ -181,9 +163,7 @@ public class Bestand
   }
 
   @Nonnull
-  final EChange setDate(
-    @Nonnull
-    final LocalDate aDate) {
+  final EChange setDate(@Nonnull final LocalDate aDate) {
     ValueEnforcer.notNull(aDate, "Date");
     if (aDate.equals(m_aDate)) {
       return EChange.UNCHANGED;
@@ -198,9 +178,7 @@ public class Bestand
   }
 
   @Nonnull
-  final EChange setVerortung(
-    @Nullable
-    final String sVerortung) {
+  final EChange setVerortung(@Nullable final String sVerortung) {
     if (EqualsHelper.equals(sVerortung, m_sVerortung)) {
       return EChange.UNCHANGED;
     }
@@ -215,9 +193,7 @@ public class Bestand
   }
 
   @Nonnull
-  final EChange setBZHBG(
-    @Nonnull
-    final ICommonsList<IHabitatbaumgruppe> aBZHBG) {
+  final EChange setBZHBG(@Nonnull final ICommonsList<IHabitatbaumgruppe> aBZHBG) {
     ValueEnforcer.notNull(aBZHBG, "BZHBG");
     // Ensure the same implementation type
     final ICommonsList<IHabitatbaumgruppe> aRealList = new CommonsArrayList<>(aBZHBG);
@@ -247,9 +223,7 @@ public class Bestand
   }
 
   @Nonnull
-  final EChange setBeschreib(
-    @Nonnull
-    final String sBeschreib) {
+  final EChange setBeschreib(@Nonnull final String sBeschreib) {
     ValueEnforcer.notNull(sBeschreib, "Beschreib");
     if (sBeschreib.equals(m_sBeschreib)) {
       return EChange.UNCHANGED;
@@ -290,9 +264,7 @@ public class Bestand
   }
 
   @Nonnull
-  final EChange setStockType(
-    @Nonnull
-    final EStockType eStockType) {
+  final EChange setStockType(@Nonnull final EStockType eStockType) {
     ValueEnforcer.notNull(eStockType, "StockType");
     if (eStockType.equals(m_eStockType)) {
       return EChange.UNCHANGED;
@@ -307,9 +279,7 @@ public class Bestand
   }
 
   @Nonnull
-  final EChange setUsageDescription(
-    @Nonnull
-    final String sUsageDescription) {
+  final EChange setUsageDescription(@Nonnull final String sUsageDescription) {
     ValueEnforcer.notNull(sUsageDescription, "UsageDescription");
     if (sUsageDescription.equals(m_sUsageDescription)) {
       return EChange.UNCHANGED;
@@ -324,9 +294,7 @@ public class Bestand
   }
 
   @Nonnull
-  final EChange setGesellschaft(
-    @Nonnull
-    final String sGesellschaft) {
+  final EChange setGesellschaft(@Nonnull final String sGesellschaft) {
     ValueEnforcer.notNull(sGesellschaft, "Gesellschaft");
     if (sGesellschaft.equals(m_sGesellschaft)) {
       return EChange.UNCHANGED;
@@ -380,9 +348,7 @@ public class Bestand
   }
 
   @Nonnull
-  final EChange setTotSteh(
-    @Nonnull
-    final EStockDeadwood eTotSteh) {
+  final EChange setTotSteh(@Nonnull final EStockDeadwood eTotSteh) {
     ValueEnforcer.notNull(eTotSteh, "TotSteh");
     if (eTotSteh.equals(m_eTotSteh)) {
       return EChange.UNCHANGED;
@@ -397,9 +363,7 @@ public class Bestand
   }
 
   @Nonnull
-  final EChange setTotStehBesch(
-    @Nonnull
-    final String sTotStehBesch) {
+  final EChange setTotStehBesch(@Nonnull final String sTotStehBesch) {
     ValueEnforcer.notNull(sTotStehBesch, "TotStehBesch");
     if (sTotStehBesch.equals(m_sTotStehBesch)) {
       return EChange.UNCHANGED;
@@ -414,9 +378,7 @@ public class Bestand
   }
 
   @Nonnull
-  final EChange setTotLieg(
-    @Nonnull
-    final EStockDeadwood eTotLieg) {
+  final EChange setTotLieg(@Nonnull final EStockDeadwood eTotLieg) {
     ValueEnforcer.notNull(eTotLieg, "TotLieg");
     if (eTotLieg.equals(m_eTotLieg)) {
       return EChange.UNCHANGED;
@@ -431,9 +393,7 @@ public class Bestand
   }
 
   @Nonnull
-  final EChange setTotLiegBesch(
-    @Nonnull
-    final String sTotLiegBesch) {
+  final EChange setTotLiegBesch(@Nonnull final String sTotLiegBesch) {
     ValueEnforcer.notNull(sTotLiegBesch, "TotLiegBesch");
     if (sTotLiegBesch.equals(m_sTotLiegBesch)) {
       return EChange.UNCHANGED;

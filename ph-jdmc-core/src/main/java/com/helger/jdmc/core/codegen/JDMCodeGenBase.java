@@ -35,6 +35,7 @@ import com.helger.commons.string.StringHelper;
 import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
 import com.helger.jcodemodel.AbstractJClass;
+import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JBlock;
@@ -278,20 +279,8 @@ public class JDMCodeGenBase
 
       // Create getter
 
-      // Find type name
-      final String sJavaTypeName1 = aField.getType ().getJavaFQCN (eMultiplicity);
-      final String sJavaTypeName2;
-      final AbstractJDMClassType aExistingClass = aProcessor.findTypeByName (sJavaTypeName1);
-      if (aExistingClass != null && aExistingClass instanceof JDMClass)
-      {
-        // It's one of our created classes - add an "I" prefix
-        sJavaTypeName2 = aExistingClass.getFQInterfaceName ();
-      }
-      else
-        sJavaTypeName2 = sJavaTypeName1;
-
       // List or field?
-      AbstractJClass jFieldType = cm.ref (sJavaTypeName2);
+      AbstractJType jFieldType = cm.ref (aField.getType (), eMultiplicity);
       IJExpression aFieldInit = null;
       boolean bFieldIsFinal = false;
       if (eMultiplicity.isOpenEnded ())

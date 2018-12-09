@@ -26,21 +26,11 @@ public class CaveType
   private ECaveClass m_eClazz;
   private ECaveType m_eType;
 
-  public CaveType(
-    @Nonnull
-    final ECaveClass eClazz,
-    @Nonnull
-    final ECaveType eType) {
+  public CaveType(@Nonnull final ECaveClass eClazz, @Nonnull final ECaveType eType) {
     this(StubObject.createForCurrentUser(), eClazz, eType);
   }
 
-  protected CaveType(
-    @Nonnull
-    final StubObject aStubObject,
-    @Nonnull
-    final ECaveClass eClazz,
-    @Nonnull
-    final ECaveType eType) {
+  protected CaveType(@Nonnull final StubObject aStubObject, @Nonnull final ECaveClass eClazz, @Nonnull final ECaveType eType) {
     super(aStubObject);
     setClazz(eClazz);
     setType(eType);
@@ -62,9 +52,7 @@ public class CaveType
   }
 
   @Nonnull
-  final EChange setClazz(
-    @Nonnull
-    final ECaveClass eClazz) {
+  final EChange setClazz(@Nonnull final ECaveClass eClazz) {
     ValueEnforcer.notNull(eClazz, "Clazz");
     if (eClazz.equals(m_eClazz)) {
       return EChange.UNCHANGED;
@@ -79,9 +67,7 @@ public class CaveType
   }
 
   @Nonnull
-  final EChange setType(
-    @Nonnull
-    final ECaveType eType) {
+  final EChange setType(@Nonnull final ECaveType eType) {
     ValueEnforcer.notNull(eType, "Type");
     if (eType.equals(m_eType)) {
       return EChange.UNCHANGED;

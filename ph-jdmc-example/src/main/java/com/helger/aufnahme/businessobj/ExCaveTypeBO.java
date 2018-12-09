@@ -26,21 +26,11 @@ public class ExCaveTypeBO
   private EExCaveClassBO m_eClazz;
   private EExCaveTypeBO m_eType;
 
-  public ExCaveTypeBO(
-    @Nonnull
-    final EExCaveClassBO eClazz,
-    @Nonnull
-    final EExCaveTypeBO eType) {
+  public ExCaveTypeBO(@Nonnull final EExCaveClassBO eClazz, @Nonnull final EExCaveTypeBO eType) {
     this(StubObject.createForCurrentUser(), eClazz, eType);
   }
 
-  protected ExCaveTypeBO(
-    @Nonnull
-    final StubObject aStubObject,
-    @Nonnull
-    final EExCaveClassBO eClazz,
-    @Nonnull
-    final EExCaveTypeBO eType) {
+  protected ExCaveTypeBO(@Nonnull final StubObject aStubObject, @Nonnull final EExCaveClassBO eClazz, @Nonnull final EExCaveTypeBO eType) {
     super(aStubObject);
     setClazz(eClazz);
     setType(eType);
@@ -62,9 +52,7 @@ public class ExCaveTypeBO
   }
 
   @Nonnull
-  final EChange setClazz(
-    @Nonnull
-    final EExCaveClassBO eClazz) {
+  final EChange setClazz(@Nonnull final EExCaveClassBO eClazz) {
     ValueEnforcer.notNull(eClazz, "Clazz");
     if (eClazz.equals(m_eClazz)) {
       return EChange.UNCHANGED;
@@ -79,9 +67,7 @@ public class ExCaveTypeBO
   }
 
   @Nonnull
-  final EChange setType(
-    @Nonnull
-    final EExCaveTypeBO eType) {
+  final EChange setType(@Nonnull final EExCaveTypeBO eType) {
     ValueEnforcer.notNull(eType, "Type");
     if (eType.equals(m_eType)) {
       return EChange.UNCHANGED;

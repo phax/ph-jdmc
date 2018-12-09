@@ -21,13 +21,7 @@ public class ExTrunkSizeBOMicroTypeConverter
   private static final String ATTR_HEIGHT = "height";
 
   @Nonnull
-  public IMicroElement convertToMicroElement(
-    @Nonnull
-    final ExTrunkSizeBO aValue,
-    @Nullable
-    final String sNamespaceURI,
-    @Nonnull
-    final String sTagName) {
+  public IMicroElement convertToMicroElement(@Nonnull final ExTrunkSizeBO aValue, @Nullable final String sNamespaceURI, @Nonnull final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     super.setObjectFields(aValue, aElement);
     aElement.setAttribute(ATTR_BHD, aValue.getBHD());
@@ -36,9 +30,7 @@ public class ExTrunkSizeBOMicroTypeConverter
   }
 
   @Nonnull
-  public ExTrunkSizeBO convertToNative(
-    @Nonnull
-    final IMicroElement aElement) {
+  public ExTrunkSizeBO convertToNative(@Nonnull final IMicroElement aElement) {
     final int nBHD = aElement.getAttributeValueAsInt(ATTR_BHD, -1);
     final EExTreeHeightBO eHeight = EExTreeHeightBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_HEIGHT));
     return new ExTrunkSizeBO(super.getStubObject(aElement), nBHD, eHeight);

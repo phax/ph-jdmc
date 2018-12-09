@@ -27,6 +27,7 @@ public final class ExStichprobeDeadwoodBOTest {
     ExStichprobeDeadwoodBO y = new ExStichprobeDeadwoodBO(EExDecompositionDegreeClassBO.CLASS0, EExTreeKindBO.Bergahorn, 8, 8);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Objects are not equal, because they have different IDs
     // Test all setters
     x.setDoD(EExDecompositionDegreeClassBO.CLASS0);
     x.setTreeKind(EExTreeKindBO.Bergahorn);

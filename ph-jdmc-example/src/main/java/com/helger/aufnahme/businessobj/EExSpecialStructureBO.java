@@ -43,13 +43,7 @@ public enum EExSpecialStructureBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EExSpecialStructureBO(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EExSpecialStructureBO(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -67,25 +61,17 @@ public enum EExSpecialStructureBO
   }
 
   @Nullable
-  public static EExSpecialStructureBO getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EExSpecialStructureBO getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EExSpecialStructureBO.class, sID);
   }
 
   @Nullable
-  public static EExSpecialStructureBO getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EExSpecialStructureBO eDefault) {
+  public static EExSpecialStructureBO getFromIDOrDefault(@Nullable final String sID, @Nullable final EExSpecialStructureBO eDefault) {
     return EnumHelper.getFromIDOrDefault(EExSpecialStructureBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EExSpecialStructureBO getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EExSpecialStructureBO getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EExSpecialStructureBO.class, sID);
   }
 }

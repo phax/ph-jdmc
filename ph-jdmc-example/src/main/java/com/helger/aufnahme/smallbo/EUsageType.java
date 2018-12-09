@@ -23,13 +23,7 @@ public enum EUsageType
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EUsageType(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EUsageType(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -47,25 +41,17 @@ public enum EUsageType
   }
 
   @Nullable
-  public static EUsageType getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EUsageType getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EUsageType.class, sID);
   }
 
   @Nullable
-  public static EUsageType getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EUsageType eDefault) {
+  public static EUsageType getFromIDOrDefault(@Nullable final String sID, @Nullable final EUsageType eDefault) {
     return EnumHelper.getFromIDOrDefault(EUsageType.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EUsageType getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EUsageType getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EUsageType.class, sID);
   }
 }

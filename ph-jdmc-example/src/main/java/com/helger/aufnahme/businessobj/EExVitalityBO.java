@@ -24,13 +24,7 @@ public enum EExVitalityBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EExVitalityBO(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EExVitalityBO(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -48,25 +42,17 @@ public enum EExVitalityBO
   }
 
   @Nullable
-  public static EExVitalityBO getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EExVitalityBO getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EExVitalityBO.class, sID);
   }
 
   @Nullable
-  public static EExVitalityBO getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EExVitalityBO eDefault) {
+  public static EExVitalityBO getFromIDOrDefault(@Nullable final String sID, @Nullable final EExVitalityBO eDefault) {
     return EnumHelper.getFromIDOrDefault(EExVitalityBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EExVitalityBO getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EExVitalityBO getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EExVitalityBO.class, sID);
   }
 }

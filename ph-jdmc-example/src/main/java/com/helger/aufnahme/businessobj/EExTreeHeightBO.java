@@ -23,13 +23,7 @@ public enum EExTreeHeightBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EExTreeHeightBO(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EExTreeHeightBO(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -47,25 +41,17 @@ public enum EExTreeHeightBO
   }
 
   @Nullable
-  public static EExTreeHeightBO getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EExTreeHeightBO getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EExTreeHeightBO.class, sID);
   }
 
   @Nullable
-  public static EExTreeHeightBO getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EExTreeHeightBO eDefault) {
+  public static EExTreeHeightBO getFromIDOrDefault(@Nullable final String sID, @Nullable final EExTreeHeightBO eDefault) {
     return EnumHelper.getFromIDOrDefault(EExTreeHeightBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EExTreeHeightBO getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EExTreeHeightBO getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EExTreeHeightBO.class, sID);
   }
 }

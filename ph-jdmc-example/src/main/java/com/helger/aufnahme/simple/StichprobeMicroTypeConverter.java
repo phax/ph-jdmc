@@ -52,13 +52,7 @@ public class StichprobeMicroTypeConverter
   private static final String ELEMENT_TOT_LIEG_2 = "totlieg2";
 
   @Nonnull
-  public IMicroElement convertToMicroElement(
-    @Nonnull
-    final Stichprobe aValue,
-    @Nullable
-    final String sNamespaceURI,
-    @Nonnull
-    final String sTagName) {
+  public IMicroElement convertToMicroElement(@Nonnull final Stichprobe aValue, @Nullable final String sNamespaceURI, @Nonnull final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     aElement.setAttribute(ATTR_STICHNR, aValue.getStichNr());
     aElement.appendChild(MicroTypeConverter.convertToMicroElement(aValue.getStichNrzR(), sNamespaceURI, ELEMENT_STICHNRZR));
@@ -103,9 +97,7 @@ public class StichprobeMicroTypeConverter
   }
 
   @Nonnull
-  public Stichprobe convertToNative(
-    @Nonnull
-    final IMicroElement aElement) {
+  public Stichprobe convertToNative(@Nonnull final IMicroElement aElement) {
     final int nStichNr = aElement.getAttributeValueAsInt(ATTR_STICHNR, -1);
     final IReservat aStichNrzR = MicroTypeConverter.convertToNative(aElement.getFirstChildElement(ELEMENT_STICHNRZR), Reservat.class);
     final ICommonsList<File> aPics = new CommonsArrayList<>();

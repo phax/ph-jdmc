@@ -25,13 +25,7 @@ public enum EExDecompositionDegreeClassBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EExDecompositionDegreeClassBO(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EExDecompositionDegreeClassBO(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -49,25 +43,17 @@ public enum EExDecompositionDegreeClassBO
   }
 
   @Nullable
-  public static EExDecompositionDegreeClassBO getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EExDecompositionDegreeClassBO getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EExDecompositionDegreeClassBO.class, sID);
   }
 
   @Nullable
-  public static EExDecompositionDegreeClassBO getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EExDecompositionDegreeClassBO eDefault) {
+  public static EExDecompositionDegreeClassBO getFromIDOrDefault(@Nullable final String sID, @Nullable final EExDecompositionDegreeClassBO eDefault) {
     return EnumHelper.getFromIDOrDefault(EExDecompositionDegreeClassBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EExDecompositionDegreeClassBO getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EExDecompositionDegreeClassBO getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EExDecompositionDegreeClassBO.class, sID);
   }
 }

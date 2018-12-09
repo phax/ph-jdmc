@@ -27,6 +27,7 @@ public final class ExBiotopbaumDeadwoodBOTest {
     ExBiotopbaumDeadwoodBO y = new ExBiotopbaumDeadwoodBO(EExDeadwoodCategoryBO.CLASS1, true, 8, 8);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Objects are not equal, because they have different IDs
     // Test all setters
     x.setType(EExDeadwoodCategoryBO.CLASS1);
     Assert.assertFalse(x.setEnabled(true).isChanged());

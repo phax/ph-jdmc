@@ -60,86 +60,63 @@ public class ExBiotopbaumBO
   private final ICommonsList<IExBiotopbaumDecompositionDegreeBO> m_aDeadwoodDoD = new CommonsArrayList<>();
 
   public ExBiotopbaumBO(final int nBBNr,
-    @Nonnull
-    @Nonempty
-    final ICommonsList<File> aPics,
-    @Nonnull
-    final LocalDate aDate,
-    @Nonnull
-    @Nonempty
-    final ICommonsList<EExBiotopbaumTypeBO> aType,
-    @Nullable
-    final String sLocation,
-    @Nonnull
-    final EExExpositionBO eExposition,
-    @Nullable
-    final String sHanglage, final boolean bEinschichtig, final boolean bSolitary, final boolean bLightLocation, final boolean bClosedCrown, final boolean bNoSun, final boolean bUeberSun, final boolean bHomogene,
-    @Nonnull
-    final String sBeschreibung,
-    @Nonnull
-    final EExTreeKindBO eTreeKind,
-    @Nonnull
-    final ICommonsList<IExCaveTypeBO> aCaves,
-    @Nonnull
-    @Nonempty
-    final ICommonsList<IExTrunkSizeBO> aTrunk,
-    @Nonnull
-    final EExVitalityBO eVitality,
-    @Nonnull
-    final ICommonsList<EExSpecialStructureBO> aSpecialStructure,
-    @Nullable
-    final String sOtherSpecial, final boolean bAspirant,
-    @Nullable
-    final String sAspirantDesc, final boolean bMarked,
-    @Nullable
-    final String sMarkedDesc,
-    @Nonnull
-    final ICommonsList<IExBiotopbaumDeadwoodBO> aDeadwoodCats,
-    @Nonnull
-    final ICommonsList<IExBiotopbaumDecompositionDegreeBO> aDeadwoodDoD) {
+    @Nonnull @Nonempty final ICommonsList<File> aPics,
+    @Nonnull final LocalDate aDate,
+    @Nonnull @Nonempty final ICommonsList<EExBiotopbaumTypeBO> aType,
+    @Nullable final String sLocation,
+    @Nonnull final EExExpositionBO eExposition,
+    @Nullable final String sHanglage,
+    final boolean bEinschichtig,
+    final boolean bSolitary,
+    final boolean bLightLocation,
+    final boolean bClosedCrown,
+    final boolean bNoSun,
+    final boolean bUeberSun,
+    final boolean bHomogene,
+    @Nonnull final String sBeschreibung,
+    @Nonnull final EExTreeKindBO eTreeKind,
+    @Nonnull final ICommonsList<IExCaveTypeBO> aCaves,
+    @Nonnull @Nonempty final ICommonsList<IExTrunkSizeBO> aTrunk,
+    @Nonnull final EExVitalityBO eVitality,
+    @Nonnull final ICommonsList<EExSpecialStructureBO> aSpecialStructure,
+    @Nullable final String sOtherSpecial,
+    final boolean bAspirant,
+    @Nullable final String sAspirantDesc,
+    final boolean bMarked,
+    @Nullable final String sMarkedDesc,
+    @Nonnull final ICommonsList<IExBiotopbaumDeadwoodBO> aDeadwoodCats,
+    @Nonnull final ICommonsList<IExBiotopbaumDecompositionDegreeBO> aDeadwoodDoD) {
     this(StubObject.createForCurrentUser(), nBBNr, aPics, aDate, aType, sLocation, eExposition, sHanglage, bEinschichtig, bSolitary, bLightLocation, bClosedCrown, bNoSun, bUeberSun, bHomogene, sBeschreibung, eTreeKind, aCaves, aTrunk, eVitality, aSpecialStructure, sOtherSpecial, bAspirant, sAspirantDesc, bMarked, sMarkedDesc, aDeadwoodCats, aDeadwoodDoD);
   }
 
-  protected ExBiotopbaumBO(
-    @Nonnull
-    final StubObject aStubObject, final int nBBNr,
-    @Nonnull
-    @Nonempty
-    final ICommonsList<File> aPics,
-    @Nonnull
-    final LocalDate aDate,
-    @Nonnull
-    @Nonempty
-    final ICommonsList<EExBiotopbaumTypeBO> aType,
-    @Nullable
-    final String sLocation,
-    @Nonnull
-    final EExExpositionBO eExposition,
-    @Nullable
-    final String sHanglage, final boolean bEinschichtig, final boolean bSolitary, final boolean bLightLocation, final boolean bClosedCrown, final boolean bNoSun, final boolean bUeberSun, final boolean bHomogene,
-    @Nonnull
-    final String sBeschreibung,
-    @Nonnull
-    final EExTreeKindBO eTreeKind,
-    @Nonnull
-    final ICommonsList<IExCaveTypeBO> aCaves,
-    @Nonnull
-    @Nonempty
-    final ICommonsList<IExTrunkSizeBO> aTrunk,
-    @Nonnull
-    final EExVitalityBO eVitality,
-    @Nonnull
-    final ICommonsList<EExSpecialStructureBO> aSpecialStructure,
-    @Nullable
-    final String sOtherSpecial, final boolean bAspirant,
-    @Nullable
-    final String sAspirantDesc, final boolean bMarked,
-    @Nullable
-    final String sMarkedDesc,
-    @Nonnull
-    final ICommonsList<IExBiotopbaumDeadwoodBO> aDeadwoodCats,
-    @Nonnull
-    final ICommonsList<IExBiotopbaumDecompositionDegreeBO> aDeadwoodDoD) {
+  protected ExBiotopbaumBO(@Nonnull final StubObject aStubObject,
+    final int nBBNr,
+    @Nonnull @Nonempty final ICommonsList<File> aPics,
+    @Nonnull final LocalDate aDate,
+    @Nonnull @Nonempty final ICommonsList<EExBiotopbaumTypeBO> aType,
+    @Nullable final String sLocation,
+    @Nonnull final EExExpositionBO eExposition,
+    @Nullable final String sHanglage,
+    final boolean bEinschichtig,
+    final boolean bSolitary,
+    final boolean bLightLocation,
+    final boolean bClosedCrown,
+    final boolean bNoSun,
+    final boolean bUeberSun,
+    final boolean bHomogene,
+    @Nonnull final String sBeschreibung,
+    @Nonnull final EExTreeKindBO eTreeKind,
+    @Nonnull final ICommonsList<IExCaveTypeBO> aCaves,
+    @Nonnull @Nonempty final ICommonsList<IExTrunkSizeBO> aTrunk,
+    @Nonnull final EExVitalityBO eVitality,
+    @Nonnull final ICommonsList<EExSpecialStructureBO> aSpecialStructure,
+    @Nullable final String sOtherSpecial,
+    final boolean bAspirant,
+    @Nullable final String sAspirantDesc,
+    final boolean bMarked,
+    @Nullable final String sMarkedDesc,
+    @Nonnull final ICommonsList<IExBiotopbaumDeadwoodBO> aDeadwoodCats,
+    @Nonnull final ICommonsList<IExBiotopbaumDecompositionDegreeBO> aDeadwoodDoD) {
     super(aStubObject);
     setBBNr(nBBNr);
     setPics(aPics);
@@ -201,10 +178,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setPics(
-    @Nonnull
-    @Nonempty
-    final ICommonsList<File> aPics) {
+  final EChange setPics(@Nonnull @Nonempty final ICommonsList<File> aPics) {
     ValueEnforcer.notEmpty(aPics, "Pics");
     // Ensure the same implementation type
     final ICommonsList<File> aRealList = new CommonsArrayList<>(aPics);
@@ -221,9 +195,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setDate(
-    @Nonnull
-    final LocalDate aDate) {
+  final EChange setDate(@Nonnull final LocalDate aDate) {
     ValueEnforcer.notNull(aDate, "Date");
     if (aDate.equals(m_aDate)) {
       return EChange.UNCHANGED;
@@ -240,10 +212,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setType(
-    @Nonnull
-    @Nonempty
-    final ICommonsList<EExBiotopbaumTypeBO> aType) {
+  final EChange setType(@Nonnull @Nonempty final ICommonsList<EExBiotopbaumTypeBO> aType) {
     ValueEnforcer.notEmpty(aType, "Type");
     // Ensure the same implementation type
     final ICommonsList<EExBiotopbaumTypeBO> aRealList = new CommonsArrayList<>(aType);
@@ -260,9 +229,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setLocation(
-    @Nullable
-    final String sLocation) {
+  final EChange setLocation(@Nullable final String sLocation) {
     if (EqualsHelper.equals(sLocation, m_sLocation)) {
       return EChange.UNCHANGED;
     }
@@ -276,9 +243,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setExposition(
-    @Nonnull
-    final EExExpositionBO eExposition) {
+  final EChange setExposition(@Nonnull final EExExpositionBO eExposition) {
     ValueEnforcer.notNull(eExposition, "Exposition");
     if (eExposition.equals(m_eExposition)) {
       return EChange.UNCHANGED;
@@ -293,9 +258,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setHanglage(
-    @Nullable
-    final String sHanglage) {
+  final EChange setHanglage(@Nullable final String sHanglage) {
     if (EqualsHelper.equals(sHanglage, m_sHanglage)) {
       return EChange.UNCHANGED;
     }
@@ -400,9 +363,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setBeschreibung(
-    @Nonnull
-    final String sBeschreibung) {
+  final EChange setBeschreibung(@Nonnull final String sBeschreibung) {
     ValueEnforcer.notNull(sBeschreibung, "Beschreibung");
     if (sBeschreibung.equals(m_sBeschreibung)) {
       return EChange.UNCHANGED;
@@ -417,9 +378,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setTreeKind(
-    @Nonnull
-    final EExTreeKindBO eTreeKind) {
+  final EChange setTreeKind(@Nonnull final EExTreeKindBO eTreeKind) {
     ValueEnforcer.notNull(eTreeKind, "TreeKind");
     if (eTreeKind.equals(m_eTreeKind)) {
       return EChange.UNCHANGED;
@@ -435,9 +394,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setCaves(
-    @Nonnull
-    final ICommonsList<IExCaveTypeBO> aCaves) {
+  final EChange setCaves(@Nonnull final ICommonsList<IExCaveTypeBO> aCaves) {
     ValueEnforcer.notNull(aCaves, "Caves");
     // Ensure the same implementation type
     final ICommonsList<IExCaveTypeBO> aRealList = new CommonsArrayList<>(aCaves);
@@ -456,10 +413,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setTrunk(
-    @Nonnull
-    @Nonempty
-    final ICommonsList<IExTrunkSizeBO> aTrunk) {
+  final EChange setTrunk(@Nonnull @Nonempty final ICommonsList<IExTrunkSizeBO> aTrunk) {
     ValueEnforcer.notEmpty(aTrunk, "Trunk");
     // Ensure the same implementation type
     final ICommonsList<IExTrunkSizeBO> aRealList = new CommonsArrayList<>(aTrunk);
@@ -476,9 +430,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setVitality(
-    @Nonnull
-    final EExVitalityBO eVitality) {
+  final EChange setVitality(@Nonnull final EExVitalityBO eVitality) {
     ValueEnforcer.notNull(eVitality, "Vitality");
     if (eVitality.equals(m_eVitality)) {
       return EChange.UNCHANGED;
@@ -494,9 +446,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setSpecialStructure(
-    @Nonnull
-    final ICommonsList<EExSpecialStructureBO> aSpecialStructure) {
+  final EChange setSpecialStructure(@Nonnull final ICommonsList<EExSpecialStructureBO> aSpecialStructure) {
     ValueEnforcer.notNull(aSpecialStructure, "SpecialStructure");
     // Ensure the same implementation type
     final ICommonsList<EExSpecialStructureBO> aRealList = new CommonsArrayList<>(aSpecialStructure);
@@ -513,9 +463,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setOtherSpecial(
-    @Nullable
-    final String sOtherSpecial) {
+  final EChange setOtherSpecial(@Nullable final String sOtherSpecial) {
     if (EqualsHelper.equals(sOtherSpecial, m_sOtherSpecial)) {
       return EChange.UNCHANGED;
     }
@@ -542,9 +490,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setAspirantDesc(
-    @Nullable
-    final String sAspirantDesc) {
+  final EChange setAspirantDesc(@Nullable final String sAspirantDesc) {
     if (EqualsHelper.equals(sAspirantDesc, m_sAspirantDesc)) {
       return EChange.UNCHANGED;
     }
@@ -571,9 +517,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setMarkedDesc(
-    @Nullable
-    final String sMarkedDesc) {
+  final EChange setMarkedDesc(@Nullable final String sMarkedDesc) {
     if (EqualsHelper.equals(sMarkedDesc, m_sMarkedDesc)) {
       return EChange.UNCHANGED;
     }
@@ -588,9 +532,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setDeadwoodCats(
-    @Nonnull
-    final ICommonsList<IExBiotopbaumDeadwoodBO> aDeadwoodCats) {
+  final EChange setDeadwoodCats(@Nonnull final ICommonsList<IExBiotopbaumDeadwoodBO> aDeadwoodCats) {
     ValueEnforcer.notNull(aDeadwoodCats, "DeadwoodCats");
     // Ensure the same implementation type
     final ICommonsList<IExBiotopbaumDeadwoodBO> aRealList = new CommonsArrayList<>(aDeadwoodCats);
@@ -608,9 +550,7 @@ public class ExBiotopbaumBO
   }
 
   @Nonnull
-  final EChange setDeadwoodDoD(
-    @Nonnull
-    final ICommonsList<IExBiotopbaumDecompositionDegreeBO> aDeadwoodDoD) {
+  final EChange setDeadwoodDoD(@Nonnull final ICommonsList<IExBiotopbaumDecompositionDegreeBO> aDeadwoodDoD) {
     ValueEnforcer.notNull(aDeadwoodDoD, "DeadwoodDoD");
     // Ensure the same implementation type
     final ICommonsList<IExBiotopbaumDecompositionDegreeBO> aRealList = new CommonsArrayList<>(aDeadwoodDoD);

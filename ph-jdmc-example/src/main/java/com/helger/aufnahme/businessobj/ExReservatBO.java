@@ -27,17 +27,14 @@ public class ExReservatBO
   private String m_sName;
   private int m_nAreaSize;
 
-  public ExReservatBO(final int nRNr,
-    @Nonnull
-    final String sName, final int nAreaSize) {
+  public ExReservatBO(final int nRNr, @Nonnull final String sName, final int nAreaSize) {
     this(StubObject.createForCurrentUser(), nRNr, sName, nAreaSize);
   }
 
-  protected ExReservatBO(
-    @Nonnull
-    final StubObject aStubObject, final int nRNr,
-    @Nonnull
-    final String sName, final int nAreaSize) {
+  protected ExReservatBO(@Nonnull final StubObject aStubObject,
+    final int nRNr,
+    @Nonnull final String sName,
+    final int nAreaSize) {
     super(aStubObject);
     setRNr(nRNr);
     setName(sName);
@@ -73,9 +70,7 @@ public class ExReservatBO
   }
 
   @Nonnull
-  final EChange setName(
-    @Nonnull
-    final String sName) {
+  final EChange setName(@Nonnull final String sName) {
     ValueEnforcer.notNull(sName, "Name");
     if (sName.equals(m_sName)) {
       return EChange.UNCHANGED;

@@ -27,6 +27,7 @@ public final class ExCaveTypeBOTest {
     ExCaveTypeBO y = new ExCaveTypeBO(EExCaveClassBO.ONE, EExCaveTypeBO._1);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Objects are not equal, because they have different IDs
     // Test all setters
     x.setClazz(EExCaveClassBO.ONE);
     x.setType(EExCaveTypeBO._1);

@@ -23,13 +23,7 @@ public enum ETreeHeight
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ETreeHeight(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private ETreeHeight(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -47,25 +41,17 @@ public enum ETreeHeight
   }
 
   @Nullable
-  public static ETreeHeight getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static ETreeHeight getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(ETreeHeight.class, sID);
   }
 
   @Nullable
-  public static ETreeHeight getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final ETreeHeight eDefault) {
+  public static ETreeHeight getFromIDOrDefault(@Nullable final String sID, @Nullable final ETreeHeight eDefault) {
     return EnumHelper.getFromIDOrDefault(ETreeHeight.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ETreeHeight getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static ETreeHeight getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(ETreeHeight.class, sID);
   }
 }

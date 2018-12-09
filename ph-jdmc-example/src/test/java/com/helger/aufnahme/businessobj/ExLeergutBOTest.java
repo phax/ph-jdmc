@@ -27,6 +27,7 @@ public final class ExLeergutBOTest {
     ExLeergutBO y = new ExLeergutBO();
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Objects are not equal, because they have different IDs
     // Test all setters
     // Check XML conversion
     XMLTestHelper.testMicroTypeConversion(x);

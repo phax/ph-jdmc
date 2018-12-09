@@ -23,13 +23,7 @@ public enum EUsagePeriod
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EUsagePeriod(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EUsagePeriod(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -47,25 +41,17 @@ public enum EUsagePeriod
   }
 
   @Nullable
-  public static EUsagePeriod getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EUsagePeriod getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EUsagePeriod.class, sID);
   }
 
   @Nullable
-  public static EUsagePeriod getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EUsagePeriod eDefault) {
+  public static EUsagePeriod getFromIDOrDefault(@Nullable final String sID, @Nullable final EUsagePeriod eDefault) {
     return EnumHelper.getFromIDOrDefault(EUsagePeriod.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EUsagePeriod getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EUsagePeriod getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EUsagePeriod.class, sID);
   }
 }

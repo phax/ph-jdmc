@@ -23,13 +23,7 @@ public enum EExUsageTypeBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EExUsageTypeBO(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EExUsageTypeBO(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -47,25 +41,17 @@ public enum EExUsageTypeBO
   }
 
   @Nullable
-  public static EExUsageTypeBO getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EExUsageTypeBO getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EExUsageTypeBO.class, sID);
   }
 
   @Nullable
-  public static EExUsageTypeBO getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EExUsageTypeBO eDefault) {
+  public static EExUsageTypeBO getFromIDOrDefault(@Nullable final String sID, @Nullable final EExUsageTypeBO eDefault) {
     return EnumHelper.getFromIDOrDefault(EExUsageTypeBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EExUsageTypeBO getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EExUsageTypeBO getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EExUsageTypeBO.class, sID);
   }
 }

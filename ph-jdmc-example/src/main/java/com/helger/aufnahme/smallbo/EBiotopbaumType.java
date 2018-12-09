@@ -25,13 +25,7 @@ public enum EBiotopbaumType
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EBiotopbaumType(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EBiotopbaumType(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -49,25 +43,17 @@ public enum EBiotopbaumType
   }
 
   @Nullable
-  public static EBiotopbaumType getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EBiotopbaumType getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EBiotopbaumType.class, sID);
   }
 
   @Nullable
-  public static EBiotopbaumType getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EBiotopbaumType eDefault) {
+  public static EBiotopbaumType getFromIDOrDefault(@Nullable final String sID, @Nullable final EBiotopbaumType eDefault) {
     return EnumHelper.getFromIDOrDefault(EBiotopbaumType.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EBiotopbaumType getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EBiotopbaumType getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EBiotopbaumType.class, sID);
   }
 }

@@ -28,17 +28,18 @@ public class BiotopbaumDecompositionDegree
   private int m_nLength;
   private int m_nBHD;
 
-  public BiotopbaumDecompositionDegree(
-    @Nonnull
-    final EDecompositionDegreeClass eType, final boolean bEnabled, final int nLength, final int nBHD) {
+  public BiotopbaumDecompositionDegree(@Nonnull final EDecompositionDegreeClass eType,
+    final boolean bEnabled,
+    final int nLength,
+    final int nBHD) {
     this(StubObject.createForCurrentUser(), eType, bEnabled, nLength, nBHD);
   }
 
-  protected BiotopbaumDecompositionDegree(
-    @Nonnull
-    final StubObject aStubObject,
-    @Nonnull
-    final EDecompositionDegreeClass eType, final boolean bEnabled, final int nLength, final int nBHD) {
+  protected BiotopbaumDecompositionDegree(@Nonnull final StubObject aStubObject,
+    @Nonnull final EDecompositionDegreeClass eType,
+    final boolean bEnabled,
+    final int nLength,
+    final int nBHD) {
     super(aStubObject);
     setType(eType);
     setEnabled(bEnabled);
@@ -62,9 +63,7 @@ public class BiotopbaumDecompositionDegree
   }
 
   @Nonnull
-  final EChange setType(
-    @Nonnull
-    final EDecompositionDegreeClass eType) {
+  final EChange setType(@Nonnull final EDecompositionDegreeClass eType) {
     ValueEnforcer.notNull(eType, "Type");
     if (eType.equals(m_eType)) {
       return EChange.UNCHANGED;

@@ -43,13 +43,7 @@ public enum ESpecialStructure
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ESpecialStructure(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private ESpecialStructure(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -67,25 +61,17 @@ public enum ESpecialStructure
   }
 
   @Nullable
-  public static ESpecialStructure getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static ESpecialStructure getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(ESpecialStructure.class, sID);
   }
 
   @Nullable
-  public static ESpecialStructure getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final ESpecialStructure eDefault) {
+  public static ESpecialStructure getFromIDOrDefault(@Nullable final String sID, @Nullable final ESpecialStructure eDefault) {
     return EnumHelper.getFromIDOrDefault(ESpecialStructure.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ESpecialStructure getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static ESpecialStructure getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(ESpecialStructure.class, sID);
   }
 }

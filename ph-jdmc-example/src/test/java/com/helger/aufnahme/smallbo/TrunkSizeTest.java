@@ -26,6 +26,7 @@ public final class TrunkSizeTest {
     TrunkSize y = new TrunkSize(8, ETreeHeight.ONE);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Objects are not equal, because they have different IDs
     // Test all setters
     Assert.assertFalse(x.setBHD(8).isChanged());
     x.setHeight(ETreeHeight.ONE);

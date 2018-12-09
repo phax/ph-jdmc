@@ -99,5 +99,13 @@ public final class BiotopbaumTest {
     Assert.assertFalse(x.setDeadwoodDoD(new CommonsArrayList<>(new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8))).isChanged());
     // Check XML conversion
     XMLTestHelper.testMicroTypeConversion(x);
+    // Test setters with null
+    Assert.assertTrue(x.setLocation(null).isChanged());
+    Assert.assertTrue(x.setHanglage(null).isChanged());
+    Assert.assertTrue(x.setOtherSpecial(null).isChanged());
+    Assert.assertTrue(x.setAspirantDesc(null).isChanged());
+    Assert.assertTrue(x.setMarkedDesc(null).isChanged());
+    // Check XML conversion again
+    XMLTestHelper.testMicroTypeConversion(x);
   }
 }

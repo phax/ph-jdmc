@@ -28,17 +28,18 @@ public class BiotopbaumDeadwood
   private int m_nLength;
   private int m_nBHD;
 
-  public BiotopbaumDeadwood(
-    @Nonnull
-    final EDeadwoodCategory eType, final boolean bEnabled, final int nLength, final int nBHD) {
+  public BiotopbaumDeadwood(@Nonnull final EDeadwoodCategory eType,
+    final boolean bEnabled,
+    final int nLength,
+    final int nBHD) {
     this(StubObject.createForCurrentUser(), eType, bEnabled, nLength, nBHD);
   }
 
-  protected BiotopbaumDeadwood(
-    @Nonnull
-    final StubObject aStubObject,
-    @Nonnull
-    final EDeadwoodCategory eType, final boolean bEnabled, final int nLength, final int nBHD) {
+  protected BiotopbaumDeadwood(@Nonnull final StubObject aStubObject,
+    @Nonnull final EDeadwoodCategory eType,
+    final boolean bEnabled,
+    final int nLength,
+    final int nBHD) {
     super(aStubObject);
     setType(eType);
     setEnabled(bEnabled);
@@ -62,9 +63,7 @@ public class BiotopbaumDeadwood
   }
 
   @Nonnull
-  final EChange setType(
-    @Nonnull
-    final EDeadwoodCategory eType) {
+  final EChange setType(@Nonnull final EDeadwoodCategory eType) {
     ValueEnforcer.notNull(eType, "Type");
     if (eType.equals(m_eType)) {
       return EChange.UNCHANGED;

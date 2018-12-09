@@ -25,13 +25,7 @@ public enum EStockDeadwood
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EStockDeadwood(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EStockDeadwood(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -49,25 +43,17 @@ public enum EStockDeadwood
   }
 
   @Nullable
-  public static EStockDeadwood getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EStockDeadwood getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EStockDeadwood.class, sID);
   }
 
   @Nullable
-  public static EStockDeadwood getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EStockDeadwood eDefault) {
+  public static EStockDeadwood getFromIDOrDefault(@Nullable final String sID, @Nullable final EStockDeadwood eDefault) {
     return EnumHelper.getFromIDOrDefault(EStockDeadwood.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EStockDeadwood getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EStockDeadwood getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EStockDeadwood.class, sID);
   }
 }

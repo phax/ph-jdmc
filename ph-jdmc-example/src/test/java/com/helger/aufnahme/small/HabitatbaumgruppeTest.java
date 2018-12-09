@@ -72,5 +72,7 @@ public final class HabitatbaumgruppeTest {
     Assert.assertFalse(x.setAreaSize(8).isChanged());
     Assert.assertFalse(x.setOnlyBB(true).isChanged());
     Assert.assertFalse(x.setBeschreibung("foo").isChanged());
+    // Test setters with null
+    Assert.assertTrue(x.setHanglage(null).isChanged());
   }
 }

@@ -25,9 +25,7 @@ public class Leergut
     this(StubObject.createForCurrentUser());
   }
 
-  protected Leergut(
-    @Nonnull
-    final StubObject aStubObject) {
+  protected Leergut(@Nonnull final StubObject aStubObject) {
     super(aStubObject);
   }
 

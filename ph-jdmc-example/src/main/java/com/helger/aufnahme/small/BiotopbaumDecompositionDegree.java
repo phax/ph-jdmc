@@ -30,18 +30,17 @@ public class BiotopbaumDecompositionDegree
   public BiotopbaumDecompositionDegree() {
   }
 
-  public BiotopbaumDecompositionDegree(
-    @Nonnull
-    final EDecompositionDegreeClass eType, final boolean bEnabled, final int nLength, final int nBHD) {
+  public BiotopbaumDecompositionDegree(@Nonnull final EDecompositionDegreeClass eType,
+    final boolean bEnabled,
+    final int nLength,
+    final int nBHD) {
     setType(eType);
     setEnabled(bEnabled);
     setLength(nLength);
     setBHD(nBHD);
   }
 
-  public BiotopbaumDecompositionDegree(
-    @Nonnull
-    final IBiotopbaumDecompositionDegree aOther) {
+  public BiotopbaumDecompositionDegree(@Nonnull final IBiotopbaumDecompositionDegree aOther) {
     ValueEnforcer.notNull(aOther, "Other");
     setType(aOther.getType());
     setEnabled(aOther.isEnabled());
@@ -89,9 +88,7 @@ public class BiotopbaumDecompositionDegree
   }
 
   @Nonnull
-  final EChange setType(
-    @Nonnull
-    final EDecompositionDegreeClass eType) {
+  final EChange setType(@Nonnull final EDecompositionDegreeClass eType) {
     ValueEnforcer.notNull(eType, "Type");
     if (eType.equals(m_eType)) {
       return EChange.UNCHANGED;

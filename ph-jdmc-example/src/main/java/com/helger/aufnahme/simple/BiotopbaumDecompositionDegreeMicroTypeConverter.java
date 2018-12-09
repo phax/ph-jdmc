@@ -23,13 +23,7 @@ public class BiotopbaumDecompositionDegreeMicroTypeConverter
   private static final String ATTR_BHD = "bhd";
 
   @Nonnull
-  public IMicroElement convertToMicroElement(
-    @Nonnull
-    final BiotopbaumDecompositionDegree aValue,
-    @Nullable
-    final String sNamespaceURI,
-    @Nonnull
-    final String sTagName) {
+  public IMicroElement convertToMicroElement(@Nonnull final BiotopbaumDecompositionDegree aValue, @Nullable final String sNamespaceURI, @Nonnull final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     aElement.setAttribute(ATTR_TYPE, aValue.getType().getID());
     aElement.setAttribute(ATTR_ENABLED, aValue.isEnabled());
@@ -39,9 +33,7 @@ public class BiotopbaumDecompositionDegreeMicroTypeConverter
   }
 
   @Nonnull
-  public BiotopbaumDecompositionDegree convertToNative(
-    @Nonnull
-    final IMicroElement aElement) {
+  public BiotopbaumDecompositionDegree convertToNative(@Nonnull final IMicroElement aElement) {
     final EDecompositionDegreeClass eType = EDecompositionDegreeClass.getFromIDOrNull(aElement.getAttributeValue(ATTR_TYPE));
     final boolean bEnabled = aElement.getAttributeValueAsBool(ATTR_ENABLED, false);
     final int nLength = aElement.getAttributeValueAsInt(ATTR_LENGTH, -1);

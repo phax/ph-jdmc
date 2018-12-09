@@ -27,6 +27,7 @@ public final class ExTrunkSizeBOTest {
     ExTrunkSizeBO y = new ExTrunkSizeBO(8, EExTreeHeightBO.ONE);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Objects are not equal, because they have different IDs
     // Test all setters
     Assert.assertFalse(x.setBHD(8).isChanged());
     x.setHeight(EExTreeHeightBO.ONE);

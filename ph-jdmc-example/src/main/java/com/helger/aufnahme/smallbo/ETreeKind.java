@@ -43,13 +43,7 @@ public enum ETreeKind
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ETreeKind(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private ETreeKind(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -67,25 +61,17 @@ public enum ETreeKind
   }
 
   @Nullable
-  public static ETreeKind getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static ETreeKind getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(ETreeKind.class, sID);
   }
 
   @Nullable
-  public static ETreeKind getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final ETreeKind eDefault) {
+  public static ETreeKind getFromIDOrDefault(@Nullable final String sID, @Nullable final ETreeKind eDefault) {
     return EnumHelper.getFromIDOrDefault(ETreeKind.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ETreeKind getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static ETreeKind getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(ETreeKind.class, sID);
   }
 }

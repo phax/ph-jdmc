@@ -30,18 +30,17 @@ public class BiotopbaumDeadwood
   public BiotopbaumDeadwood() {
   }
 
-  public BiotopbaumDeadwood(
-    @Nonnull
-    final EDeadwoodCategory eType, final boolean bEnabled, final int nLength, final int nBHD) {
+  public BiotopbaumDeadwood(@Nonnull final EDeadwoodCategory eType,
+    final boolean bEnabled,
+    final int nLength,
+    final int nBHD) {
     setType(eType);
     setEnabled(bEnabled);
     setLength(nLength);
     setBHD(nBHD);
   }
 
-  public BiotopbaumDeadwood(
-    @Nonnull
-    final IBiotopbaumDeadwood aOther) {
+  public BiotopbaumDeadwood(@Nonnull final IBiotopbaumDeadwood aOther) {
     ValueEnforcer.notNull(aOther, "Other");
     setType(aOther.getType());
     setEnabled(aOther.isEnabled());
@@ -89,9 +88,7 @@ public class BiotopbaumDeadwood
   }
 
   @Nonnull
-  final EChange setType(
-    @Nonnull
-    final EDeadwoodCategory eType) {
+  final EChange setType(@Nonnull final EDeadwoodCategory eType) {
     ValueEnforcer.notNull(eType, "Type");
     if (eType.equals(m_eType)) {
       return EChange.UNCHANGED;

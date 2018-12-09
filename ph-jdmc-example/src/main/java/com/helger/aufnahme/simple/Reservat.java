@@ -29,17 +29,13 @@ public class Reservat
   public Reservat() {
   }
 
-  public Reservat(final int nRNr,
-    @Nonnull
-    final String sName, final int nAreaSize) {
+  public Reservat(final int nRNr, @Nonnull final String sName, final int nAreaSize) {
     setRNr(nRNr);
     setName(sName);
     setAreaSize(nAreaSize);
   }
 
-  public Reservat(
-    @Nonnull
-    final IReservat aOther) {
+  public Reservat(@Nonnull final IReservat aOther) {
     ValueEnforcer.notNull(aOther, "Other");
     setRNr(aOther.getRNr());
     setName(aOther.getName());
@@ -96,9 +92,7 @@ public class Reservat
   }
 
   @Nonnull
-  final EChange setName(
-    @Nonnull
-    final String sName) {
+  final EChange setName(@Nonnull final String sName) {
     ValueEnforcer.notNull(sName, "Name");
     if (sName.equals(m_sName)) {
       return EChange.UNCHANGED;

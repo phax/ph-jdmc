@@ -30,13 +30,7 @@ public enum EExStockTypeBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EExStockTypeBO(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EExStockTypeBO(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -54,25 +48,17 @@ public enum EExStockTypeBO
   }
 
   @Nullable
-  public static EExStockTypeBO getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EExStockTypeBO getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EExStockTypeBO.class, sID);
   }
 
   @Nullable
-  public static EExStockTypeBO getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EExStockTypeBO eDefault) {
+  public static EExStockTypeBO getFromIDOrDefault(@Nullable final String sID, @Nullable final EExStockTypeBO eDefault) {
     return EnumHelper.getFromIDOrDefault(EExStockTypeBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EExStockTypeBO getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EExStockTypeBO getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EExStockTypeBO.class, sID);
   }
 }

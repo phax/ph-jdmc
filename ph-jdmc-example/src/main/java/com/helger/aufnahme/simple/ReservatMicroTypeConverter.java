@@ -23,13 +23,7 @@ public class ReservatMicroTypeConverter
   private static final String ATTR_AREASIZE = "areasize";
 
   @Nonnull
-  public IMicroElement convertToMicroElement(
-    @Nonnull
-    final Reservat aValue,
-    @Nullable
-    final String sNamespaceURI,
-    @Nonnull
-    final String sTagName) {
+  public IMicroElement convertToMicroElement(@Nonnull final Reservat aValue, @Nullable final String sNamespaceURI, @Nonnull final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     aElement.setAttribute(ATTR_RNR, aValue.getRNr());
     aElement.appendElement(sNamespaceURI, ELEMENT_NAME).appendText(aValue.getName());
@@ -38,9 +32,7 @@ public class ReservatMicroTypeConverter
   }
 
   @Nonnull
-  public Reservat convertToNative(
-    @Nonnull
-    final IMicroElement aElement) {
+  public Reservat convertToNative(@Nonnull final IMicroElement aElement) {
     final int nRNr = aElement.getAttributeValueAsInt(ATTR_RNR, -1);
     final String sName = MicroHelper.getChildTextContent(aElement, ELEMENT_NAME);
     final int nAreaSize = aElement.getAttributeValueAsInt(ATTR_AREASIZE, -1);

@@ -100,15 +100,19 @@ final class JDMCodeGenTest
         else
         {
           if (bIsOpenEnded)
+          {
             jMethod.body ()
                    .add (cm.ref (Assert.class)
                            .staticInvoke ("assertNotNull")
                            .arg (jObj.invoke (aField.getMethodGetterName (bIsOpenEnded))));
+          }
           else
+          {
             jMethod.body ()
                    .add (cm.ref (Assert.class)
                            .staticInvoke ("assertNull")
                            .arg (jObj.invoke (aField.getMethodGetterName (bIsOpenEnded))));
+          }
         }
       }
     }
@@ -140,7 +144,11 @@ final class JDMCodeGenTest
                        .staticInvoke ("assertTrue")
                        .arg (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (jY.invoke ("toString"))));
         jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotSame").arg (jX).arg (jY));
-        if (!aSettings.isUseBusinessObject ())
+        if (aSettings.isUseBusinessObject ())
+        {
+          jMethod.body ().addSingleLineComment ("Objects are not equal, because they have different IDs");
+        }
+        else
         {
           jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertEquals").arg (jX).arg (jY));
           jMethod.body ()
@@ -197,6 +205,26 @@ final class JDMCodeGenTest
       if (aSettings.isCreateMicroTypeConverter ())
       {
         jMethod.body ().addSingleLineComment ("Check XML conversion");
+        jMethod.body ().add (cm.ref (XMLTestHelper.class).staticInvoke ("testMicroTypeConversion").arg (jX));
+      }
+
+      // Try setting values to null (if possible)
+      int nNullFields = 0;
+      for (final JDMField aField : aClass.fields ())
+      {
+        final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+        if (!aField.getType ().isJavaPrimitive (eMultiplicity) && eMultiplicity == EJDMMultiplicity.OPTIONAL)
+        {
+          if (nNullFields == 0)
+            jMethod.body ().addSingleLineComment ("Test setters with null");
+          final JInvocation jSetNull = jX.invoke (aField.getMethodSetterName ()).argNull ();
+          jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertTrue").arg (jSetNull.invoke ("isChanged")));
+          nNullFields++;
+        }
+      }
+      if (aSettings.isCreateMicroTypeConverter () && nNullFields > 0)
+      {
+        jMethod.body ().addSingleLineComment ("Check XML conversion again");
         jMethod.body ().add (cm.ref (XMLTestHelper.class).staticInvoke ("testMicroTypeConversion").arg (jX));
       }
     }

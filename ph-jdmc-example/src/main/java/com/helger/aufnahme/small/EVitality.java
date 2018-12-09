@@ -24,13 +24,7 @@ public enum EVitality
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EVitality(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EVitality(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -48,25 +42,17 @@ public enum EVitality
   }
 
   @Nullable
-  public static EVitality getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EVitality getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EVitality.class, sID);
   }
 
   @Nullable
-  public static EVitality getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EVitality eDefault) {
+  public static EVitality getFromIDOrDefault(@Nullable final String sID, @Nullable final EVitality eDefault) {
     return EnumHelper.getFromIDOrDefault(EVitality.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EVitality getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EVitality getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EVitality.class, sID);
   }
 }

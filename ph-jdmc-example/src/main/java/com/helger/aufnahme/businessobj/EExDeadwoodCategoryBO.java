@@ -27,13 +27,7 @@ public enum EExDeadwoodCategoryBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EExDeadwoodCategoryBO(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EExDeadwoodCategoryBO(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -51,25 +45,17 @@ public enum EExDeadwoodCategoryBO
   }
 
   @Nullable
-  public static EExDeadwoodCategoryBO getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EExDeadwoodCategoryBO getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EExDeadwoodCategoryBO.class, sID);
   }
 
   @Nullable
-  public static EExDeadwoodCategoryBO getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EExDeadwoodCategoryBO eDefault) {
+  public static EExDeadwoodCategoryBO getFromIDOrDefault(@Nullable final String sID, @Nullable final EExDeadwoodCategoryBO eDefault) {
     return EnumHelper.getFromIDOrDefault(EExDeadwoodCategoryBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EExDeadwoodCategoryBO getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EExDeadwoodCategoryBO getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EExDeadwoodCategoryBO.class, sID);
   }
 }

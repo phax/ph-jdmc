@@ -31,13 +31,7 @@ public enum EExCaveTypeBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EExCaveTypeBO(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EExCaveTypeBO(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -55,25 +49,17 @@ public enum EExCaveTypeBO
   }
 
   @Nullable
-  public static EExCaveTypeBO getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EExCaveTypeBO getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EExCaveTypeBO.class, sID);
   }
 
   @Nullable
-  public static EExCaveTypeBO getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EExCaveTypeBO eDefault) {
+  public static EExCaveTypeBO getFromIDOrDefault(@Nullable final String sID, @Nullable final EExCaveTypeBO eDefault) {
     return EnumHelper.getFromIDOrDefault(EExCaveTypeBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EExCaveTypeBO getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EExCaveTypeBO getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EExCaveTypeBO.class, sID);
   }
 }

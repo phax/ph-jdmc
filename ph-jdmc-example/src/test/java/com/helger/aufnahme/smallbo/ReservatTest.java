@@ -26,6 +26,7 @@ public final class ReservatTest {
     Reservat y = new Reservat(8, "foo", 8);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Objects are not equal, because they have different IDs
     // Test all setters
     Assert.assertFalse(x.setRNr(8).isChanged());
     Assert.assertFalse(x.setName("foo").isChanged());

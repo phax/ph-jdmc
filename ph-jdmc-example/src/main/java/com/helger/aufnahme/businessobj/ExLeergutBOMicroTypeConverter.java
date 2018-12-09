@@ -19,22 +19,14 @@ public class ExLeergutBOMicroTypeConverter
 {
 
   @Nonnull
-  public IMicroElement convertToMicroElement(
-    @Nonnull
-    final ExLeergutBO aValue,
-    @Nullable
-    final String sNamespaceURI,
-    @Nonnull
-    final String sTagName) {
+  public IMicroElement convertToMicroElement(@Nonnull final ExLeergutBO aValue, @Nullable final String sNamespaceURI, @Nonnull final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     super.setObjectFields(aValue, aElement);
     return aElement;
   }
 
   @Nonnull
-  public ExLeergutBO convertToNative(
-    @Nonnull
-    final IMicroElement aElement) {
+  public ExLeergutBO convertToNative(@Nonnull final IMicroElement aElement) {
     return new ExLeergutBO(super.getStubObject(aElement));
   }
 }

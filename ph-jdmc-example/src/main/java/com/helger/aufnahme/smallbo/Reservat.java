@@ -27,17 +27,14 @@ public class Reservat
   private String m_sName;
   private int m_nAreaSize;
 
-  public Reservat(final int nRNr,
-    @Nonnull
-    final String sName, final int nAreaSize) {
+  public Reservat(final int nRNr, @Nonnull final String sName, final int nAreaSize) {
     this(StubObject.createForCurrentUser(), nRNr, sName, nAreaSize);
   }
 
-  protected Reservat(
-    @Nonnull
-    final StubObject aStubObject, final int nRNr,
-    @Nonnull
-    final String sName, final int nAreaSize) {
+  protected Reservat(@Nonnull final StubObject aStubObject,
+    final int nRNr,
+    @Nonnull final String sName,
+    final int nAreaSize) {
     super(aStubObject);
     setRNr(nRNr);
     setName(sName);
@@ -73,9 +70,7 @@ public class Reservat
   }
 
   @Nonnull
-  final EChange setName(
-    @Nonnull
-    final String sName) {
+  final EChange setName(@Nonnull final String sName) {
     ValueEnforcer.notNull(sName, "Name");
     if (sName.equals(m_sName)) {
       return EChange.UNCHANGED;

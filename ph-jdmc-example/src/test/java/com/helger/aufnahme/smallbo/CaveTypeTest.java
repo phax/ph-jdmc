@@ -26,6 +26,7 @@ public final class CaveTypeTest {
     CaveType y = new CaveType(ECaveClass.ONE, ECaveType._1);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Objects are not equal, because they have different IDs
     // Test all setters
     x.setClazz(ECaveClass.ONE);
     x.setType(ECaveType._1);

@@ -80,5 +80,7 @@ public final class BestandTest {
     Assert.assertFalse(x.setTotStehBesch("foo").isChanged());
     Assert.assertFalse(x.setTotLieg(EStockDeadwood._0).isChanged());
     Assert.assertFalse(x.setTotLiegBesch("foo").isChanged());
+    // Test setters with null
+    Assert.assertTrue(x.setVerortung(null).isChanged());
   }
 }

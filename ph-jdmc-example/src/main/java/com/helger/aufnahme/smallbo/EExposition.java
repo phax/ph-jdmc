@@ -30,13 +30,7 @@ public enum EExposition
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EExposition(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EExposition(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -54,25 +48,17 @@ public enum EExposition
   }
 
   @Nullable
-  public static EExposition getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EExposition getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EExposition.class, sID);
   }
 
   @Nullable
-  public static EExposition getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EExposition eDefault) {
+  public static EExposition getFromIDOrDefault(@Nullable final String sID, @Nullable final EExposition eDefault) {
     return EnumHelper.getFromIDOrDefault(EExposition.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EExposition getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EExposition getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EExposition.class, sID);
   }
 }

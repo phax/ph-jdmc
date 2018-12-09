@@ -52,13 +52,7 @@ public class BiotopbaumMicroTypeConverter
   private static final String ELEMENT_DEADWOODDOD = "deadwooddod";
 
   @Nonnull
-  public IMicroElement convertToMicroElement(
-    @Nonnull
-    final Biotopbaum aValue,
-    @Nullable
-    final String sNamespaceURI,
-    @Nonnull
-    final String sTagName) {
+  public IMicroElement convertToMicroElement(@Nonnull final Biotopbaum aValue, @Nullable final String sNamespaceURI, @Nonnull final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     aElement.setAttribute(ATTR_BBNR, aValue.getBBNr());
     for (final File aItem: aValue.pics()) {
@@ -115,9 +109,7 @@ public class BiotopbaumMicroTypeConverter
   }
 
   @Nonnull
-  public Biotopbaum convertToNative(
-    @Nonnull
-    final IMicroElement aElement) {
+  public Biotopbaum convertToNative(@Nonnull final IMicroElement aElement) {
     final int nBBNr = aElement.getAttributeValueAsInt(ATTR_BBNR, -1);
     final ICommonsList<File> aPics = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_PICS)) {

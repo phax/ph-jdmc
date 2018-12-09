@@ -40,13 +40,7 @@ public class HabitatbaumgruppeMicroTypeConverter
   private static final String ELEMENT_BESCHREIBUNG = "beschreibung";
 
   @Nonnull
-  public IMicroElement convertToMicroElement(
-    @Nonnull
-    final Habitatbaumgruppe aValue,
-    @Nullable
-    final String sNamespaceURI,
-    @Nonnull
-    final String sTagName) {
+  public IMicroElement convertToMicroElement(@Nonnull final Habitatbaumgruppe aValue, @Nullable final String sNamespaceURI, @Nonnull final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     aElement.setAttribute(ATTR_HBGNR, aValue.getHBGNr());
     for (final File aItem: aValue.pics()) {
@@ -73,9 +67,7 @@ public class HabitatbaumgruppeMicroTypeConverter
   }
 
   @Nonnull
-  public Habitatbaumgruppe convertToNative(
-    @Nonnull
-    final IMicroElement aElement) {
+  public Habitatbaumgruppe convertToNative(@Nonnull final IMicroElement aElement) {
     final int nHBGNr = aElement.getAttributeValueAsInt(ATTR_HBGNR, -1);
     final ICommonsList<File> aPics = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_PICS)) {

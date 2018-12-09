@@ -43,13 +43,7 @@ public enum EExTreeKindBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EExTreeKindBO(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EExTreeKindBO(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -67,25 +61,17 @@ public enum EExTreeKindBO
   }
 
   @Nullable
-  public static EExTreeKindBO getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EExTreeKindBO getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EExTreeKindBO.class, sID);
   }
 
   @Nullable
-  public static EExTreeKindBO getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EExTreeKindBO eDefault) {
+  public static EExTreeKindBO getFromIDOrDefault(@Nullable final String sID, @Nullable final EExTreeKindBO eDefault) {
     return EnumHelper.getFromIDOrDefault(EExTreeKindBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EExTreeKindBO getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EExTreeKindBO getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EExTreeKindBO.class, sID);
   }
 }

@@ -99,5 +99,9 @@ public final class StichprobeTest {
     Assert.assertFalse(x.setTotLieg2(new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8))).isChanged());
     // Check XML conversion
     XMLTestHelper.testMicroTypeConversion(x);
+    // Test setters with null
+    Assert.assertTrue(x.setHanglage(null).isChanged());
+    // Check XML conversion again
+    XMLTestHelper.testMicroTypeConversion(x);
   }
 }

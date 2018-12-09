@@ -25,13 +25,7 @@ public enum EDecompositionDegreeClass
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EDecompositionDegreeClass(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EDecompositionDegreeClass(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -49,25 +43,17 @@ public enum EDecompositionDegreeClass
   }
 
   @Nullable
-  public static EDecompositionDegreeClass getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EDecompositionDegreeClass getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EDecompositionDegreeClass.class, sID);
   }
 
   @Nullable
-  public static EDecompositionDegreeClass getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EDecompositionDegreeClass eDefault) {
+  public static EDecompositionDegreeClass getFromIDOrDefault(@Nullable final String sID, @Nullable final EDecompositionDegreeClass eDefault) {
     return EnumHelper.getFromIDOrDefault(EDecompositionDegreeClass.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EDecompositionDegreeClass getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EDecompositionDegreeClass getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EDecompositionDegreeClass.class, sID);
   }
 }

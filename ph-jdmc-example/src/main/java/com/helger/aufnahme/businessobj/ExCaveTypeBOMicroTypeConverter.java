@@ -21,13 +21,7 @@ public class ExCaveTypeBOMicroTypeConverter
   private static final String ATTR_TYPE = "type";
 
   @Nonnull
-  public IMicroElement convertToMicroElement(
-    @Nonnull
-    final ExCaveTypeBO aValue,
-    @Nullable
-    final String sNamespaceURI,
-    @Nonnull
-    final String sTagName) {
+  public IMicroElement convertToMicroElement(@Nonnull final ExCaveTypeBO aValue, @Nullable final String sNamespaceURI, @Nonnull final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     super.setObjectFields(aValue, aElement);
     aElement.setAttribute(ATTR_CLAZZ, aValue.getClazz().getID());
@@ -36,9 +30,7 @@ public class ExCaveTypeBOMicroTypeConverter
   }
 
   @Nonnull
-  public ExCaveTypeBO convertToNative(
-    @Nonnull
-    final IMicroElement aElement) {
+  public ExCaveTypeBO convertToNative(@Nonnull final IMicroElement aElement) {
     final EExCaveClassBO eClazz = EExCaveClassBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_CLAZZ));
     final EExCaveTypeBO eType = EExCaveTypeBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_TYPE));
     return new ExCaveTypeBO(super.getStubObject(aElement), eClazz, eType);

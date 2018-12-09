@@ -28,16 +28,12 @@ public class TrunkSize
   public TrunkSize() {
   }
 
-  public TrunkSize(final int nBHD,
-    @Nonnull
-    final ETreeHeight eHeight) {
+  public TrunkSize(final int nBHD, @Nonnull final ETreeHeight eHeight) {
     setBHD(nBHD);
     setHeight(eHeight);
   }
 
-  public TrunkSize(
-    @Nonnull
-    final ITrunkSize aOther) {
+  public TrunkSize(@Nonnull final ITrunkSize aOther) {
     ValueEnforcer.notNull(aOther, "Other");
     setBHD(aOther.getBHD());
     setHeight(aOther.getHeight());
@@ -90,9 +86,7 @@ public class TrunkSize
   }
 
   @Nonnull
-  final EChange setHeight(
-    @Nonnull
-    final ETreeHeight eHeight) {
+  final EChange setHeight(@Nonnull final ETreeHeight eHeight) {
     ValueEnforcer.notNull(eHeight, "Height");
     if (eHeight.equals(m_eHeight)) {
       return EChange.UNCHANGED;

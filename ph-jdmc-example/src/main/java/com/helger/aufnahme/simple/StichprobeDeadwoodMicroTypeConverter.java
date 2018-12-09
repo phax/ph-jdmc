@@ -23,13 +23,7 @@ public class StichprobeDeadwoodMicroTypeConverter
   private static final String ATTR_BHD = "bhd";
 
   @Nonnull
-  public IMicroElement convertToMicroElement(
-    @Nonnull
-    final StichprobeDeadwood aValue,
-    @Nullable
-    final String sNamespaceURI,
-    @Nonnull
-    final String sTagName) {
+  public IMicroElement convertToMicroElement(@Nonnull final StichprobeDeadwood aValue, @Nullable final String sNamespaceURI, @Nonnull final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     aElement.setAttribute(ATTR_DOD, aValue.getDoD().getID());
     aElement.setAttribute(ATTR_TREEKIND, aValue.getTreeKind().getID());
@@ -39,9 +33,7 @@ public class StichprobeDeadwoodMicroTypeConverter
   }
 
   @Nonnull
-  public StichprobeDeadwood convertToNative(
-    @Nonnull
-    final IMicroElement aElement) {
+  public StichprobeDeadwood convertToNative(@Nonnull final IMicroElement aElement) {
     final EDecompositionDegreeClass eDoD = EDecompositionDegreeClass.getFromIDOrNull(aElement.getAttributeValue(ATTR_DOD));
     final ETreeKind eTreeKind = ETreeKind.getFromIDOrNull(aElement.getAttributeValue(ATTR_TREEKIND));
     final int nLength = aElement.getAttributeValueAsInt(ATTR_LENGTH, -1);

@@ -96,5 +96,11 @@ public final class BiotopbaumTest {
     Assert.assertFalse(x.setMarkedDesc("foo").isChanged());
     Assert.assertFalse(x.setDeadwoodCats(new CommonsArrayList<>(new BiotopbaumDeadwood(EDeadwoodCategory.CLASS1, true, 8, 8))).isChanged());
     Assert.assertFalse(x.setDeadwoodDoD(new CommonsArrayList<>(new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8))).isChanged());
+    // Test setters with null
+    Assert.assertTrue(x.setLocation(null).isChanged());
+    Assert.assertTrue(x.setHanglage(null).isChanged());
+    Assert.assertTrue(x.setOtherSpecial(null).isChanged());
+    Assert.assertTrue(x.setAspirantDesc(null).isChanged());
+    Assert.assertTrue(x.setMarkedDesc(null).isChanged());
   }
 }

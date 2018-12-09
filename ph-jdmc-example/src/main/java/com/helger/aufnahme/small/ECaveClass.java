@@ -23,13 +23,7 @@ public enum ECaveClass
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private ECaveClass(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private ECaveClass(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -47,25 +41,17 @@ public enum ECaveClass
   }
 
   @Nullable
-  public static ECaveClass getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static ECaveClass getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(ECaveClass.class, sID);
   }
 
   @Nullable
-  public static ECaveClass getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final ECaveClass eDefault) {
+  public static ECaveClass getFromIDOrDefault(@Nullable final String sID, @Nullable final ECaveClass eDefault) {
     return EnumHelper.getFromIDOrDefault(ECaveClass.class, sID, eDefault);
   }
 
   @Nonnull
-  public static ECaveClass getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static ECaveClass getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(ECaveClass.class, sID);
   }
 }

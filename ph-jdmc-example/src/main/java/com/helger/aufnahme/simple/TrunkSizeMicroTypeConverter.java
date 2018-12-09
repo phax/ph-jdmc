@@ -21,13 +21,7 @@ public class TrunkSizeMicroTypeConverter
   private static final String ATTR_HEIGHT = "height";
 
   @Nonnull
-  public IMicroElement convertToMicroElement(
-    @Nonnull
-    final TrunkSize aValue,
-    @Nullable
-    final String sNamespaceURI,
-    @Nonnull
-    final String sTagName) {
+  public IMicroElement convertToMicroElement(@Nonnull final TrunkSize aValue, @Nullable final String sNamespaceURI, @Nonnull final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     aElement.setAttribute(ATTR_BHD, aValue.getBHD());
     aElement.setAttribute(ATTR_HEIGHT, aValue.getHeight().getID());
@@ -35,9 +29,7 @@ public class TrunkSizeMicroTypeConverter
   }
 
   @Nonnull
-  public TrunkSize convertToNative(
-    @Nonnull
-    final IMicroElement aElement) {
+  public TrunkSize convertToNative(@Nonnull final IMicroElement aElement) {
     final int nBHD = aElement.getAttributeValueAsInt(ATTR_BHD, -1);
     final ETreeHeight eHeight = ETreeHeight.getFromIDOrNull(aElement.getAttributeValue(ATTR_HEIGHT));
     return new TrunkSize(nBHD, eHeight);

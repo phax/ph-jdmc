@@ -96,5 +96,7 @@ public final class StichprobeTest {
     Assert.assertFalse(x.setTotSteh(new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8))).isChanged());
     Assert.assertFalse(x.setTotLieg1(new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8))).isChanged());
     Assert.assertFalse(x.setTotLieg2(new CommonsArrayList<>(new StichprobeDeadwood(EDecompositionDegreeClass.CLASS0, ETreeKind.Bergahorn, 8, 8))).isChanged());
+    // Test setters with null
+    Assert.assertTrue(x.setHanglage(null).isChanged());
   }
 }

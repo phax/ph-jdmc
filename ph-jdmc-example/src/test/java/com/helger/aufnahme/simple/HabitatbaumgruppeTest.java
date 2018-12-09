@@ -75,5 +75,9 @@ public final class HabitatbaumgruppeTest {
     Assert.assertFalse(x.setBeschreibung("foo").isChanged());
     // Check XML conversion
     XMLTestHelper.testMicroTypeConversion(x);
+    // Test setters with null
+    Assert.assertTrue(x.setHanglage(null).isChanged());
+    // Check XML conversion again
+    XMLTestHelper.testMicroTypeConversion(x);
   }
 }

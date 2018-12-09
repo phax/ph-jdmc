@@ -20,9 +20,7 @@ public final class MicroTypeConverterRegistrar
   implements IMicroTypeConverterRegistrarSPI
 {
 
-  public void registerMicroTypeConverter(
-    @Nonnull
-    final IMicroTypeConverterRegistry aRegistry) {
+  public void registerMicroTypeConverter(@Nonnull final IMicroTypeConverterRegistry aRegistry) {
     aRegistry.registerMicroElementTypeConverter(ExCaveTypeBO.class, new ExCaveTypeBOMicroTypeConverter());
     aRegistry.registerMicroElementTypeConverter(ExTrunkSizeBO.class, new ExTrunkSizeBOMicroTypeConverter());
     aRegistry.registerMicroElementTypeConverter(ExBiotopbaumDeadwoodBO.class, new ExBiotopbaumDeadwoodBOMicroTypeConverter());

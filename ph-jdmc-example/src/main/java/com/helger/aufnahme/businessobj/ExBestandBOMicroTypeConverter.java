@@ -44,13 +44,7 @@ public class ExBestandBOMicroTypeConverter
   private static final String ELEMENT_TOT_LIEG_BESCH = "totliegbesch";
 
   @Nonnull
-  public IMicroElement convertToMicroElement(
-    @Nonnull
-    final ExBestandBO aValue,
-    @Nullable
-    final String sNamespaceURI,
-    @Nonnull
-    final String sTagName) {
+  public IMicroElement convertToMicroElement(@Nonnull final ExBestandBO aValue, @Nullable final String sNamespaceURI, @Nonnull final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     super.setObjectFields(aValue, aElement);
     aElement.setAttribute(ATTR_BNR, aValue.getBNr());
@@ -82,9 +76,7 @@ public class ExBestandBOMicroTypeConverter
   }
 
   @Nonnull
-  public ExBestandBO convertToNative(
-    @Nonnull
-    final IMicroElement aElement) {
+  public ExBestandBO convertToNative(@Nonnull final IMicroElement aElement) {
     final int nBNr = aElement.getAttributeValueAsInt(ATTR_BNR, -1);
     final ICommonsList<File> aPics = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_PICS)) {

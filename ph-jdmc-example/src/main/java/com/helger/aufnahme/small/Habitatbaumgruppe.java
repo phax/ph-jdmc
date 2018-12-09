@@ -49,21 +49,20 @@ public class Habitatbaumgruppe
   }
 
   public Habitatbaumgruppe(final int nHBGNr,
-    @Nonnull
-    @Nonempty
-    final ICommonsList<File> aPics,
-    @Nonnull
-    final ICommonsList<IBiotopbaum> aHBGzBB,
-    @Nonnull
-    final LocalDate aDate,
-    @Nonnull
-    final String sStandort, final boolean bOneLevel, final boolean bLight, final boolean bClosedCrown, final boolean bNoSun, final boolean bHomogen,
-    @Nonnull
-    final EExposition eExposition,
-    @Nullable
-    final String sHanglage, final int nAreaSize, final boolean bOnlyBB,
-    @Nonnull
-    final String sBeschreibung) {
+    @Nonnull @Nonempty final ICommonsList<File> aPics,
+    @Nonnull final ICommonsList<IBiotopbaum> aHBGzBB,
+    @Nonnull final LocalDate aDate,
+    @Nonnull final String sStandort,
+    final boolean bOneLevel,
+    final boolean bLight,
+    final boolean bClosedCrown,
+    final boolean bNoSun,
+    final boolean bHomogen,
+    @Nonnull final EExposition eExposition,
+    @Nullable final String sHanglage,
+    final int nAreaSize,
+    final boolean bOnlyBB,
+    @Nonnull final String sBeschreibung) {
     setHBGNr(nHBGNr);
     setPics(aPics);
     setHBGzBB(aHBGzBB);
@@ -81,9 +80,7 @@ public class Habitatbaumgruppe
     setBeschreibung(sBeschreibung);
   }
 
-  public Habitatbaumgruppe(
-    @Nonnull
-    final IHabitatbaumgruppe aOther) {
+  public Habitatbaumgruppe(@Nonnull final IHabitatbaumgruppe aOther) {
     ValueEnforcer.notNull(aOther, "Other");
     setHBGNr(aOther.getHBGNr());
     setPics(aOther.pics());
@@ -190,10 +187,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  final EChange setPics(
-    @Nonnull
-    @Nonempty
-    final ICommonsList<File> aPics) {
+  final EChange setPics(@Nonnull @Nonempty final ICommonsList<File> aPics) {
     ValueEnforcer.notEmpty(aPics, "Pics");
     // Ensure the same implementation type
     final ICommonsList<File> aRealList = new CommonsArrayList<>(aPics);
@@ -211,9 +205,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  final EChange setHBGzBB(
-    @Nonnull
-    final ICommonsList<IBiotopbaum> aHBGzBB) {
+  final EChange setHBGzBB(@Nonnull final ICommonsList<IBiotopbaum> aHBGzBB) {
     ValueEnforcer.notNull(aHBGzBB, "HBGzBB");
     // Ensure the same implementation type
     final ICommonsList<IBiotopbaum> aRealList = new CommonsArrayList<>(aHBGzBB);
@@ -230,9 +222,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  final EChange setDate(
-    @Nonnull
-    final LocalDate aDate) {
+  final EChange setDate(@Nonnull final LocalDate aDate) {
     ValueEnforcer.notNull(aDate, "Date");
     if (aDate.equals(m_aDate)) {
       return EChange.UNCHANGED;
@@ -247,9 +237,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  final EChange setStandort(
-    @Nonnull
-    final String sStandort) {
+  final EChange setStandort(@Nonnull final String sStandort) {
     ValueEnforcer.notNull(sStandort, "Standort");
     if (sStandort.equals(m_sStandort)) {
       return EChange.UNCHANGED;
@@ -329,9 +317,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  final EChange setExposition(
-    @Nonnull
-    final EExposition eExposition) {
+  final EChange setExposition(@Nonnull final EExposition eExposition) {
     ValueEnforcer.notNull(eExposition, "Exposition");
     if (eExposition.equals(m_eExposition)) {
       return EChange.UNCHANGED;
@@ -346,9 +332,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  final EChange setHanglage(
-    @Nullable
-    final String sHanglage) {
+  final EChange setHanglage(@Nullable final String sHanglage) {
     if (EqualsHelper.equals(sHanglage, m_sHanglage)) {
       return EChange.UNCHANGED;
     }
@@ -388,9 +372,7 @@ public class Habitatbaumgruppe
   }
 
   @Nonnull
-  final EChange setBeschreibung(
-    @Nonnull
-    final String sBeschreibung) {
+  final EChange setBeschreibung(@Nonnull final String sBeschreibung) {
     ValueEnforcer.notNull(sBeschreibung, "Beschreibung");
     if (sBeschreibung.equals(m_sBeschreibung)) {
       return EChange.UNCHANGED;

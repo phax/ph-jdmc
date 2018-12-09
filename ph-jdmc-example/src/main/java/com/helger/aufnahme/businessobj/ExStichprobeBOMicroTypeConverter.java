@@ -52,13 +52,7 @@ public class ExStichprobeBOMicroTypeConverter
   private static final String ELEMENT_TOT_LIEG_2 = "totlieg2";
 
   @Nonnull
-  public IMicroElement convertToMicroElement(
-    @Nonnull
-    final ExStichprobeBO aValue,
-    @Nullable
-    final String sNamespaceURI,
-    @Nonnull
-    final String sTagName) {
+  public IMicroElement convertToMicroElement(@Nonnull final ExStichprobeBO aValue, @Nullable final String sNamespaceURI, @Nonnull final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     super.setObjectFields(aValue, aElement);
     aElement.setAttribute(ATTR_STICHNR, aValue.getStichNr());
@@ -104,9 +98,7 @@ public class ExStichprobeBOMicroTypeConverter
   }
 
   @Nonnull
-  public ExStichprobeBO convertToNative(
-    @Nonnull
-    final IMicroElement aElement) {
+  public ExStichprobeBO convertToNative(@Nonnull final IMicroElement aElement) {
     final int nStichNr = aElement.getAttributeValueAsInt(ATTR_STICHNR, -1);
     final IExReservatBO aStichNrzR = MicroTypeConverter.convertToNative(aElement.getFirstChildElement(ELEMENT_STICHNRZR), ExReservatBO.class);
     final ICommonsList<File> aPics = new CommonsArrayList<>();

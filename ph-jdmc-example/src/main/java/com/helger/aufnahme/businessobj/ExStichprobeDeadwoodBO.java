@@ -28,21 +28,18 @@ public class ExStichprobeDeadwoodBO
   private int m_nLength;
   private int m_nBHD;
 
-  public ExStichprobeDeadwoodBO(
-    @Nonnull
-    final EExDecompositionDegreeClassBO eDoD,
-    @Nonnull
-    final EExTreeKindBO eTreeKind, final int nLength, final int nBHD) {
+  public ExStichprobeDeadwoodBO(@Nonnull final EExDecompositionDegreeClassBO eDoD,
+    @Nonnull final EExTreeKindBO eTreeKind,
+    final int nLength,
+    final int nBHD) {
     this(StubObject.createForCurrentUser(), eDoD, eTreeKind, nLength, nBHD);
   }
 
-  protected ExStichprobeDeadwoodBO(
-    @Nonnull
-    final StubObject aStubObject,
-    @Nonnull
-    final EExDecompositionDegreeClassBO eDoD,
-    @Nonnull
-    final EExTreeKindBO eTreeKind, final int nLength, final int nBHD) {
+  protected ExStichprobeDeadwoodBO(@Nonnull final StubObject aStubObject,
+    @Nonnull final EExDecompositionDegreeClassBO eDoD,
+    @Nonnull final EExTreeKindBO eTreeKind,
+    final int nLength,
+    final int nBHD) {
     super(aStubObject);
     setDoD(eDoD);
     setTreeKind(eTreeKind);
@@ -66,9 +63,7 @@ public class ExStichprobeDeadwoodBO
   }
 
   @Nonnull
-  final EChange setDoD(
-    @Nonnull
-    final EExDecompositionDegreeClassBO eDoD) {
+  final EChange setDoD(@Nonnull final EExDecompositionDegreeClassBO eDoD) {
     ValueEnforcer.notNull(eDoD, "DoD");
     if (eDoD.equals(m_eDoD)) {
       return EChange.UNCHANGED;
@@ -83,9 +78,7 @@ public class ExStichprobeDeadwoodBO
   }
 
   @Nonnull
-  final EChange setTreeKind(
-    @Nonnull
-    final EExTreeKindBO eTreeKind) {
+  final EChange setTreeKind(@Nonnull final EExTreeKindBO eTreeKind) {
     ValueEnforcer.notNull(eTreeKind, "TreeKind");
     if (eTreeKind.equals(m_eTreeKind)) {
       return EChange.UNCHANGED;

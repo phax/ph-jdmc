@@ -23,13 +23,7 @@ public enum EExUsagePeriodBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EExUsagePeriodBO(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EExUsagePeriodBO(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -47,25 +41,17 @@ public enum EExUsagePeriodBO
   }
 
   @Nullable
-  public static EExUsagePeriodBO getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EExUsagePeriodBO getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EExUsagePeriodBO.class, sID);
   }
 
   @Nullable
-  public static EExUsagePeriodBO getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EExUsagePeriodBO eDefault) {
+  public static EExUsagePeriodBO getFromIDOrDefault(@Nullable final String sID, @Nullable final EExUsagePeriodBO eDefault) {
     return EnumHelper.getFromIDOrDefault(EExUsagePeriodBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EExUsagePeriodBO getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EExUsagePeriodBO getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EExUsagePeriodBO.class, sID);
   }
 }

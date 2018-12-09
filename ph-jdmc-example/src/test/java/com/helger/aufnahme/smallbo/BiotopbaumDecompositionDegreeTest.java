@@ -26,6 +26,7 @@ public final class BiotopbaumDecompositionDegreeTest {
     BiotopbaumDecompositionDegree y = new BiotopbaumDecompositionDegree(EDecompositionDegreeClass.CLASS0, true, 8, 8);
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Objects are not equal, because they have different IDs
     // Test all setters
     x.setType(EDecompositionDegreeClass.CLASS0);
     Assert.assertFalse(x.setEnabled(true).isChanged());

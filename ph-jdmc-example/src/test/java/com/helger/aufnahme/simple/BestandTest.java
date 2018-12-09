@@ -83,5 +83,9 @@ public final class BestandTest {
     Assert.assertFalse(x.setTotLiegBesch("foo").isChanged());
     // Check XML conversion
     XMLTestHelper.testMicroTypeConversion(x);
+    // Test setters with null
+    Assert.assertTrue(x.setVerortung(null).isChanged());
+    // Check XML conversion again
+    XMLTestHelper.testMicroTypeConversion(x);
   }
 }

@@ -26,6 +26,7 @@ public final class LeergutTest {
     Leergut y = new Leergut();
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Objects are not equal, because they have different IDs
     // Test all setters
   }
 }

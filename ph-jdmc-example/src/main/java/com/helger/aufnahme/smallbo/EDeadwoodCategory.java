@@ -27,13 +27,7 @@ public enum EDeadwoodCategory
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EDeadwoodCategory(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EDeadwoodCategory(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -51,25 +45,17 @@ public enum EDeadwoodCategory
   }
 
   @Nullable
-  public static EDeadwoodCategory getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EDeadwoodCategory getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EDeadwoodCategory.class, sID);
   }
 
   @Nullable
-  public static EDeadwoodCategory getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EDeadwoodCategory eDefault) {
+  public static EDeadwoodCategory getFromIDOrDefault(@Nullable final String sID, @Nullable final EDeadwoodCategory eDefault) {
     return EnumHelper.getFromIDOrDefault(EDeadwoodCategory.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EDeadwoodCategory getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EDeadwoodCategory getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EDeadwoodCategory.class, sID);
   }
 }

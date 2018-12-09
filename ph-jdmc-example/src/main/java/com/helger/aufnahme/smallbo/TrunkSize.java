@@ -26,17 +26,11 @@ public class TrunkSize
   private int m_nBHD;
   private ETreeHeight m_eHeight;
 
-  public TrunkSize(final int nBHD,
-    @Nonnull
-    final ETreeHeight eHeight) {
+  public TrunkSize(final int nBHD, @Nonnull final ETreeHeight eHeight) {
     this(StubObject.createForCurrentUser(), nBHD, eHeight);
   }
 
-  protected TrunkSize(
-    @Nonnull
-    final StubObject aStubObject, final int nBHD,
-    @Nonnull
-    final ETreeHeight eHeight) {
+  protected TrunkSize(@Nonnull final StubObject aStubObject, final int nBHD, @Nonnull final ETreeHeight eHeight) {
     super(aStubObject);
     setBHD(nBHD);
     setHeight(eHeight);
@@ -71,9 +65,7 @@ public class TrunkSize
   }
 
   @Nonnull
-  final EChange setHeight(
-    @Nonnull
-    final ETreeHeight eHeight) {
+  final EChange setHeight(@Nonnull final ETreeHeight eHeight) {
     ValueEnforcer.notNull(eHeight, "Height");
     if (eHeight.equals(m_eHeight)) {
       return EChange.UNCHANGED;

@@ -30,6 +30,7 @@ public final class ExBiotopbaumBOTest {
     ExBiotopbaumBO y = new ExBiotopbaumBO(8, new CommonsArrayList<>(new File("file.txt")), PDTFactory.getCurrentLocalDate(), new CommonsArrayList<>(EExBiotopbaumTypeBO.TOTHOLZ), "foo", EExExpositionBO.N, "foo", true, true, true, true, true, true, true, "foo", EExTreeKindBO.Bergahorn, new CommonsArrayList<>(new ExCaveTypeBO(EExCaveClassBO.ONE, EExCaveTypeBO._1)), new CommonsArrayList<>(new ExTrunkSizeBO(8, EExTreeHeightBO.ONE)), EExVitalityBO.ONE, new CommonsArrayList<>(EExSpecialStructureBO._1), "foo", true, "foo", true, "foo", new CommonsArrayList<>(new ExBiotopbaumDeadwoodBO(EExDeadwoodCategoryBO.CLASS1, true, 8, 8)), new CommonsArrayList<>(new ExBiotopbaumDecompositionDegreeBO(EExDecompositionDegreeClassBO.CLASS0, true, 8, 8)));
     Assert.assertTrue(StringHelper.hasText(y.toString()));
     Assert.assertNotSame(x, y);
+    // Objects are not equal, because they have different IDs
     // Test all setters
     Assert.assertFalse(x.setBBNr(8).isChanged());
     Assert.assertFalse(x.setPics(new CommonsArrayList<>(new File("file.txt"))).isChanged());
@@ -59,6 +60,14 @@ public final class ExBiotopbaumBOTest {
     x.setDeadwoodCats(new CommonsArrayList<>(new ExBiotopbaumDeadwoodBO(EExDeadwoodCategoryBO.CLASS1, true, 8, 8)));
     x.setDeadwoodDoD(new CommonsArrayList<>(new ExBiotopbaumDecompositionDegreeBO(EExDecompositionDegreeClassBO.CLASS0, true, 8, 8)));
     // Check XML conversion
+    XMLTestHelper.testMicroTypeConversion(x);
+    // Test setters with null
+    Assert.assertTrue(x.setLocation(null).isChanged());
+    Assert.assertTrue(x.setHanglage(null).isChanged());
+    Assert.assertTrue(x.setOtherSpecial(null).isChanged());
+    Assert.assertTrue(x.setAspirantDesc(null).isChanged());
+    Assert.assertTrue(x.setMarkedDesc(null).isChanged());
+    // Check XML conversion again
     XMLTestHelper.testMicroTypeConversion(x);
   }
 }

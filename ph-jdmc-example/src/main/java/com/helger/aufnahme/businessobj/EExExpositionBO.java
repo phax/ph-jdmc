@@ -30,13 +30,7 @@ public enum EExExpositionBO
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EExExpositionBO(
-    @Nonnull
-    @Nonempty
-    final String sID,
-    @Nonnull
-    @Nonempty
-    final String sDisplayName) {
+  private EExExpositionBO(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
@@ -54,25 +48,17 @@ public enum EExExpositionBO
   }
 
   @Nullable
-  public static EExExpositionBO getFromIDOrNull(
-    @Nullable
-    final String sID) {
+  public static EExExpositionBO getFromIDOrNull(@Nullable final String sID) {
     return EnumHelper.getFromIDOrNull(EExExpositionBO.class, sID);
   }
 
   @Nullable
-  public static EExExpositionBO getFromIDOrDefault(
-    @Nullable
-    final String sID,
-    @Nullable
-    final EExExpositionBO eDefault) {
+  public static EExExpositionBO getFromIDOrDefault(@Nullable final String sID, @Nullable final EExExpositionBO eDefault) {
     return EnumHelper.getFromIDOrDefault(EExExpositionBO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EExExpositionBO getFromIDOrThrow(
-    @Nullable
-    final String sID) {
+  public static EExExpositionBO getFromIDOrThrow(@Nullable final String sID) {
     return EnumHelper.getFromIDOrThrow(EExExpositionBO.class, sID);
   }
 }
