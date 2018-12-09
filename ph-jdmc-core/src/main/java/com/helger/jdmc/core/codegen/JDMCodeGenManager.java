@@ -22,16 +22,19 @@ import javax.annotation.concurrent.Immutable;
 
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.state.EChange;
 import com.helger.dao.DAOException;
 import com.helger.dao.wal.AbstractMapBasedWALDAO.InitSettings;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
+import com.helger.jcodemodel.JBlock;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
+import com.helger.jcodemodel.JReturn;
 import com.helger.jcodemodel.JTryBlock;
 import com.helger.jcodemodel.JVar;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
@@ -39,6 +42,7 @@ import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMField;
 import com.helger.photon.basic.app.dao.AbstractPhotonMapBasedWALDAO;
 import com.helger.photon.basic.audit.AuditHelper;
+import com.helger.photon.security.object.BusinessObjectHelper;
 
 @Immutable
 final class JDMCodeGenManager
@@ -46,8 +50,7 @@ final class JDMCodeGenManager
   private JDMCodeGenManager ()
   {}
 
-  public static void createMainManagerClass (@Nonnull final JDMCodeGenSettings aSettings,
-                                             @Nonnull final JDMCodeModel cm,
+  public static void createMainManagerClass (@Nonnull final JDMCodeModel cm,
                                              @Nonnull final JDMClass aClass,
                                              @Nonnull final JDefinedClass jInterface,
                                              @Nonnull final JDefinedClass jDomainClass) throws JClassAlreadyExistsException
@@ -79,7 +82,7 @@ final class JDMCodeGenManager
       jCtor.body ().add (JInvocation._super ().arg (jDomainClass.dotclass ()).arg (jParam1).arg (jParam2));
     }
 
-    // createMethod
+    // create method
     {
       final JMethod jCreate = jClass.method (JMod.PUBLIC | JMod.FINAL, jInterface, "create" + jDomainClass.name ());
       jCreate.annotate (Nonnull.class);
@@ -95,11 +98,11 @@ final class JDMCodeGenManager
         if (eMultiplicity.isOpenEnded ())
           jFieldType = cm.ref (ICommonsList.class).narrow (jFieldType);
 
-        // Constructor param
+        // method param
         final JVar jParam = jCreate.param (JMod.FINAL, jFieldType, aField.getJavaVarName (eMultiplicity));
         if (!bIsPrimitive)
         {
-          if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+          if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
             jParam.annotate (Nullable.class);
           else
             jParam.annotate (Nonnull.class);
@@ -143,6 +146,86 @@ final class JDMCodeGenManager
 
       // Done
       jCreate.body ()._return (jRet);
+    }
+
+    // update method
+    {
+      final JMethod jUpdate = jClass.method (JMod.PUBLIC | JMod.FINAL,
+                                             cm.ref (EChange.class),
+                                             "update" + jDomainClass.name ());
+      jUpdate.annotate (Nonnull.class);
+
+      final JVar jParamID = jUpdate.param (JMod.FINAL, cm.ref (String.class), "s" + jDomainClass.name () + "ID");
+      jParamID.annotate (Nullable.class);
+
+      // Start resolving object
+      final JVar jImpl = jUpdate.body ()
+                                .decl (JMod.FINAL,
+                                       jDomainClass,
+                                       "a" + jDomainClass.name (),
+                                       JExpr.invoke ("getOfID").arg (jParamID));
+
+      // Check preconditions
+      final JBlock jIfNull = jUpdate.body ()._if (jImpl.eqNull ())._then ();
+      jIfNull.add (cm.ref (AuditHelper.class)
+                     .staticInvoke ("onAuditModifyFailure")
+                     .arg (jDomainClass.staticRef ("OT"))
+                     .arg ("all")
+                     .arg (jParamID)
+                     .arg ("no-such-id"));
+      jIfNull._return (cm.ref (EChange.class).staticRef ("UNCHANGED"));
+
+      final JBlock jIfDeleted = jUpdate.body ()._if (jImpl.invoke ("isDeleted"))._then ();
+      jIfDeleted.add (cm.ref (AuditHelper.class)
+                        .staticInvoke ("onAuditModifyFailure")
+                        .arg (jDomainClass.staticRef ("OT"))
+                        .arg ("all")
+                        .arg (jParamID)
+                        .arg ("already-deleted"));
+      jIfDeleted._return (cm.ref (EChange.class).staticRef ("UNCHANGED"));
+
+      // internal update
+      jUpdate.body ().addSingleLineComment ("Update internally");
+      jUpdate.body ().add (JExpr.ref ("m_aRWLock").invoke ("writeLock").invoke ("lock"));
+      final JTryBlock jTry = jUpdate.body ()._try ();
+      final JVar jChange = jTry.body ()
+                               .decl (cm.ref (EChange.class),
+                                      "eChange",
+                                      cm.ref (EChange.class).staticRef ("UNCHANGED"));
+
+      for (final JDMField aField : aClass.fields ())
+      {
+        final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+        final boolean bIsPrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
+
+        // List or field?
+        AbstractJType jFieldType = cm.ref (aField.getType (), eMultiplicity);
+        if (eMultiplicity.isOpenEnded ())
+          jFieldType = cm.ref (ICommonsList.class).narrow (jFieldType);
+
+        // method param
+        final JVar jParam = jUpdate.param (JMod.FINAL, jFieldType, aField.getJavaVarName (eMultiplicity));
+        if (!bIsPrimitive)
+        {
+          if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
+            jParam.annotate (Nullable.class);
+          else
+            jParam.annotate (Nonnull.class);
+          if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+            jParam.annotate (Nonempty.class);
+        }
+
+        jTry.body ()
+            .assign (jChange, jChange.invoke ("or").arg (jImpl.invoke (aField.getMethodSetterName ()).arg (jParam)));
+      }
+
+      jTry.body ()._if (jChange.invoke ("isUnchanged"), new JReturn (cm.ref (EChange.class).staticRef ("UNCHANGED")));
+      jTry.body ().add (cm.ref (BusinessObjectHelper.class).staticInvoke ("setLastModificationNow").arg (jImpl));
+      jTry.body ().add (JExpr.invoke ("internalUpdateItem").arg (jImpl));
+      jTry._finally ().add (JExpr.ref ("m_aRWLock").invoke ("writeLock").invoke ("unlock"));
+
+      // AUDIT
+      jUpdate.body ()._return (cm.ref (EChange.class).staticRef ("CHANGED"));
     }
   }
 }

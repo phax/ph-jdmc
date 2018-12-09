@@ -1,9 +1,11 @@
 package com.helger.aufnahme.businessobj;
 
+import com.helger.commons.state.EChange;
 import com.helger.dao.DAOException;
 import com.helger.dao.wal.AbstractMapBasedWALDAO;
 import com.helger.photon.basic.app.dao.AbstractPhotonMapBasedWALDAO;
 import com.helger.photon.basic.audit.AuditHelper;
+import com.helger.photon.security.object.BusinessObjectHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -45,5 +47,33 @@ public class ExCaveTypeBOManager
     // Success audit
     AuditHelper.onAuditCreateSuccess(ExCaveTypeBO.OT, aExCaveTypeBO.getID(), eClazz, eType);
     return aExCaveTypeBO;
+  }
+
+  @Nonnull
+  public final EChange updateExCaveTypeBO(@Nullable final String sExCaveTypeBOID, @Nonnull final EExCaveClassBO eClazz, @Nonnull final EExCaveTypeBO eType) {
+    final ExCaveTypeBO aExCaveTypeBO = getOfID(sExCaveTypeBOID);
+    if (aExCaveTypeBO == null) {
+      AuditHelper.onAuditModifyFailure(ExCaveTypeBO.OT, "all", sExCaveTypeBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExCaveTypeBO.isDeleted()) {
+      AuditHelper.onAuditModifyFailure(ExCaveTypeBO.OT, "all", sExCaveTypeBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Update internally
+    m_aRWLock.writeLock().lock();
+    try {
+      EChange eChange = EChange.UNCHANGED;
+      eChange = eChange.or(aExCaveTypeBO.setClazz(eClazz));
+      eChange = eChange.or(aExCaveTypeBO.setType(eType));
+      if (eChange.isUnchanged()) {
+        return EChange.UNCHANGED;
+      }
+      BusinessObjectHelper.setLastModificationNow(aExCaveTypeBO);
+      internalUpdateItem(aExCaveTypeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    return EChange.CHANGED;
   }
 }

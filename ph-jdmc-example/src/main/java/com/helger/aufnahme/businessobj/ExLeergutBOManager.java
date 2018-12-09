@@ -1,9 +1,11 @@
 package com.helger.aufnahme.businessobj;
 
+import com.helger.commons.state.EChange;
 import com.helger.dao.DAOException;
 import com.helger.dao.wal.AbstractMapBasedWALDAO;
 import com.helger.photon.basic.app.dao.AbstractPhotonMapBasedWALDAO;
 import com.helger.photon.basic.audit.AuditHelper;
+import com.helger.photon.security.object.BusinessObjectHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -45,5 +47,31 @@ public class ExLeergutBOManager
     // Success audit
     AuditHelper.onAuditCreateSuccess(ExLeergutBO.OT, aExLeergutBO.getID());
     return aExLeergutBO;
+  }
+
+  @Nonnull
+  public final EChange updateExLeergutBO(@Nullable final String sExLeergutBOID) {
+    final ExLeergutBO aExLeergutBO = getOfID(sExLeergutBOID);
+    if (aExLeergutBO == null) {
+      AuditHelper.onAuditModifyFailure(ExLeergutBO.OT, "all", sExLeergutBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExLeergutBO.isDeleted()) {
+      AuditHelper.onAuditModifyFailure(ExLeergutBO.OT, "all", sExLeergutBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Update internally
+    m_aRWLock.writeLock().lock();
+    try {
+      EChange eChange = EChange.UNCHANGED;
+      if (eChange.isUnchanged()) {
+        return EChange.UNCHANGED;
+      }
+      BusinessObjectHelper.setLastModificationNow(aExLeergutBO);
+      internalUpdateItem(aExLeergutBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    return EChange.CHANGED;
   }
 }

@@ -115,7 +115,7 @@ public class JDMCodeGenBase
       // Annotations
       if (!bIsPrimitive)
       {
-        if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+        if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
           aMethodGet.annotate (Nullable.class);
         else
           aMethodGet.annotate (Nonnull.class);
@@ -136,7 +136,7 @@ public class JDMCodeGenBase
         aReturn.add ("The requested value.");
         if (!bIsPrimitive)
         {
-          if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+          if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
             aReturn.add (" May be <code>null</code>.");
           else
           {
@@ -148,7 +148,7 @@ public class JDMCodeGenBase
         }
       }
 
-      if (!bIsPrimitive && eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+      if (!bIsPrimitive && eMultiplicity == EJDMMultiplicity.OPTIONAL)
       {
         // Create the default "hasXXX" method
         final JMethod aMethodHas = jInterface.method (JMod.DEFAULT, cm.BOOLEAN, aField.getMethodHasName ());
@@ -165,8 +165,7 @@ public class JDMCodeGenBase
   }
 
   @Nonnull
-  static JDefinedClass createMainJavaClass (@Nonnull final JDMProcessor aProcessor,
-                                            @Nonnull final JDMCodeGenSettings aSettings,
+  static JDefinedClass createMainJavaClass (@Nonnull final JDMCodeGenSettings aSettings,
                                             @Nonnull final JDMCodeModel cm,
                                             @Nonnull final JDMClass aClass,
                                             @Nonnull final JDefinedClass jInterface) throws JClassAlreadyExistsException
@@ -302,7 +301,7 @@ public class JDMCodeGenBase
         final JVar jC1Arg = jCtor1.param (JMod.FINAL, jFieldType, sVarName);
         if (!bIsPrimitive)
         {
-          if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+          if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
             jC1Arg.annotate (Nullable.class);
           else
             jC1Arg.annotate (Nonnull.class);
@@ -316,7 +315,7 @@ public class JDMCodeGenBase
           final JVar jC2Arg = jCtor2.param (JMod.FINAL, jFieldType, sVarName);
           if (!bIsPrimitive)
           {
-            if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+            if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
               jC2Arg.annotate (Nullable.class);
             else
               jC2Arg.annotate (Nonnull.class);
@@ -331,7 +330,7 @@ public class JDMCodeGenBase
         final JVar jC2Arg = jCtor2.param (JMod.FINAL, jFieldType, sVarName);
         if (!bIsPrimitive)
         {
-          if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+          if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
             jC2Arg.annotate (Nullable.class);
           else
             jC2Arg.annotate (Nonnull.class);
@@ -372,7 +371,7 @@ public class JDMCodeGenBase
         // Annotations
         if (!bIsPrimitive)
         {
-          if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+          if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
             aMethodGet.annotate (Nullable.class);
           else
             aMethodGet.annotate (Nonnull.class);
@@ -394,7 +393,7 @@ public class JDMCodeGenBase
         final JVar jParam = aMethodSet.param (JMod.FINAL, jFieldType, aField.getJavaVarName (eMultiplicity));
         if (!bIsPrimitive)
         {
-          if (eMultiplicity.isMin0 () && !eMultiplicity.isOpenEnded ())
+          if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
             jParam.annotate (Nullable.class);
           else
             jParam.annotate (Nonnull.class);

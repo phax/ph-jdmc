@@ -143,8 +143,7 @@ public class JDMCodeGenerator
       for (final JDMClass aClass : aClasses)
       {
         final JDefinedClass jInterface = JDMCodeGenBase.createMainJavaInterface (m_aProcessor, m_aSettings, cm, aClass);
-        final JDefinedClass jDomainClass = JDMCodeGenBase.createMainJavaClass (m_aProcessor,
-                                                                               m_aSettings,
+        final JDefinedClass jDomainClass = JDMCodeGenBase.createMainJavaClass (m_aSettings,
                                                                                cm,
                                                                                aClass,
                                                                                jInterface);
@@ -153,7 +152,7 @@ public class JDMCodeGenerator
           JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings, cm, aClass, jDomainClass);
 
         if (m_aSettings.isCreateManager ())
-          JDMCodeGenManager.createMainManagerClass (m_aSettings, cm, aClass, jInterface, jDomainClass);
+          JDMCodeGenManager.createMainManagerClass (cm, aClass, jInterface, jDomainClass);
       }
 
       // Create all enums

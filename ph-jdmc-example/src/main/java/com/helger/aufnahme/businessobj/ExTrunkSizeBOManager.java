@@ -1,9 +1,11 @@
 package com.helger.aufnahme.businessobj;
 
+import com.helger.commons.state.EChange;
 import com.helger.dao.DAOException;
 import com.helger.dao.wal.AbstractMapBasedWALDAO;
 import com.helger.photon.basic.app.dao.AbstractPhotonMapBasedWALDAO;
 import com.helger.photon.basic.audit.AuditHelper;
+import com.helger.photon.security.object.BusinessObjectHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -45,5 +47,33 @@ public class ExTrunkSizeBOManager
     // Success audit
     AuditHelper.onAuditCreateSuccess(ExTrunkSizeBO.OT, aExTrunkSizeBO.getID(), Integer.valueOf(nBHD), eHeight);
     return aExTrunkSizeBO;
+  }
+
+  @Nonnull
+  public final EChange updateExTrunkSizeBO(@Nullable final String sExTrunkSizeBOID, final int nBHD, @Nonnull final EExTreeHeightBO eHeight) {
+    final ExTrunkSizeBO aExTrunkSizeBO = getOfID(sExTrunkSizeBOID);
+    if (aExTrunkSizeBO == null) {
+      AuditHelper.onAuditModifyFailure(ExTrunkSizeBO.OT, "all", sExTrunkSizeBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExTrunkSizeBO.isDeleted()) {
+      AuditHelper.onAuditModifyFailure(ExTrunkSizeBO.OT, "all", sExTrunkSizeBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Update internally
+    m_aRWLock.writeLock().lock();
+    try {
+      EChange eChange = EChange.UNCHANGED;
+      eChange = eChange.or(aExTrunkSizeBO.setBHD(nBHD));
+      eChange = eChange.or(aExTrunkSizeBO.setHeight(eHeight));
+      if (eChange.isUnchanged()) {
+        return EChange.UNCHANGED;
+      }
+      BusinessObjectHelper.setLastModificationNow(aExTrunkSizeBO);
+      internalUpdateItem(aExTrunkSizeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    return EChange.CHANGED;
   }
 }

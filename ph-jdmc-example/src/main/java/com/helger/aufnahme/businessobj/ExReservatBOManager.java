@@ -1,9 +1,11 @@
 package com.helger.aufnahme.businessobj;
 
+import com.helger.commons.state.EChange;
 import com.helger.dao.DAOException;
 import com.helger.dao.wal.AbstractMapBasedWALDAO;
 import com.helger.photon.basic.app.dao.AbstractPhotonMapBasedWALDAO;
 import com.helger.photon.basic.audit.AuditHelper;
+import com.helger.photon.security.object.BusinessObjectHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -45,5 +47,37 @@ public class ExReservatBOManager
     // Success audit
     AuditHelper.onAuditCreateSuccess(ExReservatBO.OT, aExReservatBO.getID(), Integer.valueOf(nRNr), sName, Integer.valueOf(nAreaSize));
     return aExReservatBO;
+  }
+
+  @Nonnull
+  public final EChange updateExReservatBO(@Nullable final String sExReservatBOID,
+    final int nRNr,
+    @Nonnull final String sName,
+    final int nAreaSize) {
+    final ExReservatBO aExReservatBO = getOfID(sExReservatBOID);
+    if (aExReservatBO == null) {
+      AuditHelper.onAuditModifyFailure(ExReservatBO.OT, "all", sExReservatBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExReservatBO.isDeleted()) {
+      AuditHelper.onAuditModifyFailure(ExReservatBO.OT, "all", sExReservatBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Update internally
+    m_aRWLock.writeLock().lock();
+    try {
+      EChange eChange = EChange.UNCHANGED;
+      eChange = eChange.or(aExReservatBO.setRNr(nRNr));
+      eChange = eChange.or(aExReservatBO.setName(sName));
+      eChange = eChange.or(aExReservatBO.setAreaSize(nAreaSize));
+      if (eChange.isUnchanged()) {
+        return EChange.UNCHANGED;
+      }
+      BusinessObjectHelper.setLastModificationNow(aExReservatBO);
+      internalUpdateItem(aExReservatBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    return EChange.CHANGED;
   }
 }

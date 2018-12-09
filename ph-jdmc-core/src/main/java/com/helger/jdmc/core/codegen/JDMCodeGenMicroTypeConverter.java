@@ -150,7 +150,7 @@ final class JDMCodeGenMicroTypeConverter
 
       // To MicroElement
       {
-        final boolean bHasHasMethod = !bIsPrimitive && eMultiplicity.isMin0 () && !bIsOpenEnded;
+        final boolean bHasHasMethod = !bIsPrimitive && eMultiplicity == EJDMMultiplicity.OPTIONAL;
 
         JBlock aExecBlock = jToMicroElement.body ();
         IJExpression jSrcElement = jElement;
