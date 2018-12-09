@@ -17,7 +17,6 @@
 package com.helger.maven.jdmc;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -341,11 +340,17 @@ public final class JDMCMojo extends AbstractMojo
       .setProgressTracker (getLog ()::info);
     try
     {
-      cg.createCode (targetMainJava, targetMainResources, targetTestJava, targetTestResources);
+      cg.createCode (targetMainJava, targetMainResources, targetTestJava, targetTestResources, (msg, ex) -> {
+        throw new MojoExecutionException (msg, ex);
+      });
     }
-    catch (final IOException ex)
+    catch (final MojoExecutionException ex)
     {
-      throw new MojoExecutionException ("IO error in Java code generation", ex);
+      throw ex;
+    }
+    catch (final Exception ex)
+    {
+      throw new MojoExecutionException ("Error in Java code generation", ex);
     }
 
     // Add output directories to project

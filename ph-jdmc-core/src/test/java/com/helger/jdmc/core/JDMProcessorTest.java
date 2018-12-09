@@ -19,7 +19,6 @@ package com.helger.jdmc.core;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
@@ -107,14 +106,14 @@ public final class JDMProcessorTest
   private static final File DIR_EXAMPLE = new File ("../ph-jdmc-example");
 
   @Test
-  public void testCodeCreation () throws IOException
+  public void testCodeCreation () throws Exception
   {
     // Order is important here
     {
       final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.simple");
       _applyTestJDM (p);
       final JDMCodeGenerator cg = new JDMCodeGenerator (p);
-      cg.settings ().setUseBusinessObject (false);
+      cg.settings ().setUseBusinessObject (false).setCreateManager (false);
       cg.createCode (DIR_EXAMPLE);
     }
     // Second run - read SPI now
@@ -124,6 +123,22 @@ public final class JDMProcessorTest
       _applyTestJDM (p);
       final JDMCodeGenerator cg = new JDMCodeGenerator (p);
       cg.settings ().setUseBusinessObject (true).setSetterArePackagePrivate (true).setReadExistingSPIFiles (true);
+      cg.createCode (DIR_EXAMPLE);
+    }
+    // Third run - as little as possible
+    {
+      final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.small");
+      _applyTestJDM (p);
+      final JDMCodeGenerator cg = new JDMCodeGenerator (p);
+      cg.settings ().setUseBusinessObject (false).setCreateManager (false).setCreateMicroTypeConverter (false);
+      cg.createCode (DIR_EXAMPLE);
+    }
+    // 4th run - as little as possible but BO
+    {
+      final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.smallbo");
+      _applyTestJDM (p);
+      final JDMCodeGenerator cg = new JDMCodeGenerator (p);
+      cg.settings ().setUseBusinessObject (true).setCreateManager (false).setCreateMicroTypeConverter (false);
       cg.createCode (DIR_EXAMPLE);
     }
   }

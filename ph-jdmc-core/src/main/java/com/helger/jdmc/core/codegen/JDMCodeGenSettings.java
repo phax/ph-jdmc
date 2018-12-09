@@ -41,6 +41,7 @@ public class JDMCodeGenSettings implements Serializable
   private boolean m_bSetterArePackagePrivate = true;
   private boolean m_bReadExistingSPIFiles = false;
   private boolean m_bCreateMicroTypeConverter = true;
+  private boolean m_bCreateManager = true;
   private Charset m_aCharset = StandardCharsets.UTF_8;
   private ENewLineMode m_eNewLineMode = ENewLineMode.DEFAULT;
   private String m_sIndentString = "  ";
@@ -119,6 +120,18 @@ public class JDMCodeGenSettings implements Serializable
     return this;
   }
 
+  public boolean isCreateManager ()
+  {
+    return m_bCreateManager;
+  }
+
+  @Nonnull
+  public JDMCodeGenSettings setCreateManager (final boolean bCreateManager)
+  {
+    m_bCreateManager = bCreateManager;
+    return this;
+  }
+
   @Nonnull
   public Charset getCharset ()
   {
@@ -172,5 +185,16 @@ public class JDMCodeGenSettings implements Serializable
   {
     m_aProgressTracker = aProgressTracker;
     return this;
+  }
+
+  public void checkConsistency (@Nonnull final IJDMErrorHandler aErrorHandler) throws Exception
+  {
+    if (m_bCreateManager)
+    {
+      if (!m_bUseBusinessObject)
+        aErrorHandler.onError ("Managers can only be created if businessObject usage is enabled", null);
+      if (!m_bCreateMicroTypeConverter)
+        aErrorHandler.onError ("Managers can only be created if microTypeConverter creation is enabled", null);
+    }
   }
 }

@@ -17,7 +17,6 @@
 package com.helger.jdmc.core.codegen;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -79,16 +78,19 @@ public class JDMCodeGenerator
    * @param aDestDir
    *        The directory to create the code in. Must stop before "src". The
    *        folders "src/main/java" and "src/test/java" are appended on demand.
-   * @throws IOException
-   *         On write error
+   * @throws Exception
+   *         On IO error or on misconfiguration
    */
-  public void createCode (@Nonnull final File aDestDir) throws IOException
+  public void createCode (@Nonnull final File aDestDir) throws Exception
   {
     ValueEnforcer.notNull (aDestDir, "DestDir");
     createCode (new File (aDestDir, "src/main/java"),
                 new File (aDestDir, "src/main/resources"),
                 new File (aDestDir, "src/test/java"),
-                new File (aDestDir, "src/test/resources"));
+                new File (aDestDir, "src/test/resources"),
+                (msg, ex) -> {
+                  throw new IllegalStateException (msg, ex);
+                });
   }
 
   /**
@@ -102,18 +104,26 @@ public class JDMCodeGenerator
    *        The directory to create the "test" Java code in.
    * @param aDirTestResources
    *        The directory to create the "test" resources in.
-   * @throws IOException
-   *         On write error
+   * @param aErrorHandler
+   *        Error handler for reporting critical issues. The error handler
+   *        should throw an exception. The first parameter is the error message
+   *        and the second parameter is the source exception - both maybe null.
+   * @throws Exception
+   *         for the error handler
    */
   public void createCode (@Nonnull final File aDirMainJava,
                           @Nonnull final File aDirMainResources,
                           @Nonnull final File aDirTestJava,
-                          @Nonnull final File aDirTestResources) throws IOException
+                          @Nonnull final File aDirTestResources,
+                          @Nonnull final IJDMErrorHandler aErrorHandler) throws Exception
   {
     ValueEnforcer.notNull (aDirMainJava, "DirMainJava");
     ValueEnforcer.notNull (aDirMainResources, "DirMainResources");
     ValueEnforcer.notNull (aDirTestJava, "DirTestJava");
     ValueEnforcer.notNull (aDirTestResources, "DirTestResources");
+
+    // Before we started, check the settings consistency
+    m_aSettings.checkConsistency (aErrorHandler);
 
     FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirMainJava);
     FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirMainResources);
@@ -162,7 +172,7 @@ public class JDMCodeGenerator
     }
     catch (final JClassAlreadyExistsException ex)
     {
-      throw new IllegalStateException (ex);
+      aErrorHandler.onError (ex.getMessage (), ex.getCause ());
     }
 
     try
@@ -195,7 +205,7 @@ public class JDMCodeGenerator
     }
     catch (final JClassAlreadyExistsException ex)
     {
-      throw new IllegalStateException (ex);
+      aErrorHandler.onError (ex.getMessage (), ex.getCause ());
     }
 
     LOGGER.info ("Done creating code from JDM files");
