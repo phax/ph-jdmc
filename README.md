@@ -94,26 +94,10 @@ So the following example is a valid enumeration definition:
 }
 ```
 
-The created code looks as follows.
+The created code looks as follows, assuming the definition was in file `EDemo2.jdm`.
 Note: The common parts (starting after the constructor) where omitted because it is identical to the previous example:
 
 ```java
-package com.helger.aufnahme.small;
-
-import com.helger.commons.annotation.Nonempty;
-import com.helger.commons.id.IHasID;
-import com.helger.commons.lang.EnumHelper;
-import com.helger.commons.name.IHasDisplayName;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-
-/**
- * This class was initially automatically created
- * 
- * 
- * @author JDMCodeGenerator
- */
 public enum EDemo2
   implements IHasID<String> , IHasDisplayName
 {
