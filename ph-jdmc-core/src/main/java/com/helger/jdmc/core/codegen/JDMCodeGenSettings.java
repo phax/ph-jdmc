@@ -22,17 +22,25 @@ import java.nio.charset.StandardCharsets;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.system.ENewLineMode;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 import com.helger.tenancy.IBusinessObject;
 
-public final class JDMCodeGenSettings implements Serializable
+/**
+ * Code generation settings.
+ *
+ * @author Philip Helger
+ */
+@NotThreadSafe
+public class JDMCodeGenSettings implements Serializable
 {
   private boolean m_bUseBusinessObject = false;
   private boolean m_bSetterArePackagePrivate = true;
   private boolean m_bReadExistingSPIFiles = false;
+  private boolean m_bCreateMicroTypeConverter = true;
   private Charset m_aCharset = StandardCharsets.UTF_8;
   private ENewLineMode m_eNewLineMode = ENewLineMode.DEFAULT;
   private String m_sIndentString = "  ";
@@ -96,6 +104,18 @@ public final class JDMCodeGenSettings implements Serializable
   public JDMCodeGenSettings setReadExistingSPIFiles (final boolean bReadExistingSPIFiles)
   {
     m_bReadExistingSPIFiles = bReadExistingSPIFiles;
+    return this;
+  }
+
+  public boolean isCreateMicroTypeConverter ()
+  {
+    return m_bCreateMicroTypeConverter;
+  }
+
+  @Nonnull
+  public JDMCodeGenSettings setCreateMicroTypeConverter (final boolean bCreateMicroTypeConverter)
+  {
+    m_bCreateMicroTypeConverter = bCreateMicroTypeConverter;
     return this;
   }
 

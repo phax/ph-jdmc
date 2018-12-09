@@ -110,6 +110,12 @@ public final class JDMCMojo extends AbstractMojo
   private boolean settersPackagePrivate = true;
 
   /**
+   * Shall the created domain objects have conversion routines from and to XML?
+   */
+  @Parameter (property = "createMicroTypeConverter", defaultValue = "true")
+  private boolean createMicroTypeConverter = true;
+
+  /**
    * The encoding of the created Java files. Defaults to UTF-8.
    */
   @Parameter (property = "targetEncoding")
@@ -218,6 +224,11 @@ public final class JDMCMojo extends AbstractMojo
     settersPackagePrivate = b;
   }
 
+  public void setCreateMicroTypeConverter (final boolean b)
+  {
+    createMicroTypeConverter = b;
+  }
+
   @Nonnull
   private File _ensureTargetDirectory (@Nonnull final File aSrc)
   {
@@ -279,6 +290,27 @@ public final class JDMCMojo extends AbstractMojo
     return s.indexOf ('*') >= 0 || s.indexOf ('?') >= 0;
   }
 
+  @Nonnull
+  private List <File> _getAllMatchingFiles (@Nonnull final String sPath)
+  {
+    final List <File> ret = new ArrayList <> ();
+    if (_isWildcard (sPath))
+    {
+      final DirectoryScanner aScanner = new DirectoryScanner ();
+      aScanner.setBasedir (sourceDirectory);
+      aScanner.setIncludes (new String [] { sPath });
+      aScanner.setCaseSensitive (true);
+      aScanner.scan ();
+      final String [] aFilenames = aScanner.getIncludedFiles ();
+      if (aFilenames != null)
+        for (final String sFilename : aFilenames)
+          ret.add (new File (sourceDirectory, sFilename));
+    }
+    else
+      ret.add (new File (sourceDirectory, sPath));
+    return ret;
+  }
+
   public void execute () throws MojoExecutionException
   {
     // Read stuff
@@ -287,36 +319,14 @@ public final class JDMCMojo extends AbstractMojo
                                                          .setClassNameSuffix (classNameSuffix);
     if (sourceEnumDefs != null)
       for (final String sEnumDef : sourceEnumDefs)
-        if (_isWildcard (sEnumDef))
-        {
-          final DirectoryScanner aScanner = new DirectoryScanner ();
-          aScanner.setBasedir (sourceDirectory);
-          aScanner.setIncludes (new String [] { sEnumDef });
-          aScanner.setCaseSensitive (true);
-          aScanner.scan ();
-          final String [] aFilenames = aScanner.getIncludedFiles ();
-          if (aFilenames != null)
-            for (final String sFilename : aFilenames)
-              p.readEnumDef (new File (sourceDirectory, sFilename));
-        }
-        else
-          p.readEnumDef (new File (sourceDirectory, sEnumDef));
+        for (final File aFile : _getAllMatchingFiles (sEnumDef))
+          if (p.readEnumDef (aFile, getLog ()::error) == null)
+            throw new MojoExecutionException ("The enum definition in " + aFile.getAbsolutePath () + " is invalid");
     if (sourceClassDefs != null)
       for (final String sClassDef : sourceClassDefs)
-        if (_isWildcard (sClassDef))
-        {
-          final DirectoryScanner aScanner = new DirectoryScanner ();
-          aScanner.setBasedir (sourceDirectory);
-          aScanner.setIncludes (new String [] { sClassDef });
-          aScanner.setCaseSensitive (true);
-          aScanner.scan ();
-          final String [] aFilenames = aScanner.getIncludedFiles ();
-          if (aFilenames != null)
-            for (final String sFilename : aFilenames)
-              p.readClassDef (new File (sourceDirectory, sFilename));
-        }
-        else
-          p.readClassDef (new File (sourceDirectory, sClassDef));
+        for (final File aFile : _getAllMatchingFiles (sClassDef))
+          if (p.readClassDef (aFile, getLog ()::error) == null)
+            throw new MojoExecutionException ("The class definition in " + aFile.getAbsolutePath () + " is invalid");
 
     // Start code generation
     final JDMCodeGenerator cg = new JDMCodeGenerator (p);
@@ -324,9 +334,11 @@ public final class JDMCMojo extends AbstractMojo
       .setUseBusinessObject (useBusinessObject)
       .setSetterArePackagePrivate (settersPackagePrivate)
       .setReadExistingSPIFiles (true)
+      .setCreateMicroTypeConverter (createMicroTypeConverter)
       .setCharset (Charset.forName (targetEncoding))
       .setNewLineMode (newLineMode)
-      .setIndentString ("  ");
+      .setIndentString ("  ")
+      .setProgressTracker (getLog ()::info);
     try
     {
       cg.createCode (targetMainJava, targetMainResources, targetTestJava, targetTestResources);

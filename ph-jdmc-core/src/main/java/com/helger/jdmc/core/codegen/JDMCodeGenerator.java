@@ -138,14 +138,16 @@ public class JDMCodeGenerator
                                                                                cm,
                                                                                aClass,
                                                                                jInterface);
-        JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings, cm, aClass, jDomainClass);
+
+        if (m_aSettings.isCreateMicroTypeConverter ())
+          JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings, cm, aClass, jDomainClass);
       }
 
       // Create all enums
       JDMCodeGenEnum.createMainJavaEnums (cm, aEnums);
 
       // create for all
-      if (aClasses.isNotEmpty ())
+      if (m_aSettings.isCreateMicroTypeConverter () && aClasses.isNotEmpty ())
         JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterRegistrarClass (m_aProcessor.getDestinationPackageName (),
                                                                                  cm,
                                                                                  aClasses);

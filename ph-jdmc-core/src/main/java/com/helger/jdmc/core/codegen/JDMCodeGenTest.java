@@ -194,6 +194,7 @@ public class JDMCodeGenTest
       }
 
       // Check micro type conversion
+      if (aSettings.isCreateMicroTypeConverter ())
       {
         jMethod.body ().addSingleLineComment ("Check XML conversion");
         jMethod.body ().add (cm.ref (XMLTestHelper.class).staticInvoke ("testMicroTypeConversion").arg (jX));

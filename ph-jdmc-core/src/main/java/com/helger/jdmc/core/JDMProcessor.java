@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
@@ -148,24 +149,25 @@ public class JDMProcessor implements IJDMTypeResolver
   }
 
   @Nullable
-  private IJsonObject _parseJson (@Nonnull final File aSrcFile)
+  private IJsonObject _parseJson (@Nonnull final File aSrcFile, @Nonnull final Consumer <? super String> aErrorHdl)
   {
-    LOGGER.info ("Parsing JSON '" + aSrcFile.getAbsolutePath () + "'");
+    if (LOGGER.isInfoEnabled ())
+      LOGGER.info ("Parsing JSON '" + aSrcFile.getAbsolutePath () + "'");
 
     final CollectingJsonParserHandler aHandler = new CollectingJsonParserHandler ();
     JsonReader.parseJson (new FileSystemResource (aSrcFile).getReader (m_aSourceCharset), aHandler, x -> {
       x.setTrackPosition (true);
-    }, ex -> LOGGER.error (ex.getMessage ()));
+    }, ex -> aErrorHdl.accept (ex.getMessage ()));
     final IJson aJson = aHandler.getJson ();
     if (aJson == null)
     {
-      LOGGER.error ("Failed to parse JSON");
+      aErrorHdl.accept ("Failed to parse JSON");
       return null;
     }
 
     if (!aJson.isObject ())
     {
-      LOGGER.error ("Parsed JSON is not an object");
+      aErrorHdl.accept ("Parsed JSON is not an object");
       return null;
     }
 
@@ -186,10 +188,16 @@ public class JDMProcessor implements IJDMTypeResolver
   @Nullable
   public JDMClass readClassDef (@Nonnull final File aSrcFile)
   {
+    return readClassDef (aSrcFile, LOGGER::error);
+  }
+
+  @Nullable
+  public JDMClass readClassDef (@Nonnull final File aSrcFile, @Nonnull final Consumer <? super String> aErrorHdl)
+  {
     ValueEnforcer.notNull (aSrcFile, "SrcFile");
 
     // Basic parsing
-    final IJsonObject aJsonObj = _parseJson (aSrcFile);
+    final IJsonObject aJsonObj = _parseJson (aSrcFile, aErrorHdl);
     if (aJsonObj == null)
       return null;
 
@@ -205,17 +213,17 @@ public class JDMProcessor implements IJDMTypeResolver
 
       if (StringHelper.hasNoText (sFieldName))
       {
-        LOGGER.error ("The field name may not be empty");
+        aErrorHdl.accept ("The field name may not be empty");
         return null;
       }
       if (!isValidIdentifier (sFieldName))
       {
-        LOGGER.error ("The field name '" + sFieldName + "' is not a valid identifier");
+        aErrorHdl.accept ("The field name '" + sFieldName + "' is not a valid identifier");
         return null;
       }
       if (ret.fields ().containsAny (x -> x.getFieldName ().equals (sFieldName)))
       {
-        LOGGER.error ("Another field with name '" + sFieldName + "' is already present");
+        aErrorHdl.accept ("Another field with name '" + sFieldName + "' is already present");
         return null;
       }
 
@@ -258,14 +266,14 @@ public class JDMProcessor implements IJDMTypeResolver
               }
               else
               {
-                LOGGER.error ("The field definition of '" + sFieldName + "' is inconsistent");
+                aErrorHdl.accept ("The field definition of '" + sFieldName + "' is inconsistent");
                 return null;
               }
 
         }
         else
         {
-          LOGGER.error ("The field definition of '" + sFieldName + "' is neither a value nor an array");
+          aErrorHdl.accept ("The field definition of '" + sFieldName + "' is neither a value nor an array");
           return null;
         }
 
@@ -276,7 +284,7 @@ public class JDMProcessor implements IJDMTypeResolver
                                                                 eMultiplicity.getSuffix ().length ());
       if (StringHelper.hasNoText (sEffectiveTypeName))
       {
-        LOGGER.error ("The field definition of '" + sFieldName + "' has no typename");
+        aErrorHdl.accept ("The field definition of '" + sFieldName + "' has no typename");
         return null;
       }
       JDMType aType = m_aContext.types ().findType (sEffectiveTypeName);
@@ -292,7 +300,7 @@ public class JDMProcessor implements IJDMTypeResolver
       }
       if (aType == null)
       {
-        LOGGER.error ("The typename '" + sEffectiveTypeName + "' is unknown");
+        aErrorHdl.accept ("The typename '" + sEffectiveTypeName + "' is unknown");
         return null;
       }
 
@@ -310,18 +318,18 @@ public class JDMProcessor implements IJDMTypeResolver
           final EJDMConstraintType eConstraintType = EJDMConstraintType.getFromIDOrNull (sConstraintName);
           if (eConstraintType == null)
           {
-            LOGGER.error ("Field '" + sFieldName + "' defines unknown constraint '" + sConstraintName + "'");
+            aErrorHdl.accept ("Field '" + sFieldName + "' defines unknown constraint '" + sConstraintName + "'");
             return null;
           }
           if (!eConstraintType.isApplicableOn (eFieldBaseType))
           {
-            LOGGER.error ("Field '" +
-                          sFieldName +
-                          "' defines constraint '" +
-                          sConstraintName +
-                          "' which cannot be applied on the underlying type '" +
-                          sTypeName +
-                          "'");
+            aErrorHdl.accept ("Field '" +
+                              sFieldName +
+                              "' defines constraint '" +
+                              sConstraintName +
+                              "' which cannot be applied on the underlying type '" +
+                              sTypeName +
+                              "'");
             return null;
           }
 
@@ -332,11 +340,11 @@ public class JDMProcessor implements IJDMTypeResolver
             aConstraintDataElement = aConstraintDef.getAsValue ();
           else
           {
-            LOGGER.error ("Field '" +
-                          sFieldName +
-                          "' defines constraint '" +
-                          sConstraintName +
-                          "' which requires a single value");
+            aErrorHdl.accept ("Field '" +
+                              sFieldName +
+                              "' defines constraint '" +
+                              sConstraintName +
+                              "' which requires a single value");
             return null;
           }
 
@@ -380,13 +388,13 @@ public class JDMProcessor implements IJDMTypeResolver
                 final Class <?> aTargetClass = GenericReflection.getClassFromNameSafe (aType.getFQCN ());
                 if (aTargetClass == null)
                 {
-                  LOGGER.error ("Field '" +
-                                sFieldName +
-                                "' defines constraint '" +
-                                sConstraintName +
-                                "' with illegal type '" +
-                                aType.getFQCN () +
-                                "'");
+                  aErrorHdl.accept ("Field '" +
+                                    sFieldName +
+                                    "' defines constraint '" +
+                                    sConstraintName +
+                                    "' with illegal type '" +
+                                    aType.getFQCN () +
+                                    "'");
                   return null;
                 }
                 aValue = (Serializable) aConstraintDataElement.getAsValue ().getConvertedValue (aTargetClass);
@@ -418,7 +426,7 @@ public class JDMProcessor implements IJDMTypeResolver
     if (false)
       if (ret.fields ().isEmpty ())
       {
-        LOGGER.error ("No fields found");
+        aErrorHdl.accept ("No fields found");
         return null;
       }
 
@@ -454,9 +462,15 @@ public class JDMProcessor implements IJDMTypeResolver
   @Nullable
   public JDMEnum readEnumDef (@Nonnull final File aSrcFile)
   {
+    return readEnumDef (aSrcFile, LOGGER::error);
+  }
+
+  @Nullable
+  public JDMEnum readEnumDef (@Nonnull final File aSrcFile, @Nonnull final Consumer <? super String> aErrorHdl)
+  {
     ValueEnforcer.notNull (aSrcFile, "SrcFile");
 
-    final IJsonObject aJsonObj = _parseJson (aSrcFile);
+    final IJsonObject aJsonObj = _parseJson (aSrcFile, aErrorHdl);
     if (aJsonObj == null)
       return null;
 
@@ -472,17 +486,17 @@ public class JDMProcessor implements IJDMTypeResolver
 
       if (StringHelper.hasNoText (sEnumConstantName))
       {
-        LOGGER.error ("The enum constant name may not be empty");
+        aErrorHdl.accept ("The enum constant name may not be empty");
         return null;
       }
       if (!isValidIdentifier (sEnumConstantName))
       {
-        LOGGER.error ("The enum constant name '" + sEnumConstantName + "' is not a valid identifier");
+        aErrorHdl.accept ("The enum constant name '" + sEnumConstantName + "' is not a valid identifier");
         return null;
       }
       if (ret.enumConstants ().containsAny (x -> x.getName ().equals (sEnumConstantName)))
       {
-        LOGGER.error ("Another enum constant with name '" + sEnumConstantName + "' is already present");
+        aErrorHdl.accept ("Another enum constant with name '" + sEnumConstantName + "' is already present");
         return null;
       }
 
@@ -514,9 +528,9 @@ public class JDMProcessor implements IJDMTypeResolver
               sDisplayName = aSecond.getAsValue ().getAsString ();
             else
             {
-              LOGGER.error ("The enum constant definition of '" +
-                            sEnumConstantName +
-                            "' is inconsistent (display name)");
+              aErrorHdl.accept ("The enum constant definition of '" +
+                                sEnumConstantName +
+                                "' is inconsistent (display name)");
               return null;
             }
           if (aThird == null)
@@ -526,13 +540,17 @@ public class JDMProcessor implements IJDMTypeResolver
               sComment = aThird.getAsValue ().getAsString ();
             else
             {
-              LOGGER.error ("The enum constant definition of '" + sEnumConstantName + "' is inconsistent (comment)");
+              aErrorHdl.accept ("The enum constant definition of '" +
+                                sEnumConstantName +
+                                "' is inconsistent (comment)");
               return null;
             }
         }
         else
         {
-          LOGGER.error ("The enum constant definition of '" + sEnumConstantName + "' is neither a value nor an array");
+          aErrorHdl.accept ("The enum constant definition of '" +
+                            sEnumConstantName +
+                            "' is neither a value nor an array");
           return null;
         }
 
@@ -546,7 +564,7 @@ public class JDMProcessor implements IJDMTypeResolver
     }
     if (ret.enumConstants ().isEmpty ())
     {
-      LOGGER.error ("No enum constant found");
+      aErrorHdl.accept ("No enum constant found");
       return null;
     }
 
