@@ -84,13 +84,23 @@ public class JDMCodeGenerator
   public void createCode (@Nonnull final File aDestDir) throws Exception
   {
     ValueEnforcer.notNull (aDestDir, "DestDir");
+    final IJDMFeedbackHandler aFeedbackHdl = new IJDMFeedbackHandler ()
+    {
+      public void onWarning (final String sMsg, final Throwable aException)
+      {
+        LOGGER.warn (sMsg, aException);
+      }
+
+      public void onError (final String sMsg, final Throwable aException) throws Exception
+      {
+        throw new IllegalStateException (sMsg, aException);
+      }
+    };
     createCode (new File (aDestDir, "src/main/java"),
                 new File (aDestDir, "src/main/resources"),
                 new File (aDestDir, "src/test/java"),
                 new File (aDestDir, "src/test/resources"),
-                (msg, ex) -> {
-                  throw new IllegalStateException (msg, ex);
-                });
+                aFeedbackHdl);
   }
 
   /**
@@ -104,10 +114,8 @@ public class JDMCodeGenerator
    *        The directory to create the "test" Java code in.
    * @param aDirTestResources
    *        The directory to create the "test" resources in.
-   * @param aErrorHandler
-   *        Error handler for reporting critical issues. The error handler
-   *        should throw an exception. The first parameter is the error message
-   *        and the second parameter is the source exception - both maybe null.
+   * @param aFeedbackHandler
+   *        Feedback handler for reporting issues. May not be <code>null</code>.
    * @throws Exception
    *         for the error handler
    */
@@ -115,15 +123,16 @@ public class JDMCodeGenerator
                           @Nonnull final File aDirMainResources,
                           @Nonnull final File aDirTestJava,
                           @Nonnull final File aDirTestResources,
-                          @Nonnull final IJDMErrorHandler aErrorHandler) throws Exception
+                          @Nonnull final IJDMFeedbackHandler aFeedbackHandler) throws Exception
   {
     ValueEnforcer.notNull (aDirMainJava, "DirMainJava");
     ValueEnforcer.notNull (aDirMainResources, "DirMainResources");
     ValueEnforcer.notNull (aDirTestJava, "DirTestJava");
     ValueEnforcer.notNull (aDirTestResources, "DirTestResources");
+    ValueEnforcer.notNull (aFeedbackHandler, "FeedbackHandler");
 
     // Before we started, check the settings consistency
-    m_aSettings.checkConsistency (aErrorHandler);
+    m_aSettings.checkConsistency (aFeedbackHandler);
 
     FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirMainJava);
     FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirMainResources);
@@ -149,7 +158,13 @@ public class JDMCodeGenerator
           JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings, cm, aClass, jDomainClass);
 
         if (m_aSettings.isCreateManager () && aClass.config ().isCreateManager ())
+        {
+          if (aClass.fields ().isEmpty ())
+            aFeedbackHandler.onWarning ("Creating a manager for class '" +
+                                        aClass.getClassName () +
+                                        "' which has no fields. So the manager is pretty useless.");
           JDMCodeGenManager.createMainManagerClass (cm, aClass, jInterface, jDomainClass);
+        }
       }
 
       // Create all enums
@@ -171,7 +186,7 @@ public class JDMCodeGenerator
     }
     catch (final JClassAlreadyExistsException ex)
     {
-      aErrorHandler.onError (ex.getMessage (), ex.getCause ());
+      aFeedbackHandler.onError (ex.getMessage (), ex.getCause ());
     }
 
     try
@@ -204,7 +219,7 @@ public class JDMCodeGenerator
     }
     catch (final JClassAlreadyExistsException ex)
     {
-      aErrorHandler.onError (ex.getMessage (), ex.getCause ());
+      aFeedbackHandler.onError (ex.getMessage (), ex.getCause ());
     }
 
     LOGGER.info ("Done creating code from JDM files");

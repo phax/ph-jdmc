@@ -38,6 +38,7 @@ import com.helger.commons.io.file.FileOperationManager;
 import com.helger.commons.string.StringHelper;
 import com.helger.commons.system.ENewLineMode;
 import com.helger.jdmc.core.JDMProcessor;
+import com.helger.jdmc.core.codegen.IJDMFeedbackHandler;
 import com.helger.jdmc.core.codegen.JDMCodeGenerator;
 
 /**
@@ -348,9 +349,19 @@ public final class JDMCMojo extends AbstractMojo
       .setProgressTracker (getLog ()::info);
     try
     {
-      cg.createCode (targetMainJava, targetMainResources, targetTestJava, targetTestResources, (msg, ex) -> {
-        throw new MojoExecutionException (msg, ex);
-      });
+      final IJDMFeedbackHandler aHdl = new IJDMFeedbackHandler ()
+      {
+        public void onWarning (final String sMsg, final Throwable aException)
+        {
+          getLog ().warn (sMsg, aException);
+        }
+
+        public void onError (final String sMsg, final Throwable aException) throws Exception
+        {
+          throw new MojoExecutionException (sMsg, aException);
+        }
+      };
+      cg.createCode (targetMainJava, targetMainResources, targetTestJava, targetTestResources, aHdl);
     }
     catch (final MojoExecutionException ex)
     {

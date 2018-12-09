@@ -187,7 +187,7 @@ public class JDMCodeGenSettings implements Serializable
     return this;
   }
 
-  public void checkConsistency (@Nonnull final IJDMErrorHandler aErrorHandler) throws Exception
+  public void checkConsistency (@Nonnull final IJDMFeedbackHandler aErrorHandler) throws Exception
   {
     if (m_bCreateManager)
     {
