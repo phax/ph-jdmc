@@ -162,9 +162,14 @@ final class JDMCodeGenManager
                                              cm.ref (EChange.class),
                                              "update" + jDomainClass.name ());
       jUpdate.annotate (Nonnull.class);
+      jUpdate.javadoc ().add ("Update an existing object with new values.");
+      jUpdate.javadoc ()
+             .addReturn ()
+             .add ("{@link EChange#CHANGED} if something was changed, {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.");
 
       final JVar jParamID = jUpdate.param (JMod.FINAL, cm.ref (String.class), "s" + jDomainClass.name () + "ID");
       jParamID.annotate (Nullable.class);
+      jUpdate.javadoc ().addParam (jParamID).add ("ID of the object to be updated. May be <code>null</code>.");
 
       // Start resolving object
       final JVar jImpl = jUpdate.body ()
@@ -224,6 +229,9 @@ final class JDMCodeGenManager
             jParam.annotate (Nonempty.class);
         }
 
+        // JavaDoc
+        jUpdate.javadoc ().addParam (jParam).add (aField.getParamJavaDoc ());
+
         jTry.body ()
             .assign (jChange, jChange.invoke ("or").arg (jImpl.invoke (aField.getMethodSetterName ()).arg (jParam)));
       }
@@ -264,9 +272,19 @@ final class JDMCodeGenManager
                                               cm.ref (EChange.class),
                                               "mark" + jDomainClass.name () + "Deleted");
       jMarkDel.annotate (Nonnull.class);
+      jMarkDel.javadoc ()
+              .add ("Mark an existing object as deleted. This means the object is still present and can be restored using the {@link #mark" +
+                    jDomainClass.name () +
+                    "Undeleted(String)} method.");
+      jMarkDel.javadoc ()
+              .addReturn ()
+              .add ("{@link EChange#CHANGED} if the object was marked as deleted {@link EChange#UNCHANGED} if the object does not exist or was already deleted. Never <code>null</code>.");
 
       final JVar jParamID = jMarkDel.param (JMod.FINAL, cm.ref (String.class), "s" + jDomainClass.name () + "ID");
       jParamID.annotate (Nullable.class);
+      jMarkDel.javadoc ()
+              .addParam (jParamID)
+              .add ("ID of the object to be marked as deleted. May be <code>null</code>.");
 
       // Start resolving object
       jMarkDel.body ().addSingleLineComment ("Check preconditions");
@@ -332,9 +350,19 @@ final class JDMCodeGenManager
                                                 cm.ref (EChange.class),
                                                 "mark" + jDomainClass.name () + "Undeleted");
       jMarkUndel.annotate (Nonnull.class);
+      jMarkUndel.javadoc ()
+                .add ("Restore an existing object that was marked deleted using the {@link #mark" +
+                      jDomainClass.name () +
+                      "Deleted(String)} method.");
+      jMarkUndel.javadoc ()
+                .addReturn ()
+                .add ("{@link EChange#CHANGED} if the object was undeleted {@link EChange#UNCHANGED} if the object does not exist or was not deleted. Never <code>null</code>.");
 
       final JVar jParamID = jMarkUndel.param (JMod.FINAL, cm.ref (String.class), "s" + jDomainClass.name () + "ID");
       jParamID.annotate (Nullable.class);
+      jMarkUndel.javadoc ()
+                .addParam (jParamID)
+                .add ("ID of the object to be marked as undeleted. May be <code>null</code>.");
 
       // Start resolving object
       jMarkUndel.body ().addSingleLineComment ("Check preconditions");
@@ -399,9 +427,16 @@ final class JDMCodeGenManager
                                              cm.ref (EChange.class),
                                              "delete" + jDomainClass.name ());
       jDelete.annotate (Nonnull.class);
+      jDelete.javadoc ().add ("Delete an existing object so that it can <b>NOT</b> be restored afterwards.");
+      jDelete.javadoc ()
+             .add ("\nNote: if an object was previously marked as deleted it can finally be deleted with this method.");
+      jDelete.javadoc ()
+             .addReturn ()
+             .add ("{@link EChange#CHANGED} if the object was deleted {@link EChange#UNCHANGED} if the object does not exist. Never <code>null</code>.");
 
       final JVar jParamID = jDelete.param (JMod.FINAL, cm.ref (String.class), "s" + jDomainClass.name () + "ID");
       jParamID.annotate (Nullable.class);
+      jDelete.javadoc ().addParam (jParamID).add ("ID of the object to be deleted. May be <code>null</code>.");
 
       // Start resolving object
       final JVar jImpl = jDelete.body ().decl (JMod.FINAL, jDomainClass, "aDeleted" + jDomainClass.name ());

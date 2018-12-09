@@ -68,6 +68,22 @@ public class ExBiotopbaumDeadwoodBOManager
     return aExBiotopbaumDeadwoodBO;
   }
 
+  /**
+   * Update an existing object with new values.
+   * 
+   * @param sExBiotopbaumDeadwoodBOID
+   *     ID of the object to be updated. May be <code>null</code>.
+   * @param eType
+   *     Totholzkategorie. May not be <code>null</code>.
+   * @param bEnabled
+   *     Boolean value.
+   * @param nLength
+   *     Länge in cm.
+   * @param nBHD
+   *     BHD bzw. Mittendurchmesser in cm.
+   * @return
+   *     {@link EChange#CHANGED} if something was changed, {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange updateExBiotopbaumDeadwoodBO(@Nullable final String sExBiotopbaumDeadwoodBOID,
     @Nonnull final EExDeadwoodCategoryBO eType,
@@ -105,6 +121,14 @@ public class ExBiotopbaumDeadwoodBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Mark an existing object as deleted. This means the object is still present and can be restored using the {@link #markExBiotopbaumDeadwoodBOUndeleted(String)} method.
+   * 
+   * @param sExBiotopbaumDeadwoodBOID
+   *     ID of the object to be marked as deleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was marked as deleted {@link EChange#UNCHANGED} if the object does not exist or was already deleted. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange markExBiotopbaumDeadwoodBODeleted(@Nullable final String sExBiotopbaumDeadwoodBOID) {
     // Check preconditions
@@ -133,6 +157,14 @@ public class ExBiotopbaumDeadwoodBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Restore an existing object that was marked deleted using the {@link #markExBiotopbaumDeadwoodBODeleted(String)} method.
+   * 
+   * @param sExBiotopbaumDeadwoodBOID
+   *     ID of the object to be marked as undeleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was undeleted {@link EChange#UNCHANGED} if the object does not exist or was not deleted. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange markExBiotopbaumDeadwoodBOUndeleted(@Nullable final String sExBiotopbaumDeadwoodBOID) {
     // Check preconditions
@@ -161,6 +193,15 @@ public class ExBiotopbaumDeadwoodBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Delete an existing object so that it can <b>NOT</b> be restored afterwards.
+   * Note: if an object was previously marked as deleted it can finally be deleted with this method.
+   * 
+   * @param sExBiotopbaumDeadwoodBOID
+   *     ID of the object to be deleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was deleted {@link EChange#UNCHANGED} if the object does not exist. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange deleteExBiotopbaumDeadwoodBO(@Nullable final String sExBiotopbaumDeadwoodBOID) {
     final ExBiotopbaumDeadwoodBO aDeletedExBiotopbaumDeadwoodBO;

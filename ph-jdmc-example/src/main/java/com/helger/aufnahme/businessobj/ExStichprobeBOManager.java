@@ -141,6 +141,68 @@ public class ExStichprobeBOManager
     return aExStichprobeBO;
   }
 
+  /**
+   * Update an existing object with new values.
+   * 
+   * @param sExStichprobeBOID
+   *     ID of the object to be updated. May be <code>null</code>.
+   * @param nStichNr
+   *     Schlüsselfeld.
+   * @param aStichNrzR
+   *     Zugehörig zu Reservat. May not be <code>null</code>.
+   * @param aPics
+   *     Fotos. May neither be <code>null</code> nor empty.
+   * @param aDate
+   *     LocalDate value. May not be <code>null</code>.
+   * @param nSize
+   *     Größe in m² bei Abweichung von Radius.
+   * @param eExposition
+   *     Exposition. May not be <code>null</code>.
+   * @param sHanglage
+   *     Angabe von Neigungen. May be <code>null</code>.
+   * @param sGesellschaft
+   *     Waldgesellschaft oder Waldgruppe. May not be <code>null</code>.
+   * @param dBKL0
+   *     Bestandesklasse 0, Flächenanteil in Zehntel.
+   * @param dBKL1
+   *     Bestandesklasse 1, Flächenanteil in Zehntel.
+   * @param dBKL2
+   *     Bestandesklasse 2, Flächenanteil in Zehntel.
+   * @param dBKL3
+   *     Bestandesklasse 3, Flächenanteil in Zehntel.
+   * @param dBKL4
+   *     Bestandesklasse 4, Flächenanteil in Zehntel.
+   * @param dBKL5
+   *     Bestandesklasse 5, Flächenanteil in Zehntel.
+   * @param dBKL6
+   *     Bestandesklasse 6, Flächenanteil in Zehntel.
+   * @param dBKL7
+   *     Bestandesklasse 7, Flächenanteil in Zehntel.
+   * @param dBKL8
+   *     Bestandesklasse 8, Flächenanteil in Zehntel.
+   * @param dBKL9
+   *     Bestandesklasse 9, Flächenanteil in Zehntel.
+   * @param sUsage
+   *     Beschreibung Nutzungsspuren. May not be <code>null</code>.
+   * @param sUsageDesc
+   *     allgemeine Beschreibung. May not be <code>null</code>.
+   * @param aTrees
+   *     Biotopbäume innerhalb Stichprobenpunkt. May not be <code>null</code>.
+   * @param sDesc
+   *     Beschreibung. May not be <code>null</code>.
+   * @param bSameAge
+   *     gleichaltrig oder ungleichaltrig.
+   * @param bOneLevel
+   *     einschichtig oder mehrschichtig.
+   * @param aTotSteh
+   *     Stehendes Totholz (Vollaufnahme) ab &gt;= 5cm BHD. May not be <code>null</code>.
+   * @param aTotLieg1
+   *     Liegendes Totholz (Line-intersect, Transekt 1) ab Mindestdurchmesser &gt;= 10 cm. May not be <code>null</code>.
+   * @param aTotLieg2
+   *     Liegendes Totholz (Line-intersect, Transekt 2) ab Mindestdurchmesser &gt;= 10 cm. May not be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if something was changed, {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange updateExStichprobeBO(@Nullable final String sExStichprobeBOID,
     final int nStichNr,
@@ -224,6 +286,14 @@ public class ExStichprobeBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Mark an existing object as deleted. This means the object is still present and can be restored using the {@link #markExStichprobeBOUndeleted(String)} method.
+   * 
+   * @param sExStichprobeBOID
+   *     ID of the object to be marked as deleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was marked as deleted {@link EChange#UNCHANGED} if the object does not exist or was already deleted. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange markExStichprobeBODeleted(@Nullable final String sExStichprobeBOID) {
     // Check preconditions
@@ -252,6 +322,14 @@ public class ExStichprobeBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Restore an existing object that was marked deleted using the {@link #markExStichprobeBODeleted(String)} method.
+   * 
+   * @param sExStichprobeBOID
+   *     ID of the object to be marked as undeleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was undeleted {@link EChange#UNCHANGED} if the object does not exist or was not deleted. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange markExStichprobeBOUndeleted(@Nullable final String sExStichprobeBOID) {
     // Check preconditions
@@ -280,6 +358,15 @@ public class ExStichprobeBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Delete an existing object so that it can <b>NOT</b> be restored afterwards.
+   * Note: if an object was previously marked as deleted it can finally be deleted with this method.
+   * 
+   * @param sExStichprobeBOID
+   *     ID of the object to be deleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was deleted {@link EChange#UNCHANGED} if the object does not exist. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange deleteExStichprobeBO(@Nullable final String sExStichprobeBOID) {
     final ExStichprobeBO aDeletedExStichprobeBO;

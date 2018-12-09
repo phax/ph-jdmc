@@ -141,6 +141,68 @@ public class ExBiotopbaumBOManager
     return aExBiotopbaumBO;
   }
 
+  /**
+   * Update an existing object with new values.
+   * 
+   * @param sExBiotopbaumBOID
+   *     ID of the object to be updated. May be <code>null</code>.
+   * @param nBBNr
+   *     Schlüsselfeld.
+   * @param aPics
+   *     Foto. May neither be <code>null</code> nor empty.
+   * @param aDate
+   *     Aufnahmedatum. May not be <code>null</code>.
+   * @param aType
+   *     Biotopbaum-Typ (Hauptauswahlkriterium). May neither be <code>null</code> nor empty.
+   * @param sLocation
+   *     allg. Beschreibung des Standorts. May be <code>null</code>.
+   * @param eExposition
+   *     Exposition. May not be <code>null</code>.
+   * @param sHanglage
+   *     Angabe von Neigungen: keine, Angabe von Neigungen, Freitext. May be <code>null</code>.
+   * @param bEinschichtig
+   *     Wald, einschichtig (1 Baumschicht, kaum Unterwuchs) oder mehrschichtiger Bestand (Unterwuchs, Strauchsch., evtl. 2. Baumschicht).
+   * @param bSolitary
+   *     Solitärbaum.
+   * @param bLightLocation
+   *     lichter Bestand (Besonnung).
+   * @param bClosedCrown
+   *     geschlossene Kronendach.
+   * @param bNoSun
+   *     explitzit keine Besonnung.
+   * @param bUeberSun
+   *     Überhälter, mind. 25% oder weniger als 25% des Stammes besonnt.
+   * @param bHomogene
+   *     eingebettet in homogenene oder heterogene Umgebung.
+   * @param sBeschreibung
+   *     Bemerkungen/ (ausführliche) Beschreibung. May not be <code>null</code>.
+   * @param eTreeKind
+   *     Baumart laut Aufnahmeblatt. May not be <code>null</code>.
+   * @param aCaves
+   *     Höhlentyp und Anzahl mit Klasseneinteilung (Checkbox, mehrere möglich; dann noch Klassenangaben; C22-35 im Aufnahmemanual). May not be <code>null</code>.
+   * @param aTrunk
+   *     Daten zum Stamm/zu den Stämmen. May neither be <code>null</code> nor empty.
+   * @param eVitality
+   *     Vitalität. May not be <code>null</code>.
+   * @param aSpecialStructure
+   *     Baum-Sonderstrukturen (Mehrfachnennung möglich). May not be <code>null</code>.
+   * @param sOtherSpecial
+   *     Sonstige Sonderstrukturen inkl. Beschreibung. May be <code>null</code>.
+   * @param bAspirant
+   *     Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe).
+   * @param sAspirantDesc
+   *     Beschreibung Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe). May be <code>null</code>.
+   * @param bMarked
+   *     bestehende Markierung.
+   * @param sMarkedDesc
+   *     Beschreibung bestehende Markierung. May be <code>null</code>.
+   * @param aDeadwoodCats
+   *     Totholzkategorien (bei toten Bäumen). May not be <code>null</code>.
+   * @param aDeadwoodDoD
+   *     Totholzmengen aufgeteilt in die Zersetzungsklassen. May not be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if something was changed, {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange updateExBiotopbaumBO(@Nullable final String sExBiotopbaumBOID,
     final int nBBNr,
@@ -224,6 +286,14 @@ public class ExBiotopbaumBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Mark an existing object as deleted. This means the object is still present and can be restored using the {@link #markExBiotopbaumBOUndeleted(String)} method.
+   * 
+   * @param sExBiotopbaumBOID
+   *     ID of the object to be marked as deleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was marked as deleted {@link EChange#UNCHANGED} if the object does not exist or was already deleted. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange markExBiotopbaumBODeleted(@Nullable final String sExBiotopbaumBOID) {
     // Check preconditions
@@ -252,6 +322,14 @@ public class ExBiotopbaumBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Restore an existing object that was marked deleted using the {@link #markExBiotopbaumBODeleted(String)} method.
+   * 
+   * @param sExBiotopbaumBOID
+   *     ID of the object to be marked as undeleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was undeleted {@link EChange#UNCHANGED} if the object does not exist or was not deleted. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange markExBiotopbaumBOUndeleted(@Nullable final String sExBiotopbaumBOID) {
     // Check preconditions
@@ -280,6 +358,15 @@ public class ExBiotopbaumBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Delete an existing object so that it can <b>NOT</b> be restored afterwards.
+   * Note: if an object was previously marked as deleted it can finally be deleted with this method.
+   * 
+   * @param sExBiotopbaumBOID
+   *     ID of the object to be deleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was deleted {@link EChange#UNCHANGED} if the object does not exist. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange deleteExBiotopbaumBO(@Nullable final String sExBiotopbaumBOID) {
     final ExBiotopbaumBO aDeletedExBiotopbaumBO;

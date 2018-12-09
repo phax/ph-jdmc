@@ -105,6 +105,44 @@ public class ExHabitatbaumgruppeBOManager
     return aExHabitatbaumgruppeBO;
   }
 
+  /**
+   * Update an existing object with new values.
+   * 
+   * @param sExHabitatbaumgruppeBOID
+   *     ID of the object to be updated. May be <code>null</code>.
+   * @param nHBGNr
+   *     Schlüsselfeld.
+   * @param aPics
+   *     Fotos. May neither be <code>null</code> nor empty.
+   * @param aHBGzBB
+   *     zugehörige Biotopbäume. May not be <code>null</code>.
+   * @param aDate
+   *     LocalDate value. May not be <code>null</code>.
+   * @param sStandort
+   *     allg. Beschreibung  Freitext. May not be <code>null</code>.
+   * @param bOneLevel
+   *     Wald, einschichtig (1 Baumschicht, kaum Unterwuchs) oder mehrschichtiger Bestand (Unterwuchs, Strauchsch., evtl. 2. Baumschicht).
+   * @param bLight
+   *     lichter Bestand (Besonnung).
+   * @param bClosedCrown
+   *     geschlossene Kronendach.
+   * @param bNoSun
+   *     explitzit keine Besonnung.
+   * @param bHomogen
+   *     eingebettet in homogenene oder heterogene Umgebung.
+   * @param eExposition
+   *     Exposition. May not be <code>null</code>.
+   * @param sHanglage
+   *     Angabe von Neigungen: keine, Angabe von Neigungen, Freitext. May be <code>null</code>.
+   * @param nAreaSize
+   *     Größe (in m²).
+   * @param bOnlyBB
+   *     Habitatbaumgruppe NUR aus schon kartierten Biotopbäumen oder  auch aus anderen Bäumen bestehend.
+   * @param sBeschreibung
+   *     Freitext . May not be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if something was changed, {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange updateExHabitatbaumgruppeBO(@Nullable final String sExHabitatbaumgruppeBOID,
     final int nHBGNr,
@@ -164,6 +202,14 @@ public class ExHabitatbaumgruppeBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Mark an existing object as deleted. This means the object is still present and can be restored using the {@link #markExHabitatbaumgruppeBOUndeleted(String)} method.
+   * 
+   * @param sExHabitatbaumgruppeBOID
+   *     ID of the object to be marked as deleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was marked as deleted {@link EChange#UNCHANGED} if the object does not exist or was already deleted. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange markExHabitatbaumgruppeBODeleted(@Nullable final String sExHabitatbaumgruppeBOID) {
     // Check preconditions
@@ -192,6 +238,14 @@ public class ExHabitatbaumgruppeBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Restore an existing object that was marked deleted using the {@link #markExHabitatbaumgruppeBODeleted(String)} method.
+   * 
+   * @param sExHabitatbaumgruppeBOID
+   *     ID of the object to be marked as undeleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was undeleted {@link EChange#UNCHANGED} if the object does not exist or was not deleted. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange markExHabitatbaumgruppeBOUndeleted(@Nullable final String sExHabitatbaumgruppeBOID) {
     // Check preconditions
@@ -220,6 +274,15 @@ public class ExHabitatbaumgruppeBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Delete an existing object so that it can <b>NOT</b> be restored afterwards.
+   * Note: if an object was previously marked as deleted it can finally be deleted with this method.
+   * 
+   * @param sExHabitatbaumgruppeBOID
+   *     ID of the object to be deleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was deleted {@link EChange#UNCHANGED} if the object does not exist. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange deleteExHabitatbaumgruppeBO(@Nullable final String sExHabitatbaumgruppeBOID) {
     final ExHabitatbaumgruppeBO aDeletedExHabitatbaumgruppeBO;

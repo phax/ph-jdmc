@@ -68,6 +68,22 @@ public class ExBiotopbaumDecompositionDegreeBOManager
     return aExBiotopbaumDecompositionDegreeBO;
   }
 
+  /**
+   * Update an existing object with new values.
+   * 
+   * @param sExBiotopbaumDecompositionDegreeBOID
+   *     ID of the object to be updated. May be <code>null</code>.
+   * @param eType
+   *     EExDecompositionDegreeClassBO value. May not be <code>null</code>.
+   * @param bEnabled
+   *     Boolean value.
+   * @param nLength
+   *     Länge in cm.
+   * @param nBHD
+   *     BHD bzw. Mittendurchmesser in cm.
+   * @return
+   *     {@link EChange#CHANGED} if something was changed, {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange updateExBiotopbaumDecompositionDegreeBO(@Nullable final String sExBiotopbaumDecompositionDegreeBOID,
     @Nonnull final EExDecompositionDegreeClassBO eType,
@@ -105,6 +121,14 @@ public class ExBiotopbaumDecompositionDegreeBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Mark an existing object as deleted. This means the object is still present and can be restored using the {@link #markExBiotopbaumDecompositionDegreeBOUndeleted(String)} method.
+   * 
+   * @param sExBiotopbaumDecompositionDegreeBOID
+   *     ID of the object to be marked as deleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was marked as deleted {@link EChange#UNCHANGED} if the object does not exist or was already deleted. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange markExBiotopbaumDecompositionDegreeBODeleted(@Nullable final String sExBiotopbaumDecompositionDegreeBOID) {
     // Check preconditions
@@ -133,6 +157,14 @@ public class ExBiotopbaumDecompositionDegreeBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Restore an existing object that was marked deleted using the {@link #markExBiotopbaumDecompositionDegreeBODeleted(String)} method.
+   * 
+   * @param sExBiotopbaumDecompositionDegreeBOID
+   *     ID of the object to be marked as undeleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was undeleted {@link EChange#UNCHANGED} if the object does not exist or was not deleted. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange markExBiotopbaumDecompositionDegreeBOUndeleted(@Nullable final String sExBiotopbaumDecompositionDegreeBOID) {
     // Check preconditions
@@ -161,6 +193,15 @@ public class ExBiotopbaumDecompositionDegreeBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Delete an existing object so that it can <b>NOT</b> be restored afterwards.
+   * Note: if an object was previously marked as deleted it can finally be deleted with this method.
+   * 
+   * @param sExBiotopbaumDecompositionDegreeBOID
+   *     ID of the object to be deleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was deleted {@link EChange#UNCHANGED} if the object does not exist. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange deleteExBiotopbaumDecompositionDegreeBO(@Nullable final String sExBiotopbaumDecompositionDegreeBOID) {
     final ExBiotopbaumDecompositionDegreeBO aDeletedExBiotopbaumDecompositionDegreeBO;

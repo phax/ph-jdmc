@@ -117,6 +117,52 @@ public class ExBestandBOManager
     return aExBestandBO;
   }
 
+  /**
+   * Update an existing object with new values.
+   * 
+   * @param sExBestandBOID
+   *     ID of the object to be updated. May be <code>null</code>.
+   * @param nBNr
+   *     Schlüsselfeld.
+   * @param aPics
+   *     Foto-Nr. May neither be <code>null</code> nor empty.
+   * @param aDate
+   *     LocalDate value. May not be <code>null</code>.
+   * @param sVerortung
+   *     GPS-Punkte oder Verweis auf Polygon. May be <code>null</code>.
+   * @param aBZHBG
+   *     Habitatbaumgruppen. May not be <code>null</code>.
+   * @param nAreaSize
+   *     Größe in m².
+   * @param sBeschreib
+   *     Bestand-Beschreibung. May not be <code>null</code>.
+   * @param bSameAge
+   *     gleichaltrig oder ungleichaltrig.
+   * @param bOneLevel
+   *     einschichtig oder mehrschichtig.
+   * @param eStockType
+   *     Bestandesklasse. May not be <code>null</code>.
+   * @param sUsageDescription
+   *     Beschreibung Nutzungsspuren. May not be <code>null</code>.
+   * @param sGesellschaft
+   *     Waldgesellschaft oder Waldgruppe. May not be <code>null</code>.
+   * @param bKronenschluss
+   *     Boolean value.
+   * @param bLightWoods
+   *     räumig oder lückig stehendes Holz (lichter Bestand).
+   * @param bUnterwuchs
+   *     Unterwuchs.
+   * @param eTotSteh
+   *     Schätzung Totholz stehend. May not be <code>null</code>.
+   * @param sTotStehBesch
+   *     Beschreibung Totholz stehend (geklumpt, Art, Herkunft, Zersetzungsgrade). May not be <code>null</code>.
+   * @param eTotLieg
+   *     Schätzung Totholz liegend. May not be <code>null</code>.
+   * @param sTotLiegBesch
+   *     Beschreibung Totholz liegend (geklumpt, Art, Herkunft, Zersetzungsgrade). May not be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if something was changed, {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange updateExBestandBO(@Nullable final String sExBestandBOID,
     final int nBNr,
@@ -184,6 +230,14 @@ public class ExBestandBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Mark an existing object as deleted. This means the object is still present and can be restored using the {@link #markExBestandBOUndeleted(String)} method.
+   * 
+   * @param sExBestandBOID
+   *     ID of the object to be marked as deleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was marked as deleted {@link EChange#UNCHANGED} if the object does not exist or was already deleted. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange markExBestandBODeleted(@Nullable final String sExBestandBOID) {
     // Check preconditions
@@ -212,6 +266,14 @@ public class ExBestandBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Restore an existing object that was marked deleted using the {@link #markExBestandBODeleted(String)} method.
+   * 
+   * @param sExBestandBOID
+   *     ID of the object to be marked as undeleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was undeleted {@link EChange#UNCHANGED} if the object does not exist or was not deleted. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange markExBestandBOUndeleted(@Nullable final String sExBestandBOID) {
     // Check preconditions
@@ -240,6 +302,15 @@ public class ExBestandBOManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Delete an existing object so that it can <b>NOT</b> be restored afterwards.
+   * Note: if an object was previously marked as deleted it can finally be deleted with this method.
+   * 
+   * @param sExBestandBOID
+   *     ID of the object to be deleted. May be <code>null</code>.
+   * @return
+   *     {@link EChange#CHANGED} if the object was deleted {@link EChange#UNCHANGED} if the object does not exist. Never <code>null</code>.
+   */
   @Nonnull
   public final EChange deleteExBestandBO(@Nullable final String sExBestandBOID) {
     final ExBestandBO aDeletedExBestandBO;
