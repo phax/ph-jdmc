@@ -1,7 +1,9 @@
 package com.helger.aufnahme.businessobj;
 
 import com.helger.dao.DAOException;
+import com.helger.dao.wal.AbstractMapBasedWALDAO;
 import com.helger.photon.basic.app.dao.AbstractPhotonMapBasedWALDAO;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
@@ -22,5 +24,15 @@ public class ExStichprobeDeadwoodBOManager
     throws DAOException
   {
     super(ExStichprobeDeadwoodBO.class, sFilename);
+  }
+
+  public ExStichprobeDeadwoodBOManager(
+    @Nullable
+    final String sFilename,
+    @Nonnull
+    final AbstractMapBasedWALDAO.InitSettings<ExStichprobeDeadwoodBO> aInitSettings)
+    throws DAOException
+  {
+    super(ExStichprobeDeadwoodBO.class, sFilename, aInitSettings);
   }
 }

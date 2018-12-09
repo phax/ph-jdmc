@@ -1,7 +1,9 @@
 package com.helger.aufnahme.businessobj;
 
 import com.helger.dao.DAOException;
+import com.helger.dao.wal.AbstractMapBasedWALDAO;
 import com.helger.photon.basic.app.dao.AbstractPhotonMapBasedWALDAO;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
@@ -22,5 +24,15 @@ public class ExReservatBOManager
     throws DAOException
   {
     super(ExReservatBO.class, sFilename);
+  }
+
+  public ExReservatBOManager(
+    @Nullable
+    final String sFilename,
+    @Nonnull
+    final AbstractMapBasedWALDAO.InitSettings<ExReservatBO> aInitSettings)
+    throws DAOException
+  {
+    super(ExReservatBO.class, sFilename, aInitSettings);
   }
 }

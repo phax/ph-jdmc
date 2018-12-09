@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.helger.dao.DAOException;
+import com.helger.dao.wal.AbstractMapBasedWALDAO.InitSettings;
 import com.helger.jcodemodel.EClassType;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JDefinedClass;
@@ -50,13 +51,31 @@ final class JDMCodeGenManager
     jClass.javadoc ().add ("<p>This class was initially automatically created</p>\n");
     jClass.javadoc ().addAuthor ().add (JDMCodeGenerator.AUTHOR);
 
-    // Constructor
+    // Constructor 1
     {
       final JMethod jCtor = jClass.constructor (JMod.PUBLIC);
       final JVar jParam = jCtor.param (JMod.FINAL, cm.ref (String.class), "sFilename");
       jParam.annotate (Nullable.class);
       jCtor._throws (DAOException.class);
       jCtor.body ().add (JInvocation._super ().arg (jDomainClass.dotclass ()).arg (jParam));
+    }
+
+    // Constructor 2
+    {
+      final JMethod jCtor = jClass.constructor (JMod.PUBLIC);
+      final JVar jParam1 = jCtor.param (JMod.FINAL, cm.ref (String.class), "sFilename");
+      jParam1.annotate (Nullable.class);
+      final JVar jParam2 = jCtor.param (JMod.FINAL, cm.ref (InitSettings.class).narrow (jDomainClass), "aInitSettings");
+      jParam2.annotate (Nonnull.class);
+      jCtor._throws (DAOException.class);
+      jCtor.body ().add (JInvocation._super ().arg (jDomainClass.dotclass ()).arg (jParam1).arg (jParam2));
+    }
+
+    // createMethod
+    if (false)
+    {
+      final JMethod jCreate = jClass.method (JMod.PUBLIC | JMod.FINAL, jInterface, "create" + jDomainClass.name ());
+      jCreate.annotate (Nonnull.class);
     }
   }
 }
