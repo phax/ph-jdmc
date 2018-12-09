@@ -115,6 +115,14 @@ public final class JDMCMojo extends AbstractMojo
   private boolean createMicroTypeConverter = true;
 
   /**
+   * Shall thread-safe managers be created for the classes? This requires that
+   * <code>useBusinessObject</code> is set to <code>true</code> as well as
+   * <code>createMicroTypeConvert</code> is <code>true</code>.
+   */
+  @Parameter (property = "createManager", defaultValue = "false")
+  private final boolean createManager = false;
+
+  /**
    * The encoding of the created Java files. Defaults to UTF-8.
    */
   @Parameter (property = "targetEncoding")

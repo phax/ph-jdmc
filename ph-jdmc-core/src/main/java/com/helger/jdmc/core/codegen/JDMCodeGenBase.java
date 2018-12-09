@@ -127,7 +127,7 @@ public class JDMCodeGenBase
       // Java docs
       {
         if (aField.hasComment ())
-          aMethodGet.javadoc ().add (aField.getComment ());
+          aMethodGet.javadoc ().addMasked (aField.getComment ());
         else
           aMethodGet.javadoc ().add ("Get the value of " + aField.getOriginalFieldName () + ".");
 

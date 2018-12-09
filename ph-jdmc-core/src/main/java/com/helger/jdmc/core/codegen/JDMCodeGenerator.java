@@ -151,6 +151,9 @@ public class JDMCodeGenerator
 
         if (m_aSettings.isCreateMicroTypeConverter ())
           JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings, cm, aClass, jDomainClass);
+
+        if (m_aSettings.isCreateManager ())
+          JDMCodeGenManager.createMainManagerClass (m_aSettings, cm, aClass, jInterface, jDomainClass);
       }
 
       // Create all enums

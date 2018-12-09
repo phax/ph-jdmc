@@ -89,6 +89,13 @@ public abstract class AbstractJDMClassType
     return getFQCN (m_sPackageName, m_sClassName + "MicroTypeConverter");
   }
 
+  @Nonnull
+  @Nonempty
+  public final String getFQManagerClassName ()
+  {
+    return getFQCN (m_sPackageName, m_sClassName + "Manager");
+  }
+
   public final boolean isClass ()
   {
     return this instanceof JDMClass;

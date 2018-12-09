@@ -232,7 +232,7 @@ public interface IExStichprobeBO
   boolean isOneLevel();
 
   /**
-   * Stehendes Totholz (Vollaufnahme) ab >= 5cm BHD
+   * Stehendes Totholz (Vollaufnahme) ab &gt;= 5cm BHD
    * 
    * @return
    *     The requested value. May not be <code>null</code>.
@@ -242,7 +242,7 @@ public interface IExStichprobeBO
   ICommonsList<IExStichprobeDeadwoodBO> totSteh();
 
   /**
-   * Liegendes Totholz (Line-intersect, Transekt 1) ab Mindestdurchmesser >= 10 cm
+   * Liegendes Totholz (Line-intersect, Transekt 1) ab Mindestdurchmesser &gt;= 10 cm
    * 
    * @return
    *     The requested value. May not be <code>null</code>.
@@ -252,7 +252,7 @@ public interface IExStichprobeBO
   ICommonsList<IExStichprobeDeadwoodBO> totLieg1();
 
   /**
-   * Liegendes Totholz (Line-intersect, Transekt 2) ab Mindestdurchmesser >= 10 cm
+   * Liegendes Totholz (Line-intersect, Transekt 2) ab Mindestdurchmesser &gt;= 10 cm
    * 
    * @return
    *     The requested value. May not be <code>null</code>.
