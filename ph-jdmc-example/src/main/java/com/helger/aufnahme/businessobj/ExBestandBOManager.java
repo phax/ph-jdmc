@@ -62,6 +62,8 @@ public class ExBestandBOManager
    *     einschichtig oder mehrschichtig.
    * @param eStockType
    *     Bestandesklasse. May not be <code>null</code>.
+   * @param eStockTypeOpt
+   *     Bestandesklasse optional. May be <code>null</code>.
    * @param sUsageDescription
    *     Beschreibung Nutzungsspuren. May not be <code>null</code>.
    * @param sGesellschaft
@@ -94,6 +96,7 @@ public class ExBestandBOManager
     final boolean bSameAge,
     final boolean bOneLevel,
     @Nonnull final EExStockTypeBO eStockType,
+    @Nullable final EExStockTypeBO eStockTypeOpt,
     @Nonnull final String sUsageDescription,
     @Nonnull final String sGesellschaft,
     final boolean bKronenschluss,
@@ -104,7 +107,7 @@ public class ExBestandBOManager
     @Nonnull final EExStockDeadwoodBO eTotLieg,
     @Nonnull final String sTotLiegBesch) {
     // Create new object
-    final ExBestandBO aExBestandBO = new ExBestandBO(nBNr, aPics, aDate, sVerortung, aBZHBG, nAreaSize, sBeschreib, bSameAge, bOneLevel, eStockType, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
+    final ExBestandBO aExBestandBO = new ExBestandBO(nBNr, aPics, aDate, sVerortung, aBZHBG, nAreaSize, sBeschreib, bSameAge, bOneLevel, eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
     // Save internally
     m_aRWLock.writeLock().lock();
     try {
@@ -113,7 +116,7 @@ public class ExBestandBOManager
       m_aRWLock.writeLock().unlock();
     }
     // Success audit
-    AuditHelper.onAuditCreateSuccess(ExBestandBO.OT, aExBestandBO.getID(), Integer.valueOf(nBNr), aPics, aDate, sVerortung, aBZHBG, Integer.valueOf(nAreaSize), sBeschreib, Boolean.valueOf(bSameAge), Boolean.valueOf(bOneLevel), eStockType, sUsageDescription, sGesellschaft, Boolean.valueOf(bKronenschluss), Boolean.valueOf(bLightWoods), Boolean.valueOf(bUnterwuchs), eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
+    AuditHelper.onAuditCreateSuccess(ExBestandBO.OT, aExBestandBO.getID(), Integer.valueOf(nBNr), aPics, aDate, sVerortung, aBZHBG, Integer.valueOf(nAreaSize), sBeschreib, Boolean.valueOf(bSameAge), Boolean.valueOf(bOneLevel), eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, Boolean.valueOf(bKronenschluss), Boolean.valueOf(bLightWoods), Boolean.valueOf(bUnterwuchs), eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
     return aExBestandBO;
   }
 
@@ -142,6 +145,8 @@ public class ExBestandBOManager
    *     einschichtig oder mehrschichtig.
    * @param eStockType
    *     Bestandesklasse. May not be <code>null</code>.
+   * @param eStockTypeOpt
+   *     Bestandesklasse optional. May be <code>null</code>.
    * @param sUsageDescription
    *     Beschreibung Nutzungsspuren. May not be <code>null</code>.
    * @param sGesellschaft
@@ -175,6 +180,7 @@ public class ExBestandBOManager
     final boolean bSameAge,
     final boolean bOneLevel,
     @Nonnull final EExStockTypeBO eStockType,
+    @Nullable final EExStockTypeBO eStockTypeOpt,
     @Nonnull final String sUsageDescription,
     @Nonnull final String sGesellschaft,
     final boolean bKronenschluss,
@@ -208,6 +214,7 @@ public class ExBestandBOManager
       eChange = eChange.or(aExBestandBO.setSameAge(bSameAge));
       eChange = eChange.or(aExBestandBO.setOneLevel(bOneLevel));
       eChange = eChange.or(aExBestandBO.setStockType(eStockType));
+      eChange = eChange.or(aExBestandBO.setStockTypeOpt(eStockTypeOpt));
       eChange = eChange.or(aExBestandBO.setUsageDescription(sUsageDescription));
       eChange = eChange.or(aExBestandBO.setGesellschaft(sGesellschaft));
       eChange = eChange.or(aExBestandBO.setKronenschluss(bKronenschluss));
@@ -226,7 +233,7 @@ public class ExBestandBOManager
       m_aRWLock.writeLock().unlock();
     }
     // Success audit
-    AuditHelper.onAuditModifySuccess(ExBestandBO.OT, "all", aExBestandBO.getID(), Integer.valueOf(nBNr), aPics, aDate, sVerortung, aBZHBG, Integer.valueOf(nAreaSize), sBeschreib, Boolean.valueOf(bSameAge), Boolean.valueOf(bOneLevel), eStockType, sUsageDescription, sGesellschaft, Boolean.valueOf(bKronenschluss), Boolean.valueOf(bLightWoods), Boolean.valueOf(bUnterwuchs), eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
+    AuditHelper.onAuditModifySuccess(ExBestandBO.OT, "all", aExBestandBO.getID(), Integer.valueOf(nBNr), aPics, aDate, sVerortung, aBZHBG, Integer.valueOf(nAreaSize), sBeschreib, Boolean.valueOf(bSameAge), Boolean.valueOf(bOneLevel), eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, Boolean.valueOf(bKronenschluss), Boolean.valueOf(bLightWoods), Boolean.valueOf(bUnterwuchs), eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
     return EChange.CHANGED;
   }
 

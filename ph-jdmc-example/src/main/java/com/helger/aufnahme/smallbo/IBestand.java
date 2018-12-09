@@ -115,6 +115,30 @@ public interface IBestand
   @Nonnull
   EStockType getStockType();
 
+  @Nonnull
+  default String getStockTypeID() {
+    return getStockType().getID();
+  }
+
+  /**
+   * Bestandesklasse optional
+   * 
+   * @return
+   *     The requested value. May be <code>null</code>.
+   */
+  @Nullable
+  EStockType getStockTypeOpt();
+
+  default boolean hasStockTypeOpt() {
+    return (getStockTypeOpt()!= null);
+  }
+
+  @Nullable
+  default String getStockTypeOptID() {
+    final EStockType aObj = getStockTypeOpt();
+    return ((aObj == null)?null:aObj.getID());
+  }
+
   /**
    * Beschreibung Nutzungsspuren
    * 
@@ -166,6 +190,11 @@ public interface IBestand
   @Nonnull
   EStockDeadwood getTotSteh();
 
+  @Nonnull
+  default String getTotStehID() {
+    return getTotSteh().getID();
+  }
+
   /**
    * Beschreibung Totholz stehend (geklumpt, Art, Herkunft, Zersetzungsgrade)
    * 
@@ -183,6 +212,11 @@ public interface IBestand
    */
   @Nonnull
   EStockDeadwood getTotLieg();
+
+  @Nonnull
+  default String getTotLiegID() {
+    return getTotLieg().getID();
+  }
 
   /**
    * Beschreibung Totholz liegend (geklumpt, Art, Herkunft, Zersetzungsgrade)

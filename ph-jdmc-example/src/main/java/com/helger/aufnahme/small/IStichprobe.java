@@ -76,6 +76,11 @@ public interface IStichprobe
   @Nonnull
   EExposition getExposition();
 
+  @Nonnull
+  default String getExpositionID() {
+    return getExposition().getID();
+  }
+
   /**
    * Angabe von Neigungen
    * 

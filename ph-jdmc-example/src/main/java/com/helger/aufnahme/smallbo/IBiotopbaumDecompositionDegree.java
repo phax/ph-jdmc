@@ -24,6 +24,11 @@ public interface IBiotopbaumDecompositionDegree
   @Nonnull
   EDecompositionDegreeClass getType();
 
+  @Nonnull
+  default String getTypeID() {
+    return getType().getID();
+  }
+
   /**
    * Get the value of enabled.
    * 

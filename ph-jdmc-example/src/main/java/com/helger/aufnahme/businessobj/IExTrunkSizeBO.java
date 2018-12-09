@@ -31,4 +31,9 @@ public interface IExTrunkSizeBO
    */
   @Nonnull
   EExTreeHeightBO getHeight();
+
+  @Nonnull
+  default String getHeightID() {
+    return getHeight().getID();
+  }
 }

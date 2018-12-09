@@ -24,6 +24,11 @@ public interface ICaveType
   @Nonnull
   ECaveClass getClazz();
 
+  @Nonnull
+  default String getClazzID() {
+    return getClazz().getID();
+  }
+
   /**
    * Get the value of type.
    * 
@@ -32,4 +37,9 @@ public interface ICaveType
    */
   @Nonnull
   ECaveType getType();
+
+  @Nonnull
+  default String getTypeID() {
+    return getType().getID();
+  }
 }

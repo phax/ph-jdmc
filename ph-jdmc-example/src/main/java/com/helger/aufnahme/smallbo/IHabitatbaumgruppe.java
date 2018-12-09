@@ -118,6 +118,11 @@ public interface IHabitatbaumgruppe
   @Nonnull
   EExposition getExposition();
 
+  @Nonnull
+  default String getExpositionID() {
+    return getExposition().getID();
+  }
+
   /**
    * Angabe von Neigungen: keine, Angabe von Neigungen, Freitext
    * 

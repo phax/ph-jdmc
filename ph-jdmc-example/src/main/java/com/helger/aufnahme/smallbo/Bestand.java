@@ -41,6 +41,7 @@ public class Bestand
   private boolean m_bSameAge;
   private boolean m_bOneLevel;
   private EStockType m_eStockType;
+  private EStockType m_eStockTypeOpt;
   private String m_sUsageDescription;
   private String m_sGesellschaft;
   private boolean m_bKronenschluss;
@@ -61,6 +62,7 @@ public class Bestand
     final boolean bSameAge,
     final boolean bOneLevel,
     @Nonnull final EStockType eStockType,
+    @Nullable final EStockType eStockTypeOpt,
     @Nonnull final String sUsageDescription,
     @Nonnull final String sGesellschaft,
     final boolean bKronenschluss,
@@ -70,7 +72,7 @@ public class Bestand
     @Nonnull final String sTotStehBesch,
     @Nonnull final EStockDeadwood eTotLieg,
     @Nonnull final String sTotLiegBesch) {
-    this(StubObject.createForCurrentUser(), nBNr, aPics, aDate, sVerortung, aBZHBG, nAreaSize, sBeschreib, bSameAge, bOneLevel, eStockType, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
+    this(StubObject.createForCurrentUser(), nBNr, aPics, aDate, sVerortung, aBZHBG, nAreaSize, sBeschreib, bSameAge, bOneLevel, eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
   }
 
   protected Bestand(@Nonnull final StubObject aStubObject,
@@ -84,6 +86,7 @@ public class Bestand
     final boolean bSameAge,
     final boolean bOneLevel,
     @Nonnull final EStockType eStockType,
+    @Nullable final EStockType eStockTypeOpt,
     @Nonnull final String sUsageDescription,
     @Nonnull final String sGesellschaft,
     final boolean bKronenschluss,
@@ -104,6 +107,7 @@ public class Bestand
     setSameAge(bSameAge);
     setOneLevel(bOneLevel);
     setStockType(eStockType);
+    setStockTypeOpt(eStockTypeOpt);
     setUsageDescription(sUsageDescription);
     setGesellschaft(sGesellschaft);
     setKronenschluss(bKronenschluss);
@@ -122,7 +126,7 @@ public class Bestand
 
   @Override
   public String toString() {
-    return ToStringGenerator.getDerived(super.toString()).append("BNr", m_nBNr).append("pics", m_aPics).append("date", m_aDate).append("Verortung", m_sVerortung).append("BZHBG", m_aBZHBG).append("areaSize", m_nAreaSize).append("Beschreib", m_sBeschreib).append("sameAge", m_bSameAge).append("oneLevel", m_bOneLevel).append("stockType", m_eStockType).append("usageDescription", m_sUsageDescription).append("Gesellschaft", m_sGesellschaft).append("Kronenschluss", m_bKronenschluss).append("lightWoods", m_bLightWoods).append("Unterwuchs", m_bUnterwuchs).append("TotSteh", m_eTotSteh).append("TotStehBesch", m_sTotStehBesch).append("TotLieg", m_eTotLieg).append("TotLiegBesch", m_sTotLiegBesch).getToString();
+    return ToStringGenerator.getDerived(super.toString()).append("BNr", m_nBNr).append("pics", m_aPics).append("date", m_aDate).append("Verortung", m_sVerortung).append("BZHBG", m_aBZHBG).append("areaSize", m_nAreaSize).append("Beschreib", m_sBeschreib).append("sameAge", m_bSameAge).append("oneLevel", m_bOneLevel).append("stockType", m_eStockType).append("stockTypeOpt", m_eStockTypeOpt).append("usageDescription", m_sUsageDescription).append("Gesellschaft", m_sGesellschaft).append("Kronenschluss", m_bKronenschluss).append("lightWoods", m_bLightWoods).append("Unterwuchs", m_bUnterwuchs).append("TotSteh", m_eTotSteh).append("TotStehBesch", m_sTotStehBesch).append("TotLieg", m_eTotLieg).append("TotLiegBesch", m_sTotLiegBesch).getToString();
   }
 
   public final int getBNr() {
@@ -270,6 +274,20 @@ public class Bestand
       return EChange.UNCHANGED;
     }
     m_eStockType = eStockType;
+    return EChange.CHANGED;
+  }
+
+  @Nullable
+  public final EStockType getStockTypeOpt() {
+    return m_eStockTypeOpt;
+  }
+
+  @Nonnull
+  final EChange setStockTypeOpt(@Nullable final EStockType eStockTypeOpt) {
+    if (EqualsHelper.equals(eStockTypeOpt, m_eStockTypeOpt)) {
+      return EChange.UNCHANGED;
+    }
+    m_eStockTypeOpt = eStockTypeOpt;
     return EChange.CHANGED;
   }
 

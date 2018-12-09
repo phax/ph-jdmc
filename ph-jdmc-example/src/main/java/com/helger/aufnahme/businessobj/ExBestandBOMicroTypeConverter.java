@@ -33,6 +33,7 @@ public class ExBestandBOMicroTypeConverter
   private static final String ATTR_SAMEAGE = "sameage";
   private static final String ATTR_ONELEVEL = "onelevel";
   private static final String ATTR_STOCKTYPE = "stocktype";
+  private static final String ATTR_STOCKTYPEOPT = "stocktypeopt";
   private static final String ELEMENT_USAGEDESCRIPTION = "usagedescription";
   private static final String ELEMENT_GESELLSCHAFT = "gesellschaft";
   private static final String ATTR_KRONENSCHLUSS = "kronenschluss";
@@ -63,6 +64,9 @@ public class ExBestandBOMicroTypeConverter
     aElement.setAttribute(ATTR_SAMEAGE, aValue.isSameAge());
     aElement.setAttribute(ATTR_ONELEVEL, aValue.isOneLevel());
     aElement.setAttribute(ATTR_STOCKTYPE, aValue.getStockType().getID());
+    if (aValue.hasStockTypeOpt()) {
+      aElement.setAttribute(ATTR_STOCKTYPEOPT, aValue.getStockTypeOpt().getID());
+    }
     aElement.appendElement(sNamespaceURI, ELEMENT_USAGEDESCRIPTION).appendText(aValue.getUsageDescription());
     aElement.appendElement(sNamespaceURI, ELEMENT_GESELLSCHAFT).appendText(aValue.getGesellschaft());
     aElement.setAttribute(ATTR_KRONENSCHLUSS, aValue.isKronenschluss());
@@ -93,6 +97,7 @@ public class ExBestandBOMicroTypeConverter
     final boolean bSameAge = aElement.getAttributeValueAsBool(ATTR_SAMEAGE, false);
     final boolean bOneLevel = aElement.getAttributeValueAsBool(ATTR_ONELEVEL, false);
     final EExStockTypeBO eStockType = EExStockTypeBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_STOCKTYPE));
+    final EExStockTypeBO eStockTypeOpt = EExStockTypeBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_STOCKTYPEOPT));
     final String sUsageDescription = MicroHelper.getChildTextContent(aElement, ELEMENT_USAGEDESCRIPTION);
     final String sGesellschaft = MicroHelper.getChildTextContent(aElement, ELEMENT_GESELLSCHAFT);
     final boolean bKronenschluss = aElement.getAttributeValueAsBool(ATTR_KRONENSCHLUSS, false);
@@ -102,6 +107,6 @@ public class ExBestandBOMicroTypeConverter
     final String sTotStehBesch = MicroHelper.getChildTextContent(aElement, ELEMENT_TOT_STEH_BESCH);
     final EExStockDeadwoodBO eTotLieg = EExStockDeadwoodBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_TOT_LIEG));
     final String sTotLiegBesch = MicroHelper.getChildTextContent(aElement, ELEMENT_TOT_LIEG_BESCH);
-    return new ExBestandBO(super.getStubObject(aElement), nBNr, aPics, aDate, sVerortung, aBZHBG, nAreaSize, sBeschreib, bSameAge, bOneLevel, eStockType, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
+    return new ExBestandBO(super.getStubObject(aElement), nBNr, aPics, aDate, sVerortung, aBZHBG, nAreaSize, sBeschreib, bSameAge, bOneLevel, eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
   }
 }

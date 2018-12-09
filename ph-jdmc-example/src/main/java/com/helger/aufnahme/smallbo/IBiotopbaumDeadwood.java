@@ -24,6 +24,11 @@ public interface IBiotopbaumDeadwood
   @Nonnull
   EDeadwoodCategory getType();
 
+  @Nonnull
+  default String getTypeID() {
+    return getType().getID();
+  }
+
   /**
    * Get the value of enabled.
    * 

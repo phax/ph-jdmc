@@ -31,4 +31,9 @@ public interface ITrunkSize
    */
   @Nonnull
   ETreeHeight getHeight();
+
+  @Nonnull
+  default String getHeightID() {
+    return getHeight().getID();
+  }
 }

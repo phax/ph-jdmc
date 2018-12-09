@@ -76,6 +76,11 @@ public interface IExStichprobeBO
   @Nonnull
   EExExpositionBO getExposition();
 
+  @Nonnull
+  default String getExpositionID() {
+    return getExposition().getID();
+  }
+
   /**
    * Angabe von Neigungen
    * 

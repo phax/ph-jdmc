@@ -83,6 +83,11 @@ public interface IBiotopbaum
   @Nonnull
   EExposition getExposition();
 
+  @Nonnull
+  default String getExpositionID() {
+    return getExposition().getID();
+  }
+
   /**
    * Angabe von Neigungen: keine, Angabe von Neigungen, Freitext
    * 
@@ -170,6 +175,11 @@ public interface IBiotopbaum
   @Nonnull
   ETreeKind getTreeKind();
 
+  @Nonnull
+  default String getTreeKindID() {
+    return getTreeKind().getID();
+  }
+
   /**
    * Höhlentyp und Anzahl mit Klasseneinteilung (Checkbox, mehrere möglich; dann noch Klassenangaben; C22-35 im Aufnahmemanual)
    * 
@@ -199,6 +209,11 @@ public interface IBiotopbaum
    */
   @Nonnull
   EVitality getVitality();
+
+  @Nonnull
+  default String getVitalityID() {
+    return getVitality().getID();
+  }
 
   /**
    * Baum-Sonderstrukturen (Mehrfachnennung möglich)

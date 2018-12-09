@@ -24,6 +24,11 @@ public interface IExCaveTypeBO
   @Nonnull
   EExCaveClassBO getClazz();
 
+  @Nonnull
+  default String getClazzID() {
+    return getClazz().getID();
+  }
+
   /**
    * Get the value of type.
    * 
@@ -32,4 +37,9 @@ public interface IExCaveTypeBO
    */
   @Nonnull
   EExCaveTypeBO getType();
+
+  @Nonnull
+  default String getTypeID() {
+    return getType().getID();
+  }
 }

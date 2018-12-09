@@ -13,6 +13,7 @@
   "sameAge": ["boolean", "gleichaltrig oder ungleichaltrig"],
   "oneLevel": ["boolean", "einschichtig oder mehrschichtig"],
   "stockType": [ "EStockType", "Bestandesklasse" ],
+  "stockTypeOpt": [ "EStockType?", "Bestandesklasse optional" ],
   "usageDescription": ["String", "Beschreibung Nutzungsspuren"],
   "Gesellschaft": ["String", "Waldgesellschaft oder Waldgruppe"],
   "Kronenschluss": [ "boolean" ],

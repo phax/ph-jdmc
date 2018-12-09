@@ -24,6 +24,11 @@ public interface IStichprobeDeadwood
   @Nonnull
   EDecompositionDegreeClass getDoD();
 
+  @Nonnull
+  default String getDoDID() {
+    return getDoD().getID();
+  }
+
   /**
    * Baumart laut Aufnahmeblatt
    * 
@@ -32,6 +37,11 @@ public interface IStichprobeDeadwood
    */
   @Nonnull
   ETreeKind getTreeKind();
+
+  @Nonnull
+  default String getTreeKindID() {
+    return getTreeKind().getID();
+  }
 
   /**
    * Länge in cm

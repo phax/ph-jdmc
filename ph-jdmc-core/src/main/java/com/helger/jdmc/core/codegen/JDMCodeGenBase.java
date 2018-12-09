@@ -97,6 +97,7 @@ public class JDMCodeGenBase
     for (final JDMField aField : aClass.fields ())
     {
       final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+      final boolean bIsOpenEnded = eMultiplicity.isOpenEnded ();
       final boolean bIsPrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
       final boolean bIsStringType = "String".equals (aField.getType ().getShortName ());
 
@@ -104,12 +105,10 @@ public class JDMCodeGenBase
 
       // List or field?
       AbstractJClass jReturnType = _resolveType (aProcessor, cm, aField.getType ().getJavaFQCN (eMultiplicity));
-      if (eMultiplicity.isOpenEnded ())
+      if (bIsOpenEnded)
         jReturnType = cm.ref (ICommonsList.class).narrow (jReturnType);
 
-      final JMethod aMethodGet = jInterface.method (0,
-                                                    jReturnType,
-                                                    aField.getMethodGetterName (eMultiplicity.isOpenEnded ()));
+      final JMethod aMethodGet = jInterface.method (0, jReturnType, aField.getMethodGetterName (bIsOpenEnded));
 
       // Annotations
       if (!bIsPrimitive)
@@ -120,7 +119,7 @@ public class JDMCodeGenBase
           aMethodGet.annotate (Nonnull.class);
         if (eMultiplicity == EJDMMultiplicity.MANDATORY_OR_MORE)
           aMethodGet.annotate (Nonempty.class);
-        if (eMultiplicity.isOpenEnded ())
+        if (bIsOpenEnded)
           aMethodGet.annotate (ReturnsMutableObject.class);
       }
 
@@ -145,6 +144,25 @@ public class JDMCodeGenBase
         }
         else
           aMethodHas.body ()._return (JExpr.invoke (aMethodGet).neNull ());
+      }
+
+      if (aField.getType ().isEnum () && !bIsOpenEnded)
+      {
+        // Create the get...ID method for enums
+        final JMethod aMethodGetID = jInterface.method (JMod.DEFAULT,
+                                                        cm.ref (String.class),
+                                                        aField.getMethodGetterName (bIsOpenEnded) + "ID");
+        if (eMultiplicity.isMin0 ())
+        {
+          aMethodGetID.annotate (Nullable.class);
+          final JVar jVar = aMethodGetID.body ().decl (JMod.FINAL, jReturnType, "aObj", JExpr.invoke (aMethodGet));
+          aMethodGetID.body ()._return (JExpr.cond (jVar.eqNull (), JExpr._null (), jVar.invoke ("getID")));
+        }
+        else
+        {
+          aMethodGetID.annotate (Nonnull.class);
+          aMethodGetID.body ()._return (JExpr.invoke (aMethodGet).invoke ("getID"));
+        }
       }
     }
     return jInterface;
