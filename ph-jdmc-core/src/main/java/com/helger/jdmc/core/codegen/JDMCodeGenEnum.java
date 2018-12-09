@@ -18,6 +18,7 @@ package com.helger.jdmc.core.codegen;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -47,6 +48,7 @@ import com.helger.jdmc.core.datamodel.JDMEnumConstant;
  *
  * @author Philip Helger
  */
+@Immutable
 final class JDMCodeGenEnum
 {
   private JDMCodeGenEnum ()

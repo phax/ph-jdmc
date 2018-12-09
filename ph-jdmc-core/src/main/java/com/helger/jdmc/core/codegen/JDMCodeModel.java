@@ -17,6 +17,7 @@
 package com.helger.jdmc.core.codegen;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.ReturnsMutableObject;
@@ -29,6 +30,7 @@ import com.helger.jdmc.core.datamodel.IJDMTypeResolver;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMType;
 
+@NotThreadSafe
 public final class JDMCodeModel extends JCodeModel
 {
   private final IJDMTypeResolver m_aTypeResolver;

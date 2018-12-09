@@ -54,6 +54,7 @@ import com.helger.xml.microdom.convert.IMicroTypeConverterRegistry;
 import com.helger.xml.microdom.convert.MicroTypeConverter;
 import com.helger.xml.microdom.util.MicroHelper;
 
+@Immutable
 final class JDMCodeGenMicroTypeConverter
 {
   private JDMCodeGenMicroTypeConverter ()

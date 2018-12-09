@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.ValueEnforcer;
@@ -56,7 +57,7 @@ import com.helger.jdmc.core.datamodel.JDMField;
 import com.helger.tenancy.AbstractBusinessObject;
 import com.helger.tenancy.IBusinessObject;
 
-@NotThreadSafe
+@Immutable
 public class JDMCodeGenBase
 {
   private JDMCodeGenBase ()

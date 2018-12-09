@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.Comparator;
 
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.concurrent.Immutable;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -50,8 +50,8 @@ import com.helger.jdmc.core.datamodel.JDMType;
 import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
 import com.helger.xml.mock.XMLTestHelper;
 
-@NotThreadSafe
-public class JDMCodeGenTest
+@Immutable
+final class JDMCodeGenTest
 {
   private static final String ORG_JUNIT_TEST_FQCN = "org.junit.Test";
 
