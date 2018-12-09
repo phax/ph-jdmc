@@ -1,4 +1,8 @@
 {
+  "$config" :
+  {
+    "manager": true
+  },
   "StichNr": ["int", "Schlüsselfeld"],
   "StichNrzR": ["Reservat", "Zugehörig zu Reservat"],  
   "pics": ["File+", "Fotos"],

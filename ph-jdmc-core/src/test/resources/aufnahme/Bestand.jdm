@@ -1,4 +1,8 @@
 { 
+  "$config" :
+  {
+    "manager": true
+  },
   "BNr": [ "int", "Schlüsselfeld" ],
   "pics": ["File+", "Foto-Nr"],
   "date": "LocalDate",

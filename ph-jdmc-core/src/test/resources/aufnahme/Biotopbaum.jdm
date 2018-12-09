@@ -1,4 +1,8 @@
 {
+  "$config" :
+  {
+    "manager": true
+  },
   /* BB plus kurze fortlaufende Zahl als Numerierung */
   "BBNr": ["int", "Schlüsselfeld"],
   "pics": ["File+", "Foto"],

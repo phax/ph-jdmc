@@ -143,15 +143,12 @@ public class JDMCodeGenerator
       for (final JDMClass aClass : aClasses)
       {
         final JDefinedClass jInterface = JDMCodeGenBase.createMainJavaInterface (m_aProcessor, m_aSettings, cm, aClass);
-        final JDefinedClass jDomainClass = JDMCodeGenBase.createMainJavaClass (m_aSettings,
-                                                                               cm,
-                                                                               aClass,
-                                                                               jInterface);
+        final JDefinedClass jDomainClass = JDMCodeGenBase.createMainJavaClass (m_aSettings, cm, aClass, jInterface);
 
         if (m_aSettings.isCreateMicroTypeConverter ())
           JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings, cm, aClass, jDomainClass);
 
-        if (m_aSettings.isCreateManager ())
+        if (m_aSettings.isCreateManager () && aClass.config ().isCreateManager ())
           JDMCodeGenManager.createMainManagerClass (cm, aClass, jInterface, jDomainClass);
       }
 

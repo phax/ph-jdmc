@@ -1,3 +1,7 @@
 {
+  "$config" :
+  {
+    "manager": true
+  }
 /* no fields - test only */ 
 }

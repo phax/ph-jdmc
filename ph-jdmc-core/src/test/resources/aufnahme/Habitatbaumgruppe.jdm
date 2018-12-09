@@ -1,4 +1,8 @@
 {
+  "$config" :
+  {
+    "manager": true
+  },
   "HBGNr": ["int", "Schlüsselfeld"],
   "pics": ["File+", "Fotos"],
   "HBGzBB" : [ "Biotopbaum*", "zugehörige Biotopbäume" ],  

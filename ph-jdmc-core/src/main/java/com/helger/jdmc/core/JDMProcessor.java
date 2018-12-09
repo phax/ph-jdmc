@@ -50,6 +50,7 @@ import com.helger.jdmc.core.datamodel.EJDMConstraintType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.IJDMTypeResolver;
 import com.helger.jdmc.core.datamodel.JDMClass;
+import com.helger.jdmc.core.datamodel.JDMClassTypeConfiguration;
 import com.helger.jdmc.core.datamodel.JDMConstraint;
 import com.helger.jdmc.core.datamodel.JDMContext;
 import com.helger.jdmc.core.datamodel.JDMEnum;
@@ -185,6 +186,30 @@ public class JDMProcessor implements IJDMTypeResolver
     return ret;
   }
 
+  private void _handleClassTypeConfiguration (@Nonnull final AbstractJDMClassType aType,
+                                    @Nonnull final IJson aFieldDef,
+                                    @Nonnull final Consumer <? super String> aErrorHdl)
+  {
+    if (!aFieldDef.isObject ())
+      aErrorHdl.accept ("The per-type configuration must be an object");
+    else
+      for (final Map.Entry <String, IJson> aEntry : aFieldDef.getAsObject ())
+      {
+        final String sKey = aEntry.getKey ();
+        final IJson aValue = aEntry.getValue ();
+        if ("manager".equals (sKey))
+        {
+          if (aValue.isValue ())
+            aType.config ()
+                 .setCreateManager (aValue.getAsValue ().getAsBoolean (JDMClassTypeConfiguration.DEFAULT_CREATE_MANAGER));
+          else
+            aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
+        }
+        else
+          aErrorHdl.accept ("The configuration property '" + sKey + "' is unknown");
+      }
+  }
+
   @Nullable
   public JDMClass readClassDef (@Nonnull final File aSrcFile)
   {
@@ -215,6 +240,11 @@ public class JDMProcessor implements IJDMTypeResolver
       {
         aErrorHdl.accept ("The field name may not be empty");
         return null;
+      }
+      if ("$config".equals (sFieldName))
+      {
+        _handleClassTypeConfiguration (ret, aFieldDef, aErrorHdl);
+        continue;
       }
       if (!isValidIdentifier (sFieldName))
       {
@@ -482,12 +512,17 @@ public class JDMProcessor implements IJDMTypeResolver
     for (final Map.Entry <String, IJson> aFieldEntry : aJsonObj)
     {
       final String sEnumConstantName = aFieldEntry.getKey ();
-      final IJson aEnumConstantDef = aFieldEntry.getValue ();
+      final IJson aEnumDef = aFieldEntry.getValue ();
 
       if (StringHelper.hasNoText (sEnumConstantName))
       {
         aErrorHdl.accept ("The enum constant name may not be empty");
         return null;
+      }
+      if ("$config".equals (sEnumConstantName))
+      {
+        _handleClassTypeConfiguration (ret, aEnumDef, aErrorHdl);
+        continue;
       }
       if (!isValidIdentifier (sEnumConstantName))
       {
@@ -503,21 +538,21 @@ public class JDMProcessor implements IJDMTypeResolver
       String sID;
       String sDisplayName;
       final String sComment;
-      if (aEnumConstantDef.isValue ())
+      if (aEnumDef.isValue ())
       {
         // ID
-        final IJsonValue aValue = aEnumConstantDef.getAsValue ();
+        final IJsonValue aValue = aEnumDef.getAsValue ();
         sID = aValue.getAsString ();
         sDisplayName = null;
         sComment = null;
       }
       else
-        if (aEnumConstantDef.isArray ())
+        if (aEnumDef.isArray ())
         {
           // [ID] or
           // [ID, DisplayName] or
           // [ID, DisplayName, Comment]
-          final IJsonArray aArray = aEnumConstantDef.getAsArray ();
+          final IJsonArray aArray = aEnumDef.getAsArray ();
           sID = aArray.getAsString (0);
           final IJson aSecond = aArray.get (1);
           final IJson aThird = aArray.get (2);

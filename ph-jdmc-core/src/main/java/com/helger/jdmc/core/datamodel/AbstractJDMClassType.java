@@ -21,11 +21,13 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
+import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.string.StringHelper;
 
 @NotThreadSafe
 public abstract class AbstractJDMClassType
 {
+  private final JDMClassTypeConfiguration m_aConfig = new JDMClassTypeConfiguration ();
   private final String m_sPackageName;
   private final String m_sClassName;
 
@@ -42,6 +44,13 @@ public abstract class AbstractJDMClassType
     ValueEnforcer.notEmpty (sClassName, "ClassName");
     m_sPackageName = sPackageName;
     m_sClassName = sClassName;
+  }
+
+  @Nonnull
+  @ReturnsMutableObject
+  public final JDMClassTypeConfiguration config ()
+  {
+    return m_aConfig;
   }
 
   @Nonnull
