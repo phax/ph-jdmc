@@ -1,0 +1,6 @@
+{
+  "ALPHA" : "a",
+  "RED" : [ "r" ],
+  "GREEN" : [ "g", "green", "The green part." ],
+  "BLUE" :  [ "b", "blue" ]
+}
