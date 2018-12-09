@@ -41,7 +41,6 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JBlock;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JCommentPart;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JFieldVar;
@@ -119,7 +118,7 @@ public class JDMCodeGenBase
           aMethodGet.annotate (Nullable.class);
         else
           aMethodGet.annotate (Nonnull.class);
-        if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+        if (eMultiplicity == EJDMMultiplicity.MANDATORY_OR_MORE)
           aMethodGet.annotate (Nonempty.class);
         if (eMultiplicity.isOpenEnded ())
           aMethodGet.annotate (ReturnsMutableObject.class);
@@ -132,20 +131,7 @@ public class JDMCodeGenBase
         else
           aMethodGet.javadoc ().add ("Get the value of " + aField.getOriginalFieldName () + ".");
 
-        final JCommentPart aReturn = aMethodGet.javadoc ().addReturn ();
-        aReturn.add ("The requested value.");
-        if (!bIsPrimitive)
-        {
-          if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
-            aReturn.add (" May be <code>null</code>.");
-          else
-          {
-            if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
-              aReturn.add (" May neither be <code>null</code> nor empty.");
-            else
-              aReturn.add (" May not be <code>null</code>.");
-          }
-        }
+        aMethodGet.javadoc ().addReturn ().add ("The requested value." + aField.getJavaDocSuffix ());
       }
 
       if (!bIsPrimitive && eMultiplicity == EJDMMultiplicity.OPTIONAL)
@@ -305,7 +291,7 @@ public class JDMCodeGenBase
             jC1Arg.annotate (Nullable.class);
           else
             jC1Arg.annotate (Nonnull.class);
-          if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+          if (eMultiplicity == EJDMMultiplicity.MANDATORY_OR_MORE)
             jC1Arg.annotate (Nonempty.class);
         }
         jC1CallsC2.arg (jC1Arg);
@@ -319,7 +305,7 @@ public class JDMCodeGenBase
               jC2Arg.annotate (Nullable.class);
             else
               jC2Arg.annotate (Nonnull.class);
-            if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+            if (eMultiplicity == EJDMMultiplicity.MANDATORY_OR_MORE)
               jC2Arg.annotate (Nonempty.class);
           }
           jCtor2.body ().add (JExpr.invoke (aField.getMethodSetterName ()).arg (jC2Arg));
@@ -334,7 +320,7 @@ public class JDMCodeGenBase
             jC2Arg.annotate (Nullable.class);
           else
             jC2Arg.annotate (Nonnull.class);
-          if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+          if (eMultiplicity == EJDMMultiplicity.MANDATORY_OR_MORE)
             jC2Arg.annotate (Nonempty.class);
         }
         jCtor2.body ().add (JExpr.invoke (aField.getMethodSetterName ()).arg (jC2Arg));
@@ -375,7 +361,7 @@ public class JDMCodeGenBase
             aMethodGet.annotate (Nullable.class);
           else
             aMethodGet.annotate (Nonnull.class);
-          if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+          if (eMultiplicity == EJDMMultiplicity.MANDATORY_OR_MORE)
             aMethodGet.annotate (Nonempty.class);
           if (eMultiplicity.isOpenEnded ())
             aMethodGet.annotate (ReturnsMutableObject.class);
@@ -397,7 +383,7 @@ public class JDMCodeGenBase
             jParam.annotate (Nullable.class);
           else
             jParam.annotate (Nonnull.class);
-          if (eMultiplicity.isOpenEnded () && eMultiplicity.isMin1 ())
+          if (eMultiplicity == EJDMMultiplicity.MANDATORY_OR_MORE)
             jParam.annotate (Nonempty.class);
         }
 

@@ -12,6 +12,7 @@ import com.helger.photon.basic.audit.AuditHelper;
 import com.helger.photon.security.object.BusinessObjectHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 
 /**
@@ -21,6 +22,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
+@ThreadSafe
 public class ExBiotopbaumBOManager
   extends AbstractPhotonMapBasedWALDAO<IExBiotopbaumBO, ExBiotopbaumBO>
 {
@@ -37,6 +39,66 @@ public class ExBiotopbaumBOManager
     super(ExBiotopbaumBO.class, sFilename, aInitSettings);
   }
 
+  /**
+   * Create a new object and add it to the internal map.
+   * 
+   * @param nBBNr
+   *     Schlüsselfeld.
+   * @param aPics
+   *     Foto. May neither be <code>null</code> nor empty.
+   * @param aDate
+   *     Aufnahmedatum. May not be <code>null</code>.
+   * @param aType
+   *     Biotopbaum-Typ (Hauptauswahlkriterium). May neither be <code>null</code> nor empty.
+   * @param sLocation
+   *     allg. Beschreibung des Standorts. May be <code>null</code>.
+   * @param eExposition
+   *     Exposition. May not be <code>null</code>.
+   * @param sHanglage
+   *     Angabe von Neigungen: keine, Angabe von Neigungen, Freitext. May be <code>null</code>.
+   * @param bEinschichtig
+   *     Wald, einschichtig (1 Baumschicht, kaum Unterwuchs) oder mehrschichtiger Bestand (Unterwuchs, Strauchsch., evtl. 2. Baumschicht).
+   * @param bSolitary
+   *     Solitärbaum.
+   * @param bLightLocation
+   *     lichter Bestand (Besonnung).
+   * @param bClosedCrown
+   *     geschlossene Kronendach.
+   * @param bNoSun
+   *     explitzit keine Besonnung.
+   * @param bUeberSun
+   *     Überhälter, mind. 25% oder weniger als 25% des Stammes besonnt.
+   * @param bHomogene
+   *     eingebettet in homogenene oder heterogene Umgebung.
+   * @param sBeschreibung
+   *     Bemerkungen/ (ausführliche) Beschreibung. May not be <code>null</code>.
+   * @param eTreeKind
+   *     Baumart laut Aufnahmeblatt. May not be <code>null</code>.
+   * @param aCaves
+   *     Höhlentyp und Anzahl mit Klasseneinteilung (Checkbox, mehrere möglich; dann noch Klassenangaben; C22-35 im Aufnahmemanual). May not be <code>null</code>.
+   * @param aTrunk
+   *     Daten zum Stamm/zu den Stämmen. May neither be <code>null</code> nor empty.
+   * @param eVitality
+   *     Vitalität. May not be <code>null</code>.
+   * @param aSpecialStructure
+   *     Baum-Sonderstrukturen (Mehrfachnennung möglich). May not be <code>null</code>.
+   * @param sOtherSpecial
+   *     Sonstige Sonderstrukturen inkl. Beschreibung. May be <code>null</code>.
+   * @param bAspirant
+   *     Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe).
+   * @param sAspirantDesc
+   *     Beschreibung Anwärter in nächster Umgebung (Potenzial für Habitatbaumgruppe). May be <code>null</code>.
+   * @param bMarked
+   *     bestehende Markierung.
+   * @param sMarkedDesc
+   *     Beschreibung bestehende Markierung. May be <code>null</code>.
+   * @param aDeadwoodCats
+   *     Totholzkategorien (bei toten Bäumen). May not be <code>null</code>.
+   * @param aDeadwoodDoD
+   *     Totholzmengen aufgeteilt in die Zersetzungsklassen. May not be <code>null</code>.
+   * @return
+   *     The created object and never <code>null</code>.
+   */
   @Nonnull
   public final IExBiotopbaumBO createExBiotopbaumBO(final int nBBNr,
     @Nonnull @Nonempty final ICommonsList<File> aPics,
@@ -109,6 +171,7 @@ public class ExBiotopbaumBOManager
     @Nonnull final ICommonsList<IExBiotopbaumDeadwoodBO> aDeadwoodCats,
     @Nonnull final ICommonsList<IExBiotopbaumDecompositionDegreeBO> aDeadwoodDoD) {
     final ExBiotopbaumBO aExBiotopbaumBO = getOfID(sExBiotopbaumBOID);
+    // Check preconditions
     if (aExBiotopbaumBO == null) {
       AuditHelper.onAuditModifyFailure(ExBiotopbaumBO.OT, "all", sExBiotopbaumBOID, "no-such-id");
       return EChange.UNCHANGED;
@@ -162,7 +225,8 @@ public class ExBiotopbaumBOManager
   }
 
   @Nonnull
-  public final EChange markDeletedExBiotopbaumBO(@Nullable final String sExBiotopbaumBOID) {
+  public final EChange markExBiotopbaumBODeleted(@Nullable final String sExBiotopbaumBOID) {
+    // Check preconditions
     final ExBiotopbaumBO aExBiotopbaumBO = getOfID(sExBiotopbaumBOID);
     if (aExBiotopbaumBO == null) {
       AuditHelper.onAuditDeleteFailure(ExBiotopbaumBO.OT, sExBiotopbaumBOID, "no-such-id");
@@ -184,7 +248,55 @@ public class ExBiotopbaumBOManager
       m_aRWLock.writeLock().unlock();
     }
     // Success audit
-    AuditHelper.onAuditDeleteSuccess(ExBiotopbaumBO.OT, aExBiotopbaumBO.getID());
+    AuditHelper.onAuditDeleteSuccess(ExBiotopbaumBO.OT, sExBiotopbaumBOID, "mark-deleted");
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange markExBiotopbaumBOUndeleted(@Nullable final String sExBiotopbaumBOID) {
+    // Check preconditions
+    final ExBiotopbaumBO aExBiotopbaumBO = getOfID(sExBiotopbaumBOID);
+    if (aExBiotopbaumBO == null) {
+      AuditHelper.onAuditUndeleteFailure(ExBiotopbaumBO.OT, sExBiotopbaumBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (!aExBiotopbaumBO.isDeleted()) {
+      AuditHelper.onAuditUndeleteFailure(ExBiotopbaumBO.OT, sExBiotopbaumBOID, "not-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as undeleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setUndeletionNow(aExBiotopbaumBO).isUnchanged()) {
+        AuditHelper.onAuditUndeleteFailure(ExBiotopbaumBO.OT, sExBiotopbaumBOID, "not-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemUndeleted(aExBiotopbaumBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditUndeleteSuccess(ExBiotopbaumBO.OT, sExBiotopbaumBOID);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange deleteExBiotopbaumBO(@Nullable final String sExBiotopbaumBOID) {
+    final ExBiotopbaumBO aDeletedExBiotopbaumBO;
+    // Delete internally
+    m_aRWLock.writeLock().lock();
+    try {
+      aDeletedExBiotopbaumBO = internalDeleteItem(sExBiotopbaumBOID);
+      if (aDeletedExBiotopbaumBO == null) {
+        AuditHelper.onAuditDeleteFailure(ExBiotopbaumBO.OT, sExBiotopbaumBOID, "no-such-id");
+        return EChange.UNCHANGED;
+      }
+      BusinessObjectHelper.setDeletionNow(aDeletedExBiotopbaumBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExBiotopbaumBO.OT, sExBiotopbaumBOID, "removed");
     return EChange.CHANGED;
   }
 }

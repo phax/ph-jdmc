@@ -8,6 +8,7 @@ import com.helger.photon.basic.audit.AuditHelper;
 import com.helger.photon.security.object.BusinessObjectHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 
 /**
@@ -17,6 +18,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
+@ThreadSafe
 public class ExReservatBOManager
   extends AbstractPhotonMapBasedWALDAO<IExReservatBO, ExReservatBO>
 {
@@ -33,6 +35,18 @@ public class ExReservatBOManager
     super(ExReservatBO.class, sFilename, aInitSettings);
   }
 
+  /**
+   * Create a new object and add it to the internal map.
+   * 
+   * @param nRNr
+   *     Schlüsselfeld.
+   * @param sName
+   *     Name des Reservats. May not be <code>null</code>.
+   * @param nAreaSize
+   *     Größe in m².
+   * @return
+   *     The created object and never <code>null</code>.
+   */
   @Nonnull
   public final IExReservatBO createExReservatBO(final int nRNr, @Nonnull final String sName, final int nAreaSize) {
     // Create new object
@@ -55,6 +69,7 @@ public class ExReservatBOManager
     @Nonnull final String sName,
     final int nAreaSize) {
     final ExReservatBO aExReservatBO = getOfID(sExReservatBOID);
+    // Check preconditions
     if (aExReservatBO == null) {
       AuditHelper.onAuditModifyFailure(ExReservatBO.OT, "all", sExReservatBOID, "no-such-id");
       return EChange.UNCHANGED;
@@ -84,7 +99,8 @@ public class ExReservatBOManager
   }
 
   @Nonnull
-  public final EChange markDeletedExReservatBO(@Nullable final String sExReservatBOID) {
+  public final EChange markExReservatBODeleted(@Nullable final String sExReservatBOID) {
+    // Check preconditions
     final ExReservatBO aExReservatBO = getOfID(sExReservatBOID);
     if (aExReservatBO == null) {
       AuditHelper.onAuditDeleteFailure(ExReservatBO.OT, sExReservatBOID, "no-such-id");
@@ -106,7 +122,55 @@ public class ExReservatBOManager
       m_aRWLock.writeLock().unlock();
     }
     // Success audit
-    AuditHelper.onAuditDeleteSuccess(ExReservatBO.OT, aExReservatBO.getID());
+    AuditHelper.onAuditDeleteSuccess(ExReservatBO.OT, sExReservatBOID, "mark-deleted");
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange markExReservatBOUndeleted(@Nullable final String sExReservatBOID) {
+    // Check preconditions
+    final ExReservatBO aExReservatBO = getOfID(sExReservatBOID);
+    if (aExReservatBO == null) {
+      AuditHelper.onAuditUndeleteFailure(ExReservatBO.OT, sExReservatBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (!aExReservatBO.isDeleted()) {
+      AuditHelper.onAuditUndeleteFailure(ExReservatBO.OT, sExReservatBOID, "not-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as undeleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setUndeletionNow(aExReservatBO).isUnchanged()) {
+        AuditHelper.onAuditUndeleteFailure(ExReservatBO.OT, sExReservatBOID, "not-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemUndeleted(aExReservatBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditUndeleteSuccess(ExReservatBO.OT, sExReservatBOID);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange deleteExReservatBO(@Nullable final String sExReservatBOID) {
+    final ExReservatBO aDeletedExReservatBO;
+    // Delete internally
+    m_aRWLock.writeLock().lock();
+    try {
+      aDeletedExReservatBO = internalDeleteItem(sExReservatBOID);
+      if (aDeletedExReservatBO == null) {
+        AuditHelper.onAuditDeleteFailure(ExReservatBO.OT, sExReservatBOID, "no-such-id");
+        return EChange.UNCHANGED;
+      }
+      BusinessObjectHelper.setDeletionNow(aDeletedExReservatBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExReservatBO.OT, sExReservatBOID, "removed");
     return EChange.CHANGED;
   }
 }

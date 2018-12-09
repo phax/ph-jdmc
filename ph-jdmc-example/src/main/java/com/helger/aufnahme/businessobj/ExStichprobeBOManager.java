@@ -12,6 +12,7 @@ import com.helger.photon.basic.audit.AuditHelper;
 import com.helger.photon.security.object.BusinessObjectHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 
 /**
@@ -21,6 +22,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
+@ThreadSafe
 public class ExStichprobeBOManager
   extends AbstractPhotonMapBasedWALDAO<IExStichprobeBO, ExStichprobeBO>
 {
@@ -37,6 +39,66 @@ public class ExStichprobeBOManager
     super(ExStichprobeBO.class, sFilename, aInitSettings);
   }
 
+  /**
+   * Create a new object and add it to the internal map.
+   * 
+   * @param nStichNr
+   *     Schlüsselfeld.
+   * @param aStichNrzR
+   *     Zugehörig zu Reservat. May not be <code>null</code>.
+   * @param aPics
+   *     Fotos. May neither be <code>null</code> nor empty.
+   * @param aDate
+   *     LocalDate value. May not be <code>null</code>.
+   * @param nSize
+   *     Größe in m² bei Abweichung von Radius.
+   * @param eExposition
+   *     Exposition. May not be <code>null</code>.
+   * @param sHanglage
+   *     Angabe von Neigungen. May be <code>null</code>.
+   * @param sGesellschaft
+   *     Waldgesellschaft oder Waldgruppe. May not be <code>null</code>.
+   * @param dBKL0
+   *     Bestandesklasse 0, Flächenanteil in Zehntel.
+   * @param dBKL1
+   *     Bestandesklasse 1, Flächenanteil in Zehntel.
+   * @param dBKL2
+   *     Bestandesklasse 2, Flächenanteil in Zehntel.
+   * @param dBKL3
+   *     Bestandesklasse 3, Flächenanteil in Zehntel.
+   * @param dBKL4
+   *     Bestandesklasse 4, Flächenanteil in Zehntel.
+   * @param dBKL5
+   *     Bestandesklasse 5, Flächenanteil in Zehntel.
+   * @param dBKL6
+   *     Bestandesklasse 6, Flächenanteil in Zehntel.
+   * @param dBKL7
+   *     Bestandesklasse 7, Flächenanteil in Zehntel.
+   * @param dBKL8
+   *     Bestandesklasse 8, Flächenanteil in Zehntel.
+   * @param dBKL9
+   *     Bestandesklasse 9, Flächenanteil in Zehntel.
+   * @param sUsage
+   *     Beschreibung Nutzungsspuren. May not be <code>null</code>.
+   * @param sUsageDesc
+   *     allgemeine Beschreibung. May not be <code>null</code>.
+   * @param aTrees
+   *     Biotopbäume innerhalb Stichprobenpunkt. May not be <code>null</code>.
+   * @param sDesc
+   *     Beschreibung. May not be <code>null</code>.
+   * @param bSameAge
+   *     gleichaltrig oder ungleichaltrig.
+   * @param bOneLevel
+   *     einschichtig oder mehrschichtig.
+   * @param aTotSteh
+   *     Stehendes Totholz (Vollaufnahme) ab &gt;= 5cm BHD. May not be <code>null</code>.
+   * @param aTotLieg1
+   *     Liegendes Totholz (Line-intersect, Transekt 1) ab Mindestdurchmesser &gt;= 10 cm. May not be <code>null</code>.
+   * @param aTotLieg2
+   *     Liegendes Totholz (Line-intersect, Transekt 2) ab Mindestdurchmesser &gt;= 10 cm. May not be <code>null</code>.
+   * @return
+   *     The created object and never <code>null</code>.
+   */
   @Nonnull
   public final IExStichprobeBO createExStichprobeBO(final int nStichNr,
     @Nonnull final IExReservatBO aStichNrzR,
@@ -109,6 +171,7 @@ public class ExStichprobeBOManager
     @Nonnull final ICommonsList<IExStichprobeDeadwoodBO> aTotLieg1,
     @Nonnull final ICommonsList<IExStichprobeDeadwoodBO> aTotLieg2) {
     final ExStichprobeBO aExStichprobeBO = getOfID(sExStichprobeBOID);
+    // Check preconditions
     if (aExStichprobeBO == null) {
       AuditHelper.onAuditModifyFailure(ExStichprobeBO.OT, "all", sExStichprobeBOID, "no-such-id");
       return EChange.UNCHANGED;
@@ -162,7 +225,8 @@ public class ExStichprobeBOManager
   }
 
   @Nonnull
-  public final EChange markDeletedExStichprobeBO(@Nullable final String sExStichprobeBOID) {
+  public final EChange markExStichprobeBODeleted(@Nullable final String sExStichprobeBOID) {
+    // Check preconditions
     final ExStichprobeBO aExStichprobeBO = getOfID(sExStichprobeBOID);
     if (aExStichprobeBO == null) {
       AuditHelper.onAuditDeleteFailure(ExStichprobeBO.OT, sExStichprobeBOID, "no-such-id");
@@ -184,7 +248,55 @@ public class ExStichprobeBOManager
       m_aRWLock.writeLock().unlock();
     }
     // Success audit
-    AuditHelper.onAuditDeleteSuccess(ExStichprobeBO.OT, aExStichprobeBO.getID());
+    AuditHelper.onAuditDeleteSuccess(ExStichprobeBO.OT, sExStichprobeBOID, "mark-deleted");
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange markExStichprobeBOUndeleted(@Nullable final String sExStichprobeBOID) {
+    // Check preconditions
+    final ExStichprobeBO aExStichprobeBO = getOfID(sExStichprobeBOID);
+    if (aExStichprobeBO == null) {
+      AuditHelper.onAuditUndeleteFailure(ExStichprobeBO.OT, sExStichprobeBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (!aExStichprobeBO.isDeleted()) {
+      AuditHelper.onAuditUndeleteFailure(ExStichprobeBO.OT, sExStichprobeBOID, "not-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as undeleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setUndeletionNow(aExStichprobeBO).isUnchanged()) {
+        AuditHelper.onAuditUndeleteFailure(ExStichprobeBO.OT, sExStichprobeBOID, "not-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemUndeleted(aExStichprobeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditUndeleteSuccess(ExStichprobeBO.OT, sExStichprobeBOID);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange deleteExStichprobeBO(@Nullable final String sExStichprobeBOID) {
+    final ExStichprobeBO aDeletedExStichprobeBO;
+    // Delete internally
+    m_aRWLock.writeLock().lock();
+    try {
+      aDeletedExStichprobeBO = internalDeleteItem(sExStichprobeBOID);
+      if (aDeletedExStichprobeBO == null) {
+        AuditHelper.onAuditDeleteFailure(ExStichprobeBO.OT, sExStichprobeBOID, "no-such-id");
+        return EChange.UNCHANGED;
+      }
+      BusinessObjectHelper.setDeletionNow(aDeletedExStichprobeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExStichprobeBO.OT, sExStichprobeBOID, "removed");
     return EChange.CHANGED;
   }
 }

@@ -8,6 +8,7 @@ import com.helger.photon.basic.audit.AuditHelper;
 import com.helger.photon.security.object.BusinessObjectHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 
 /**
@@ -17,6 +18,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
+@ThreadSafe
 public class ExBiotopbaumDecompositionDegreeBOManager
   extends AbstractPhotonMapBasedWALDAO<IExBiotopbaumDecompositionDegreeBO, ExBiotopbaumDecompositionDegreeBO>
 {
@@ -33,6 +35,20 @@ public class ExBiotopbaumDecompositionDegreeBOManager
     super(ExBiotopbaumDecompositionDegreeBO.class, sFilename, aInitSettings);
   }
 
+  /**
+   * Create a new object and add it to the internal map.
+   * 
+   * @param eType
+   *     EExDecompositionDegreeClassBO value. May not be <code>null</code>.
+   * @param bEnabled
+   *     Boolean value.
+   * @param nLength
+   *     Länge in cm.
+   * @param nBHD
+   *     BHD bzw. Mittendurchmesser in cm.
+   * @return
+   *     The created object and never <code>null</code>.
+   */
   @Nonnull
   public final IExBiotopbaumDecompositionDegreeBO createExBiotopbaumDecompositionDegreeBO(@Nonnull final EExDecompositionDegreeClassBO eType,
     final boolean bEnabled,
@@ -59,6 +75,7 @@ public class ExBiotopbaumDecompositionDegreeBOManager
     final int nLength,
     final int nBHD) {
     final ExBiotopbaumDecompositionDegreeBO aExBiotopbaumDecompositionDegreeBO = getOfID(sExBiotopbaumDecompositionDegreeBOID);
+    // Check preconditions
     if (aExBiotopbaumDecompositionDegreeBO == null) {
       AuditHelper.onAuditModifyFailure(ExBiotopbaumDecompositionDegreeBO.OT, "all", sExBiotopbaumDecompositionDegreeBOID, "no-such-id");
       return EChange.UNCHANGED;
@@ -89,7 +106,8 @@ public class ExBiotopbaumDecompositionDegreeBOManager
   }
 
   @Nonnull
-  public final EChange markDeletedExBiotopbaumDecompositionDegreeBO(@Nullable final String sExBiotopbaumDecompositionDegreeBOID) {
+  public final EChange markExBiotopbaumDecompositionDegreeBODeleted(@Nullable final String sExBiotopbaumDecompositionDegreeBOID) {
+    // Check preconditions
     final ExBiotopbaumDecompositionDegreeBO aExBiotopbaumDecompositionDegreeBO = getOfID(sExBiotopbaumDecompositionDegreeBOID);
     if (aExBiotopbaumDecompositionDegreeBO == null) {
       AuditHelper.onAuditDeleteFailure(ExBiotopbaumDecompositionDegreeBO.OT, sExBiotopbaumDecompositionDegreeBOID, "no-such-id");
@@ -111,7 +129,55 @@ public class ExBiotopbaumDecompositionDegreeBOManager
       m_aRWLock.writeLock().unlock();
     }
     // Success audit
-    AuditHelper.onAuditDeleteSuccess(ExBiotopbaumDecompositionDegreeBO.OT, aExBiotopbaumDecompositionDegreeBO.getID());
+    AuditHelper.onAuditDeleteSuccess(ExBiotopbaumDecompositionDegreeBO.OT, sExBiotopbaumDecompositionDegreeBOID, "mark-deleted");
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange markExBiotopbaumDecompositionDegreeBOUndeleted(@Nullable final String sExBiotopbaumDecompositionDegreeBOID) {
+    // Check preconditions
+    final ExBiotopbaumDecompositionDegreeBO aExBiotopbaumDecompositionDegreeBO = getOfID(sExBiotopbaumDecompositionDegreeBOID);
+    if (aExBiotopbaumDecompositionDegreeBO == null) {
+      AuditHelper.onAuditUndeleteFailure(ExBiotopbaumDecompositionDegreeBO.OT, sExBiotopbaumDecompositionDegreeBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (!aExBiotopbaumDecompositionDegreeBO.isDeleted()) {
+      AuditHelper.onAuditUndeleteFailure(ExBiotopbaumDecompositionDegreeBO.OT, sExBiotopbaumDecompositionDegreeBOID, "not-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as undeleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setUndeletionNow(aExBiotopbaumDecompositionDegreeBO).isUnchanged()) {
+        AuditHelper.onAuditUndeleteFailure(ExBiotopbaumDecompositionDegreeBO.OT, sExBiotopbaumDecompositionDegreeBOID, "not-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemUndeleted(aExBiotopbaumDecompositionDegreeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditUndeleteSuccess(ExBiotopbaumDecompositionDegreeBO.OT, sExBiotopbaumDecompositionDegreeBOID);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange deleteExBiotopbaumDecompositionDegreeBO(@Nullable final String sExBiotopbaumDecompositionDegreeBOID) {
+    final ExBiotopbaumDecompositionDegreeBO aDeletedExBiotopbaumDecompositionDegreeBO;
+    // Delete internally
+    m_aRWLock.writeLock().lock();
+    try {
+      aDeletedExBiotopbaumDecompositionDegreeBO = internalDeleteItem(sExBiotopbaumDecompositionDegreeBOID);
+      if (aDeletedExBiotopbaumDecompositionDegreeBO == null) {
+        AuditHelper.onAuditDeleteFailure(ExBiotopbaumDecompositionDegreeBO.OT, sExBiotopbaumDecompositionDegreeBOID, "no-such-id");
+        return EChange.UNCHANGED;
+      }
+      BusinessObjectHelper.setDeletionNow(aDeletedExBiotopbaumDecompositionDegreeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExBiotopbaumDecompositionDegreeBO.OT, sExBiotopbaumDecompositionDegreeBOID, "removed");
     return EChange.CHANGED;
   }
 }

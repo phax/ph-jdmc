@@ -8,6 +8,7 @@ import com.helger.photon.basic.audit.AuditHelper;
 import com.helger.photon.security.object.BusinessObjectHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 
 /**
@@ -17,6 +18,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
+@ThreadSafe
 public class ExTrunkSizeBOManager
   extends AbstractPhotonMapBasedWALDAO<IExTrunkSizeBO, ExTrunkSizeBO>
 {
@@ -33,6 +35,16 @@ public class ExTrunkSizeBOManager
     super(ExTrunkSizeBO.class, sFilename, aInitSettings);
   }
 
+  /**
+   * Create a new object and add it to the internal map.
+   * 
+   * @param nBHD
+   *     Brusthöhendurchmesser; Mittendurchmesser in cm.
+   * @param eHeight
+   *     Baumhöhe/Stammlänge. May not be <code>null</code>.
+   * @return
+   *     The created object and never <code>null</code>.
+   */
   @Nonnull
   public final IExTrunkSizeBO createExTrunkSizeBO(final int nBHD, @Nonnull final EExTreeHeightBO eHeight) {
     // Create new object
@@ -52,6 +64,7 @@ public class ExTrunkSizeBOManager
   @Nonnull
   public final EChange updateExTrunkSizeBO(@Nullable final String sExTrunkSizeBOID, final int nBHD, @Nonnull final EExTreeHeightBO eHeight) {
     final ExTrunkSizeBO aExTrunkSizeBO = getOfID(sExTrunkSizeBOID);
+    // Check preconditions
     if (aExTrunkSizeBO == null) {
       AuditHelper.onAuditModifyFailure(ExTrunkSizeBO.OT, "all", sExTrunkSizeBOID, "no-such-id");
       return EChange.UNCHANGED;
@@ -80,7 +93,8 @@ public class ExTrunkSizeBOManager
   }
 
   @Nonnull
-  public final EChange markDeletedExTrunkSizeBO(@Nullable final String sExTrunkSizeBOID) {
+  public final EChange markExTrunkSizeBODeleted(@Nullable final String sExTrunkSizeBOID) {
+    // Check preconditions
     final ExTrunkSizeBO aExTrunkSizeBO = getOfID(sExTrunkSizeBOID);
     if (aExTrunkSizeBO == null) {
       AuditHelper.onAuditDeleteFailure(ExTrunkSizeBO.OT, sExTrunkSizeBOID, "no-such-id");
@@ -102,7 +116,55 @@ public class ExTrunkSizeBOManager
       m_aRWLock.writeLock().unlock();
     }
     // Success audit
-    AuditHelper.onAuditDeleteSuccess(ExTrunkSizeBO.OT, aExTrunkSizeBO.getID());
+    AuditHelper.onAuditDeleteSuccess(ExTrunkSizeBO.OT, sExTrunkSizeBOID, "mark-deleted");
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange markExTrunkSizeBOUndeleted(@Nullable final String sExTrunkSizeBOID) {
+    // Check preconditions
+    final ExTrunkSizeBO aExTrunkSizeBO = getOfID(sExTrunkSizeBOID);
+    if (aExTrunkSizeBO == null) {
+      AuditHelper.onAuditUndeleteFailure(ExTrunkSizeBO.OT, sExTrunkSizeBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (!aExTrunkSizeBO.isDeleted()) {
+      AuditHelper.onAuditUndeleteFailure(ExTrunkSizeBO.OT, sExTrunkSizeBOID, "not-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as undeleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setUndeletionNow(aExTrunkSizeBO).isUnchanged()) {
+        AuditHelper.onAuditUndeleteFailure(ExTrunkSizeBO.OT, sExTrunkSizeBOID, "not-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemUndeleted(aExTrunkSizeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditUndeleteSuccess(ExTrunkSizeBO.OT, sExTrunkSizeBOID);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange deleteExTrunkSizeBO(@Nullable final String sExTrunkSizeBOID) {
+    final ExTrunkSizeBO aDeletedExTrunkSizeBO;
+    // Delete internally
+    m_aRWLock.writeLock().lock();
+    try {
+      aDeletedExTrunkSizeBO = internalDeleteItem(sExTrunkSizeBOID);
+      if (aDeletedExTrunkSizeBO == null) {
+        AuditHelper.onAuditDeleteFailure(ExTrunkSizeBO.OT, sExTrunkSizeBOID, "no-such-id");
+        return EChange.UNCHANGED;
+      }
+      BusinessObjectHelper.setDeletionNow(aDeletedExTrunkSizeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExTrunkSizeBO.OT, sExTrunkSizeBOID, "removed");
     return EChange.CHANGED;
   }
 }

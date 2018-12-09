@@ -8,6 +8,7 @@ import com.helger.photon.basic.audit.AuditHelper;
 import com.helger.photon.security.object.BusinessObjectHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 
 /**
@@ -17,6 +18,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
+@ThreadSafe
 public class ExLeergutBOManager
   extends AbstractPhotonMapBasedWALDAO<IExLeergutBO, ExLeergutBO>
 {
@@ -33,6 +35,12 @@ public class ExLeergutBOManager
     super(ExLeergutBO.class, sFilename, aInitSettings);
   }
 
+  /**
+   * Create a new object and add it to the internal map.
+   * 
+   * @return
+   *     The created object and never <code>null</code>.
+   */
   @Nonnull
   public final IExLeergutBO createExLeergutBO() {
     // Create new object
@@ -52,6 +60,7 @@ public class ExLeergutBOManager
   @Nonnull
   public final EChange updateExLeergutBO(@Nullable final String sExLeergutBOID) {
     final ExLeergutBO aExLeergutBO = getOfID(sExLeergutBOID);
+    // Check preconditions
     if (aExLeergutBO == null) {
       AuditHelper.onAuditModifyFailure(ExLeergutBO.OT, "all", sExLeergutBOID, "no-such-id");
       return EChange.UNCHANGED;
@@ -78,7 +87,8 @@ public class ExLeergutBOManager
   }
 
   @Nonnull
-  public final EChange markDeletedExLeergutBO(@Nullable final String sExLeergutBOID) {
+  public final EChange markExLeergutBODeleted(@Nullable final String sExLeergutBOID) {
+    // Check preconditions
     final ExLeergutBO aExLeergutBO = getOfID(sExLeergutBOID);
     if (aExLeergutBO == null) {
       AuditHelper.onAuditDeleteFailure(ExLeergutBO.OT, sExLeergutBOID, "no-such-id");
@@ -100,7 +110,55 @@ public class ExLeergutBOManager
       m_aRWLock.writeLock().unlock();
     }
     // Success audit
-    AuditHelper.onAuditDeleteSuccess(ExLeergutBO.OT, aExLeergutBO.getID());
+    AuditHelper.onAuditDeleteSuccess(ExLeergutBO.OT, sExLeergutBOID, "mark-deleted");
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange markExLeergutBOUndeleted(@Nullable final String sExLeergutBOID) {
+    // Check preconditions
+    final ExLeergutBO aExLeergutBO = getOfID(sExLeergutBOID);
+    if (aExLeergutBO == null) {
+      AuditHelper.onAuditUndeleteFailure(ExLeergutBO.OT, sExLeergutBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (!aExLeergutBO.isDeleted()) {
+      AuditHelper.onAuditUndeleteFailure(ExLeergutBO.OT, sExLeergutBOID, "not-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as undeleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setUndeletionNow(aExLeergutBO).isUnchanged()) {
+        AuditHelper.onAuditUndeleteFailure(ExLeergutBO.OT, sExLeergutBOID, "not-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemUndeleted(aExLeergutBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditUndeleteSuccess(ExLeergutBO.OT, sExLeergutBOID);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange deleteExLeergutBO(@Nullable final String sExLeergutBOID) {
+    final ExLeergutBO aDeletedExLeergutBO;
+    // Delete internally
+    m_aRWLock.writeLock().lock();
+    try {
+      aDeletedExLeergutBO = internalDeleteItem(sExLeergutBOID);
+      if (aDeletedExLeergutBO == null) {
+        AuditHelper.onAuditDeleteFailure(ExLeergutBO.OT, sExLeergutBOID, "no-such-id");
+        return EChange.UNCHANGED;
+      }
+      BusinessObjectHelper.setDeletionNow(aDeletedExLeergutBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExLeergutBO.OT, sExLeergutBOID, "removed");
     return EChange.CHANGED;
   }
 }

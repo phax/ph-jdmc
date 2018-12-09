@@ -12,6 +12,7 @@ import com.helger.photon.basic.audit.AuditHelper;
 import com.helger.photon.security.object.BusinessObjectHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 
 /**
@@ -21,6 +22,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
+@ThreadSafe
 public class ExHabitatbaumgruppeBOManager
   extends AbstractPhotonMapBasedWALDAO<IExHabitatbaumgruppeBO, ExHabitatbaumgruppeBO>
 {
@@ -37,6 +39,42 @@ public class ExHabitatbaumgruppeBOManager
     super(ExHabitatbaumgruppeBO.class, sFilename, aInitSettings);
   }
 
+  /**
+   * Create a new object and add it to the internal map.
+   * 
+   * @param nHBGNr
+   *     Schlüsselfeld.
+   * @param aPics
+   *     Fotos. May neither be <code>null</code> nor empty.
+   * @param aHBGzBB
+   *     zugehörige Biotopbäume. May not be <code>null</code>.
+   * @param aDate
+   *     LocalDate value. May not be <code>null</code>.
+   * @param sStandort
+   *     allg. Beschreibung  Freitext. May not be <code>null</code>.
+   * @param bOneLevel
+   *     Wald, einschichtig (1 Baumschicht, kaum Unterwuchs) oder mehrschichtiger Bestand (Unterwuchs, Strauchsch., evtl. 2. Baumschicht).
+   * @param bLight
+   *     lichter Bestand (Besonnung).
+   * @param bClosedCrown
+   *     geschlossene Kronendach.
+   * @param bNoSun
+   *     explitzit keine Besonnung.
+   * @param bHomogen
+   *     eingebettet in homogenene oder heterogene Umgebung.
+   * @param eExposition
+   *     Exposition. May not be <code>null</code>.
+   * @param sHanglage
+   *     Angabe von Neigungen: keine, Angabe von Neigungen, Freitext. May be <code>null</code>.
+   * @param nAreaSize
+   *     Größe (in m²).
+   * @param bOnlyBB
+   *     Habitatbaumgruppe NUR aus schon kartierten Biotopbäumen oder  auch aus anderen Bäumen bestehend.
+   * @param sBeschreibung
+   *     Freitext . May not be <code>null</code>.
+   * @return
+   *     The created object and never <code>null</code>.
+   */
   @Nonnull
   public final IExHabitatbaumgruppeBO createExHabitatbaumgruppeBO(final int nHBGNr,
     @Nonnull @Nonempty final ICommonsList<File> aPics,
@@ -85,6 +123,7 @@ public class ExHabitatbaumgruppeBOManager
     final boolean bOnlyBB,
     @Nonnull final String sBeschreibung) {
     final ExHabitatbaumgruppeBO aExHabitatbaumgruppeBO = getOfID(sExHabitatbaumgruppeBOID);
+    // Check preconditions
     if (aExHabitatbaumgruppeBO == null) {
       AuditHelper.onAuditModifyFailure(ExHabitatbaumgruppeBO.OT, "all", sExHabitatbaumgruppeBOID, "no-such-id");
       return EChange.UNCHANGED;
@@ -126,7 +165,8 @@ public class ExHabitatbaumgruppeBOManager
   }
 
   @Nonnull
-  public final EChange markDeletedExHabitatbaumgruppeBO(@Nullable final String sExHabitatbaumgruppeBOID) {
+  public final EChange markExHabitatbaumgruppeBODeleted(@Nullable final String sExHabitatbaumgruppeBOID) {
+    // Check preconditions
     final ExHabitatbaumgruppeBO aExHabitatbaumgruppeBO = getOfID(sExHabitatbaumgruppeBOID);
     if (aExHabitatbaumgruppeBO == null) {
       AuditHelper.onAuditDeleteFailure(ExHabitatbaumgruppeBO.OT, sExHabitatbaumgruppeBOID, "no-such-id");
@@ -148,7 +188,55 @@ public class ExHabitatbaumgruppeBOManager
       m_aRWLock.writeLock().unlock();
     }
     // Success audit
-    AuditHelper.onAuditDeleteSuccess(ExHabitatbaumgruppeBO.OT, aExHabitatbaumgruppeBO.getID());
+    AuditHelper.onAuditDeleteSuccess(ExHabitatbaumgruppeBO.OT, sExHabitatbaumgruppeBOID, "mark-deleted");
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange markExHabitatbaumgruppeBOUndeleted(@Nullable final String sExHabitatbaumgruppeBOID) {
+    // Check preconditions
+    final ExHabitatbaumgruppeBO aExHabitatbaumgruppeBO = getOfID(sExHabitatbaumgruppeBOID);
+    if (aExHabitatbaumgruppeBO == null) {
+      AuditHelper.onAuditUndeleteFailure(ExHabitatbaumgruppeBO.OT, sExHabitatbaumgruppeBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (!aExHabitatbaumgruppeBO.isDeleted()) {
+      AuditHelper.onAuditUndeleteFailure(ExHabitatbaumgruppeBO.OT, sExHabitatbaumgruppeBOID, "not-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as undeleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setUndeletionNow(aExHabitatbaumgruppeBO).isUnchanged()) {
+        AuditHelper.onAuditUndeleteFailure(ExHabitatbaumgruppeBO.OT, sExHabitatbaumgruppeBOID, "not-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemUndeleted(aExHabitatbaumgruppeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditUndeleteSuccess(ExHabitatbaumgruppeBO.OT, sExHabitatbaumgruppeBOID);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange deleteExHabitatbaumgruppeBO(@Nullable final String sExHabitatbaumgruppeBOID) {
+    final ExHabitatbaumgruppeBO aDeletedExHabitatbaumgruppeBO;
+    // Delete internally
+    m_aRWLock.writeLock().lock();
+    try {
+      aDeletedExHabitatbaumgruppeBO = internalDeleteItem(sExHabitatbaumgruppeBOID);
+      if (aDeletedExHabitatbaumgruppeBO == null) {
+        AuditHelper.onAuditDeleteFailure(ExHabitatbaumgruppeBO.OT, sExHabitatbaumgruppeBOID, "no-such-id");
+        return EChange.UNCHANGED;
+      }
+      BusinessObjectHelper.setDeletionNow(aDeletedExHabitatbaumgruppeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExHabitatbaumgruppeBO.OT, sExHabitatbaumgruppeBOID, "removed");
     return EChange.CHANGED;
   }
 }

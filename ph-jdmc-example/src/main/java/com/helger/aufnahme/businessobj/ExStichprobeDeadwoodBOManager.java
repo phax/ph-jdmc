@@ -8,6 +8,7 @@ import com.helger.photon.basic.audit.AuditHelper;
 import com.helger.photon.security.object.BusinessObjectHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 
 /**
@@ -17,6 +18,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
+@ThreadSafe
 public class ExStichprobeDeadwoodBOManager
   extends AbstractPhotonMapBasedWALDAO<IExStichprobeDeadwoodBO, ExStichprobeDeadwoodBO>
 {
@@ -33,6 +35,20 @@ public class ExStichprobeDeadwoodBOManager
     super(ExStichprobeDeadwoodBO.class, sFilename, aInitSettings);
   }
 
+  /**
+   * Create a new object and add it to the internal map.
+   * 
+   * @param eDoD
+   *     Zersetzungsgrad. May not be <code>null</code>.
+   * @param eTreeKind
+   *     Baumart laut Aufnahmeblatt. May not be <code>null</code>.
+   * @param nLength
+   *     Länge in cm.
+   * @param nBHD
+   *     BHD bzw. Mittendurchmesser in cm.
+   * @return
+   *     The created object and never <code>null</code>.
+   */
   @Nonnull
   public final IExStichprobeDeadwoodBO createExStichprobeDeadwoodBO(@Nonnull final EExDecompositionDegreeClassBO eDoD,
     @Nonnull final EExTreeKindBO eTreeKind,
@@ -59,6 +75,7 @@ public class ExStichprobeDeadwoodBOManager
     final int nLength,
     final int nBHD) {
     final ExStichprobeDeadwoodBO aExStichprobeDeadwoodBO = getOfID(sExStichprobeDeadwoodBOID);
+    // Check preconditions
     if (aExStichprobeDeadwoodBO == null) {
       AuditHelper.onAuditModifyFailure(ExStichprobeDeadwoodBO.OT, "all", sExStichprobeDeadwoodBOID, "no-such-id");
       return EChange.UNCHANGED;
@@ -89,7 +106,8 @@ public class ExStichprobeDeadwoodBOManager
   }
 
   @Nonnull
-  public final EChange markDeletedExStichprobeDeadwoodBO(@Nullable final String sExStichprobeDeadwoodBOID) {
+  public final EChange markExStichprobeDeadwoodBODeleted(@Nullable final String sExStichprobeDeadwoodBOID) {
+    // Check preconditions
     final ExStichprobeDeadwoodBO aExStichprobeDeadwoodBO = getOfID(sExStichprobeDeadwoodBOID);
     if (aExStichprobeDeadwoodBO == null) {
       AuditHelper.onAuditDeleteFailure(ExStichprobeDeadwoodBO.OT, sExStichprobeDeadwoodBOID, "no-such-id");
@@ -111,7 +129,55 @@ public class ExStichprobeDeadwoodBOManager
       m_aRWLock.writeLock().unlock();
     }
     // Success audit
-    AuditHelper.onAuditDeleteSuccess(ExStichprobeDeadwoodBO.OT, aExStichprobeDeadwoodBO.getID());
+    AuditHelper.onAuditDeleteSuccess(ExStichprobeDeadwoodBO.OT, sExStichprobeDeadwoodBOID, "mark-deleted");
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange markExStichprobeDeadwoodBOUndeleted(@Nullable final String sExStichprobeDeadwoodBOID) {
+    // Check preconditions
+    final ExStichprobeDeadwoodBO aExStichprobeDeadwoodBO = getOfID(sExStichprobeDeadwoodBOID);
+    if (aExStichprobeDeadwoodBO == null) {
+      AuditHelper.onAuditUndeleteFailure(ExStichprobeDeadwoodBO.OT, sExStichprobeDeadwoodBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (!aExStichprobeDeadwoodBO.isDeleted()) {
+      AuditHelper.onAuditUndeleteFailure(ExStichprobeDeadwoodBO.OT, sExStichprobeDeadwoodBOID, "not-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as undeleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setUndeletionNow(aExStichprobeDeadwoodBO).isUnchanged()) {
+        AuditHelper.onAuditUndeleteFailure(ExStichprobeDeadwoodBO.OT, sExStichprobeDeadwoodBOID, "not-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemUndeleted(aExStichprobeDeadwoodBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditUndeleteSuccess(ExStichprobeDeadwoodBO.OT, sExStichprobeDeadwoodBOID);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange deleteExStichprobeDeadwoodBO(@Nullable final String sExStichprobeDeadwoodBOID) {
+    final ExStichprobeDeadwoodBO aDeletedExStichprobeDeadwoodBO;
+    // Delete internally
+    m_aRWLock.writeLock().lock();
+    try {
+      aDeletedExStichprobeDeadwoodBO = internalDeleteItem(sExStichprobeDeadwoodBOID);
+      if (aDeletedExStichprobeDeadwoodBO == null) {
+        AuditHelper.onAuditDeleteFailure(ExStichprobeDeadwoodBO.OT, sExStichprobeDeadwoodBOID, "no-such-id");
+        return EChange.UNCHANGED;
+      }
+      BusinessObjectHelper.setDeletionNow(aDeletedExStichprobeDeadwoodBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExStichprobeDeadwoodBO.OT, sExStichprobeDeadwoodBOID, "removed");
     return EChange.CHANGED;
   }
 }

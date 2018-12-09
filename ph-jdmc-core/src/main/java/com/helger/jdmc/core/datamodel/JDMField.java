@@ -28,6 +28,7 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.string.StringHelper;
+import com.helger.jcodemodel.JCommentPart;
 
 /**
  * Single field.
@@ -192,6 +193,42 @@ public class JDMField
   public String getComment ()
   {
     return m_sComment;
+  }
+
+  @Nonnull
+  public String getJavaDocSuffix ()
+  {
+    final String sSuffix;
+    if (m_aType.isJavaPrimitive (m_eMultiplicity))
+      sSuffix = "";
+    else
+    {
+      if (m_eMultiplicity == EJDMMultiplicity.OPTIONAL)
+        sSuffix = " May be <code>null</code>.";
+      else
+      {
+        if (m_eMultiplicity == EJDMMultiplicity.MANDATORY_OR_MORE)
+          sSuffix = " May neither be <code>null</code> nor empty.";
+        else
+          sSuffix = " May not be <code>null</code>.";
+      }
+    }
+    return sSuffix;
+  }
+
+  @Nonnull
+  public String getParamJavaDoc ()
+  {
+    final String sBase;
+    if (StringHelper.hasNoText (m_sComment))
+      sBase = m_aType.getClassName () + " value.";
+    else
+      if (m_sComment.endsWith ("."))
+        sBase = m_sComment;
+      else
+        sBase = m_sComment + ".";
+
+    return JCommentPart.getHTMLEscaped (sBase) + getJavaDocSuffix ();
   }
 
   public boolean hasComment ()

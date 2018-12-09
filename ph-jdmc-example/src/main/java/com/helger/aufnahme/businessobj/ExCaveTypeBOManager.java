@@ -8,6 +8,7 @@ import com.helger.photon.basic.audit.AuditHelper;
 import com.helger.photon.security.object.BusinessObjectHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 
 /**
@@ -17,6 +18,7 @@ import javax.annotation.Nullable;
  * 
  * @author JDMCodeGenerator
  */
+@ThreadSafe
 public class ExCaveTypeBOManager
   extends AbstractPhotonMapBasedWALDAO<IExCaveTypeBO, ExCaveTypeBO>
 {
@@ -33,6 +35,16 @@ public class ExCaveTypeBOManager
     super(ExCaveTypeBO.class, sFilename, aInitSettings);
   }
 
+  /**
+   * Create a new object and add it to the internal map.
+   * 
+   * @param eClazz
+   *     EExCaveClassBO value. May not be <code>null</code>.
+   * @param eType
+   *     EExCaveTypeBO value. May not be <code>null</code>.
+   * @return
+   *     The created object and never <code>null</code>.
+   */
   @Nonnull
   public final IExCaveTypeBO createExCaveTypeBO(@Nonnull final EExCaveClassBO eClazz, @Nonnull final EExCaveTypeBO eType) {
     // Create new object
@@ -52,6 +64,7 @@ public class ExCaveTypeBOManager
   @Nonnull
   public final EChange updateExCaveTypeBO(@Nullable final String sExCaveTypeBOID, @Nonnull final EExCaveClassBO eClazz, @Nonnull final EExCaveTypeBO eType) {
     final ExCaveTypeBO aExCaveTypeBO = getOfID(sExCaveTypeBOID);
+    // Check preconditions
     if (aExCaveTypeBO == null) {
       AuditHelper.onAuditModifyFailure(ExCaveTypeBO.OT, "all", sExCaveTypeBOID, "no-such-id");
       return EChange.UNCHANGED;
@@ -80,7 +93,8 @@ public class ExCaveTypeBOManager
   }
 
   @Nonnull
-  public final EChange markDeletedExCaveTypeBO(@Nullable final String sExCaveTypeBOID) {
+  public final EChange markExCaveTypeBODeleted(@Nullable final String sExCaveTypeBOID) {
+    // Check preconditions
     final ExCaveTypeBO aExCaveTypeBO = getOfID(sExCaveTypeBOID);
     if (aExCaveTypeBO == null) {
       AuditHelper.onAuditDeleteFailure(ExCaveTypeBO.OT, sExCaveTypeBOID, "no-such-id");
@@ -102,7 +116,55 @@ public class ExCaveTypeBOManager
       m_aRWLock.writeLock().unlock();
     }
     // Success audit
-    AuditHelper.onAuditDeleteSuccess(ExCaveTypeBO.OT, aExCaveTypeBO.getID());
+    AuditHelper.onAuditDeleteSuccess(ExCaveTypeBO.OT, sExCaveTypeBOID, "mark-deleted");
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange markExCaveTypeBOUndeleted(@Nullable final String sExCaveTypeBOID) {
+    // Check preconditions
+    final ExCaveTypeBO aExCaveTypeBO = getOfID(sExCaveTypeBOID);
+    if (aExCaveTypeBO == null) {
+      AuditHelper.onAuditUndeleteFailure(ExCaveTypeBO.OT, sExCaveTypeBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (!aExCaveTypeBO.isDeleted()) {
+      AuditHelper.onAuditUndeleteFailure(ExCaveTypeBO.OT, sExCaveTypeBOID, "not-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as undeleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setUndeletionNow(aExCaveTypeBO).isUnchanged()) {
+        AuditHelper.onAuditUndeleteFailure(ExCaveTypeBO.OT, sExCaveTypeBOID, "not-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemUndeleted(aExCaveTypeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditUndeleteSuccess(ExCaveTypeBO.OT, sExCaveTypeBOID);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public final EChange deleteExCaveTypeBO(@Nullable final String sExCaveTypeBOID) {
+    final ExCaveTypeBO aDeletedExCaveTypeBO;
+    // Delete internally
+    m_aRWLock.writeLock().lock();
+    try {
+      aDeletedExCaveTypeBO = internalDeleteItem(sExCaveTypeBOID);
+      if (aDeletedExCaveTypeBO == null) {
+        AuditHelper.onAuditDeleteFailure(ExCaveTypeBO.OT, sExCaveTypeBOID, "no-such-id");
+        return EChange.UNCHANGED;
+      }
+      BusinessObjectHelper.setDeletionNow(aDeletedExCaveTypeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExCaveTypeBO.OT, sExCaveTypeBOID, "removed");
     return EChange.CHANGED;
   }
 }
