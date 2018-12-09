@@ -386,4 +386,17 @@ public class ExStichprobeBOManager
     AuditHelper.onAuditDeleteSuccess(ExStichprobeBO.OT, sExStichprobeBOID, "removed");
     return EChange.CHANGED;
   }
+
+  /**
+   * Get the object with the provided ID.
+   * 
+   * @param sExStichprobeBOID
+   *     ID of the object to be retrieved. May be <code>null</code>.
+   * @return
+   *     The object with the ID or <code>null</code> if no such object is present.
+   */
+  @Nullable
+  public final IExStichprobeBO getExStichprobeBOOfID(@Nullable final String sExStichprobeBOID) {
+    return getOfID(sExStichprobeBOID);
+  }
 }

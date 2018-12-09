@@ -330,4 +330,17 @@ public class ExBestandBOManager
     AuditHelper.onAuditDeleteSuccess(ExBestandBO.OT, sExBestandBOID, "removed");
     return EChange.CHANGED;
   }
+
+  /**
+   * Get the object with the provided ID.
+   * 
+   * @param sExBestandBOID
+   *     ID of the object to be retrieved. May be <code>null</code>.
+   * @return
+   *     The object with the ID or <code>null</code> if no such object is present.
+   */
+  @Nullable
+  public final IExBestandBO getExBestandBOOfID(@Nullable final String sExBestandBOID) {
+    return getOfID(sExBestandBOID);
+  }
 }

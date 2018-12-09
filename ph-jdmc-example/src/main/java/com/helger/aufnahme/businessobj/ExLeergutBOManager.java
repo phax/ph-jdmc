@@ -194,4 +194,17 @@ public class ExLeergutBOManager
     AuditHelper.onAuditDeleteSuccess(ExLeergutBO.OT, sExLeergutBOID, "removed");
     return EChange.CHANGED;
   }
+
+  /**
+   * Get the object with the provided ID.
+   * 
+   * @param sExLeergutBOID
+   *     ID of the object to be retrieved. May be <code>null</code>.
+   * @return
+   *     The object with the ID or <code>null</code> if no such object is present.
+   */
+  @Nullable
+  public final IExLeergutBO getExLeergutBOOfID(@Nullable final String sExLeergutBOID) {
+    return getOfID(sExLeergutBOID);
+  }
 }

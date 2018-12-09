@@ -212,4 +212,17 @@ public class ExReservatBOManager
     AuditHelper.onAuditDeleteSuccess(ExReservatBO.OT, sExReservatBOID, "removed");
     return EChange.CHANGED;
   }
+
+  /**
+   * Get the object with the provided ID.
+   * 
+   * @param sExReservatBOID
+   *     ID of the object to be retrieved. May be <code>null</code>.
+   * @return
+   *     The object with the ID or <code>null</code> if no such object is present.
+   */
+  @Nullable
+  public final IExReservatBO getExReservatBOOfID(@Nullable final String sExReservatBOID) {
+    return getOfID(sExReservatBOID);
+  }
 }

@@ -468,5 +468,19 @@ final class JDMCodeGenManager
 
       jDelete.body ()._return (cm.ref (EChange.class).staticRef ("CHANGED"));
     }
+
+    // get Of ID
+    {
+      final JMethod jGet = jClass.method (JMod.PUBLIC | JMod.FINAL, jInterface, "get" + jDomainClass.name () + "OfID");
+      jGet.annotate (Nullable.class);
+      jGet.javadoc ().add ("Get the object with the provided ID.");
+      jGet.javadoc ().addReturn ().add ("The object with the ID or <code>null</code> if no such object is present.");
+
+      final JVar jParamID = jGet.param (JMod.FINAL, cm.ref (String.class), "s" + jDomainClass.name () + "ID");
+      jParamID.annotate (Nullable.class);
+      jGet.javadoc ().addParam (jParamID).add ("ID of the object to be retrieved. May be <code>null</code>.");
+
+      jGet.body ()._return (JExpr.invoke ("getOfID").arg (jParamID));
+    }
   }
 }
