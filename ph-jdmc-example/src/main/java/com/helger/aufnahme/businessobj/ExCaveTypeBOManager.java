@@ -74,6 +74,8 @@ public class ExCaveTypeBOManager
     } finally {
       m_aRWLock.writeLock().unlock();
     }
+    // Success audit
+    AuditHelper.onAuditModifySuccess(ExCaveTypeBO.OT, "all", aExCaveTypeBO.getID(), eClazz, eType);
     return EChange.CHANGED;
   }
 }

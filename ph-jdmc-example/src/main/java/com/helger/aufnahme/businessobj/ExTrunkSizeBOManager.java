@@ -74,6 +74,8 @@ public class ExTrunkSizeBOManager
     } finally {
       m_aRWLock.writeLock().unlock();
     }
+    // Success audit
+    AuditHelper.onAuditModifySuccess(ExTrunkSizeBO.OT, "all", aExTrunkSizeBO.getID(), Integer.valueOf(nBHD), eHeight);
     return EChange.CHANGED;
   }
 }

@@ -83,6 +83,8 @@ public class ExStichprobeDeadwoodBOManager
     } finally {
       m_aRWLock.writeLock().unlock();
     }
+    // Success audit
+    AuditHelper.onAuditModifySuccess(ExStichprobeDeadwoodBO.OT, "all", aExStichprobeDeadwoodBO.getID(), eDoD, eTreeKind, Integer.valueOf(nLength), Integer.valueOf(nBHD));
     return EChange.CHANGED;
   }
 }

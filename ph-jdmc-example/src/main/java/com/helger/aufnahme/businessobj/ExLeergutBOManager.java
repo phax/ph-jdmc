@@ -72,6 +72,8 @@ public class ExLeergutBOManager
     } finally {
       m_aRWLock.writeLock().unlock();
     }
+    // Success audit
+    AuditHelper.onAuditModifySuccess(ExLeergutBO.OT, "all", aExLeergutBO.getID());
     return EChange.CHANGED;
   }
 }

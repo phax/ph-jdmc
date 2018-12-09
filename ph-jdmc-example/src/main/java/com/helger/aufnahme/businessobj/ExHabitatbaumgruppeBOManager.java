@@ -120,6 +120,8 @@ public class ExHabitatbaumgruppeBOManager
     } finally {
       m_aRWLock.writeLock().unlock();
     }
+    // Success audit
+    AuditHelper.onAuditModifySuccess(ExHabitatbaumgruppeBO.OT, "all", aExHabitatbaumgruppeBO.getID(), Integer.valueOf(nHBGNr), aPics, aHBGzBB, aDate, sStandort, Boolean.valueOf(bOneLevel), Boolean.valueOf(bLight), Boolean.valueOf(bClosedCrown), Boolean.valueOf(bNoSun), Boolean.valueOf(bHomogen), eExposition, sHanglage, Integer.valueOf(nAreaSize), Boolean.valueOf(bOnlyBB), sBeschreibung);
     return EChange.CHANGED;
   }
 }

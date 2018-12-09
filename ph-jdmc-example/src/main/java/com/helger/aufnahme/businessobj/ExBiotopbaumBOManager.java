@@ -156,6 +156,8 @@ public class ExBiotopbaumBOManager
     } finally {
       m_aRWLock.writeLock().unlock();
     }
+    // Success audit
+    AuditHelper.onAuditModifySuccess(ExBiotopbaumBO.OT, "all", aExBiotopbaumBO.getID(), Integer.valueOf(nBBNr), aPics, aDate, aType, sLocation, eExposition, sHanglage, Boolean.valueOf(bEinschichtig), Boolean.valueOf(bSolitary), Boolean.valueOf(bLightLocation), Boolean.valueOf(bClosedCrown), Boolean.valueOf(bNoSun), Boolean.valueOf(bUeberSun), Boolean.valueOf(bHomogene), sBeschreibung, eTreeKind, aCaves, aTrunk, eVitality, aSpecialStructure, sOtherSpecial, Boolean.valueOf(bAspirant), sAspirantDesc, Boolean.valueOf(bMarked), sMarkedDesc, aDeadwoodCats, aDeadwoodDoD);
     return EChange.CHANGED;
   }
 }

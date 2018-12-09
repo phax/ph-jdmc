@@ -83,6 +83,8 @@ public class ExBiotopbaumDeadwoodBOManager
     } finally {
       m_aRWLock.writeLock().unlock();
     }
+    // Success audit
+    AuditHelper.onAuditModifySuccess(ExBiotopbaumDeadwoodBO.OT, "all", aExBiotopbaumDeadwoodBO.getID(), eType, Boolean.valueOf(bEnabled), Integer.valueOf(nLength), Integer.valueOf(nBHD));
     return EChange.CHANGED;
   }
 }

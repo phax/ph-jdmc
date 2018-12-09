@@ -224,7 +224,28 @@ final class JDMCodeGenManager
       jTry.body ().add (JExpr.invoke ("internalUpdateItem").arg (jImpl));
       jTry._finally ().add (JExpr.ref ("m_aRWLock").invoke ("writeLock").invoke ("unlock"));
 
-      // AUDIT
+      // Audit
+      jUpdate.body ().addSingleLineComment ("Success audit");
+      final JInvocation jAudit = cm.ref (AuditHelper.class)
+                                   .staticInvoke ("onAuditModifySuccess")
+                                   .arg (jDomainClass.staticRef ("OT"))
+                                   .arg ("all")
+                                   .arg (jImpl.invoke ("getID"));
+      for (final JDMField aField : aClass.fields ())
+      {
+        final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+
+        // List or field?
+        final AbstractJType jFieldType = cm.ref (aField.getType (), eMultiplicity);
+        if (jFieldType.isPrimitive ())
+          jAudit.arg (jFieldType.boxify ()
+                                .staticInvoke ("valueOf")
+                                .arg (JExpr.ref (aField.getJavaVarName (eMultiplicity))));
+        else
+          jAudit.arg (JExpr.ref (aField.getJavaVarName (eMultiplicity)));
+      }
+      jUpdate.body ().add (jAudit);
+
       jUpdate.body ()._return (cm.ref (EChange.class).staticRef ("CHANGED"));
     }
   }

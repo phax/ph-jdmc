@@ -78,6 +78,8 @@ public class ExReservatBOManager
     } finally {
       m_aRWLock.writeLock().unlock();
     }
+    // Success audit
+    AuditHelper.onAuditModifySuccess(ExReservatBO.OT, "all", aExReservatBO.getID(), Integer.valueOf(nRNr), sName, Integer.valueOf(nAreaSize));
     return EChange.CHANGED;
   }
 }

@@ -156,6 +156,8 @@ public class ExStichprobeBOManager
     } finally {
       m_aRWLock.writeLock().unlock();
     }
+    // Success audit
+    AuditHelper.onAuditModifySuccess(ExStichprobeBO.OT, "all", aExStichprobeBO.getID(), Integer.valueOf(nStichNr), aStichNrzR, aPics, aDate, Integer.valueOf(nSize), eExposition, sHanglage, sGesellschaft, Double.valueOf(dBKL0), Double.valueOf(dBKL1), Double.valueOf(dBKL2), Double.valueOf(dBKL3), Double.valueOf(dBKL4), Double.valueOf(dBKL5), Double.valueOf(dBKL6), Double.valueOf(dBKL7), Double.valueOf(dBKL8), Double.valueOf(dBKL9), sUsage, sUsageDesc, aTrees, sDesc, Boolean.valueOf(bSameAge), Boolean.valueOf(bOneLevel), aTotSteh, aTotLieg1, aTotLieg2);
     return EChange.CHANGED;
   }
 }
