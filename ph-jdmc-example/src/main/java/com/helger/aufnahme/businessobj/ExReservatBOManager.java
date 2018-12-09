@@ -82,4 +82,31 @@ public class ExReservatBOManager
     AuditHelper.onAuditModifySuccess(ExReservatBO.OT, "all", aExReservatBO.getID(), Integer.valueOf(nRNr), sName, Integer.valueOf(nAreaSize));
     return EChange.CHANGED;
   }
+
+  @Nonnull
+  public final EChange markDeletedExReservatBO(@Nullable final String sExReservatBOID) {
+    final ExReservatBO aExReservatBO = getOfID(sExReservatBOID);
+    if (aExReservatBO == null) {
+      AuditHelper.onAuditDeleteFailure(ExReservatBO.OT, sExReservatBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExReservatBO.isDeleted()) {
+      AuditHelper.onAuditDeleteFailure(ExReservatBO.OT, sExReservatBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as deleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setDeletionNow(aExReservatBO).isUnchanged()) {
+        AuditHelper.onAuditDeleteFailure(ExReservatBO.OT, sExReservatBOID, "already-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemDeleted(aExReservatBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExReservatBO.OT, aExReservatBO.getID());
+    return EChange.CHANGED;
+  }
 }

@@ -78,4 +78,31 @@ public class ExTrunkSizeBOManager
     AuditHelper.onAuditModifySuccess(ExTrunkSizeBO.OT, "all", aExTrunkSizeBO.getID(), Integer.valueOf(nBHD), eHeight);
     return EChange.CHANGED;
   }
+
+  @Nonnull
+  public final EChange markDeletedExTrunkSizeBO(@Nullable final String sExTrunkSizeBOID) {
+    final ExTrunkSizeBO aExTrunkSizeBO = getOfID(sExTrunkSizeBOID);
+    if (aExTrunkSizeBO == null) {
+      AuditHelper.onAuditDeleteFailure(ExTrunkSizeBO.OT, sExTrunkSizeBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExTrunkSizeBO.isDeleted()) {
+      AuditHelper.onAuditDeleteFailure(ExTrunkSizeBO.OT, sExTrunkSizeBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as deleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setDeletionNow(aExTrunkSizeBO).isUnchanged()) {
+        AuditHelper.onAuditDeleteFailure(ExTrunkSizeBO.OT, sExTrunkSizeBOID, "already-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemDeleted(aExTrunkSizeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExTrunkSizeBO.OT, aExTrunkSizeBO.getID());
+    return EChange.CHANGED;
+  }
 }

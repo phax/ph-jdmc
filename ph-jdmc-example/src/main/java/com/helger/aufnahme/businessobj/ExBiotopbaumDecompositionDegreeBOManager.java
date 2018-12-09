@@ -87,4 +87,31 @@ public class ExBiotopbaumDecompositionDegreeBOManager
     AuditHelper.onAuditModifySuccess(ExBiotopbaumDecompositionDegreeBO.OT, "all", aExBiotopbaumDecompositionDegreeBO.getID(), eType, Boolean.valueOf(bEnabled), Integer.valueOf(nLength), Integer.valueOf(nBHD));
     return EChange.CHANGED;
   }
+
+  @Nonnull
+  public final EChange markDeletedExBiotopbaumDecompositionDegreeBO(@Nullable final String sExBiotopbaumDecompositionDegreeBOID) {
+    final ExBiotopbaumDecompositionDegreeBO aExBiotopbaumDecompositionDegreeBO = getOfID(sExBiotopbaumDecompositionDegreeBOID);
+    if (aExBiotopbaumDecompositionDegreeBO == null) {
+      AuditHelper.onAuditDeleteFailure(ExBiotopbaumDecompositionDegreeBO.OT, sExBiotopbaumDecompositionDegreeBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExBiotopbaumDecompositionDegreeBO.isDeleted()) {
+      AuditHelper.onAuditDeleteFailure(ExBiotopbaumDecompositionDegreeBO.OT, sExBiotopbaumDecompositionDegreeBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as deleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setDeletionNow(aExBiotopbaumDecompositionDegreeBO).isUnchanged()) {
+        AuditHelper.onAuditDeleteFailure(ExBiotopbaumDecompositionDegreeBO.OT, sExBiotopbaumDecompositionDegreeBOID, "already-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemDeleted(aExBiotopbaumDecompositionDegreeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExBiotopbaumDecompositionDegreeBO.OT, aExBiotopbaumDecompositionDegreeBO.getID());
+    return EChange.CHANGED;
+  }
 }

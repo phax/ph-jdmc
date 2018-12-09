@@ -76,4 +76,31 @@ public class ExLeergutBOManager
     AuditHelper.onAuditModifySuccess(ExLeergutBO.OT, "all", aExLeergutBO.getID());
     return EChange.CHANGED;
   }
+
+  @Nonnull
+  public final EChange markDeletedExLeergutBO(@Nullable final String sExLeergutBOID) {
+    final ExLeergutBO aExLeergutBO = getOfID(sExLeergutBOID);
+    if (aExLeergutBO == null) {
+      AuditHelper.onAuditDeleteFailure(ExLeergutBO.OT, sExLeergutBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExLeergutBO.isDeleted()) {
+      AuditHelper.onAuditDeleteFailure(ExLeergutBO.OT, sExLeergutBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as deleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setDeletionNow(aExLeergutBO).isUnchanged()) {
+        AuditHelper.onAuditDeleteFailure(ExLeergutBO.OT, sExLeergutBOID, "already-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemDeleted(aExLeergutBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExLeergutBO.OT, aExLeergutBO.getID());
+    return EChange.CHANGED;
+  }
 }

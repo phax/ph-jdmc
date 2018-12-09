@@ -124,4 +124,31 @@ public class ExHabitatbaumgruppeBOManager
     AuditHelper.onAuditModifySuccess(ExHabitatbaumgruppeBO.OT, "all", aExHabitatbaumgruppeBO.getID(), Integer.valueOf(nHBGNr), aPics, aHBGzBB, aDate, sStandort, Boolean.valueOf(bOneLevel), Boolean.valueOf(bLight), Boolean.valueOf(bClosedCrown), Boolean.valueOf(bNoSun), Boolean.valueOf(bHomogen), eExposition, sHanglage, Integer.valueOf(nAreaSize), Boolean.valueOf(bOnlyBB), sBeschreibung);
     return EChange.CHANGED;
   }
+
+  @Nonnull
+  public final EChange markDeletedExHabitatbaumgruppeBO(@Nullable final String sExHabitatbaumgruppeBOID) {
+    final ExHabitatbaumgruppeBO aExHabitatbaumgruppeBO = getOfID(sExHabitatbaumgruppeBOID);
+    if (aExHabitatbaumgruppeBO == null) {
+      AuditHelper.onAuditDeleteFailure(ExHabitatbaumgruppeBO.OT, sExHabitatbaumgruppeBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExHabitatbaumgruppeBO.isDeleted()) {
+      AuditHelper.onAuditDeleteFailure(ExHabitatbaumgruppeBO.OT, sExHabitatbaumgruppeBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as deleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setDeletionNow(aExHabitatbaumgruppeBO).isUnchanged()) {
+        AuditHelper.onAuditDeleteFailure(ExHabitatbaumgruppeBO.OT, sExHabitatbaumgruppeBOID, "already-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemDeleted(aExHabitatbaumgruppeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExHabitatbaumgruppeBO.OT, aExHabitatbaumgruppeBO.getID());
+    return EChange.CHANGED;
+  }
 }

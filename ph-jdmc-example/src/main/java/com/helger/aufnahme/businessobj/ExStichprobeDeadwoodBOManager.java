@@ -87,4 +87,31 @@ public class ExStichprobeDeadwoodBOManager
     AuditHelper.onAuditModifySuccess(ExStichprobeDeadwoodBO.OT, "all", aExStichprobeDeadwoodBO.getID(), eDoD, eTreeKind, Integer.valueOf(nLength), Integer.valueOf(nBHD));
     return EChange.CHANGED;
   }
+
+  @Nonnull
+  public final EChange markDeletedExStichprobeDeadwoodBO(@Nullable final String sExStichprobeDeadwoodBOID) {
+    final ExStichprobeDeadwoodBO aExStichprobeDeadwoodBO = getOfID(sExStichprobeDeadwoodBOID);
+    if (aExStichprobeDeadwoodBO == null) {
+      AuditHelper.onAuditDeleteFailure(ExStichprobeDeadwoodBO.OT, sExStichprobeDeadwoodBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExStichprobeDeadwoodBO.isDeleted()) {
+      AuditHelper.onAuditDeleteFailure(ExStichprobeDeadwoodBO.OT, sExStichprobeDeadwoodBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as deleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setDeletionNow(aExStichprobeDeadwoodBO).isUnchanged()) {
+        AuditHelper.onAuditDeleteFailure(ExStichprobeDeadwoodBO.OT, sExStichprobeDeadwoodBOID, "already-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemDeleted(aExStichprobeDeadwoodBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExStichprobeDeadwoodBO.OT, aExStichprobeDeadwoodBO.getID());
+    return EChange.CHANGED;
+  }
 }

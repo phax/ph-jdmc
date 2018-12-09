@@ -248,5 +248,71 @@ final class JDMCodeGenManager
 
       jUpdate.body ()._return (cm.ref (EChange.class).staticRef ("CHANGED"));
     }
+
+    // mark deleted method
+    {
+      final JMethod jMarkDel = jClass.method (JMod.PUBLIC | JMod.FINAL,
+                                              cm.ref (EChange.class),
+                                              "markDeleted" + jDomainClass.name ());
+      jMarkDel.annotate (Nonnull.class);
+
+      final JVar jParamID = jMarkDel.param (JMod.FINAL, cm.ref (String.class), "s" + jDomainClass.name () + "ID");
+      jParamID.annotate (Nullable.class);
+
+      // Start resolving object
+      final JVar jImpl = jMarkDel.body ()
+                                 .decl (JMod.FINAL,
+                                        jDomainClass,
+                                        "a" + jDomainClass.name (),
+                                        JExpr.invoke ("getOfID").arg (jParamID));
+
+      // Check preconditions
+      final JBlock jIfNull = jMarkDel.body ()._if (jImpl.eqNull ())._then ();
+      jIfNull.add (cm.ref (AuditHelper.class)
+                     .staticInvoke ("onAuditDeleteFailure")
+                     .arg (jDomainClass.staticRef ("OT"))
+                     .arg (jParamID)
+                     .arg ("no-such-id"));
+      jIfNull._return (cm.ref (EChange.class).staticRef ("UNCHANGED"));
+
+      // Check before write lock
+      final JBlock jIfDeleted = jMarkDel.body ()._if (jImpl.invoke ("isDeleted"))._then ();
+      jIfDeleted.add (cm.ref (AuditHelper.class)
+                        .staticInvoke ("onAuditDeleteFailure")
+                        .arg (jDomainClass.staticRef ("OT"))
+                        .arg (jParamID)
+                        .arg ("already-deleted"));
+      jIfDeleted._return (cm.ref (EChange.class).staticRef ("UNCHANGED"));
+
+      // internal update
+      jMarkDel.body ().addSingleLineComment ("Mark internally as deleted");
+      jMarkDel.body ().add (JExpr.ref ("m_aRWLock").invoke ("writeLock").invoke ("lock"));
+      final JTryBlock jTry = jMarkDel.body ()._try ();
+      final JBlock jIfNotDel = jTry.body ()
+                                   ._if (cm.ref (BusinessObjectHelper.class)
+                                           .staticInvoke ("setDeletionNow")
+                                           .arg (jImpl)
+                                           .invoke ("isUnchanged"))
+                                   ._then ();
+      jIfNotDel.add (cm.ref (AuditHelper.class)
+                       .staticInvoke ("onAuditDeleteFailure")
+                       .arg (jDomainClass.staticRef ("OT"))
+                       .arg (jParamID)
+                       .arg ("already-deleted"));
+      jIfNotDel._return (cm.ref (EChange.class).staticRef ("UNCHANGED"));
+
+      jTry.body ().add (JExpr.invoke ("internalMarkItemDeleted").arg (jImpl));
+      jTry._finally ().add (JExpr.ref ("m_aRWLock").invoke ("writeLock").invoke ("unlock"));
+
+      // Audit
+      jMarkDel.body ().addSingleLineComment ("Success audit");
+      jMarkDel.body ()
+              .add (cm.ref (AuditHelper.class)
+                      .staticInvoke ("onAuditDeleteSuccess")
+                      .arg (jDomainClass.staticRef ("OT"))
+                      .arg (jImpl.invoke ("getID")));
+
+      jMarkDel.body ()._return (cm.ref (EChange.class).staticRef ("CHANGED"));
+    }
   }
 }

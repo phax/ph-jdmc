@@ -87,4 +87,31 @@ public class ExBiotopbaumDeadwoodBOManager
     AuditHelper.onAuditModifySuccess(ExBiotopbaumDeadwoodBO.OT, "all", aExBiotopbaumDeadwoodBO.getID(), eType, Boolean.valueOf(bEnabled), Integer.valueOf(nLength), Integer.valueOf(nBHD));
     return EChange.CHANGED;
   }
+
+  @Nonnull
+  public final EChange markDeletedExBiotopbaumDeadwoodBO(@Nullable final String sExBiotopbaumDeadwoodBOID) {
+    final ExBiotopbaumDeadwoodBO aExBiotopbaumDeadwoodBO = getOfID(sExBiotopbaumDeadwoodBOID);
+    if (aExBiotopbaumDeadwoodBO == null) {
+      AuditHelper.onAuditDeleteFailure(ExBiotopbaumDeadwoodBO.OT, sExBiotopbaumDeadwoodBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExBiotopbaumDeadwoodBO.isDeleted()) {
+      AuditHelper.onAuditDeleteFailure(ExBiotopbaumDeadwoodBO.OT, sExBiotopbaumDeadwoodBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as deleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setDeletionNow(aExBiotopbaumDeadwoodBO).isUnchanged()) {
+        AuditHelper.onAuditDeleteFailure(ExBiotopbaumDeadwoodBO.OT, sExBiotopbaumDeadwoodBOID, "already-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemDeleted(aExBiotopbaumDeadwoodBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExBiotopbaumDeadwoodBO.OT, aExBiotopbaumDeadwoodBO.getID());
+    return EChange.CHANGED;
+  }
 }

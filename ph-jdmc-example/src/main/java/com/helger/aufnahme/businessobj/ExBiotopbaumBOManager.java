@@ -160,4 +160,31 @@ public class ExBiotopbaumBOManager
     AuditHelper.onAuditModifySuccess(ExBiotopbaumBO.OT, "all", aExBiotopbaumBO.getID(), Integer.valueOf(nBBNr), aPics, aDate, aType, sLocation, eExposition, sHanglage, Boolean.valueOf(bEinschichtig), Boolean.valueOf(bSolitary), Boolean.valueOf(bLightLocation), Boolean.valueOf(bClosedCrown), Boolean.valueOf(bNoSun), Boolean.valueOf(bUeberSun), Boolean.valueOf(bHomogene), sBeschreibung, eTreeKind, aCaves, aTrunk, eVitality, aSpecialStructure, sOtherSpecial, Boolean.valueOf(bAspirant), sAspirantDesc, Boolean.valueOf(bMarked), sMarkedDesc, aDeadwoodCats, aDeadwoodDoD);
     return EChange.CHANGED;
   }
+
+  @Nonnull
+  public final EChange markDeletedExBiotopbaumBO(@Nullable final String sExBiotopbaumBOID) {
+    final ExBiotopbaumBO aExBiotopbaumBO = getOfID(sExBiotopbaumBOID);
+    if (aExBiotopbaumBO == null) {
+      AuditHelper.onAuditDeleteFailure(ExBiotopbaumBO.OT, sExBiotopbaumBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExBiotopbaumBO.isDeleted()) {
+      AuditHelper.onAuditDeleteFailure(ExBiotopbaumBO.OT, sExBiotopbaumBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as deleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setDeletionNow(aExBiotopbaumBO).isUnchanged()) {
+        AuditHelper.onAuditDeleteFailure(ExBiotopbaumBO.OT, sExBiotopbaumBOID, "already-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemDeleted(aExBiotopbaumBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExBiotopbaumBO.OT, aExBiotopbaumBO.getID());
+    return EChange.CHANGED;
+  }
 }

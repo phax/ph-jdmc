@@ -78,4 +78,31 @@ public class ExCaveTypeBOManager
     AuditHelper.onAuditModifySuccess(ExCaveTypeBO.OT, "all", aExCaveTypeBO.getID(), eClazz, eType);
     return EChange.CHANGED;
   }
+
+  @Nonnull
+  public final EChange markDeletedExCaveTypeBO(@Nullable final String sExCaveTypeBOID) {
+    final ExCaveTypeBO aExCaveTypeBO = getOfID(sExCaveTypeBOID);
+    if (aExCaveTypeBO == null) {
+      AuditHelper.onAuditDeleteFailure(ExCaveTypeBO.OT, sExCaveTypeBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExCaveTypeBO.isDeleted()) {
+      AuditHelper.onAuditDeleteFailure(ExCaveTypeBO.OT, sExCaveTypeBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as deleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setDeletionNow(aExCaveTypeBO).isUnchanged()) {
+        AuditHelper.onAuditDeleteFailure(ExCaveTypeBO.OT, sExCaveTypeBOID, "already-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemDeleted(aExCaveTypeBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExCaveTypeBO.OT, aExCaveTypeBO.getID());
+    return EChange.CHANGED;
+  }
 }

@@ -136,4 +136,31 @@ public class ExBestandBOManager
     AuditHelper.onAuditModifySuccess(ExBestandBO.OT, "all", aExBestandBO.getID(), Integer.valueOf(nBNr), aPics, aDate, sVerortung, aBZHBG, Integer.valueOf(nAreaSize), sBeschreib, Boolean.valueOf(bSameAge), Boolean.valueOf(bOneLevel), eStockType, sUsageDescription, sGesellschaft, Boolean.valueOf(bKronenschluss), Boolean.valueOf(bLightWoods), Boolean.valueOf(bUnterwuchs), eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
     return EChange.CHANGED;
   }
+
+  @Nonnull
+  public final EChange markDeletedExBestandBO(@Nullable final String sExBestandBOID) {
+    final ExBestandBO aExBestandBO = getOfID(sExBestandBOID);
+    if (aExBestandBO == null) {
+      AuditHelper.onAuditDeleteFailure(ExBestandBO.OT, sExBestandBOID, "no-such-id");
+      return EChange.UNCHANGED;
+    }
+    if (aExBestandBO.isDeleted()) {
+      AuditHelper.onAuditDeleteFailure(ExBestandBO.OT, sExBestandBOID, "already-deleted");
+      return EChange.UNCHANGED;
+    }
+    // Mark internally as deleted
+    m_aRWLock.writeLock().lock();
+    try {
+      if (BusinessObjectHelper.setDeletionNow(aExBestandBO).isUnchanged()) {
+        AuditHelper.onAuditDeleteFailure(ExBestandBO.OT, sExBestandBOID, "already-deleted");
+        return EChange.UNCHANGED;
+      }
+      internalMarkItemDeleted(aExBestandBO);
+    } finally {
+      m_aRWLock.writeLock().unlock();
+    }
+    // Success audit
+    AuditHelper.onAuditDeleteSuccess(ExBestandBO.OT, aExBestandBO.getID());
+    return EChange.CHANGED;
+  }
 }
