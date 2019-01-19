@@ -27,7 +27,7 @@ import com.helger.commons.string.StringHelper;
 @NotThreadSafe
 public abstract class AbstractJDMClassType
 {
-  private final JDMClassTypeConfiguration m_aConfig = new JDMClassTypeConfiguration ();
+  private final JDMPerClassSettings m_aSettings = new JDMPerClassSettings ();
   private final String m_sPackageName;
   private final String m_sClassName;
 
@@ -48,9 +48,9 @@ public abstract class AbstractJDMClassType
 
   @Nonnull
   @ReturnsMutableObject
-  public final JDMClassTypeConfiguration config ()
+  public final JDMPerClassSettings settings ()
   {
-    return m_aConfig;
+    return m_aSettings;
   }
 
   @Nonnull

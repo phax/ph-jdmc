@@ -47,7 +47,7 @@ public class JDMCodeGenerator
   private static final Logger LOGGER = LoggerFactory.getLogger (JDMCodeGenerator.class);
 
   private final JDMProcessor m_aProcessor;
-  private final JDMCodeGenSettings m_aSettings = new JDMCodeGenSettings ();
+  private final JDMCodeGenSettings m_aDefaultSettings = new JDMCodeGenSettings ();
 
   public JDMCodeGenerator (@Nonnull final JDMProcessor aProcessor)
   {
@@ -57,9 +57,9 @@ public class JDMCodeGenerator
 
   @Nonnull
   @ReturnsMutableObject
-  public final JDMCodeGenSettings settings ()
+  public final JDMCodeGenSettings defaultSettings ()
   {
-    return m_aSettings;
+    return m_aDefaultSettings;
   }
 
   private static void _createMetaInfServices (@Nonnull final JDMCodeModel cm)
@@ -132,7 +132,7 @@ public class JDMCodeGenerator
     ValueEnforcer.notNull (aFeedbackHandler, "FeedbackHandler");
 
     // Before we started, check the settings consistency
-    m_aSettings.checkConsistency (aFeedbackHandler);
+    m_aDefaultSettings.checkConsistency (aFeedbackHandler);
 
     FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirMainJava);
     FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirMainResources);
@@ -145,19 +145,29 @@ public class JDMCodeGenerator
     try
     {
       final JDMCodeModel cm = new JDMCodeModel (m_aProcessor);
-      if (m_aSettings.isReadExistingSPIFiles ())
+      if (m_aDefaultSettings.isReadExistingSPIFiles ())
         cm.spiImplMap ().readInitial (aDirMainResources);
 
       // Create all classes
       for (final JDMClass aClass : aClasses)
       {
-        final JDefinedClass jInterface = JDMCodeGenBase.createMainJavaInterface (m_aProcessor, m_aSettings, cm, aClass);
-        final JDefinedClass jDomainClass = JDMCodeGenBase.createMainJavaClass (m_aSettings, cm, aClass, jInterface);
+        // Create a copy of the settings
+        final JDMCodeGenSettings aPerClassSettings = m_aDefaultSettings.getClone ();
+        aClass.settings ().applyToSettings (aPerClassSettings);
 
-        if (m_aSettings.isCreateMicroTypeConverter ())
-          JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (m_aSettings, cm, aClass, jDomainClass);
+        final JDefinedClass jInterface = JDMCodeGenBase.createMainJavaInterface (m_aProcessor,
+                                                                                 aPerClassSettings,
+                                                                                 cm,
+                                                                                 aClass);
+        final JDefinedClass jDomainClass = JDMCodeGenBase.createMainJavaClass (aPerClassSettings,
+                                                                               cm,
+                                                                               aClass,
+                                                                               jInterface);
 
-        if (m_aSettings.isCreateManager () && aClass.config ().isCreateManager ())
+        if (aPerClassSettings.isCreateMicroTypeConverter ())
+          JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (aPerClassSettings, cm, aClass, jDomainClass);
+
+        if (aPerClassSettings.canCreateManager ())
         {
           if (aClass.fields ().isEmpty ())
             aFeedbackHandler.onWarning ("Creating a manager for class '" +
@@ -171,7 +181,7 @@ public class JDMCodeGenerator
       JDMCodeGenEnum.createMainJavaEnums (cm, aEnums);
 
       // create for all
-      if (m_aSettings.isCreateMicroTypeConverter () && aClasses.isNotEmpty ())
+      if (m_aDefaultSettings.isCreateMicroTypeConverter () && aClasses.isNotEmpty ())
         JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterRegistrarClass (m_aProcessor.getDestinationPackageName (),
                                                                                  cm,
                                                                                  aClasses);
@@ -179,10 +189,10 @@ public class JDMCodeGenerator
       // Create all resources as last thing before writing
       _createMetaInfServices (cm);
 
-      new JCMWriter (cm).setCharset (m_aSettings.getCharset ())
-                        .setNewLine (m_aSettings.getNewLineMode ().getText ())
-                        .setIndentString (m_aSettings.getIndentString ())
-                        .build (aDirMainJava, aDirMainResources, m_aSettings.getProgressTracker ());
+      new JCMWriter (cm).setCharset (m_aDefaultSettings.getCharset ())
+                        .setNewLine (m_aDefaultSettings.getNewLineMode ().getText ())
+                        .setIndentString (m_aDefaultSettings.getIndentString ())
+                        .build (aDirMainJava, aDirMainResources, m_aDefaultSettings.getProgressTracker ());
     }
     catch (final JClassAlreadyExistsException ex)
     {
@@ -192,10 +202,10 @@ public class JDMCodeGenerator
     try
     {
       final JDMCodeModel cm = new JDMCodeModel (m_aProcessor);
-      if (m_aSettings.isReadExistingSPIFiles ())
+      if (m_aDefaultSettings.isReadExistingSPIFiles ())
         cm.spiImplMap ().readInitial (aDirTestResources);
 
-      JDMCodeGenTest.createTestJavaSelfTest (m_aProcessor, m_aSettings, cm);
+      JDMCodeGenTest.createTestJavaSelfTest (m_aProcessor, m_aDefaultSettings, cm);
 
       if (aClasses.isNotEmpty ())
         JDMCodeGenTest.createSPITest (m_aProcessor.getDestinationPackageName (), cm);
@@ -203,7 +213,7 @@ public class JDMCodeGenerator
       // Create test classes for all domain classes
       for (final JDMClass aClass : aClasses)
       {
-        JDMCodeGenTest.createTestJavaClass (m_aSettings, cm, aClass);
+        JDMCodeGenTest.createTestJavaClass (m_aDefaultSettings, cm, aClass);
       }
 
       // Create all enums
@@ -212,10 +222,10 @@ public class JDMCodeGenerator
       // Create all resources as last thing before writing
       _createMetaInfServices (cm);
 
-      new JCMWriter (cm).setCharset (m_aSettings.getCharset ())
-                        .setNewLine (m_aSettings.getNewLineMode ().getText ())
-                        .setIndentString (m_aSettings.getIndentString ())
-                        .build (aDirTestJava, aDirTestResources, m_aSettings.getProgressTracker ());
+      new JCMWriter (cm).setCharset (m_aDefaultSettings.getCharset ())
+                        .setNewLine (m_aDefaultSettings.getNewLineMode ().getText ())
+                        .setIndentString (m_aDefaultSettings.getIndentString ())
+                        .build (aDirTestJava, aDirTestResources, m_aDefaultSettings.getProgressTracker ());
     }
     catch (final JClassAlreadyExistsException ex)
     {

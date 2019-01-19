@@ -25,17 +25,19 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.ReturnsMutableCopy;
+import com.helger.commons.lang.ICloneable;
 import com.helger.commons.system.ENewLineMode;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 import com.helger.tenancy.IBusinessObject;
 
 /**
- * Code generation settings.
+ * Code generation settings. They can be cloned to create "per class" settings.
  *
  * @author Philip Helger
  */
 @NotThreadSafe
-public class JDMCodeGenSettings implements Serializable
+public class JDMCodeGenSettings implements Serializable, ICloneable <JDMCodeGenSettings>
 {
   private boolean m_bUseBusinessObject = false;
   private boolean m_bSetterArePackagePrivate = true;
@@ -47,7 +49,23 @@ public class JDMCodeGenSettings implements Serializable
   private String m_sIndentString = "  ";
   private IProgressTracker m_aProgressTracker;
 
-  public boolean isUseBusinessObject ()
+  public JDMCodeGenSettings ()
+  {}
+
+  public JDMCodeGenSettings (@Nonnull final JDMCodeGenSettings aOther)
+  {
+    setUseBusinessObject (aOther.isUseBusinessObject ());
+    setSetterArePackagePrivate (aOther.isSetterArePackagePrivate ());
+    setReadExistingSPIFiles (aOther.isReadExistingSPIFiles ());
+    setCreateMicroTypeConverter (aOther.isCreateMicroTypeConverter ());
+    setCreateManager (aOther.isCreateManager ());
+    setCharset (aOther.getCharset ());
+    setNewLineMode (aOther.getNewLineMode ());
+    setIndentString (aOther.getIndentString ());
+    setProgressTracker (aOther.getProgressTracker ());
+  }
+
+  public final boolean isUseBusinessObject ()
   {
     return m_bUseBusinessObject;
   }
@@ -61,13 +79,13 @@ public class JDMCodeGenSettings implements Serializable
    * @return this for chaining
    */
   @Nonnull
-  public JDMCodeGenSettings setUseBusinessObject (final boolean bUseBusinessObject)
+  public final JDMCodeGenSettings setUseBusinessObject (final boolean bUseBusinessObject)
   {
     m_bUseBusinessObject = bUseBusinessObject;
     return this;
   }
 
-  public boolean isSetterArePackagePrivate ()
+  public final boolean isSetterArePackagePrivate ()
   {
     return m_bSetterArePackagePrivate;
   }
@@ -82,13 +100,13 @@ public class JDMCodeGenSettings implements Serializable
    * @return this for chaining
    */
   @Nonnull
-  public JDMCodeGenSettings setSetterArePackagePrivate (final boolean bSetterArePackagePrivate)
+  public final JDMCodeGenSettings setSetterArePackagePrivate (final boolean bSetterArePackagePrivate)
   {
     m_bSetterArePackagePrivate = bSetterArePackagePrivate;
     return this;
   }
 
-  public boolean isReadExistingSPIFiles ()
+  public final boolean isReadExistingSPIFiles ()
   {
     return m_bReadExistingSPIFiles;
   }
@@ -102,44 +120,49 @@ public class JDMCodeGenSettings implements Serializable
    * @return this for chaining
    */
   @Nonnull
-  public JDMCodeGenSettings setReadExistingSPIFiles (final boolean bReadExistingSPIFiles)
+  public final JDMCodeGenSettings setReadExistingSPIFiles (final boolean bReadExistingSPIFiles)
   {
     m_bReadExistingSPIFiles = bReadExistingSPIFiles;
     return this;
   }
 
-  public boolean isCreateMicroTypeConverter ()
+  public final boolean isCreateMicroTypeConverter ()
   {
     return m_bCreateMicroTypeConverter;
   }
 
   @Nonnull
-  public JDMCodeGenSettings setCreateMicroTypeConverter (final boolean bCreateMicroTypeConverter)
+  public final JDMCodeGenSettings setCreateMicroTypeConverter (final boolean bCreateMicroTypeConverter)
   {
     m_bCreateMicroTypeConverter = bCreateMicroTypeConverter;
     return this;
   }
 
-  public boolean isCreateManager ()
+  public final boolean isCreateManager ()
   {
     return m_bCreateManager;
   }
 
+  public final boolean canCreateManager ()
+  {
+    return m_bCreateManager && m_bUseBusinessObject && m_bCreateMicroTypeConverter;
+  }
+
   @Nonnull
-  public JDMCodeGenSettings setCreateManager (final boolean bCreateManager)
+  public final JDMCodeGenSettings setCreateManager (final boolean bCreateManager)
   {
     m_bCreateManager = bCreateManager;
     return this;
   }
 
   @Nonnull
-  public Charset getCharset ()
+  public final Charset getCharset ()
   {
     return m_aCharset;
   }
 
   @Nonnull
-  public JDMCodeGenSettings setCharset (@Nonnull final Charset aCharset)
+  public final JDMCodeGenSettings setCharset (@Nonnull final Charset aCharset)
   {
     ValueEnforcer.notNull (aCharset, "Charset");
     m_aCharset = aCharset;
@@ -147,13 +170,13 @@ public class JDMCodeGenSettings implements Serializable
   }
 
   @Nonnull
-  public ENewLineMode getNewLineMode ()
+  public final ENewLineMode getNewLineMode ()
   {
     return m_eNewLineMode;
   }
 
   @Nonnull
-  public JDMCodeGenSettings setNewLineMode (@Nonnull final ENewLineMode eNewLineMode)
+  public final JDMCodeGenSettings setNewLineMode (@Nonnull final ENewLineMode eNewLineMode)
   {
     ValueEnforcer.notNull (eNewLineMode, "NewLineMode");
     m_eNewLineMode = eNewLineMode;
@@ -161,13 +184,13 @@ public class JDMCodeGenSettings implements Serializable
   }
 
   @Nonnull
-  public String getIndentString ()
+  public final String getIndentString ()
   {
     return m_sIndentString;
   }
 
   @Nonnull
-  public JDMCodeGenSettings setIndentString (@Nonnull final String sIndentString)
+  public final JDMCodeGenSettings setIndentString (@Nonnull final String sIndentString)
   {
     ValueEnforcer.notNull (sIndentString, "IndentString");
     m_sIndentString = sIndentString;
@@ -175,13 +198,13 @@ public class JDMCodeGenSettings implements Serializable
   }
 
   @Nullable
-  public IProgressTracker getProgressTracker ()
+  public final IProgressTracker getProgressTracker ()
   {
     return m_aProgressTracker;
   }
 
   @Nonnull
-  public JDMCodeGenSettings setProgressTracker (@Nullable final IProgressTracker aProgressTracker)
+  public final JDMCodeGenSettings setProgressTracker (@Nullable final IProgressTracker aProgressTracker)
   {
     m_aProgressTracker = aProgressTracker;
     return this;
@@ -196,5 +219,12 @@ public class JDMCodeGenSettings implements Serializable
       if (!m_bCreateMicroTypeConverter)
         aErrorHandler.onError ("Managers can only be created if microTypeConverter creation is enabled", null);
     }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public JDMCodeGenSettings getClone ()
+  {
+    return new JDMCodeGenSettings (this);
   }
 }

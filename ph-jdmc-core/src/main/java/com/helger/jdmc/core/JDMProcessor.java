@@ -50,7 +50,6 @@ import com.helger.jdmc.core.datamodel.EJDMConstraintType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.IJDMTypeResolver;
 import com.helger.jdmc.core.datamodel.JDMClass;
-import com.helger.jdmc.core.datamodel.JDMClassTypeConfiguration;
 import com.helger.jdmc.core.datamodel.JDMConstraint;
 import com.helger.jdmc.core.datamodel.JDMContext;
 import com.helger.jdmc.core.datamodel.JDMEnum;
@@ -186,9 +185,9 @@ public class JDMProcessor implements IJDMTypeResolver
     return ret;
   }
 
-  private void _handleClassTypeConfiguration (@Nonnull final AbstractJDMClassType aType,
-                                    @Nonnull final IJson aFieldDef,
-                                    @Nonnull final Consumer <? super String> aErrorHdl)
+  private void _handleClassTypeSettings (@Nonnull final AbstractJDMClassType aType,
+                                              @Nonnull final IJson aFieldDef,
+                                              @Nonnull final Consumer <? super String> aErrorHdl)
   {
     if (!aFieldDef.isObject ())
       aErrorHdl.accept ("The per-type configuration must be an object");
@@ -197,16 +196,23 @@ public class JDMProcessor implements IJDMTypeResolver
       {
         final String sKey = aEntry.getKey ();
         final IJson aValue = aEntry.getValue ();
-        if ("manager".equals (sKey))
+        if ("createManager".equals (sKey))
         {
           if (aValue.isValue ())
-            aType.config ()
-                 .setCreateManager (aValue.getAsValue ().getAsBoolean (JDMClassTypeConfiguration.DEFAULT_CREATE_MANAGER));
+            aType.settings ().setCreateManager (aValue.getAsValue ().getAsBoolean ());
           else
             aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
         }
         else
-          aErrorHdl.accept ("The configuration property '" + sKey + "' is unknown");
+          if ("businessObject".equals (sKey))
+          {
+            if (aValue.isValue ())
+              aType.settings ().setUseBusinessObjects (aValue.getAsValue ().getAsBoolean ());
+            else
+              aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
+          }
+          else
+            aErrorHdl.accept ("The configuration property '" + sKey + "' is unknown");
       }
   }
 
@@ -243,7 +249,7 @@ public class JDMProcessor implements IJDMTypeResolver
       }
       if ("$config".equals (sFieldName))
       {
-        _handleClassTypeConfiguration (ret, aFieldDef, aErrorHdl);
+        _handleClassTypeSettings (ret, aFieldDef, aErrorHdl);
         continue;
       }
       if (!isValidIdentifier (sFieldName))
@@ -521,7 +527,7 @@ public class JDMProcessor implements IJDMTypeResolver
       }
       if ("$config".equals (sEnumConstantName))
       {
-        _handleClassTypeConfiguration (ret, aEnumDef, aErrorHdl);
+        _handleClassTypeSettings (ret, aEnumDef, aErrorHdl);
         continue;
       }
       if (!isValidIdentifier (sEnumConstantName))

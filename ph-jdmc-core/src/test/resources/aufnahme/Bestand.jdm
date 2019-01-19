@@ -1,7 +1,7 @@
 { 
   "$config" :
   {
-    "manager": true
+    "createManager": true
   },
   "BNr": [ "int", "Schlüsselfeld" ],
   "pics": ["File+", "Foto-Nr"],

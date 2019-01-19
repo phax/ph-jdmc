@@ -338,7 +338,7 @@ public final class JDMCMojo extends AbstractMojo
 
     // Start code generation
     final JDMCodeGenerator cg = new JDMCodeGenerator (p);
-    cg.settings ()
+    cg.defaultSettings ()
       .setUseBusinessObject (useBusinessObject)
       .setSetterArePackagePrivate (settersPackagePrivate)
       .setReadExistingSPIFiles (true)

@@ -79,8 +79,7 @@ final class JDMCodeGenTest
                                            cm.ref (PhotonBasicWebTestRule.class)._new ());
       jRule.annotate (Rule.class);
     }
-
-    if (!aSettings.isUseBusinessObject ())
+    else
     {
       final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testDefaultCtor");
       // Use String to avoid Eclipse treats this as a real test

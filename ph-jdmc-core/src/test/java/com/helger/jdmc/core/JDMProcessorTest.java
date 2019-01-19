@@ -118,7 +118,7 @@ public final class JDMProcessorTest
       final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.simple");
       _applyTestJDM (p);
       final JDMCodeGenerator cg = new JDMCodeGenerator (p);
-      cg.settings ().setUseBusinessObject (false).setCreateManager (false);
+      cg.defaultSettings ().setUseBusinessObject (false).setCreateManager (false);
       cg.createCode (DIR_EXAMPLE);
     }
     // Second run - read SPI now
@@ -127,7 +127,7 @@ public final class JDMProcessorTest
       p.setClassNamePrefix ("Ex").setClassNameSuffix ("BO");
       _applyTestJDM (p);
       final JDMCodeGenerator cg = new JDMCodeGenerator (p);
-      cg.settings ().setUseBusinessObject (true).setSetterArePackagePrivate (true).setReadExistingSPIFiles (true);
+      cg.defaultSettings ().setUseBusinessObject (true).setSetterArePackagePrivate (true).setReadExistingSPIFiles (true);
       cg.createCode (DIR_EXAMPLE);
     }
     // Third run - as little as possible
@@ -135,7 +135,7 @@ public final class JDMProcessorTest
       final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.small");
       _applyTestJDM (p);
       final JDMCodeGenerator cg = new JDMCodeGenerator (p);
-      cg.settings ().setUseBusinessObject (false).setCreateManager (false).setCreateMicroTypeConverter (false);
+      cg.defaultSettings ().setUseBusinessObject (false).setCreateManager (false).setCreateMicroTypeConverter (false);
       cg.createCode (DIR_EXAMPLE);
     }
     // 4th run - as little as possible but BO
@@ -143,7 +143,7 @@ public final class JDMProcessorTest
       final JDMProcessor p = new JDMProcessor ("com.helger.aufnahme.smallbo");
       _applyTestJDM (p);
       final JDMCodeGenerator cg = new JDMCodeGenerator (p);
-      cg.settings ().setUseBusinessObject (true).setCreateManager (false).setCreateMicroTypeConverter (false);
+      cg.defaultSettings ().setUseBusinessObject (true).setCreateManager (false).setCreateMicroTypeConverter (false);
       cg.createCode (DIR_EXAMPLE);
     }
   }
