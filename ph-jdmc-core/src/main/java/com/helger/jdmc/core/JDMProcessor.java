@@ -186,8 +186,8 @@ public class JDMProcessor implements IJDMTypeResolver
   }
 
   private void _handleClassTypeSettings (@Nonnull final AbstractJDMClassType aType,
-                                              @Nonnull final IJson aFieldDef,
-                                              @Nonnull final Consumer <? super String> aErrorHdl)
+                                         @Nonnull final IJson aFieldDef,
+                                         @Nonnull final Consumer <? super String> aErrorHdl)
   {
     if (!aFieldDef.isObject ())
       aErrorHdl.accept ("The per-type configuration must be an object");
@@ -247,7 +247,7 @@ public class JDMProcessor implements IJDMTypeResolver
         aErrorHdl.accept ("The field name may not be empty");
         return null;
       }
-      if ("$config".equals (sFieldName))
+      if ("$settings".equals (sFieldName))
       {
         _handleClassTypeSettings (ret, aFieldDef, aErrorHdl);
         continue;
@@ -525,7 +525,7 @@ public class JDMProcessor implements IJDMTypeResolver
         aErrorHdl.accept ("The enum constant name may not be empty");
         return null;
       }
-      if ("$config".equals (sEnumConstantName))
+      if ("$settings".equals (sEnumConstantName))
       {
         _handleClassTypeSettings (ret, aEnumDef, aErrorHdl);
         continue;
