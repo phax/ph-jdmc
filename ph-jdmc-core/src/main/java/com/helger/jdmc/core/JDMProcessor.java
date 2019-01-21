@@ -212,7 +212,15 @@ public class JDMProcessor implements IJDMTypeResolver
               aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
           }
           else
-            aErrorHdl.accept ("The configuration property '" + sKey + "' is unknown");
+            if ("setterArePackagePrivate".equals (sKey))
+            {
+              if (aValue.isValue ())
+                aType.settings ().setSetterArePackagePrivate (aValue.getAsValue ().getAsBoolean ());
+              else
+                aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
+            }
+            else
+              aErrorHdl.accept ("The configuration property '" + sKey + "' is unknown");
       }
   }
 
