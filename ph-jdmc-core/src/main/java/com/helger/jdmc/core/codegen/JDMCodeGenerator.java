@@ -218,7 +218,11 @@ public class JDMCodeGenerator
       // Create test classes for all domain classes
       for (final JDMClass aClass : aClasses)
       {
-        JDMCodeGenTest.createTestJavaClass (m_aDefaultSettings, cm, aClass);
+        // Create a copy of the settings
+        final JDMCodeGenSettings aPerClassSettings = m_aDefaultSettings.getClone ();
+        aClass.settings ().applyToSettings (aPerClassSettings);
+
+        JDMCodeGenTest.createTestJavaClass (aPerClassSettings, cm, aClass);
       }
 
       // Create all enums

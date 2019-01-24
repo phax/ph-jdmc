@@ -39,11 +39,14 @@ import com.helger.tenancy.IBusinessObject;
 @NotThreadSafe
 public class JDMCodeGenSettings implements Serializable, ICloneable <JDMCodeGenSettings>
 {
+  // Global init settings
+  private boolean m_bReadExistingSPIFiles = false;
+  // Per class settings
   private boolean m_bUseBusinessObject = false;
   private boolean m_bSetterArePackagePrivate = true;
-  private boolean m_bReadExistingSPIFiles = false;
   private boolean m_bCreateMicroTypeConverter = true;
   private boolean m_bCreateManager = true;
+  // Global output settings
   private Charset m_aCharset = StandardCharsets.UTF_8;
   private ENewLineMode m_eNewLineMode = ENewLineMode.DEFAULT;
   private String m_sIndentString = "  ";
@@ -54,15 +57,35 @@ public class JDMCodeGenSettings implements Serializable, ICloneable <JDMCodeGenS
 
   public JDMCodeGenSettings (@Nonnull final JDMCodeGenSettings aOther)
   {
+    setReadExistingSPIFiles (aOther.isReadExistingSPIFiles ());
     setUseBusinessObject (aOther.isUseBusinessObject ());
     setSetterArePackagePrivate (aOther.isSetterArePackagePrivate ());
-    setReadExistingSPIFiles (aOther.isReadExistingSPIFiles ());
     setCreateMicroTypeConverter (aOther.isCreateMicroTypeConverter ());
     setCreateManager (aOther.isCreateManager ());
     setCharset (aOther.getCharset ());
     setNewLineMode (aOther.getNewLineMode ());
     setIndentString (aOther.getIndentString ());
     setProgressTracker (aOther.getProgressTracker ());
+  }
+
+  public final boolean isReadExistingSPIFiles ()
+  {
+    return m_bReadExistingSPIFiles;
+  }
+
+  /**
+   * Should existing SPI META-INF/services files be read or not. By default this
+   * does not happen.
+   *
+   * @param bReadExistingSPIFiles
+   *        <code>true</code> to read them, <code>false</code> if not.
+   * @return this for chaining
+   */
+  @Nonnull
+  public final JDMCodeGenSettings setReadExistingSPIFiles (final boolean bReadExistingSPIFiles)
+  {
+    m_bReadExistingSPIFiles = bReadExistingSPIFiles;
+    return this;
   }
 
   public final boolean isUseBusinessObject ()
@@ -103,26 +126,6 @@ public class JDMCodeGenSettings implements Serializable, ICloneable <JDMCodeGenS
   public final JDMCodeGenSettings setSetterArePackagePrivate (final boolean bSetterArePackagePrivate)
   {
     m_bSetterArePackagePrivate = bSetterArePackagePrivate;
-    return this;
-  }
-
-  public final boolean isReadExistingSPIFiles ()
-  {
-    return m_bReadExistingSPIFiles;
-  }
-
-  /**
-   * Should existing SPI META-INF/services files be read or not. By default this
-   * does not happen.
-   *
-   * @param bReadExistingSPIFiles
-   *        <code>true</code> to read them, <code>false</code> if not.
-   * @return this for chaining
-   */
-  @Nonnull
-  public final JDMCodeGenSettings setReadExistingSPIFiles (final boolean bReadExistingSPIFiles)
-  {
-    m_bReadExistingSPIFiles = bReadExistingSPIFiles;
     return this;
   }
 
@@ -217,7 +220,7 @@ public class JDMCodeGenSettings implements Serializable, ICloneable <JDMCodeGenS
       if (!m_bUseBusinessObject)
         aErrorHandler.onError ("Managers can only be created if businessObject usage is enabled", null);
       if (!m_bCreateMicroTypeConverter)
-        aErrorHandler.onError ("Managers can only be created if microTypeConverter creation is enabled", null);
+        aErrorHandler.onError ("Managers can only be created if MicroTypeConverter creation is enabled", null);
     }
   }
 
