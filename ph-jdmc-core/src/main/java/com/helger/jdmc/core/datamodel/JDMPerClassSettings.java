@@ -31,25 +31,13 @@ import com.helger.jdmc.core.codegen.JDMCodeGenSettings;
  */
 public class JDMPerClassSettings implements Serializable
 {
-  private ETriState m_eCreateManager = ETriState.UNDEFINED;
   private ETriState m_eUseBusinessObject = ETriState.UNDEFINED;
   private ETriState m_eSetterArePackagePrivate = ETriState.UNDEFINED;
+  private ETriState m_eCreateMicroTypeConverter = ETriState.UNDEFINED;
+  private ETriState m_eCreateManager = ETriState.UNDEFINED;
 
   public JDMPerClassSettings ()
   {}
-
-  @Nonnull
-  public ETriState getCreateManager ()
-  {
-    return m_eCreateManager;
-  }
-
-  @Nonnull
-  public JDMPerClassSettings setCreateManager (final boolean b)
-  {
-    m_eCreateManager = ETriState.valueOf (b);
-    return this;
-  }
 
   @Nonnull
   public ETriState getUseBusinessObjects ()
@@ -77,13 +65,41 @@ public class JDMPerClassSettings implements Serializable
     return this;
   }
 
+  @Nonnull
+  public ETriState getCreateMicroTypeConverter ()
+  {
+    return m_eCreateMicroTypeConverter;
+  }
+
+  @Nonnull
+  public JDMPerClassSettings setCreateMicroTypeConverter (final boolean b)
+  {
+    m_eCreateMicroTypeConverter = ETriState.valueOf (b);
+    return this;
+  }
+
+  @Nonnull
+  public ETriState getCreateManager ()
+  {
+    return m_eCreateManager;
+  }
+
+  @Nonnull
+  public JDMPerClassSettings setCreateManager (final boolean b)
+  {
+    m_eCreateManager = ETriState.valueOf (b);
+    return this;
+  }
+
   public void applyToSettings (@Nonnull final JDMCodeGenSettings aPerClassSettings)
   {
-    if (m_eCreateManager.isDefined ())
-      aPerClassSettings.setCreateManager (m_eCreateManager.getAsBooleanValue ());
     if (m_eUseBusinessObject.isDefined ())
       aPerClassSettings.setUseBusinessObject (m_eUseBusinessObject.getAsBooleanValue ());
     if (m_eSetterArePackagePrivate.isDefined ())
       aPerClassSettings.setSetterArePackagePrivate (m_eSetterArePackagePrivate.getAsBooleanValue ());
+    if (m_eCreateMicroTypeConverter.isDefined ())
+      aPerClassSettings.setCreateMicroTypeConverter (m_eCreateMicroTypeConverter.getAsBooleanValue ());
+    if (m_eCreateManager.isDefined ())
+      aPerClassSettings.setCreateManager (m_eCreateManager.getAsBooleanValue ());
   }
 }

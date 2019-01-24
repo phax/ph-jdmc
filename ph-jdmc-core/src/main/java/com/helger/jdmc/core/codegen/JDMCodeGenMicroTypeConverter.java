@@ -92,10 +92,11 @@ final class JDMCodeGenMicroTypeConverter
     return false;
   }
 
-  static void createMainMicroTypeConverterClass (@Nonnull final JDMCodeGenSettings aSettings,
-                                                 @Nonnull final JDMCodeModel cm,
-                                                 @Nonnull final JDMClass aClass,
-                                                 @Nonnull final JDefinedClass jDomainClass) throws JClassAlreadyExistsException
+  @Nonnull
+  static JDefinedClass createMainMicroTypeConverterClass (@Nonnull final JDMCodeGenSettings aSettings,
+                                                          @Nonnull final JDMCodeModel cm,
+                                                          @Nonnull final JDMClass aClass,
+                                                          @Nonnull final JDefinedClass jDomainClass) throws JClassAlreadyExistsException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC, aClass.getFQMicroTypeConverterClassName (), EClassType.CLASS);
     if (aSettings.isUseBusinessObject ())
@@ -358,6 +359,8 @@ final class JDMCodeGenMicroTypeConverter
         jInvRet.arg (aVar);
       jToNative.body ()._return (jInvRet);
     }
+
+    return jClass;
   }
 
   static void createMainMicroTypeConverterRegistrarClass (@Nonnull final String sDestPackageName,

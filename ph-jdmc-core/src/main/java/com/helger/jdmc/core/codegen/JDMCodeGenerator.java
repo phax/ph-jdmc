@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.ReturnsMutableObject;
+import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.collection.impl.ICommonsOrderedSet;
 import com.helger.commons.io.file.FileOperationManager;
@@ -149,6 +150,7 @@ public class JDMCodeGenerator
         cm.spiImplMap ().readInitial (aDirMainResources);
 
       // Create all classes
+      final ICommonsList <JDMClass> aMicroTypeConvertersCreated = new CommonsArrayList <> ();
       for (final JDMClass aClass : aClasses)
       {
         // Create a copy of the settings
@@ -165,7 +167,10 @@ public class JDMCodeGenerator
                                                                                jInterface);
 
         if (aPerClassSettings.isCreateMicroTypeConverter ())
+        {
           JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (aPerClassSettings, cm, aClass, jDomainClass);
+          aMicroTypeConvertersCreated.add (aClass);
+        }
 
         if (aPerClassSettings.canCreateManager ())
         {
@@ -181,10 +186,10 @@ public class JDMCodeGenerator
       JDMCodeGenEnum.createMainJavaEnums (cm, aEnums);
 
       // create for all
-      if (m_aDefaultSettings.isCreateMicroTypeConverter () && aClasses.isNotEmpty ())
+      if (aMicroTypeConvertersCreated.isNotEmpty ())
         JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterRegistrarClass (m_aProcessor.getDestinationPackageName (),
                                                                                  cm,
-                                                                                 aClasses);
+                                                                                 aMicroTypeConvertersCreated);
 
       // Create all resources as last thing before writing
       _createMetaInfServices (cm);

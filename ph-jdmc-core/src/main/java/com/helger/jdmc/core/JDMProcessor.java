@@ -196,31 +196,39 @@ public class JDMProcessor implements IJDMTypeResolver
       {
         final String sKey = aEntry.getKey ();
         final IJson aValue = aEntry.getValue ();
-        if ("createManager".equals (sKey))
+        if ("businessObject".equals (sKey))
         {
           if (aValue.isValue ())
-            aType.settings ().setCreateManager (aValue.getAsValue ().getAsBoolean ());
+            aType.settings ().setUseBusinessObjects (aValue.getAsValue ().getAsBoolean ());
           else
             aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
         }
         else
-          if ("businessObject".equals (sKey))
+          if ("setterArePackagePrivate".equals (sKey))
           {
             if (aValue.isValue ())
-              aType.settings ().setUseBusinessObjects (aValue.getAsValue ().getAsBoolean ());
+              aType.settings ().setSetterArePackagePrivate (aValue.getAsValue ().getAsBoolean ());
             else
               aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
           }
           else
-            if ("setterArePackagePrivate".equals (sKey))
+            if ("createMicroTypeConverter".equals (sKey))
             {
               if (aValue.isValue ())
-                aType.settings ().setSetterArePackagePrivate (aValue.getAsValue ().getAsBoolean ());
+                aType.settings ().setCreateMicroTypeConverter (aValue.getAsValue ().getAsBoolean ());
               else
                 aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
             }
             else
-              aErrorHdl.accept ("The configuration property '" + sKey + "' is unknown");
+              if ("createManager".equals (sKey))
+              {
+                if (aValue.isValue ())
+                  aType.settings ().setCreateManager (aValue.getAsValue ().getAsBoolean ());
+                else
+                  aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
+              }
+              else
+                aErrorHdl.accept ("The configuration property '" + sKey + "' is unknown");
       }
   }
 
