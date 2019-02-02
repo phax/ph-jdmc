@@ -1,6 +1,6 @@
 # ph-jdmc
 
-Status: **work in progress**
+Status: last release is **0.0.2** (2019-02-02)
 
 Java Domain Model Creator (jdmc).
 The source structure is defined in JSON, and the domain model, test classes and XML serialization for usage on the "ph-" stack is created.
