@@ -29,6 +29,9 @@ public class ExBestandBOMicroTypeConverter
   private static final String ELEMENT_VERORTUNG = "verortung";
   private static final String ELEMENT_BZHBG = "bzhbg";
   private static final String ATTR_AREASIZE = "areasize";
+  private static final String ATTR_AREASIZELONG = "areasizelong";
+  private static final String ATTR_AREASIZEFLOAT = "areasizefloat";
+  private static final String ATTR_AREASIZEDOUBLE = "areasizedouble";
   private static final String ELEMENT_BESCHREIB = "beschreib";
   private static final String ATTR_SAMEAGE = "sameage";
   private static final String ATTR_ONELEVEL = "onelevel";
@@ -59,7 +62,10 @@ public class ExBestandBOMicroTypeConverter
     for (final IExHabitatbaumgruppeBO aItem: aValue.bZHBG()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_BZHBG));
     }
-    aElement.setAttribute(ATTR_AREASIZE, aValue.getAreaSize());
+    aElement.setAttributeWithConversion(ATTR_AREASIZE, aValue.getAreaSize());
+    aElement.setAttributeWithConversion(ATTR_AREASIZELONG, aValue.getAreaSizeLong());
+    aElement.setAttributeWithConversion(ATTR_AREASIZEFLOAT, aValue.getAreaSizeFloat());
+    aElement.setAttributeWithConversion(ATTR_AREASIZEDOUBLE, aValue.getAreaSizeDouble());
     aElement.appendElement(sNamespaceURI, ELEMENT_BESCHREIB).appendText(aValue.getBeschreib());
     aElement.setAttribute(ATTR_SAMEAGE, aValue.isSameAge());
     aElement.setAttribute(ATTR_ONELEVEL, aValue.isOneLevel());
@@ -92,7 +98,10 @@ public class ExBestandBOMicroTypeConverter
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_BZHBG)) {
       aBZHBG.add(MicroTypeConverter.convertToNative(aChild, ExHabitatbaumgruppeBO.class));
     }
-    final int nAreaSize = aElement.getAttributeValueAsInt(ATTR_AREASIZE, -1);
+    final Integer aAreaSize = aElement.getAttributeValueWithConversion(ATTR_AREASIZE, Integer.class);
+    final Long aAreaSizeLong = aElement.getAttributeValueWithConversion(ATTR_AREASIZELONG, Long.class);
+    final Float aAreaSizeFloat = aElement.getAttributeValueWithConversion(ATTR_AREASIZEFLOAT, Float.class);
+    final Double aAreaSizeDouble = aElement.getAttributeValueWithConversion(ATTR_AREASIZEDOUBLE, Double.class);
     final String sBeschreib = MicroHelper.getChildTextContent(aElement, ELEMENT_BESCHREIB);
     final boolean bSameAge = aElement.getAttributeValueAsBool(ATTR_SAMEAGE, false);
     final boolean bOneLevel = aElement.getAttributeValueAsBool(ATTR_ONELEVEL, false);
@@ -107,6 +116,6 @@ public class ExBestandBOMicroTypeConverter
     final String sTotStehBesch = MicroHelper.getChildTextContent(aElement, ELEMENT_TOT_STEH_BESCH);
     final EExStockDeadwoodBO eTotLieg = EExStockDeadwoodBO.getFromIDOrNull(aElement.getAttributeValue(ATTR_TOT_LIEG));
     final String sTotLiegBesch = MicroHelper.getChildTextContent(aElement, ELEMENT_TOT_LIEG_BESCH);
-    return new ExBestandBO(super.getStubObject(aElement), nBNr, aPics, aDate, sVerortung, aBZHBG, nAreaSize, sBeschreib, bSameAge, bOneLevel, eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
+    return new ExBestandBO(super.getStubObject(aElement), nBNr, aPics, aDate, sVerortung, aBZHBG, aAreaSize, aAreaSizeLong, aAreaSizeFloat, aAreaSizeDouble, sBeschreib, bSameAge, bOneLevel, eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
   }
 }

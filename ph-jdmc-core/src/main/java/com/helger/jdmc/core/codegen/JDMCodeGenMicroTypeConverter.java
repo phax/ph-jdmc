@@ -137,8 +137,8 @@ final class JDMCodeGenMicroTypeConverter
 
     for (final JDMField aField : aClass.fields ())
     {
-      final boolean bIsPrimitive = aField.getType ().isPrimitive ();
       final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+      final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
       final boolean bIsOpenEnded = eMultiplicity.isOpenEnded ();
 
       final boolean bIsElement = _isElement (aField);
@@ -151,7 +151,7 @@ final class JDMCodeGenMicroTypeConverter
 
       // To MicroElement
       {
-        final boolean bHasHasMethod = !bIsPrimitive && eMultiplicity == EJDMMultiplicity.OPTIONAL;
+        final boolean bHasHasMethod = !bIsEffectivePrimitive && eMultiplicity == EJDMMultiplicity.OPTIONAL;
 
         JBlock aExecBlock = jToMicroElement.body ();
         IJExpression jSrcElement = jElement;
@@ -218,7 +218,7 @@ final class JDMCodeGenMicroTypeConverter
               aExecBlock.add (aExec);
           }
           else
-            if (aField.getType ().isPrimitive ())
+            if (bIsEffectivePrimitive)
             {
               aExecBlock.add (jSrcElement.invoke ("setAttribute").arg (jRealName).arg (aValueProvider));
             }

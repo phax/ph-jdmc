@@ -90,8 +90,9 @@ final class JDMCodeGenTest
       for (final JDMField aField : aClass.fields ())
       {
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+        final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
         final boolean bIsOpenEnded = eMultiplicity.isOpenEnded ();
-        if (aField.getType ().isJavaPrimitive (eMultiplicity))
+        if (bIsEffectivePrimitive)
         {
           // No testing
           jMethod.body ().add (jObj.invoke (aField.getMethodGetterName (bIsOpenEnded)));
@@ -212,7 +213,8 @@ final class JDMCodeGenTest
       for (final JDMField aField : aClass.fields ())
       {
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
-        if (!aField.getType ().isJavaPrimitive (eMultiplicity) && eMultiplicity == EJDMMultiplicity.OPTIONAL)
+        final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
+        if (!bIsEffectivePrimitive && eMultiplicity == EJDMMultiplicity.OPTIONAL)
         {
           if (nNullFields == 0)
             jMethod.body ().addSingleLineComment ("Test setters with null");

@@ -77,9 +77,53 @@ public interface IExBestandBO
    * Größe in m²
    * 
    * @return
-   *     The requested value.
+   *     The requested value. May be <code>null</code>.
    */
-  int getAreaSize();
+  @Nullable
+  Integer getAreaSize();
+
+  default boolean hasAreaSize() {
+    return (getAreaSize()!= null);
+  }
+
+  /**
+   * Größe in m²
+   * 
+   * @return
+   *     The requested value. May be <code>null</code>.
+   */
+  @Nullable
+  Long getAreaSizeLong();
+
+  default boolean hasAreaSizeLong() {
+    return (getAreaSizeLong()!= null);
+  }
+
+  /**
+   * Größe in m²
+   * 
+   * @return
+   *     The requested value. May be <code>null</code>.
+   */
+  @Nullable
+  Float getAreaSizeFloat();
+
+  default boolean hasAreaSizeFloat() {
+    return (getAreaSizeFloat()!= null);
+  }
+
+  /**
+   * Größe in m²
+   * 
+   * @return
+   *     The requested value. May be <code>null</code>.
+   */
+  @Nullable
+  Double getAreaSizeDouble();
+
+  default boolean hasAreaSizeDouble() {
+    return (getAreaSizeDouble()!= null);
+  }
 
   /**
    * Bestand-Beschreibung

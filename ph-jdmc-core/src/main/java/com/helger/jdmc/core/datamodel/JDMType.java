@@ -107,7 +107,8 @@ public class JDMType implements Serializable
 
   /**
    * @return The class short name without the package. Neither <code>null</code>
-   *         nor empty.
+   *         nor empty. For primitive types, this is e.g. "int".
+   * @see #getClassName()
    */
   @Nonnull
   @Nonempty
@@ -126,8 +127,9 @@ public class JDMType implements Serializable
   }
 
   /**
-   * @return The class name. It differs from the type name if
+   * @return The class name. It differs from the short name if
    *         {@link #isPrimitive()} is <code>true</code>.
+   * @see #getShortName()
    */
   @Nonnull
   @Nonempty

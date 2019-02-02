@@ -97,8 +97,8 @@ public class JDMCodeGenBase
     for (final JDMField aField : aClass.fields ())
     {
       final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+      final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
       final boolean bIsOpenEnded = eMultiplicity.isOpenEnded ();
-      final boolean bIsPrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
       final boolean bIsStringType = "String".equals (aField.getType ().getShortName ());
 
       // Create getter
@@ -111,7 +111,7 @@ public class JDMCodeGenBase
       final JMethod aMethodGet = jInterface.method (0, jReturnType, aField.getMethodGetterName (bIsOpenEnded));
 
       // Annotations
-      if (!bIsPrimitive)
+      if (!bIsEffectivePrimitive)
       {
         if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
           aMethodGet.annotate (Nullable.class);
@@ -133,7 +133,7 @@ public class JDMCodeGenBase
         aMethodGet.javadoc ().addReturn ().add ("The requested value." + aField.getJavaDocSuffix ());
       }
 
-      if (!bIsPrimitive && eMultiplicity == EJDMMultiplicity.OPTIONAL)
+      if (!bIsEffectivePrimitive && eMultiplicity == EJDMMultiplicity.OPTIONAL)
       {
         // Create the default "hasXXX" method
         final JMethod aMethodHas = jInterface.method (JMod.DEFAULT, cm.BOOLEAN, aField.getMethodHasName ());
@@ -278,7 +278,7 @@ public class JDMCodeGenBase
     for (final JDMField aField : aClass.fields ())
     {
       final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
-      final boolean bIsPrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
+      final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
 
       // Create getter
 
@@ -303,7 +303,7 @@ public class JDMCodeGenBase
       if (aSettings.isUseBusinessObject ())
       {
         final JVar jC1Arg = jCtor1.param (JMod.FINAL, jFieldType, sVarName);
-        if (!bIsPrimitive)
+        if (!bIsEffectivePrimitive)
         {
           if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
             jC1Arg.annotate (Nullable.class);
@@ -317,7 +317,7 @@ public class JDMCodeGenBase
         if (jCtor2 != null)
         {
           final JVar jC2Arg = jCtor2.param (JMod.FINAL, jFieldType, sVarName);
-          if (!bIsPrimitive)
+          if (!bIsEffectivePrimitive)
           {
             if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
               jC2Arg.annotate (Nullable.class);
@@ -332,7 +332,7 @@ public class JDMCodeGenBase
       else
       {
         final JVar jC2Arg = jCtor2.param (JMod.FINAL, jFieldType, sVarName);
-        if (!bIsPrimitive)
+        if (!bIsEffectivePrimitive)
         {
           if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
             jC2Arg.annotate (Nullable.class);
@@ -373,7 +373,7 @@ public class JDMCodeGenBase
                                                   aField.getMethodGetterName (eMultiplicity.isOpenEnded ()));
 
         // Annotations
-        if (!bIsPrimitive)
+        if (!bIsEffectivePrimitive)
         {
           if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
             aMethodGet.annotate (Nullable.class);
@@ -395,7 +395,7 @@ public class JDMCodeGenBase
                                                   aField.getMethodSetterName ());
         aMethodSet.annotate (Nonnull.class);
         final JVar jParam = aMethodSet.param (JMod.FINAL, jFieldType, aField.getJavaVarName (eMultiplicity));
-        if (!bIsPrimitive)
+        if (!bIsEffectivePrimitive)
         {
           if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
             jParam.annotate (Nullable.class);
@@ -407,7 +407,7 @@ public class JDMCodeGenBase
 
         final JBlock aBody = aMethodSet.body ();
 
-        if (!bIsPrimitive)
+        if (!bIsEffectivePrimitive)
         {
           // Use param name without prefix
           final String sParamNameLit = jParam.name ().substring (1);
@@ -425,7 +425,7 @@ public class JDMCodeGenBase
           }
         }
 
-        if (bIsPrimitive)
+        if (bIsEffectivePrimitive)
         {
           // if (param == field) return EChange.UNCHANGED
           aBody._if (jParam.eq (jField))._then ()._return (jEChange.staticRef ("UNCHANGED"));

@@ -52,8 +52,14 @@ public class ExBestandBOManager
    *     GPS-Punkte oder Verweis auf Polygon. May be <code>null</code>.
    * @param aBZHBG
    *     Habitatbaumgruppen. May not be <code>null</code>.
-   * @param nAreaSize
-   *     Größe in m².
+   * @param aAreaSize
+   *     Größe in m². May be <code>null</code>.
+   * @param aAreaSizeLong
+   *     Größe in m². May be <code>null</code>.
+   * @param aAreaSizeFloat
+   *     Größe in m². May be <code>null</code>.
+   * @param aAreaSizeDouble
+   *     Größe in m². May be <code>null</code>.
    * @param sBeschreib
    *     Bestand-Beschreibung. May not be <code>null</code>.
    * @param bSameAge
@@ -91,7 +97,10 @@ public class ExBestandBOManager
     @Nonnull final LocalDate aDate,
     @Nullable final String sVerortung,
     @Nonnull final ICommonsList<IExHabitatbaumgruppeBO> aBZHBG,
-    final int nAreaSize,
+    @Nullable final Integer aAreaSize,
+    @Nullable final Long aAreaSizeLong,
+    @Nullable final Float aAreaSizeFloat,
+    @Nullable final Double aAreaSizeDouble,
     @Nonnull final String sBeschreib,
     final boolean bSameAge,
     final boolean bOneLevel,
@@ -107,7 +116,7 @@ public class ExBestandBOManager
     @Nonnull final EExStockDeadwoodBO eTotLieg,
     @Nonnull final String sTotLiegBesch) {
     // Create new object
-    final ExBestandBO aExBestandBO = new ExBestandBO(nBNr, aPics, aDate, sVerortung, aBZHBG, nAreaSize, sBeschreib, bSameAge, bOneLevel, eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
+    final ExBestandBO aExBestandBO = new ExBestandBO(nBNr, aPics, aDate, sVerortung, aBZHBG, aAreaSize, aAreaSizeLong, aAreaSizeFloat, aAreaSizeDouble, sBeschreib, bSameAge, bOneLevel, eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
     // Save internally
     m_aRWLock.writeLock().lock();
     try {
@@ -116,7 +125,7 @@ public class ExBestandBOManager
       m_aRWLock.writeLock().unlock();
     }
     // Success audit
-    AuditHelper.onAuditCreateSuccess(ExBestandBO.OT, aExBestandBO.getID(), Integer.valueOf(nBNr), aPics, aDate, sVerortung, aBZHBG, Integer.valueOf(nAreaSize), sBeschreib, Boolean.valueOf(bSameAge), Boolean.valueOf(bOneLevel), eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, Boolean.valueOf(bKronenschluss), Boolean.valueOf(bLightWoods), Boolean.valueOf(bUnterwuchs), eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
+    AuditHelper.onAuditCreateSuccess(ExBestandBO.OT, aExBestandBO.getID(), Integer.valueOf(nBNr), aPics, aDate, sVerortung, aBZHBG, aAreaSize, aAreaSizeLong, aAreaSizeFloat, aAreaSizeDouble, sBeschreib, Boolean.valueOf(bSameAge), Boolean.valueOf(bOneLevel), eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, Boolean.valueOf(bKronenschluss), Boolean.valueOf(bLightWoods), Boolean.valueOf(bUnterwuchs), eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
     return aExBestandBO;
   }
 
@@ -135,8 +144,14 @@ public class ExBestandBOManager
    *     GPS-Punkte oder Verweis auf Polygon. May be <code>null</code>.
    * @param aBZHBG
    *     Habitatbaumgruppen. May not be <code>null</code>.
-   * @param nAreaSize
-   *     Größe in m².
+   * @param aAreaSize
+   *     Größe in m². May be <code>null</code>.
+   * @param aAreaSizeLong
+   *     Größe in m². May be <code>null</code>.
+   * @param aAreaSizeFloat
+   *     Größe in m². May be <code>null</code>.
+   * @param aAreaSizeDouble
+   *     Größe in m². May be <code>null</code>.
    * @param sBeschreib
    *     Bestand-Beschreibung. May not be <code>null</code>.
    * @param bSameAge
@@ -175,7 +190,10 @@ public class ExBestandBOManager
     @Nonnull final LocalDate aDate,
     @Nullable final String sVerortung,
     @Nonnull final ICommonsList<IExHabitatbaumgruppeBO> aBZHBG,
-    final int nAreaSize,
+    @Nullable final Integer aAreaSize,
+    @Nullable final Long aAreaSizeLong,
+    @Nullable final Float aAreaSizeFloat,
+    @Nullable final Double aAreaSizeDouble,
     @Nonnull final String sBeschreib,
     final boolean bSameAge,
     final boolean bOneLevel,
@@ -209,7 +227,10 @@ public class ExBestandBOManager
       eChange = eChange.or(aExBestandBO.setDate(aDate));
       eChange = eChange.or(aExBestandBO.setVerortung(sVerortung));
       eChange = eChange.or(aExBestandBO.setBZHBG(aBZHBG));
-      eChange = eChange.or(aExBestandBO.setAreaSize(nAreaSize));
+      eChange = eChange.or(aExBestandBO.setAreaSize(aAreaSize));
+      eChange = eChange.or(aExBestandBO.setAreaSizeLong(aAreaSizeLong));
+      eChange = eChange.or(aExBestandBO.setAreaSizeFloat(aAreaSizeFloat));
+      eChange = eChange.or(aExBestandBO.setAreaSizeDouble(aAreaSizeDouble));
       eChange = eChange.or(aExBestandBO.setBeschreib(sBeschreib));
       eChange = eChange.or(aExBestandBO.setSameAge(bSameAge));
       eChange = eChange.or(aExBestandBO.setOneLevel(bOneLevel));
@@ -233,7 +254,7 @@ public class ExBestandBOManager
       m_aRWLock.writeLock().unlock();
     }
     // Success audit
-    AuditHelper.onAuditModifySuccess(ExBestandBO.OT, "all", aExBestandBO.getID(), Integer.valueOf(nBNr), aPics, aDate, sVerortung, aBZHBG, Integer.valueOf(nAreaSize), sBeschreib, Boolean.valueOf(bSameAge), Boolean.valueOf(bOneLevel), eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, Boolean.valueOf(bKronenschluss), Boolean.valueOf(bLightWoods), Boolean.valueOf(bUnterwuchs), eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
+    AuditHelper.onAuditModifySuccess(ExBestandBO.OT, "all", aExBestandBO.getID(), Integer.valueOf(nBNr), aPics, aDate, sVerortung, aBZHBG, aAreaSize, aAreaSizeLong, aAreaSizeFloat, aAreaSizeDouble, sBeschreib, Boolean.valueOf(bSameAge), Boolean.valueOf(bOneLevel), eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, Boolean.valueOf(bKronenschluss), Boolean.valueOf(bLightWoods), Boolean.valueOf(bUnterwuchs), eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
     return EChange.CHANGED;
   }
 

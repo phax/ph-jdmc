@@ -36,7 +36,10 @@ public class Bestand
   private LocalDate m_aDate;
   private String m_sVerortung;
   private final ICommonsList<IHabitatbaumgruppe> m_aBZHBG = new CommonsArrayList<>();
-  private int m_nAreaSize;
+  private Integer m_aAreaSize;
+  private Long m_aAreaSizeLong;
+  private Float m_aAreaSizeFloat;
+  private Double m_aAreaSizeDouble;
   private String m_sBeschreib;
   private boolean m_bSameAge;
   private boolean m_bOneLevel;
@@ -57,7 +60,10 @@ public class Bestand
     @Nonnull final LocalDate aDate,
     @Nullable final String sVerortung,
     @Nonnull final ICommonsList<IHabitatbaumgruppe> aBZHBG,
-    final int nAreaSize,
+    @Nullable final Integer aAreaSize,
+    @Nullable final Long aAreaSizeLong,
+    @Nullable final Float aAreaSizeFloat,
+    @Nullable final Double aAreaSizeDouble,
     @Nonnull final String sBeschreib,
     final boolean bSameAge,
     final boolean bOneLevel,
@@ -72,7 +78,7 @@ public class Bestand
     @Nonnull final String sTotStehBesch,
     @Nonnull final EStockDeadwood eTotLieg,
     @Nonnull final String sTotLiegBesch) {
-    this(StubObject.createForCurrentUser(), nBNr, aPics, aDate, sVerortung, aBZHBG, nAreaSize, sBeschreib, bSameAge, bOneLevel, eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
+    this(StubObject.createForCurrentUser(), nBNr, aPics, aDate, sVerortung, aBZHBG, aAreaSize, aAreaSizeLong, aAreaSizeFloat, aAreaSizeDouble, sBeschreib, bSameAge, bOneLevel, eStockType, eStockTypeOpt, sUsageDescription, sGesellschaft, bKronenschluss, bLightWoods, bUnterwuchs, eTotSteh, sTotStehBesch, eTotLieg, sTotLiegBesch);
   }
 
   protected Bestand(@Nonnull final StubObject aStubObject,
@@ -81,7 +87,10 @@ public class Bestand
     @Nonnull final LocalDate aDate,
     @Nullable final String sVerortung,
     @Nonnull final ICommonsList<IHabitatbaumgruppe> aBZHBG,
-    final int nAreaSize,
+    @Nullable final Integer aAreaSize,
+    @Nullable final Long aAreaSizeLong,
+    @Nullable final Float aAreaSizeFloat,
+    @Nullable final Double aAreaSizeDouble,
     @Nonnull final String sBeschreib,
     final boolean bSameAge,
     final boolean bOneLevel,
@@ -102,7 +111,10 @@ public class Bestand
     setDate(aDate);
     setVerortung(sVerortung);
     setBZHBG(aBZHBG);
-    setAreaSize(nAreaSize);
+    setAreaSize(aAreaSize);
+    setAreaSizeLong(aAreaSizeLong);
+    setAreaSizeFloat(aAreaSizeFloat);
+    setAreaSizeDouble(aAreaSizeDouble);
     setBeschreib(sBeschreib);
     setSameAge(bSameAge);
     setOneLevel(bOneLevel);
@@ -126,7 +138,7 @@ public class Bestand
 
   @Override
   public String toString() {
-    return ToStringGenerator.getDerived(super.toString()).append("BNr", m_nBNr).append("pics", m_aPics).append("date", m_aDate).append("Verortung", m_sVerortung).append("BZHBG", m_aBZHBG).append("areaSize", m_nAreaSize).append("Beschreib", m_sBeschreib).append("sameAge", m_bSameAge).append("oneLevel", m_bOneLevel).append("stockType", m_eStockType).append("stockTypeOpt", m_eStockTypeOpt).append("usageDescription", m_sUsageDescription).append("Gesellschaft", m_sGesellschaft).append("Kronenschluss", m_bKronenschluss).append("lightWoods", m_bLightWoods).append("Unterwuchs", m_bUnterwuchs).append("TotSteh", m_eTotSteh).append("TotStehBesch", m_sTotStehBesch).append("TotLieg", m_eTotLieg).append("TotLiegBesch", m_sTotLiegBesch).getToString();
+    return ToStringGenerator.getDerived(super.toString()).append("BNr", m_nBNr).append("pics", m_aPics).append("date", m_aDate).append("Verortung", m_sVerortung).append("BZHBG", m_aBZHBG).append("areaSize", m_aAreaSize).append("areaSizeLong", m_aAreaSizeLong).append("areaSizeFloat", m_aAreaSizeFloat).append("areaSizeDouble", m_aAreaSizeDouble).append("Beschreib", m_sBeschreib).append("sameAge", m_bSameAge).append("oneLevel", m_bOneLevel).append("stockType", m_eStockType).append("stockTypeOpt", m_eStockTypeOpt).append("usageDescription", m_sUsageDescription).append("Gesellschaft", m_sGesellschaft).append("Kronenschluss", m_bKronenschluss).append("lightWoods", m_bLightWoods).append("Unterwuchs", m_bUnterwuchs).append("TotSteh", m_eTotSteh).append("TotStehBesch", m_sTotStehBesch).append("TotLieg", m_eTotLieg).append("TotLiegBesch", m_sTotLiegBesch).getToString();
   }
 
   public final int getBNr() {
@@ -208,16 +220,59 @@ public class Bestand
     return EChange.CHANGED;
   }
 
-  public final int getAreaSize() {
-    return m_nAreaSize;
+  @Nullable
+  public final Integer getAreaSize() {
+    return m_aAreaSize;
   }
 
   @Nonnull
-  final EChange setAreaSize(final int nAreaSize) {
-    if (nAreaSize == m_nAreaSize) {
+  final EChange setAreaSize(@Nullable final Integer aAreaSize) {
+    if (EqualsHelper.equals(aAreaSize, m_aAreaSize)) {
       return EChange.UNCHANGED;
     }
-    m_nAreaSize = nAreaSize;
+    m_aAreaSize = aAreaSize;
+    return EChange.CHANGED;
+  }
+
+  @Nullable
+  public final Long getAreaSizeLong() {
+    return m_aAreaSizeLong;
+  }
+
+  @Nonnull
+  final EChange setAreaSizeLong(@Nullable final Long aAreaSizeLong) {
+    if (EqualsHelper.equals(aAreaSizeLong, m_aAreaSizeLong)) {
+      return EChange.UNCHANGED;
+    }
+    m_aAreaSizeLong = aAreaSizeLong;
+    return EChange.CHANGED;
+  }
+
+  @Nullable
+  public final Float getAreaSizeFloat() {
+    return m_aAreaSizeFloat;
+  }
+
+  @Nonnull
+  final EChange setAreaSizeFloat(@Nullable final Float aAreaSizeFloat) {
+    if (EqualsHelper.equals(aAreaSizeFloat, m_aAreaSizeFloat)) {
+      return EChange.UNCHANGED;
+    }
+    m_aAreaSizeFloat = aAreaSizeFloat;
+    return EChange.CHANGED;
+  }
+
+  @Nullable
+  public final Double getAreaSizeDouble() {
+    return m_aAreaSizeDouble;
+  }
+
+  @Nonnull
+  final EChange setAreaSizeDouble(@Nullable final Double aAreaSizeDouble) {
+    if (EqualsHelper.equals(aAreaSizeDouble, m_aAreaSizeDouble)) {
+      return EChange.UNCHANGED;
+    }
+    m_aAreaSizeDouble = aAreaSizeDouble;
     return EChange.CHANGED;
   }
 

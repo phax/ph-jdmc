@@ -95,7 +95,7 @@ final class JDMCodeGenManager
       for (final JDMField aField : aClass.fields ())
       {
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
-        final boolean bIsPrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
+        final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
 
         // List or field?
         AbstractJType jFieldType = cm.ref (aField.getType (), eMultiplicity);
@@ -104,7 +104,7 @@ final class JDMCodeGenManager
 
         // method param
         final JVar jParam = jCreate.param (JMod.FINAL, jFieldType, aField.getJavaVarName (eMultiplicity));
-        if (!bIsPrimitive)
+        if (!bIsEffectivePrimitive)
         {
           if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
             jParam.annotate (Nullable.class);
@@ -210,7 +210,7 @@ final class JDMCodeGenManager
       for (final JDMField aField : aClass.fields ())
       {
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
-        final boolean bIsPrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
+        final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
 
         // List or field?
         AbstractJType jFieldType = cm.ref (aField.getType (), eMultiplicity);
@@ -219,7 +219,7 @@ final class JDMCodeGenManager
 
         // method param
         final JVar jParam = jUpdate.param (JMod.FINAL, jFieldType, aField.getJavaVarName (eMultiplicity));
-        if (!bIsPrimitive)
+        if (!bIsEffectivePrimitive)
         {
           if (eMultiplicity == EJDMMultiplicity.OPTIONAL)
             jParam.annotate (Nullable.class);
