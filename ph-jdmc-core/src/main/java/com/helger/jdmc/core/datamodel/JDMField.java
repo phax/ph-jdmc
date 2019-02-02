@@ -16,8 +16,6 @@
  */
 package com.helger.jdmc.core.datamodel;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
@@ -71,18 +69,32 @@ public class JDMField
     return s;
   }
 
+  @Nonnull
   private static String _getStartUC (@Nonnull final String s)
   {
-    if (s.length () == 1)
-      return s.toUpperCase (Locale.ENGLISH);
-    return Character.toUpperCase (s.charAt (0)) + s.substring (1);
+    // According to JavaBeans standard
+    // Thus "FooBah" becomes "fooBah" and "X" becomes "x", but "URL" staysas
+    if (s.length () == 0)
+      return s;
+    if (s.length () > 1 && Character.isUpperCase (s.charAt (1)) && Character.isUpperCase (s.charAt (0)))
+      return s;
+    final char [] chars = s.toCharArray ();
+    chars[0] = Character.toUpperCase (chars[0]);
+    return new String (chars);
   }
 
+  @Nonnull
   private static String _getStartLC (@Nonnull final String s)
   {
-    if (s.length () == 1)
-      return s.toLowerCase (Locale.ENGLISH);
-    return Character.toLowerCase (s.charAt (0)) + s.substring (1);
+    // According to JavaBeans standard
+    // Thus "FooBah" becomes "fooBah" and "X" becomes "x", but "URL" staysas
+    if (s.length () == 0)
+      return s;
+    if (s.length () > 1 && Character.isUpperCase (s.charAt (1)) && Character.isUpperCase (s.charAt (0)))
+      return s;
+    final char [] chars = s.toCharArray ();
+    chars[0] = Character.toLowerCase (chars[0]);
+    return new String (chars);
   }
 
   public JDMField (@Nonnull @Nonempty final String sFieldName,

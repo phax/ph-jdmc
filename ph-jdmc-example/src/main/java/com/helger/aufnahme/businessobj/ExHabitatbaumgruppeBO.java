@@ -143,7 +143,7 @@ public class ExHabitatbaumgruppeBO
 
   @Nonnull
   @ReturnsMutableObject
-  public final ICommonsList<IExBiotopbaumBO> hBGzBB() {
+  public final ICommonsList<IExBiotopbaumBO> HBGzBB() {
     return m_aHBGzBB;
   }
 

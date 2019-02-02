@@ -26,7 +26,7 @@ public final class BestandTest {
     Assert.assertNotNull(x.pics());
     Assert.assertNull(x.getDate());
     Assert.assertNull(x.getVerortung());
-    Assert.assertNotNull(x.bZHBG());
+    Assert.assertNotNull(x.BZHBG());
     Assert.assertNull(x.getAreaSize());
     Assert.assertNull(x.getAreaSizeLong());
     Assert.assertNull(x.getAreaSizeFloat());

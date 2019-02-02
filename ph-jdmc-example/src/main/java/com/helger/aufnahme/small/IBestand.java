@@ -71,7 +71,7 @@ public interface IBestand
    */
   @Nonnull
   @ReturnsMutableObject
-  ICommonsList<IHabitatbaumgruppe> bZHBG();
+  ICommonsList<IHabitatbaumgruppe> BZHBG();
 
   /**
    * Größe in m²

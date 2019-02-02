@@ -25,7 +25,7 @@ public final class HabitatbaumgruppeTest {
     Assert.assertEquals(x, new Habitatbaumgruppe());
     x.getHBGNr();
     Assert.assertNotNull(x.pics());
-    Assert.assertNotNull(x.hBGzBB());
+    Assert.assertNotNull(x.HBGzBB());
     Assert.assertNull(x.getDate());
     Assert.assertNull(x.getStandort());
     x.isOneLevel();

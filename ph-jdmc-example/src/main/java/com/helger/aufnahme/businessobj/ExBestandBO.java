@@ -204,7 +204,7 @@ public class ExBestandBO
 
   @Nonnull
   @ReturnsMutableObject
-  public final ICommonsList<IExHabitatbaumgruppeBO> bZHBG() {
+  public final ICommonsList<IExHabitatbaumgruppeBO> BZHBG() {
     return m_aBZHBG;
   }
 

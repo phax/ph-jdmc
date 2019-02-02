@@ -46,7 +46,7 @@ public class HabitatbaumgruppeMicroTypeConverter
     for (final File aItem: aValue.pics()) {
       aElement.appendElement(sNamespaceURI, ELEMENT_PICS).setAttributeWithConversion("value", aItem);
     }
-    for (final IBiotopbaum aItem: aValue.hBGzBB()) {
+    for (final IBiotopbaum aItem: aValue.HBGzBB()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_HBGZBB));
     }
     aElement.setAttributeWithConversion(ATTR_DATE, aValue.getDate());

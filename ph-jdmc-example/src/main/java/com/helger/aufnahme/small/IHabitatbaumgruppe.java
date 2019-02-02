@@ -49,7 +49,7 @@ public interface IHabitatbaumgruppe
    */
   @Nonnull
   @ReturnsMutableObject
-  ICommonsList<IBiotopbaum> hBGzBB();
+  ICommonsList<IBiotopbaum> HBGzBB();
 
   /**
    * Get the value of date.

@@ -58,7 +58,7 @@ public class BestandMicroTypeConverter
     if (aValue.hasVerortung()) {
       aElement.appendElement(sNamespaceURI, ELEMENT_VERORTUNG).appendText(aValue.getVerortung());
     }
-    for (final IHabitatbaumgruppe aItem: aValue.bZHBG()) {
+    for (final IHabitatbaumgruppe aItem: aValue.BZHBG()) {
       aElement.appendChild(MicroTypeConverter.convertToMicroElement(aItem, sNamespaceURI, ELEMENT_BZHBG));
     }
     aElement.setAttributeWithConversion(ATTR_AREASIZE, aValue.getAreaSize());

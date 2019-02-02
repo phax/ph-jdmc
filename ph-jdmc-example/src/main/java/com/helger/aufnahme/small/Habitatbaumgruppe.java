@@ -84,7 +84,7 @@ public class Habitatbaumgruppe
     ValueEnforcer.notNull(aOther, "Other");
     setHBGNr(aOther.getHBGNr());
     setPics(aOther.pics());
-    setHBGzBB(aOther.hBGzBB());
+    setHBGzBB(aOther.HBGzBB());
     setDate(aOther.getDate());
     setStandort(aOther.getStandort());
     setOneLevel(aOther.isOneLevel());
@@ -200,7 +200,7 @@ public class Habitatbaumgruppe
 
   @Nonnull
   @ReturnsMutableObject
-  public final ICommonsList<IBiotopbaum> hBGzBB() {
+  public final ICommonsList<IBiotopbaum> HBGzBB() {
     return m_aHBGzBB;
   }
 

@@ -204,7 +204,7 @@ public class Bestand
 
   @Nonnull
   @ReturnsMutableObject
-  public final ICommonsList<IHabitatbaumgruppe> bZHBG() {
+  public final ICommonsList<IHabitatbaumgruppe> BZHBG() {
     return m_aBZHBG;
   }
 

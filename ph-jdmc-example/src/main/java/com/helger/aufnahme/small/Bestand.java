@@ -110,7 +110,7 @@ public class Bestand
     setPics(aOther.pics());
     setDate(aOther.getDate());
     setVerortung(aOther.getVerortung());
-    setBZHBG(aOther.bZHBG());
+    setBZHBG(aOther.BZHBG());
     setAreaSize(aOther.getAreaSize());
     setAreaSizeLong(aOther.getAreaSizeLong());
     setAreaSizeFloat(aOther.getAreaSizeFloat());
@@ -285,7 +285,7 @@ public class Bestand
 
   @Nonnull
   @ReturnsMutableObject
-  public final ICommonsList<IHabitatbaumgruppe> bZHBG() {
+  public final ICommonsList<IHabitatbaumgruppe> BZHBG() {
     return m_aBZHBG;
   }
 
