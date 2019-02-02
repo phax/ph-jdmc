@@ -67,105 +67,119 @@ public class JDMTypes
   {
     // Primitive types and primitive wrapper types
     final JDMType aBoolean = _register (JDMType.createPredefinedClassTypeImmutable (Boolean.class,
-                                                                                    (cm, cs) -> cm.ref (Boolean.class)
-                                                                                                  .staticRef ("TRUE")));
-    _register (JDMType.createPredefinedPrimitiveType ("boolean", aBoolean, (cm, cs) -> JExpr.TRUE));
+                                                                                    (cm,
+                                                                                     cs,
+                                                                                     e) -> cm.ref (Boolean.class)
+                                                                                             .staticRef ("TRUE")));
+    _register (JDMType.createPredefinedPrimitiveType ("boolean", aBoolean, (cm, cs, e) -> JExpr.TRUE));
     final JDMType aByte = _register (JDMType.createPredefinedClassTypeImmutable (Byte.class,
                                                                                  (cm,
-                                                                                  cs) -> cm.ref (Byte.class)
-                                                                                           .staticInvoke ("valueOf")
-                                                                                           .arg (JExpr.lit (1)
-                                                                                                      .castTo (cm.BYTE))));
-    _register (JDMType.createPredefinedPrimitiveType ("byte", aByte, (cm, cs) -> JExpr.lit (2)));
+                                                                                  cs,
+                                                                                  e) -> cm.ref (Byte.class)
+                                                                                          .staticInvoke ("valueOf")
+                                                                                          .arg (JExpr.lit (1)
+                                                                                                     .castTo (cm.BYTE))));
+    _register (JDMType.createPredefinedPrimitiveType ("byte", aByte, (cm, cs, e) -> JExpr.lit (2)));
     final JDMType aCharacter = _register (JDMType.createPredefinedClassTypeImmutable (Character.class,
                                                                                       (cm,
-                                                                                       cs) -> cm.ref (Character.class)
-                                                                                                .staticInvoke ("valueOf")
-                                                                                                .arg (' ')));
-    _register (JDMType.createPredefinedPrimitiveType ("char", aCharacter, (cm, cs) -> JExpr.lit ('x')));
+                                                                                       cs,
+                                                                                       e) -> cm.ref (Character.class)
+                                                                                               .staticInvoke ("valueOf")
+                                                                                               .arg (' ')));
+    _register (JDMType.createPredefinedPrimitiveType ("char", aCharacter, (cm, cs, e) -> JExpr.lit ('x')));
     final JDMType aDouble = _register (JDMType.createPredefinedClassTypeImmutable (Double.class,
                                                                                    (cm,
-                                                                                    cs) -> cm.ref (Double.class)
-                                                                                             .staticInvoke ("valueOf")
-                                                                                             .arg (3d)));
-    _register (JDMType.createPredefinedPrimitiveType ("double", aDouble, (cm, cs) -> JExpr.lit (4d)));
+                                                                                    cs,
+                                                                                    e) -> cm.ref (Double.class)
+                                                                                            .staticInvoke ("valueOf")
+                                                                                            .arg (3d)));
+    _register (JDMType.createPredefinedPrimitiveType ("double", aDouble, (cm, cs, e) -> JExpr.lit (4d)));
     final JDMType aFloat = _register (JDMType.createPredefinedClassTypeImmutable (Float.class,
                                                                                   (cm,
-                                                                                   cs) -> cm.ref (Float.class)
-                                                                                            .staticInvoke ("valueOf")
-                                                                                            .arg (5f)));
-    _register (JDMType.createPredefinedPrimitiveType ("float", aFloat, (cm, cs) -> JExpr.lit (6f)));
+                                                                                   cs,
+                                                                                   e) -> cm.ref (Float.class)
+                                                                                           .staticInvoke ("valueOf")
+                                                                                           .arg (5f)));
+    _register (JDMType.createPredefinedPrimitiveType ("float", aFloat, (cm, cs, e) -> JExpr.lit (6f)));
     final JDMType aInteger = _register (JDMType.createPredefinedClassTypeImmutable (Integer.class,
                                                                                     (cm,
-                                                                                     cs) -> cm.ref (Integer.class)
-                                                                                              .staticInvoke ("valueOf")
-                                                                                              .arg (7)));
-    _register (JDMType.createPredefinedPrimitiveType ("int", aInteger, (cm, cs) -> JExpr.lit (8)));
+                                                                                     cs,
+                                                                                     e) -> cm.ref (Integer.class)
+                                                                                             .staticInvoke ("valueOf")
+                                                                                             .arg (7)));
+    _register (JDMType.createPredefinedPrimitiveType ("int", aInteger, (cm, cs, e) -> JExpr.lit (8)));
     final JDMType aLong = _register (JDMType.createPredefinedClassTypeImmutable (Long.class,
-                                                                                 (cm, cs) -> cm.ref (Long.class)
-                                                                                               .staticInvoke ("valueOf")
-                                                                                               .arg (9L)));
-    _register (JDMType.createPredefinedPrimitiveType ("long", aLong, (cm, cs) -> JExpr.lit (10L)));
+                                                                                 (cm,
+                                                                                  cs,
+                                                                                  e) -> cm.ref (Long.class)
+                                                                                          .staticInvoke ("valueOf")
+                                                                                          .arg (9L)));
+    _register (JDMType.createPredefinedPrimitiveType ("long", aLong, (cm, cs, e) -> JExpr.lit (10L)));
     final JDMType aShort = _register (JDMType.createPredefinedClassTypeImmutable (Short.class,
                                                                                   (cm,
-                                                                                   cs) -> cm.ref (Short.class)
-                                                                                            .staticInvoke ("valueOf")
-                                                                                            .arg (JExpr.lit (11)
-                                                                                                       .castTo (cm.SHORT))));
-    _register (JDMType.createPredefinedPrimitiveType ("short", aShort, (cm, cs) -> JExpr.lit (12)));
+                                                                                   cs,
+                                                                                   e) -> cm.ref (Short.class)
+                                                                                           .staticInvoke ("valueOf")
+                                                                                           .arg (JExpr.lit (11)
+                                                                                                      .castTo (cm.SHORT))));
+    _register (JDMType.createPredefinedPrimitiveType ("short", aShort, (cm, cs, e) -> JExpr.lit (12)));
 
     // Other types
     _register (JDMType.createPredefinedClassTypeImmutable (BigDecimal.class,
-                                                           (cm, cs) -> cm.ref (MathHelper.class)
-                                                                         .staticInvoke ("toBigDecimal")
-                                                                         .arg ("12.3456")));
+                                                           (cm, cs, e) -> cm.ref (MathHelper.class)
+                                                                            .staticInvoke ("toBigDecimal")
+                                                                            .arg ("12.3456")));
     _register (JDMType.createPredefinedClassTypeImmutable (BigInteger.class,
-                                                           (cm, cs) -> cm.ref (MathHelper.class)
-                                                                         .staticInvoke ("toBigInteger")
-                                                                         .arg ("7890")));
+                                                           (cm, cs, e) -> cm.ref (MathHelper.class)
+                                                                            .staticInvoke ("toBigInteger")
+                                                                            .arg ("7890")));
     _register (JDMType.createPredefinedClassTypeImmutable (Duration.class,
-                                                           (cm, cs) -> cm.ref (Duration.class)
-                                                                         .staticInvoke ("ofDays")
-                                                                         .arg (1L)));
+                                                           (cm, cs, e) -> cm.ref (Duration.class)
+                                                                            .staticInvoke ("ofDays")
+                                                                            .arg (1L)));
     _register (JDMType.createPredefinedClassTypeImmutable (Element.class,
-                                                           (cm, cs) -> cm.ref (DOMReader.class)
-                                                                         .staticInvoke ("readXMLDOM")
-                                                                         .arg ("<item x='y'/>")
-                                                                         .invoke ("getDocumentElement")));
+                                                           (cm, cs, e) -> cm.ref (DOMReader.class)
+                                                                            .staticInvoke ("readXMLDOM")
+                                                                            .arg ("<item x='y'/>")
+                                                                            .invoke ("getDocumentElement")));
     _register (JDMType.createPredefinedClassTypeImmutable (File.class,
-                                                           (cm, cs) -> cm.ref (File.class)._new ().arg ("file.txt")));
+                                                           (cm, cs, e) -> cm.ref (File.class)
+                                                                            ._new ()
+                                                                            .arg ("file.txt")));
     _register (JDMType.createPredefinedClassTypeImmutable (LocalDate.class,
-                                                           (cm, cs) -> cm.ref (PDTFactory.class)
-                                                                         .staticInvoke ("getCurrentLocalDate")));
+                                                           (cm, cs, e) -> cm.ref (PDTFactory.class)
+                                                                            .staticInvoke ("getCurrentLocalDate")));
     _register (JDMType.createPredefinedClassTypeImmutable (LocalDateTime.class,
-                                                           (cm, cs) -> cm.ref (PDTFactory.class)
-                                                                         .staticInvoke ("getCurrentLocalDateTime")));
+                                                           (cm, cs, e) -> cm.ref (PDTFactory.class)
+                                                                            .staticInvoke ("getCurrentLocalDateTime")));
     _register (JDMType.createPredefinedClassTypeImmutable (LocalTime.class,
-                                                           (cm, cs) -> cm.ref (PDTFactory.class)
-                                                                         .staticInvoke ("getCurrentLocalTime")));
+                                                           (cm, cs, e) -> cm.ref (PDTFactory.class)
+                                                                            .staticInvoke ("getCurrentLocalTime")));
     if (false)
       _register (JDMType.createPredefinedClassTypeImmutable (Object.class,
-                                                             (cm, cs) -> JExpr.lit ("object")
-                                                                              .castTo (cm.ref (Object.class))));
+                                                             (cm, cs, e) -> JExpr.lit ("object")
+                                                                                 .castTo (cm.ref (Object.class))));
     _register (JDMType.createPredefinedClassTypeImmutable (OffsetDateTime.class,
-                                                           (cm, cs) -> cm.ref (PDTFactory.class)
-                                                                         .staticInvoke ("getCurrentOffsetDateTime")));
+                                                           (cm,
+                                                            cs,
+                                                            e) -> cm.ref (PDTFactory.class)
+                                                                    .staticInvoke ("getCurrentOffsetDateTime")));
     _register (JDMType.createPredefinedClassTypeImmutable (Period.class,
-                                                           (cm, cs) -> cm.ref (Period.class)
-                                                                         .staticInvoke ("ofDays")
-                                                                         .arg (2)));
+                                                           (cm, cs, e) -> cm.ref (Period.class)
+                                                                            .staticInvoke ("ofDays")
+                                                                            .arg (2)));
     _register (JDMType.createPredefinedClassTypeImmutable (QName.class,
-                                                           (cm, cs) -> cm.ref (QName.class)
-                                                                         ._new ()
-                                                                         .arg ("urn:example")
-                                                                         .arg ("elem")));
+                                                           (cm, cs, e) -> cm.ref (QName.class)
+                                                                            ._new ()
+                                                                            .arg ("urn:example")
+                                                                            .arg ("elem")));
     _register (JDMType.createPredefinedClassTypeImmutable (Serializable.class,
-                                                           (cm, cs) -> JExpr.lit ("object")
-                                                                            .castTo (cm.ref (Serializable.class))));
-    _register (JDMType.createPredefinedClassTypeImmutable (String.class, (cm, cs) -> JExpr.lit ("foo")));
+                                                           (cm, cs, e) -> JExpr.lit ("object")
+                                                                               .castTo (cm.ref (Serializable.class))));
+    _register (JDMType.createPredefinedClassTypeImmutable (String.class, (cm, cs, e) -> JExpr.lit ("foo")));
     _register (JDMType.createPredefinedClassTypeImmutable (ZonedDateTime.class,
-                                                           (cm, cs) -> cm.ref (PDTFactory.class)
-                                                                         .staticInvoke ("getCurrentZonedDateTime")));
+                                                           (cm, cs, e) -> cm.ref (PDTFactory.class)
+                                                                            .staticInvoke ("getCurrentZonedDateTime")));
   }
 
   public JDMTypes ()

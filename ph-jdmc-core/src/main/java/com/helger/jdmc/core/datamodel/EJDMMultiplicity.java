@@ -22,10 +22,14 @@ import com.helger.commons.ValueEnforcer;
 
 public enum EJDMMultiplicity
 {
-  MANDATORY (""),
+  /** 0..1 */
   OPTIONAL ("?"),
-  MANDATORY_OR_MORE ("+"),
-  OPTIONAL_OR_MORE ("*");
+  /** 1..1 */
+  MANDATORY (""),
+  /** 0..n */
+  OPTIONAL_OR_MORE ("*"),
+  /** 1..n */
+  MANDATORY_OR_MORE ("+");
 
   private final String m_sSuffix;
 

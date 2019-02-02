@@ -202,7 +202,8 @@ public class JDMType implements Serializable
 
   public boolean isJavaPrimitive (@Nonnull final EJDMMultiplicity eMultiplicity)
   {
-    return isPrimitive () && eMultiplicity.isMin1 () && eMultiplicity.isMax1 ();
+    // No optional primitive and no list of primitives
+    return isPrimitive () && eMultiplicity == EJDMMultiplicity.MANDATORY;
   }
 
   @Nonnull
@@ -215,9 +216,17 @@ public class JDMType implements Serializable
   }
 
   @Nonnull
-  public IJExpression createTestValue (@Nonnull final JDMCodeModel cm, @Nonnull final JDMCodeGenSettings cs)
+  protected final IJDMTypeTestValueCreator getTestValueFactory ()
   {
-    return m_aTestValueFactory.createTestValue (cm, cs);
+    return m_aTestValueFactory;
+  }
+
+  @Nonnull
+  public IJExpression createTestValue (@Nonnull final JDMCodeModel cm,
+                                       @Nonnull final JDMCodeGenSettings cs,
+                                       @Nonnull final EJDMMultiplicity eMultiplicity)
+  {
+    return m_aTestValueFactory.createTestValue (cm, cs, eMultiplicity);
   }
 
   @Nonnull
@@ -234,6 +243,12 @@ public class JDMType implements Serializable
     final boolean bImmutable = true;
     final boolean bSerializable = true;
     final boolean bIsEnum = false;
+    final IJDMTypeTestValueCreator aSpecialTVC = (cm, cs, e) -> {
+      if (e == EJDMMultiplicity.MANDATORY)
+        return aTestValueFactory.createTestValue (cm, cs, e);
+      // Otherwise use the test value of the primtive wrapper type
+      return aClassType.getTestValueFactory ().createTestValue (cm, cs, e);
+    };
     return new JDMType (sShortName,
                         aClassType.getPackageName (),
                         aClassType.getClassName (),
@@ -242,7 +257,7 @@ public class JDMType implements Serializable
                         bImmutable,
                         bSerializable,
                         bIsEnum,
-                        aTestValueFactory);
+                        aSpecialTVC);
   }
 
   @Nonnull

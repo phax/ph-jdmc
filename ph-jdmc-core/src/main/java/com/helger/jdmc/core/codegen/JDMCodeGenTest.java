@@ -126,7 +126,8 @@ final class JDMCodeGenTest
       JInvocation aNew = jClass._new ();
       for (final JDMField aField : aClass.fields ())
       {
-        IJExpression aTestVal = aField.getType ().createTestValue (cm, aSettings);
+        final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+        IJExpression aTestVal = aField.getType ().createTestValue (cm, aSettings, eMultiplicity);
         if (aField.getMultiplicity ().isOpenEnded ())
           aTestVal = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ().arg (aTestVal);
         aNew = aNew.arg (aTestVal);
@@ -190,7 +191,8 @@ final class JDMCodeGenTest
       jMethod.body ().addSingleLineComment ("Test all setters");
       for (final JDMField aField : aClass.fields ())
       {
-        IJExpression aTestVal = aField.getType ().createTestValue (cm, aSettings);
+        final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+        IJExpression aTestVal = aField.getType ().createTestValue (cm, aSettings, eMultiplicity);
         if (aField.getMultiplicity ().isOpenEnded ())
           aTestVal = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ().arg (aTestVal);
 
@@ -263,8 +265,9 @@ final class JDMCodeGenTest
     for (final JDMType aType : CollectionHelper.getSorted (aProcessor.getContext ().types ().getTypes (),
                                                            Comparator.comparing (JDMType::getClassName)))
     {
-      final JVar aVar = jMethod.body ().decl (cm.ref (aType, EJDMMultiplicity.MANDATORY), "var" + nCount);
-      jMethod.body ().assign (aVar, aType.createTestValue (cm, aSettings));
+      final EJDMMultiplicity eMultiplicity = EJDMMultiplicity.MANDATORY;
+      final JVar aVar = jMethod.body ().decl (cm.ref (aType, eMultiplicity), "var" + nCount);
+      jMethod.body ().assign (aVar, aType.createTestValue (cm, aSettings, eMultiplicity));
       if (!aType.isPrimitive () && aType.isImmutable ())
         jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotNull").arg (aVar));
 

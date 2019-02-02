@@ -26,6 +26,19 @@ import com.helger.jdmc.core.codegen.JDMCodeModel;
 
 public interface IJDMTypeTestValueCreator extends Serializable
 {
+  /**
+   * Create a Java expression that can be used for testing this specific value
+   *
+   * @param cm
+   *        JDM Code model
+   * @param cs
+   *        Code generation settings
+   * @param eMultiplicity
+   *        Current field multiplicity. This is only needed for primitive types
+   * @return The test expression.
+   */
   @Nonnull
-  IJExpression createTestValue (@Nonnull JDMCodeModel cm, @Nonnull JDMCodeGenSettings cs);
+  IJExpression createTestValue (@Nonnull JDMCodeModel cm,
+                                @Nonnull JDMCodeGenSettings cs,
+                                @Nonnull EJDMMultiplicity eMultiplicity);
 }

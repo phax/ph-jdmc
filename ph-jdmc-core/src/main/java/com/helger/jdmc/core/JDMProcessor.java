@@ -483,11 +483,12 @@ public class JDMProcessor implements IJDMTypeResolver
       }
 
     // Upon success, register this type
-    m_aContext.types ().registerType (ret, (cm, cs) -> {
+    m_aContext.types ().registerType (ret, (cm, cs, e) -> {
       JInvocation aNew = cm.ref (ret.getFQClassName ())._new ();
       for (final JDMField aField : ret.fields ())
       {
-        IJExpression aTestVal = aField.getType ().createTestValue (cm, cs);
+        final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+        IJExpression aTestVal = aField.getType ().createTestValue (cm, cs, eMultiplicity);
         if (aField.getMultiplicity ().isOpenEnded ())
           aTestVal = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ().arg (aTestVal);
         aNew = aNew.arg (aTestVal);
@@ -628,8 +629,8 @@ public class JDMProcessor implements IJDMTypeResolver
     // Upon success, register this type
     m_aContext.types ()
               .registerType (ret,
-                             (cm, cs) -> cm.ref (ret.getFQClassName ())
-                                           .staticRef (ret.enumConstants ().getFirst ().getName ()));
+                             (cm, cs, e) -> cm.ref (ret.getFQClassName ())
+                                              .staticRef (ret.enumConstants ().getFirst ().getName ()));
     m_aTypes.add (ret);
 
     return ret;
