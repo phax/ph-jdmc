@@ -4,7 +4,7 @@ Status: last release is **0.0.2** (2019-02-02)
 
 Java Domain Model Creator (jdmc).
 The source structure is defined in JSON, and the domain model, test classes and XML serialization for usage on the "ph-" stack is created.
-See the `ph-jdmc-example` subproject which is purely created by the unit tests of `ph-jdmc-core`.
+See the `ph-jdmc-example` subproject at https://github.com/phax/ph-jdmc/tree/master/ph-jdmc-example which is purely created by the unit tests of `ph-jdmc-core`.
 
 The `ph-jdmc-maven-plugin` subproject is a Maven plugin to use JDMC in your projects.
 
