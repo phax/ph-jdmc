@@ -207,6 +207,7 @@ public class JDMCodeGenerator
 
       // Create all classes
       final ICommonsList <JDMGenClass> aMicroTypeConvertersCreated = new CommonsArrayList <> ();
+      int nDefaultMicroTypeConvertersCreated = 0;
       for (final JDMGenClass aClass : aClasses)
       {
         // Create a copy of the settings
@@ -224,7 +225,15 @@ public class JDMCodeGenerator
 
         if (aPerClassSettings.isCreateMicroTypeConverter ())
         {
-          JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (aPerClassSettings, cm, aClass, jDomainClass);
+          final JDefinedClass jMTCClass = JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterClass (aPerClassSettings,
+                                                                                                          cm,
+                                                                                                          aClass,
+                                                                                                          jDomainClass);
+          if (!jMTCClass.constructors ().hasNext ())
+          {
+            // If no constructor is present, remember it
+            nDefaultMicroTypeConvertersCreated++;
+          }
           aMicroTypeConvertersCreated.add (aClass);
         }
 
@@ -242,10 +251,13 @@ public class JDMCodeGenerator
       JDMCodeGenEnum.createMainJavaEnums (cm, aEnums);
 
       // create for all
-      if (aMicroTypeConvertersCreated.isNotEmpty ())
-        JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterRegistrarClass (m_aProcessor.getDestinationPackageName (),
+      if (nDefaultMicroTypeConvertersCreated > 0)
+      {
+        JDMCodeGenMicroTypeConverter.createMainMicroTypeConverterRegistrarClass (m_aDefaultSettings,
+                                                                                 m_aProcessor.getDestinationPackageName (),
                                                                                  cm,
                                                                                  aMicroTypeConvertersCreated);
+      }
 
       // Create all resources as last thing before writing
       _createMetaInfServices (cm);

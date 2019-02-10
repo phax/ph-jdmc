@@ -22,7 +22,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.MustImplementComparable;
+import com.helger.commons.annotation.MustImplementEqualsAndHashcode;
 import com.helger.commons.annotation.Nonempty;
+import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.lang.ClassHelper;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jdmc.core.codegen.JDMCodeGenSettings;
@@ -34,7 +37,9 @@ import com.helger.jdmc.core.codegen.JDMCodeModel;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class JDMType implements Serializable
+@MustImplementEqualsAndHashcode
+@MustImplementComparable
+public class JDMType implements Serializable, Comparable <JDMType>
 {
   private final String m_sShortName;
   private final String m_sPackageName;
@@ -229,6 +234,28 @@ public class JDMType implements Serializable
                                        @Nonnull final EJDMMultiplicity eMultiplicity)
   {
     return m_aTestValueFactory.createTestValue (cm, cs, eMultiplicity);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final JDMType rhs = (JDMType) o;
+    return m_sShortName.equals (rhs.m_sShortName);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_sShortName).getHashCode ();
+  }
+
+  public int compareTo (@Nonnull final JDMType aOther)
+  {
+    return m_sShortName.compareTo (aOther.m_sShortName);
   }
 
   @Nonnull

@@ -284,4 +284,10 @@ public class JDMGenField implements Serializable
   {
     return m_aConstraints;
   }
+
+  public boolean isBOReference ()
+  {
+    // Only generated types can be a business object reference
+    return !m_aType.isPredefined () && m_aSettings.isBOReference ();
+  }
 }

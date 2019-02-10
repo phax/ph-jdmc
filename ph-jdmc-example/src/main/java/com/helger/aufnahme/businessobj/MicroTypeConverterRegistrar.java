@@ -30,7 +30,7 @@ public final class MicroTypeConverterRegistrar
     aRegistry.registerMicroElementTypeConverter(ExHabitatbaumgruppeBO.class, new ExHabitatbaumgruppeBOMicroTypeConverter());
     aRegistry.registerMicroElementTypeConverter(ExBestandBO.class, new ExBestandBOMicroTypeConverter());
     aRegistry.registerMicroElementTypeConverter(ExReservatBO.class, new ExReservatBOMicroTypeConverter());
-    aRegistry.registerMicroElementTypeConverter(ExStichprobeBO.class, new ExStichprobeBOMicroTypeConverter());
+    // Registration of com.helger.aufnahme.businessobj.ExStichprobeBO must be done manually!
     aRegistry.registerMicroElementTypeConverter(ExLeergutBO.class, new ExLeergutBOMicroTypeConverter());
   }
 }

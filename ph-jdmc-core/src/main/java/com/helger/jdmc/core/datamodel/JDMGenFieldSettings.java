@@ -29,21 +29,26 @@ import com.helger.commons.state.ETriState;
  */
 public class JDMGenFieldSettings implements Serializable
 {
-  private ETriState m_eIsReference = ETriState.UNDEFINED;
+  private ETriState m_eIsBOReference = ETriState.UNDEFINED;
 
   public JDMGenFieldSettings ()
   {}
 
   @Nonnull
-  public ETriState getIsReference ()
+  public ETriState getBOReference ()
   {
-    return m_eIsReference;
+    return m_eIsBOReference;
+  }
+
+  public boolean isBOReference ()
+  {
+    return m_eIsBOReference.getAsBooleanValue (false);
   }
 
   @Nonnull
-  public JDMGenFieldSettings setIsReference (final boolean b)
+  public JDMGenFieldSettings setBOReference (final boolean b)
   {
-    m_eIsReference = ETriState.valueOf (b);
+    m_eIsBOReference = ETriState.valueOf (b);
     return this;
   }
 }

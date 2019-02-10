@@ -24,7 +24,11 @@ import javax.annotation.concurrent.Immutable;
 
 import com.helger.commons.annotation.IsSPIImplementation;
 import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.CommonsTreeSet;
 import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.collection.impl.ICommonsSortedSet;
+import com.helger.commons.functional.IFunction;
+import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
 import com.helger.jcodemodel.IJExpression;
@@ -65,7 +69,7 @@ final class JDMCodeGenMicroTypeConverter
     return aType.getShortName ().equals ("String");
   }
 
-  private static boolean _isElement (@Nonnull final JDMGenField aField)
+  private static boolean _isElement (@Nonnull final JDMGenField aField, final boolean bIsReference)
   {
     if (aField.getType ().isPrimitive ())
     {
@@ -80,6 +84,10 @@ final class JDMCodeGenMicroTypeConverter
     if (!aField.getType ().isPredefined ())
     {
       // Nested, created types, are always elements, except for enums
+      // Exception: for references, use an attribute
+      if (bIsReference)
+        return false;
+
       return true;
     }
     if (_isString (aField.getType ()))
@@ -134,14 +142,20 @@ final class JDMCodeGenMicroTypeConverter
     jToNativeElement.annotate (Nonnull.class);
 
     final ICommonsList <JVar> aParamsToNative = new CommonsArrayList <> ();
+    final ICommonsSortedSet <JDMType> aTypesToResolve = new CommonsTreeSet <> ();
 
     for (final JDMGenField aField : aClass.fields ())
     {
       final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
       final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
       final boolean bIsOpenEnded = eMultiplicity.isOpenEnded ();
+      // isReference only works for businessObjects
+      final boolean bIsEffectiveBOReference = aSettings.isUseBusinessObject () && aField.isBOReference ();
+      if (bIsEffectiveBOReference)
+        aTypesToResolve.add (aField.getType ());
 
-      final boolean bIsElement = _isElement (aField);
+      // Element or attribute?
+      final boolean bIsElement = _isElement (aField, bIsEffectiveBOReference);
       final JFieldVar jFieldName = jClass.field (JMod.PRIVATE | JMod.STATIC | JMod.FINAL,
                                                  cm.ref (String.class),
                                                  (bIsOpenEnded || bIsElement ? "ELEMENT_" : "ATTR_") +
@@ -179,8 +193,8 @@ final class JDMCodeGenMicroTypeConverter
         {
           aValueProvider = jRealToObj.invoke (aField.getMethodGetterName (bIsOpenEnded));
         }
-        final IJStatement aExec;
 
+        final IJStatement aExec;
         if (bIsElement)
         {
           if (_isString (aField.getType ()))
@@ -209,8 +223,9 @@ final class JDMCodeGenMicroTypeConverter
         else
         {
           // attribute
-          if (aField.getType ().isEnum ())
+          if (aField.getType ().isEnum () || bIsEffectiveBOReference)
           {
+            // Enum or effectiveReference
             aExec = jSrcElement.invoke ("setAttribute").arg (jRealName).arg (aValueProvider.invoke ("getID"));
             if (bHasHasMethod)
               aExecBlock._if (jRealToObj.invoke (aField.getMethodHasName ()), aExec);
@@ -289,40 +304,47 @@ final class JDMCodeGenMicroTypeConverter
                           .staticInvoke ("getFromIDOrNull")
                           .arg (jToNativeRealElement.invoke ("getAttributeValue").arg (jRealName));
           else
-            if (jVarType == cm.BOOLEAN)
-              jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsBool").arg (jRealName).arg (JExpr.FALSE);
+            if (bIsEffectiveBOReference)
+            {
+              jGetValue = JExpr.ref ("m_aResolver" + aField.getType ().getShortName ())
+                               .invoke ("apply")
+                               .arg (jToNativeRealElement.invoke ("getAttributeValue").arg (jRealName));
+            }
             else
-              if (jVarType == cm.BYTE)
-                jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsInt")
-                                                .arg (jRealName)
-                                                .arg (-1)
-                                                .castTo (cm.BYTE);
+              if (jVarType == cm.BOOLEAN)
+                jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsBool").arg (jRealName).arg (JExpr.FALSE);
               else
-                if (jVarType == cm.DOUBLE)
-                  jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsDouble")
+                if (jVarType == cm.BYTE)
+                  jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsInt")
                                                   .arg (jRealName)
-                                                  .arg (cm.ref (Double.class).staticRef ("NaN"));
+                                                  .arg (-1)
+                                                  .castTo (cm.BYTE);
                 else
-                  if (jVarType == cm.FLOAT)
-                    jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsFloat")
+                  if (jVarType == cm.DOUBLE)
+                    jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsDouble")
                                                     .arg (jRealName)
-                                                    .arg (cm.ref (Float.class).staticRef ("NaN"));
+                                                    .arg (cm.ref (Double.class).staticRef ("NaN"));
                   else
-                    if (jVarType == cm.INT)
-                      jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsInt").arg (jRealName).arg (-1);
+                    if (jVarType == cm.FLOAT)
+                      jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsFloat")
+                                                      .arg (jRealName)
+                                                      .arg (cm.ref (Float.class).staticRef ("NaN"));
                     else
-                      if (jVarType == cm.LONG)
-                        jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsLong").arg (jRealName).arg (-1);
+                      if (jVarType == cm.INT)
+                        jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsInt").arg (jRealName).arg (-1);
                       else
-                        if (jVarType == cm.SHORT)
-                          jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsInt")
-                                                          .arg (jRealName)
-                                                          .arg (-1)
-                                                          .castTo (cm.SHORT);
+                        if (jVarType == cm.LONG)
+                          jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsLong").arg (jRealName).arg (-1);
                         else
-                          jGetValue = jToNativeRealElement.invoke ("getAttributeValueWithConversion")
-                                                          .arg (jRealName)
-                                                          .arg (JExpr.dotClass (jVarType));
+                          if (jVarType == cm.SHORT)
+                            jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsInt")
+                                                            .arg (jRealName)
+                                                            .arg (-1)
+                                                            .castTo (cm.SHORT);
+                          else
+                            jGetValue = jToNativeRealElement.invoke ("getAttributeValueWithConversion")
+                                                            .arg (jRealName)
+                                                            .arg (JExpr.dotClass (jVarType));
 
         }
 
@@ -360,16 +382,36 @@ final class JDMCodeGenMicroTypeConverter
       jToNative.body ()._return (jInvRet);
     }
 
+    if (aTypesToResolve.isNotEmpty ())
+    {
+      // Create fields and a constructor for resolution
+      final JMethod jCtor = jClass.constructor (JMod.PUBLIC);
+
+      for (final JDMType aTypeToResolve : aTypesToResolve)
+      {
+        final AbstractJClass aType = cm.ref (IFunction.class)
+                                       .narrow (cm.ref (String.class),
+                                                cm.ref (aTypeToResolve.getFQCN ()).wildcardExtends ());
+        final JFieldVar jField = jClass.field (JMod.PRIVATE_FINAL,
+                                               aType,
+                                               "m_aResolver" + aTypeToResolve.getShortName ());
+        final JVar jParam = jCtor.param (aType, "aResolver" + aTypeToResolve.getShortName ());
+        jParam.annotate (Nonnull.class);
+        jCtor.body ().assign (jField, jParam);
+      }
+    }
+
     return jClass;
   }
 
-  static void createMainMicroTypeConverterRegistrarClass (@Nonnull final String sDestPackageName,
+  static void createMainMicroTypeConverterRegistrarClass (@Nonnull final JDMCodeGenSettings aDefaultSettings,
+                                                          @Nonnull final String sDestPackageName,
                                                           @Nonnull final JDMCodeModel cm,
-                                                          @Nonnull final ICommonsList <? extends AbstractJDMGenType> aClasses) throws JClassAlreadyExistsException
+                                                          @Nonnull final ICommonsList <JDMGenClass> aClasses) throws JClassAlreadyExistsException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC | JMod.FINAL,
                                             AbstractJDMGenType.getFQCN (sDestPackageName,
-                                                                          "MicroTypeConverterRegistrar"),
+                                                                        "MicroTypeConverterRegistrar"),
                                             EClassType.CLASS);
     jClass._implements (cm.ref (IMicroTypeConverterRegistrarSPI.class));
     jClass.javadoc ().add ("<p>Default MicroTypeConverter registrar of this project</p>\n");
@@ -383,13 +425,37 @@ final class JDMCodeGenMicroTypeConverter
     final JVar jParam = jMethod.param (JMod.FINAL, cm.ref (IMicroTypeConverterRegistry.class), "aRegistry");
     jParam.annotate (Nonnull.class);
 
-    for (final AbstractJDMGenType aClass : aClasses)
+    for (final JDMGenClass aClass : aClasses)
     {
-      jMethod.body ()
-             .add (jParam.invoke ("registerMicroElementTypeConverter")
-                         .arg (cm.ref (aClass.getFQClassName ()).dotclass ())
-                         .arg (cm.ref (aClass.getFQMicroTypeConverterClassName ())._new ()));
+      // Create a copy of the settings
+      final JDMCodeGenSettings aPerClassSettings = aDefaultSettings.getClone ();
+      aClass.settings ().applyToSettings (aPerClassSettings);
+
+      boolean bCallRegister = true;
+      if (aPerClassSettings.isUseBusinessObject ())
+        for (final JDMGenField aField : aClass.fields ())
+          if (aField.isBOReference ())
+          {
+            // We cannot register, because constructor has parameters
+            bCallRegister = false;
+            break;
+          }
+
+      if (bCallRegister)
+      {
+        jMethod.body ()
+               .add (jParam.invoke ("registerMicroElementTypeConverter")
+                           .arg (cm.ref (aClass.getFQClassName ()).dotclass ())
+                           .arg (cm.ref (aClass.getFQMicroTypeConverterClassName ())._new ()));
+      }
+      else
+      {
+        jMethod.body ()
+               .addSingleLineComment ("Registration of " + aClass.getFQClassName () + " must be done manually!");
+      }
     }
+
+    // Register for later SPI creation
     cm.spiImplMap ().register (IMicroTypeConverterRegistrarSPI.class, jClass.fullName ());
   }
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.time.LocalDate;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.functional.IFunction;
 import com.helger.photon.security.object.AbstractBusinessObjectMicroTypeConverter;
 import com.helger.xml.microdom.IMicroElement;
 import com.helger.xml.microdom.MicroElement;
@@ -24,7 +25,7 @@ public class ExStichprobeBOMicroTypeConverter
   extends AbstractBusinessObjectMicroTypeConverter<ExStichprobeBO>
 {
   private static final String ATTR_STICHNR = "stichnr";
-  private static final String ELEMENT_STICHNRZR = "stichnrzr";
+  private static final String ATTR_STICHNRZR = "stichnrzr";
   private static final String ELEMENT_PICS = "pics";
   private static final String ATTR_DATE = "date";
   private static final String ATTR_SIZE = "size";
@@ -50,13 +51,18 @@ public class ExStichprobeBOMicroTypeConverter
   private static final String ELEMENT_TOT_STEH = "totsteh";
   private static final String ELEMENT_TOT_LIEG_1 = "totlieg1";
   private static final String ELEMENT_TOT_LIEG_2 = "totlieg2";
+  private final IFunction<String, ? extends ExReservatBO> m_aResolverExReservatBO;
+
+  public ExStichprobeBOMicroTypeConverter(@Nonnull IFunction<String, ? extends ExReservatBO> aResolverExReservatBO) {
+    m_aResolverExReservatBO = aResolverExReservatBO;
+  }
 
   @Nonnull
   public IMicroElement convertToMicroElement(@Nonnull final ExStichprobeBO aValue, @Nullable final String sNamespaceURI, @Nonnull final String sTagName) {
     final IMicroElement aElement = new MicroElement(sNamespaceURI, sTagName);
     super.setObjectFields(aValue, aElement);
     aElement.setAttribute(ATTR_STICHNR, aValue.getStichNr());
-    aElement.appendChild(MicroTypeConverter.convertToMicroElement(aValue.getStichNrzR(), sNamespaceURI, ELEMENT_STICHNRZR));
+    aElement.setAttribute(ATTR_STICHNRZR, aValue.getStichNrzR().getID());
     for (final File aItem: aValue.pics()) {
       aElement.appendElement(sNamespaceURI, ELEMENT_PICS).setAttributeWithConversion("value", aItem);
     }
@@ -100,7 +106,7 @@ public class ExStichprobeBOMicroTypeConverter
   @Nonnull
   public ExStichprobeBO convertToNative(@Nonnull final IMicroElement aElement) {
     final int nStichNr = aElement.getAttributeValueAsInt(ATTR_STICHNR, -1);
-    final IExReservatBO aStichNrzR = MicroTypeConverter.convertToNative(aElement.getFirstChildElement(ELEMENT_STICHNRZR), ExReservatBO.class);
+    final IExReservatBO aStichNrzR = m_aResolverExReservatBO.apply(aElement.getAttributeValue(ATTR_STICHNRZR));
     final ICommonsList<File> aPics = new CommonsArrayList<>();
     for (final IMicroElement aChild: aElement.getAllChildElements(ELEMENT_PICS)) {
       aPics.add(aChild.getAttributeValueWithConversion("value", File.class));

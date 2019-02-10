@@ -241,10 +241,10 @@ public class JDMProcessor implements IJDMGenTypeResolver
     {
       final String sKey = aEntry.getKey ();
       final IJson aValue = aEntry.getValue ();
-      if ("isReference".equals (sKey))
+      if ("businessObjectReference".equals (sKey))
       {
         if (aValue.isValue ())
-          aField.settings ().setIsReference (aValue.getAsValue ().getAsBoolean ());
+          aField.settings ().setBOReference (aValue.getAsValue ().getAsBoolean ());
         else
           aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
       }

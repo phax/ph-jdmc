@@ -28,7 +28,7 @@ import com.helger.commons.string.StringHelper;
 
 /**
  * Base type for created classes and enums.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -110,6 +110,13 @@ public abstract class AbstractJDMGenType implements Serializable
   public final String getFQManagerClassName ()
   {
     return getFQCN (m_sPackageName, m_sClassName + "Manager");
+  }
+
+  @Nonnull
+  @Nonempty
+  public final String getFQResolverInterfaceName ()
+  {
+    return getFQCN (m_sPackageName, "I" + m_sClassName + "Resolver");
   }
 
   public final boolean isClass ()

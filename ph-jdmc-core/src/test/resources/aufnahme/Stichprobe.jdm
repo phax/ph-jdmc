@@ -4,7 +4,7 @@
     "createManager": true
   },
   "StichNr": ["int", "Schlüsselfeld"],
-  "StichNrzR": ["Reservat", "Zugehörig zu Reservat"],  
+  "StichNrzR": ["Reservat", "Zugehörig zu Reservat", {}, { "businessObjectReference" : true }],  
   "pics": ["File+", "Fotos"],
   "date": [ "LocalDate" ],
   "size": ["int", "Größe in m² bei Abweichung von Radius"],
