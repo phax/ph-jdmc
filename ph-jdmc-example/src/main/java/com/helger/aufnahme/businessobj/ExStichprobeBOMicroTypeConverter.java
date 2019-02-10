@@ -51,9 +51,9 @@ public class ExStichprobeBOMicroTypeConverter
   private static final String ELEMENT_TOT_STEH = "totsteh";
   private static final String ELEMENT_TOT_LIEG_1 = "totlieg1";
   private static final String ELEMENT_TOT_LIEG_2 = "totlieg2";
-  private final IFunction<String, ? extends ExReservatBO> m_aResolverExReservatBO;
+  private final IFunction<String, ? extends IExReservatBO> m_aResolverExReservatBO;
 
-  public ExStichprobeBOMicroTypeConverter(@Nonnull IFunction<String, ? extends ExReservatBO> aResolverExReservatBO) {
+  public ExStichprobeBOMicroTypeConverter(@Nonnull IFunction<String, ? extends IExReservatBO> aResolverExReservatBO) {
     m_aResolverExReservatBO = aResolverExReservatBO;
   }
 

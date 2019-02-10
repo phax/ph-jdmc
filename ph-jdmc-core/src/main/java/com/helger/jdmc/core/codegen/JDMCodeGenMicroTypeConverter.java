@@ -391,7 +391,7 @@ final class JDMCodeGenMicroTypeConverter
       {
         final AbstractJClass aType = cm.ref (IFunction.class)
                                        .narrow (cm.ref (String.class),
-                                                cm.ref (aTypeToResolve.getFQCN ()).wildcardExtends ());
+                                                cm.ref (aTypeToResolve.getInterfaceFQCN ()).wildcardExtends ());
         final JFieldVar jField = jClass.field (JMod.PRIVATE_FINAL,
                                                aType,
                                                "m_aResolver" + aTypeToResolve.getShortName ());

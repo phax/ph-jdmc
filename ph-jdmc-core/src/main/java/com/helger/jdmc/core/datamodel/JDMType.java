@@ -155,6 +155,16 @@ public class JDMType implements Serializable, Comparable <JDMType>
     return AbstractJDMGenType.getFQCN (m_sPackageName, m_sClassName);
   }
 
+  /**
+   * @return {@link #getPackageName()} + ".I" + {@link #getClassName()}
+   */
+  @Nonnull
+  @Nonempty
+  public String getInterfaceFQCN ()
+  {
+    return AbstractJDMGenType.getFQCN (m_sPackageName, "I" + m_sClassName);
+  }
+
   @Nonnull
   public EJDMBaseType getBaseType ()
   {
