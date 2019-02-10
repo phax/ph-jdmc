@@ -78,6 +78,8 @@ public class JDMType implements Serializable
       else
         if ("byte".equals (sShortName) ||
             "Byte".equals (sShortName) ||
+            "char".equals (sShortName) ||
+            "Character".equals (sShortName) ||
             "int".equals (sShortName) ||
             "Integer".equals (sShortName) ||
             "long".equals (sShortName) ||

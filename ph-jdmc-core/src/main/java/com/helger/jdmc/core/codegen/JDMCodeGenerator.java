@@ -29,10 +29,15 @@ import org.slf4j.LoggerFactory;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.CommonsTreeSet;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.collection.impl.ICommonsOrderedSet;
+import com.helger.commons.collection.impl.ICommonsSortedSet;
 import com.helger.commons.io.file.FileOperationManager;
 import com.helger.commons.string.StringHelper;
+import com.helger.graph.IMutableDirectedGraphNode;
+import com.helger.graph.iterate.DirectedGraphIteratorForward;
+import com.helger.graph.simple.SimpleDirectedGraph;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.fmt.JTextFile;
@@ -40,6 +45,7 @@ import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jdmc.core.JDMProcessor;
 import com.helger.jdmc.core.datamodel.JDMClass;
 import com.helger.jdmc.core.datamodel.JDMEnum;
+import com.helger.jdmc.core.datamodel.JDMField;
 
 @NotThreadSafe
 public class JDMCodeGenerator
@@ -63,11 +69,36 @@ public class JDMCodeGenerator
     return m_aDefaultSettings;
   }
 
+  @Nonnull
+  private static SimpleDirectedGraph _createTypeGraph (@Nonnull final ICommonsList <JDMClass> aReadClasses)
+  {
+    final SimpleDirectedGraph aGraph = new SimpleDirectedGraph ();
+
+    // Create a node for each class
+    for (final JDMClass aClass : aReadClasses)
+      aGraph.createNode (aClass.getClassName ());
+
+    // Connect all fields via relations
+    for (final JDMClass aClass : aReadClasses)
+    {
+      final IMutableDirectedGraphNode aClassNode = aGraph.getNodeOfID (aClass.getClassName ());
+      for (final JDMField aField : aClass.fields ())
+      {
+        final String sNodeID = aField.getType ().getShortName ();
+        final IMutableDirectedGraphNode aFieldNode = aGraph.getNodeOfID (sNodeID);
+        if (aFieldNode != null)
+          aGraph.createRelation (aClassNode, aFieldNode);
+      }
+    }
+    return aGraph;
+  }
+
   private static void _createMetaInfServices (@Nonnull final JDMCodeModel cm)
   {
     for (final Map.Entry <String, ICommonsOrderedSet <String>> aEntry : cm.spiImplMap ().getAll ())
     {
       final String sContent = StringHelper.getImploded ('\n', aEntry.getValue ()) + "\n";
+      // Fake directory
       cm._package ("META-INF.services")
         .addResourceFile (JTextFile.createFully (aEntry.getKey (), StandardCharsets.UTF_8, sContent));
     }
@@ -142,6 +173,23 @@ public class JDMCodeGenerator
 
     final ICommonsList <JDMClass> aClasses = m_aProcessor.getAllReadClasses ();
     final ICommonsList <JDMEnum> aEnums = m_aProcessor.getAllReadEnums ();
+
+    final SimpleDirectedGraph aGraph = _createTypeGraph (aClasses);
+    if (aGraph.containsCycles ())
+    {
+      // At least one cycle is contained
+      final ICommonsSortedSet <String> aCycleClassNames = new CommonsTreeSet <> ();
+      for (final IMutableDirectedGraphNode aCurNode : aGraph.getAllNodes ().values ())
+      {
+        final DirectedGraphIteratorForward it = new DirectedGraphIteratorForward (aCurNode);
+        while (it.hasNext () && !it.hasCycles ())
+          it.next ();
+        if (it.hasCycles ())
+          aCycleClassNames.add (aCurNode.getID ());
+      }
+      aFeedbackHandler.onWarning ("The type graph contains at least one cycle. Involved classes are: " +
+                                  aCycleClassNames);
+    }
 
     try
     {

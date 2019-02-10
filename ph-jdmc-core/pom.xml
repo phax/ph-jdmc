@@ -64,6 +64,10 @@
     </dependency>
     <dependency>
       <groupId>com.helger</groupId>
+      <artifactId>ph-graph</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.helger</groupId>
       <artifactId>ph-tenancy</artifactId>
     </dependency>
     <dependency>

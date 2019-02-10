@@ -16,10 +16,24 @@
  */
 package com.helger.jdmc.core.codegen;
 
+import java.io.Serializable;
+
 import javax.annotation.Nullable;
 
-public interface IJDMFeedbackHandler
+/**
+ * JDM feedback handler for warnings and errors.
+ *
+ * @author Philip Helger
+ */
+public interface IJDMFeedbackHandler extends Serializable
 {
+  /**
+   * Log a warning without an exception
+   *
+   * @param sMsg
+   *        Message. May be <code>null</code>.
+   * @see #onWarning(String, Throwable)
+   */
   default void onWarning (@Nullable final String sMsg)
   {
     onWarning (sMsg, null);
@@ -32,6 +46,7 @@ public interface IJDMFeedbackHandler
    *        Message. May be <code>null</code>.
    * @param aException
    *        Exception that occurred. May be <code>null</code>.
+   * @see #onWarning(String)
    */
   void onWarning (@Nullable String sMsg, @Nullable Throwable aException);
 

@@ -16,6 +16,8 @@
  */
 package com.helger.jdmc.core.datamodel;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -24,8 +26,13 @@ import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.string.StringHelper;
 
+/**
+ * Base type for created classes and enums.
+ * 
+ * @author Philip Helger
+ */
 @NotThreadSafe
-public abstract class AbstractJDMClassType
+public abstract class AbstractJDMClassType implements Serializable
 {
   private final JDMPerClassSettings m_aSettings = new JDMPerClassSettings ();
   private final String m_sPackageName;

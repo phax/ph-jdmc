@@ -16,6 +16,8 @@
  */
 package com.helger.jdmc.core.datamodel;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
@@ -34,7 +36,7 @@ import com.helger.jcodemodel.JCommentPart;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class JDMField
+public class JDMField implements Serializable
 {
   private final String m_sOriginalFieldName;
   private final String m_sFieldName;
@@ -73,7 +75,8 @@ public class JDMField
   private static String _getStartUC (@Nonnull final String s)
   {
     // According to JavaBeans standard
-    // Thus "FooBah" becomes "fooBah" and "X" becomes "x", but "URL" staysas
+    // Thus "fooBah" becomes "FooBah" and "x" becomes "X", but "URL" stays as it
+    // is
     if (s.length () == 0)
       return s;
     if (s.length () > 1 && Character.isUpperCase (s.charAt (1)) && Character.isUpperCase (s.charAt (0)))
@@ -87,7 +90,8 @@ public class JDMField
   private static String _getStartLC (@Nonnull final String s)
   {
     // According to JavaBeans standard
-    // Thus "FooBah" becomes "fooBah" and "X" becomes "x", but "URL" staysas
+    // Thus "FooBah" becomes "fooBah" and "X" becomes "x", but "URL" stays as it
+    // is
     if (s.length () == 0)
       return s;
     if (s.length () > 1 && Character.isUpperCase (s.charAt (1)) && Character.isUpperCase (s.charAt (0)))
@@ -97,6 +101,21 @@ public class JDMField
     return new String (chars);
   }
 
+  /**
+   * Constructor
+   *
+   * @param sFieldName
+   *        Original field name. May neither be <code>null</code> nor empty.
+   * @param aType
+   *        The type to use. Either one of the predefined types or a created
+   *        type.
+   * @param eMultiplicity
+   *        Multiplicity of the field. May not be <code>null</code>.
+   * @param sComment
+   *        Optional textual comment of the field. May be <code>null</code>.
+   * @param aConstraints
+   *        Optional list of field constraints. May be <code>null</code>.
+   */
   public JDMField (@Nonnull @Nonempty final String sFieldName,
                    @Nonnull final JDMType aType,
                    @Nonnull final EJDMMultiplicity eMultiplicity,
@@ -189,6 +208,9 @@ public class JDMField
     return "s_" + getJavaVarName (eMultiplicity);
   }
 
+  /**
+   * @return The type of the field. Never <code>null</code>.
+   */
   @Nonnull
   public JDMType getType ()
   {

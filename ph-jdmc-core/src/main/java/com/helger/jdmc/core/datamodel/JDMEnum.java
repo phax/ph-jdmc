@@ -24,6 +24,11 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 
+/**
+ * Definition of an enum to be created. See also {@link JDMClass}.
+ *
+ * @author Philip Helger
+ */
 @NotThreadSafe
 public class JDMEnum extends AbstractJDMClassType
 {
@@ -36,7 +41,7 @@ public class JDMEnum extends AbstractJDMClassType
 
   @Nonnull
   @ReturnsMutableObject
-  public ICommonsList <JDMEnumConstant> enumConstants ()
+  public final ICommonsList <JDMEnumConstant> enumConstants ()
   {
     return m_aEnumConstants;
   }

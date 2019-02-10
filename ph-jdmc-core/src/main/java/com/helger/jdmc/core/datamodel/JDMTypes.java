@@ -195,6 +195,17 @@ public class JDMTypes
     return m_aTypes.get (sShortName);
   }
 
+  /**
+   * Register a newly created class or enum in this type container.
+   *
+   * @param aClass
+   *        The created class or enum. May not be <code>null</code>.
+   * @param aTestValueFactory
+   *        The test value factory to be used. May not be <code>null</code>.
+   * @return The created type and never <code>null</code>.
+   * @throws IllegalArgumentException
+   *         If another type with the same short name is already registered.
+   */
   @Nonnull
   public JDMType registerType (@Nonnull final AbstractJDMClassType aClass,
                                @Nonnull final IJDMTypeTestValueCreator aTestValueFactory)

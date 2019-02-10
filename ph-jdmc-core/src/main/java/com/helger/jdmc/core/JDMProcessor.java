@@ -321,7 +321,6 @@ public class JDMProcessor implements IJDMTypeResolver
                 aErrorHdl.accept ("The field definition of '" + sFieldName + "' is inconsistent");
                 return null;
               }
-
         }
         else
         {

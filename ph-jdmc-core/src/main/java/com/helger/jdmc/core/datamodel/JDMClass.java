@@ -24,6 +24,11 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 
+/**
+ * Definition of a class to be created. See also {@link JDMEnum}.
+ *
+ * @author Philip Helger
+ */
 @NotThreadSafe
 public class JDMClass extends AbstractJDMClassType
 {
@@ -36,7 +41,7 @@ public class JDMClass extends AbstractJDMClassType
 
   @Nonnull
   @ReturnsMutableObject
-  public ICommonsList <JDMField> fields ()
+  public final ICommonsList <JDMField> fields ()
   {
     return m_aFields;
   }
