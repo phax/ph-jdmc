@@ -45,17 +45,17 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JJavaName;
-import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
+import com.helger.jdmc.core.datamodel.AbstractJDMGenType;
 import com.helger.jdmc.core.datamodel.EJDMBaseType;
 import com.helger.jdmc.core.datamodel.EJDMConstraintType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
-import com.helger.jdmc.core.datamodel.IJDMTypeResolver;
-import com.helger.jdmc.core.datamodel.JDMClass;
-import com.helger.jdmc.core.datamodel.JDMConstraint;
+import com.helger.jdmc.core.datamodel.IJDMGenTypeResolver;
+import com.helger.jdmc.core.datamodel.JDMGenClass;
+import com.helger.jdmc.core.datamodel.JDMGenConstraint;
 import com.helger.jdmc.core.datamodel.JDMContext;
-import com.helger.jdmc.core.datamodel.JDMEnum;
-import com.helger.jdmc.core.datamodel.JDMEnumConstant;
-import com.helger.jdmc.core.datamodel.JDMField;
+import com.helger.jdmc.core.datamodel.JDMGenEnum;
+import com.helger.jdmc.core.datamodel.JDMGenEnumConstant;
+import com.helger.jdmc.core.datamodel.JDMGenField;
 import com.helger.jdmc.core.datamodel.JDMType;
 import com.helger.json.IJson;
 import com.helger.json.IJsonArray;
@@ -65,7 +65,7 @@ import com.helger.json.parser.handler.CollectingJsonParserHandler;
 import com.helger.json.serialize.JsonReader;
 
 @NotThreadSafe
-public class JDMProcessor implements IJDMTypeResolver
+public class JDMProcessor implements IJDMGenTypeResolver
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (JDMProcessor.class);
 
@@ -74,7 +74,7 @@ public class JDMProcessor implements IJDMTypeResolver
   private String m_sClassNamePrefix = null;
   private String m_sClassNameSuffix = null;
   private final JDMContext m_aContext = new JDMContext ();
-  private final ICommonsList <AbstractJDMClassType> m_aReadTypes = new CommonsArrayList <> ();
+  private final ICommonsList <AbstractJDMGenType> m_aReadTypes = new CommonsArrayList <> ();
 
   public JDMProcessor (@Nonnull final String sDestinationPackageName)
   {
@@ -186,7 +186,7 @@ public class JDMProcessor implements IJDMTypeResolver
     return ret;
   }
 
-  private void _handleClassTypeSettings (@Nonnull final AbstractJDMClassType aType,
+  private void _handleClassTypeSettings (@Nonnull final AbstractJDMGenType aType,
                                          @Nonnull final IJson aFieldDef,
                                          @Nonnull final Consumer <? super String> aErrorHdl)
   {
@@ -234,13 +234,13 @@ public class JDMProcessor implements IJDMTypeResolver
   }
 
   @Nullable
-  public JDMClass readClassDef (@Nonnull final File aSrcFile)
+  public JDMGenClass readClassDef (@Nonnull final File aSrcFile)
   {
     return readClassDef (aSrcFile, LOGGER::error);
   }
 
   @Nullable
-  public JDMClass readClassDef (@Nonnull final File aSrcFile, @Nonnull final Consumer <? super String> aErrorHdl)
+  public JDMGenClass readClassDef (@Nonnull final File aSrcFile, @Nonnull final Consumer <? super String> aErrorHdl)
   {
     ValueEnforcer.notNull (aSrcFile, "SrcFile");
 
@@ -251,13 +251,13 @@ public class JDMProcessor implements IJDMTypeResolver
 
     // Build class
     final String sLocalClassName = _getAdoptedTypeName (FilenameHelper.getBaseName (aSrcFile));
-    final JDMClass ret = new JDMClass (m_sDestinationPackageName, sLocalClassName);
+    final JDMGenClass ret = new JDMGenClass (m_sDestinationPackageName, sLocalClassName);
 
     // register this type before the actual fields, so that "self reference"
     // works.
-    m_aContext.types ().registerType (ret, (cm, cs, e) -> {
+    m_aContext.typeContainer ().registerType (ret, (cm, cs, e) -> {
       JInvocation aNew = cm.ref (ret.getFQClassName ())._new ();
-      for (final JDMField aField : ret.fields ())
+      for (final JDMGenField aField : ret.fields ())
       {
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
         final boolean bIsSelfRef = aField.getType ().getShortName ().equals (ret.getClassName ());
@@ -362,15 +362,15 @@ public class JDMProcessor implements IJDMTypeResolver
         bError = true;
         break fieldloop;
       }
-      JDMType aType = m_aContext.types ().findType (sEffectiveTypeName);
+      JDMType aType = m_aContext.typeContainer ().findType (sEffectiveTypeName);
       if (aType == null)
       {
         // Is the type part of the compilation?
-        aType = m_aContext.types ().findType (_getAdoptedTypeName (sEffectiveTypeName));
+        aType = m_aContext.typeContainer ().findType (_getAdoptedTypeName (sEffectiveTypeName));
         if (aType == null)
         {
           // Is the type part of the compilation?
-          aType = m_aContext.types ().findType (_getAdoptedEnumName (sEffectiveTypeName));
+          aType = m_aContext.typeContainer ().findType (_getAdoptedEnumName (sEffectiveTypeName));
         }
       }
       if (aType == null)
@@ -380,7 +380,7 @@ public class JDMProcessor implements IJDMTypeResolver
         break fieldloop;
       }
 
-      ICommonsList <JDMConstraint> aConstraints = null;
+      ICommonsList <JDMGenConstraint> aConstraints = null;
       if (aJsonConstraints != null && aJsonConstraints.isNotEmpty ())
       {
         aConstraints = new CommonsArrayList <> ();
@@ -495,18 +495,18 @@ public class JDMProcessor implements IJDMTypeResolver
             default:
               throw new IllegalStateException ("Internal inconsistency");
           }
-          aConstraints.add (new JDMConstraint (eConstraintType, aValue));
+          aConstraints.add (new JDMGenConstraint (eConstraintType, aValue));
         }
       }
 
       // Add the field with all constraints
-      ret.fields ().add (new JDMField (sFieldName, aType, eMultiplicity, sComment, aConstraints));
+      ret.fields ().add (new JDMGenField (sFieldName, aType, eMultiplicity, sComment, aConstraints));
     }
 
     if (bError)
     {
       // Undo initial adding
-      m_aContext.types ().unregisterType (ret);
+      m_aContext.typeContainer ().unregisterType (ret);
       return null;
     }
 
@@ -536,13 +536,13 @@ public class JDMProcessor implements IJDMTypeResolver
   }
 
   @Nullable
-  public JDMEnum readEnumDef (@Nonnull final File aSrcFile)
+  public JDMGenEnum readEnumDef (@Nonnull final File aSrcFile)
   {
     return readEnumDef (aSrcFile, LOGGER::error);
   }
 
   @Nullable
-  public JDMEnum readEnumDef (@Nonnull final File aSrcFile, @Nonnull final Consumer <? super String> aErrorHdl)
+  public JDMGenEnum readEnumDef (@Nonnull final File aSrcFile, @Nonnull final Consumer <? super String> aErrorHdl)
   {
     ValueEnforcer.notNull (aSrcFile, "SrcFile");
 
@@ -552,7 +552,7 @@ public class JDMProcessor implements IJDMTypeResolver
 
     // Build class
     final String sLocalClassName = _getAdoptedEnumName (FilenameHelper.getBaseName (aSrcFile));
-    final JDMEnum ret = new JDMEnum (m_sDestinationPackageName, sLocalClassName);
+    final JDMGenEnum ret = new JDMGenEnum (m_sDestinationPackageName, sLocalClassName);
 
     // Read all enum entries
     for (final Map.Entry <String, IJson> aFieldEntry : aJsonObj)
@@ -641,7 +641,7 @@ public class JDMProcessor implements IJDMTypeResolver
         sDisplayName = sID;
 
       // Add the field with all constraints
-      ret.enumConstants ().add (new JDMEnumConstant (sEnumConstantName, sID, sDisplayName, sComment));
+      ret.enumConstants ().add (new JDMGenEnumConstant (sEnumConstantName, sID, sDisplayName, sComment));
     }
     if (ret.enumConstants ().isEmpty ())
     {
@@ -650,7 +650,7 @@ public class JDMProcessor implements IJDMTypeResolver
     }
 
     // Upon success, register this type
-    m_aContext.types ()
+    m_aContext.typeContainer ()
               .registerType (ret,
                              (cm, cs, e) -> cm.ref (ret.getFQClassName ())
                                               .staticRef (ret.enumConstants ().getFirst ().getName ()));
@@ -660,32 +660,32 @@ public class JDMProcessor implements IJDMTypeResolver
   }
 
   @Nonnull
-  public ICommonsList <AbstractJDMClassType> getAllTypes ()
+  public ICommonsList <AbstractJDMGenType> getAllTypes ()
   {
     return m_aReadTypes.getClone ();
   }
 
   @Nullable
-  public AbstractJDMClassType findTypeByName (@Nonnull final String sFQCN)
+  public AbstractJDMGenType findGenTypeByName (@Nonnull final String sFQCN)
   {
     return m_aReadTypes.findFirst (x -> x.getFQClassName ().equals (sFQCN));
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public ICommonsList <JDMClass> getAllReadClasses ()
+  public ICommonsList <JDMGenClass> getAllReadClasses ()
   {
     return CommonsArrayList.createFiltered (m_aReadTypes,
-                                            x -> x instanceof JDMClass,
-                                            (Function <AbstractJDMClassType, JDMClass>) x -> (JDMClass) x);
+                                            x -> x instanceof JDMGenClass,
+                                            (Function <AbstractJDMGenType, JDMGenClass>) x -> (JDMGenClass) x);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public ICommonsList <JDMEnum> getAllReadEnums ()
+  public ICommonsList <JDMGenEnum> getAllReadEnums ()
   {
     return CommonsArrayList.createFiltered (m_aReadTypes,
-                                            x -> x instanceof JDMEnum,
-                                            (Function <AbstractJDMClassType, JDMEnum>) x -> (JDMEnum) x);
+                                            x -> x instanceof JDMGenEnum,
+                                            (Function <AbstractJDMGenType, JDMGenEnum>) x -> (JDMGenEnum) x);
   }
 }

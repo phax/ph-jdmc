@@ -25,24 +25,24 @@ import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 
 /**
- * Definition of an enum to be created. See also {@link JDMClass}.
+ * Definition of a class to be created. See also {@link JDMGenEnum}.
  *
  * @author Philip Helger
  */
 @NotThreadSafe
-public class JDMEnum extends AbstractJDMClassType
+public class JDMGenClass extends AbstractJDMGenType
 {
-  private final ICommonsList <JDMEnumConstant> m_aEnumConstants = new CommonsArrayList <> ();
+  private final ICommonsList <JDMGenField> m_aFields = new CommonsArrayList <> ();
 
-  public JDMEnum (@Nonnull final String sPackageName, @Nonnull @Nonempty final String sClassName)
+  public JDMGenClass (@Nonnull final String sPackageName, @Nonnull @Nonempty final String sClassName)
   {
     super (sPackageName, sClassName);
   }
 
   @Nonnull
   @ReturnsMutableObject
-  public final ICommonsList <JDMEnumConstant> enumConstants ()
+  public final ICommonsList <JDMGenField> fields ()
   {
-    return m_aEnumConstants;
+    return m_aFields;
   }
 }

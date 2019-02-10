@@ -44,9 +44,9 @@ import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.fmt.JTextFile;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jdmc.core.JDMProcessor;
-import com.helger.jdmc.core.datamodel.JDMClass;
-import com.helger.jdmc.core.datamodel.JDMEnum;
-import com.helger.jdmc.core.datamodel.JDMField;
+import com.helger.jdmc.core.datamodel.JDMGenClass;
+import com.helger.jdmc.core.datamodel.JDMGenEnum;
+import com.helger.jdmc.core.datamodel.JDMGenField;
 
 @NotThreadSafe
 public class JDMCodeGenerator
@@ -71,19 +71,19 @@ public class JDMCodeGenerator
   }
 
   @Nonnull
-  private static SimpleDirectedGraph _createTypeGraph (@Nonnull final ICommonsList <JDMClass> aReadClasses)
+  private static SimpleDirectedGraph _createTypeGraph (@Nonnull final ICommonsList <JDMGenClass> aReadClasses)
   {
     final SimpleDirectedGraph aGraph = new SimpleDirectedGraph ();
 
     // Create a node for each class
-    for (final JDMClass aClass : aReadClasses)
+    for (final JDMGenClass aClass : aReadClasses)
       aGraph.createNode (aClass.getClassName ());
 
     // Connect all fields via relations
-    for (final JDMClass aClass : aReadClasses)
+    for (final JDMGenClass aClass : aReadClasses)
     {
       final IMutableDirectedGraphNode aClassNode = aGraph.getNodeOfID (aClass.getClassName ());
-      for (final JDMField aField : aClass.fields ())
+      for (final JDMGenField aField : aClass.fields ())
       {
         final String sNodeID = aField.getType ().getShortName ();
         final IMutableDirectedGraphNode aFieldNode = aGraph.getNodeOfID (sNodeID);
@@ -177,8 +177,8 @@ public class JDMCodeGenerator
     FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirTestJava);
     FileOperationManager.INSTANCE.createDirRecursiveIfNotExisting (aDirTestResources);
 
-    final ICommonsList <JDMClass> aClasses = m_aProcessor.getAllReadClasses ();
-    final ICommonsList <JDMEnum> aEnums = m_aProcessor.getAllReadEnums ();
+    final ICommonsList <JDMGenClass> aClasses = m_aProcessor.getAllReadClasses ();
+    final ICommonsList <JDMGenEnum> aEnums = m_aProcessor.getAllReadEnums ();
 
     final SimpleDirectedGraph aGraph = _createTypeGraph (aClasses);
     if (aGraph.containsCycles ())
@@ -206,8 +206,8 @@ public class JDMCodeGenerator
         cm.spiImplMap ().readInitial (aDirMainResources);
 
       // Create all classes
-      final ICommonsList <JDMClass> aMicroTypeConvertersCreated = new CommonsArrayList <> ();
-      for (final JDMClass aClass : aClasses)
+      final ICommonsList <JDMGenClass> aMicroTypeConvertersCreated = new CommonsArrayList <> ();
+      for (final JDMGenClass aClass : aClasses)
       {
         // Create a copy of the settings
         final JDMCodeGenSettings aPerClassSettings = m_aDefaultSettings.getClone ();
@@ -272,7 +272,7 @@ public class JDMCodeGenerator
         JDMCodeGenTest.createSPITest (m_aProcessor.getDestinationPackageName (), cm);
 
       // Create test classes for all domain classes
-      for (final JDMClass aClass : aClasses)
+      for (final JDMGenClass aClass : aClasses)
       {
         // Create a copy of the settings
         final JDMCodeGenSettings aPerClassSettings = m_aDefaultSettings.getClone ();

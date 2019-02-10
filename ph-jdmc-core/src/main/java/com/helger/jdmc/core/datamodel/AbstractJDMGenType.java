@@ -32,9 +32,9 @@ import com.helger.commons.string.StringHelper;
  * @author Philip Helger
  */
 @NotThreadSafe
-public abstract class AbstractJDMClassType implements Serializable
+public abstract class AbstractJDMGenType implements Serializable
 {
-  private final JDMPerClassSettings m_aSettings = new JDMPerClassSettings ();
+  private final JDMGenClassSettings m_aSettings = new JDMGenClassSettings ();
   private final String m_sPackageName;
   private final String m_sClassName;
 
@@ -45,7 +45,7 @@ public abstract class AbstractJDMClassType implements Serializable
     return (StringHelper.hasText (sPackageName) ? sPackageName + "." : "") + sClassName;
   }
 
-  public AbstractJDMClassType (@Nonnull final String sPackageName, @Nonnull @Nonempty final String sClassName)
+  public AbstractJDMGenType (@Nonnull final String sPackageName, @Nonnull @Nonempty final String sClassName)
   {
     ValueEnforcer.notNull (sPackageName, "PackageName");
     ValueEnforcer.notEmpty (sClassName, "ClassName");
@@ -55,7 +55,7 @@ public abstract class AbstractJDMClassType implements Serializable
 
   @Nonnull
   @ReturnsMutableObject
-  public final JDMPerClassSettings settings ()
+  public final JDMGenClassSettings settings ()
   {
     return m_aSettings;
   }
@@ -114,11 +114,11 @@ public abstract class AbstractJDMClassType implements Serializable
 
   public final boolean isClass ()
   {
-    return this instanceof JDMClass;
+    return this instanceof JDMGenClass;
   }
 
   public final boolean isEnum ()
   {
-    return this instanceof JDMEnum;
+    return this instanceof JDMGenEnum;
   }
 }

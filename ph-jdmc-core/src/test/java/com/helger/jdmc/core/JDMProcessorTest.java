@@ -25,8 +25,8 @@ import javax.annotation.Nonnull;
 import org.junit.Test;
 
 import com.helger.jdmc.core.codegen.JDMCodeGenerator;
-import com.helger.jdmc.core.datamodel.JDMClass;
-import com.helger.jdmc.core.datamodel.JDMEnum;
+import com.helger.jdmc.core.datamodel.JDMGenClass;
+import com.helger.jdmc.core.datamodel.JDMGenEnum;
 
 /**
  * Test class for class {@link JDMProcessor}.
@@ -39,7 +39,7 @@ public final class JDMProcessorTest
   {
     final File aSrcDir = new File ("src/test/resources/aufnahme");
 
-    JDMEnum aEnum;
+    JDMGenEnum aEnum;
 
     aEnum = p.readEnumDef (new File (aSrcDir, "demo/EDemo1.jdm"));
     assertNotNull (aEnum);
@@ -78,7 +78,7 @@ public final class JDMProcessorTest
     aEnum = p.readEnumDef (new File (aSrcDir, "stichprobe/EUsageType.jdm"));
     assertNotNull (aEnum);
 
-    JDMClass aClass;
+    JDMGenClass aClass;
     aClass = p.readClassDef (new File (aSrcDir, "biotopbaum/CaveType.jdm"));
     assertNotNull (aClass);
     aClass = p.readClassDef (new File (aSrcDir, "biotopbaum/TrunkSize.jdm"));
@@ -157,7 +157,7 @@ public final class JDMProcessorTest
     final JDMProcessor p = new JDMProcessor ("com.helger.selfref");
     final File aSrcDir = new File ("src/test/resources/selfref");
 
-    JDMClass aClass;
+    JDMGenClass aClass;
     aClass = p.readClassDef (new File (aSrcDir, "SelfRefDemo1.jdm"));
     assertNotNull (aClass);
     final JDMCodeGenerator cg = new JDMCodeGenerator (p);

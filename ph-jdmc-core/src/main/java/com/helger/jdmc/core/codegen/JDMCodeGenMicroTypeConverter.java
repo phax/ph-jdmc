@@ -40,10 +40,10 @@ import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JMods;
 import com.helger.jcodemodel.JVar;
-import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
+import com.helger.jdmc.core.datamodel.AbstractJDMGenType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
-import com.helger.jdmc.core.datamodel.JDMClass;
-import com.helger.jdmc.core.datamodel.JDMField;
+import com.helger.jdmc.core.datamodel.JDMGenClass;
+import com.helger.jdmc.core.datamodel.JDMGenField;
 import com.helger.jdmc.core.datamodel.JDMType;
 import com.helger.photon.security.object.AbstractBusinessObjectMicroTypeConverter;
 import com.helger.xml.microdom.IMicroElement;
@@ -65,7 +65,7 @@ final class JDMCodeGenMicroTypeConverter
     return aType.getShortName ().equals ("String");
   }
 
-  private static boolean _isElement (@Nonnull final JDMField aField)
+  private static boolean _isElement (@Nonnull final JDMGenField aField)
   {
     if (aField.getType ().isPrimitive ())
     {
@@ -95,7 +95,7 @@ final class JDMCodeGenMicroTypeConverter
   @Nonnull
   static JDefinedClass createMainMicroTypeConverterClass (@Nonnull final JDMCodeGenSettings aSettings,
                                                           @Nonnull final JDMCodeModel cm,
-                                                          @Nonnull final JDMClass aClass,
+                                                          @Nonnull final JDMGenClass aClass,
                                                           @Nonnull final JDefinedClass jDomainClass) throws JClassAlreadyExistsException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC, aClass.getFQMicroTypeConverterClassName (), EClassType.CLASS);
@@ -135,7 +135,7 @@ final class JDMCodeGenMicroTypeConverter
 
     final ICommonsList <JVar> aParamsToNative = new CommonsArrayList <> ();
 
-    for (final JDMField aField : aClass.fields ())
+    for (final JDMGenField aField : aClass.fields ())
     {
       final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
       final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
@@ -365,10 +365,10 @@ final class JDMCodeGenMicroTypeConverter
 
   static void createMainMicroTypeConverterRegistrarClass (@Nonnull final String sDestPackageName,
                                                           @Nonnull final JDMCodeModel cm,
-                                                          @Nonnull final ICommonsList <? extends AbstractJDMClassType> aClasses) throws JClassAlreadyExistsException
+                                                          @Nonnull final ICommonsList <? extends AbstractJDMGenType> aClasses) throws JClassAlreadyExistsException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC | JMod.FINAL,
-                                            AbstractJDMClassType.getFQCN (sDestPackageName,
+                                            AbstractJDMGenType.getFQCN (sDestPackageName,
                                                                           "MicroTypeConverterRegistrar"),
                                             EClassType.CLASS);
     jClass._implements (cm.ref (IMicroTypeConverterRegistrarSPI.class));
@@ -383,7 +383,7 @@ final class JDMCodeGenMicroTypeConverter
     final JVar jParam = jMethod.param (JMod.FINAL, cm.ref (IMicroTypeConverterRegistry.class), "aRegistry");
     jParam.annotate (Nonnull.class);
 
-    for (final AbstractJDMClassType aClass : aClasses)
+    for (final AbstractJDMGenType aClass : aClasses)
     {
       jMethod.body ()
              .add (jParam.invoke ("registerMicroElementTypeConverter")

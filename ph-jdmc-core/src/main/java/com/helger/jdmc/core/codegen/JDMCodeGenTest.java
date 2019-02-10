@@ -42,10 +42,10 @@ import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JVar;
 import com.helger.jdmc.core.JDMProcessor;
-import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
+import com.helger.jdmc.core.datamodel.AbstractJDMGenType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
-import com.helger.jdmc.core.datamodel.JDMClass;
-import com.helger.jdmc.core.datamodel.JDMField;
+import com.helger.jdmc.core.datamodel.JDMGenClass;
+import com.helger.jdmc.core.datamodel.JDMGenField;
 import com.helger.jdmc.core.datamodel.JDMType;
 import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
 import com.helger.xml.mock.XMLTestHelper;
@@ -60,7 +60,7 @@ final class JDMCodeGenTest
 
   static void createTestJavaClass (@Nonnull final JDMCodeGenSettings aSettings,
                                    @Nonnull final JDMCodeModel cm,
-                                   @Nonnull final JDMClass aClass) throws JClassAlreadyExistsException
+                                   @Nonnull final JDMGenClass aClass) throws JClassAlreadyExistsException
   {
     final AbstractJClass jClass = cm.ref (aClass.getFQClassName ());
     final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
@@ -87,7 +87,7 @@ final class JDMCodeGenTest
       final JVar jObj = jMethod.body ().decl (jClass, "x", jClass._new ());
       jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertEquals").arg (jObj).arg (jClass._new ()));
 
-      for (final JDMField aField : aClass.fields ())
+      for (final JDMGenField aField : aClass.fields ())
       {
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
         final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
@@ -124,7 +124,7 @@ final class JDMCodeGenTest
 
       // Ctor with all params
       JInvocation aNew = jClass._new ();
-      for (final JDMField aField : aClass.fields ())
+      for (final JDMGenField aField : aClass.fields ())
       {
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
         IJExpression aTestVal = aField.getType ().createTestValue (cm, aSettings, eMultiplicity);
@@ -189,7 +189,7 @@ final class JDMCodeGenTest
 
       // Invoke all setters
       jMethod.body ().addSingleLineComment ("Test all setters");
-      for (final JDMField aField : aClass.fields ())
+      for (final JDMGenField aField : aClass.fields ())
       {
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
         IJExpression aTestVal = aField.getType ().createTestValue (cm, aSettings, eMultiplicity);
@@ -212,7 +212,7 @@ final class JDMCodeGenTest
 
       // Try setting values to null (if possible)
       int nNullFields = 0;
-      for (final JDMField aField : aClass.fields ())
+      for (final JDMGenField aField : aClass.fields ())
       {
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
         final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
@@ -238,7 +238,7 @@ final class JDMCodeGenTest
                                       @Nonnull final JDMCodeModel cm) throws JClassAlreadyExistsException
   {
     final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
-                                                AbstractJDMClassType.getFQCN (aProcessor.getDestinationPackageName (),
+                                                AbstractJDMGenType.getFQCN (aProcessor.getDestinationPackageName (),
                                                                               "JDMSelfTest"),
                                                 EClassType.CLASS);
     jTestClass.javadoc ().add ("This is the self-test class of JDM\n");
@@ -262,7 +262,7 @@ final class JDMCodeGenTest
            .paramArray (JAnnotationUse.SPECIAL_KEY_VALUE, new String [] { "unused", "cast" });
 
     int nCount = 0;
-    for (final JDMType aType : CollectionHelper.getSorted (aProcessor.getContext ().types ().getTypes (),
+    for (final JDMType aType : CollectionHelper.getSorted (aProcessor.getContext ().typeContainer ().getTypes (),
                                                            Comparator.comparing (JDMType::getClassName)))
     {
       final EJDMMultiplicity eMultiplicity = EJDMMultiplicity.MANDATORY;
@@ -279,7 +279,7 @@ final class JDMCodeGenTest
                              @Nonnull final JDMCodeModel cm) throws JClassAlreadyExistsException
   {
     final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
-                                                AbstractJDMClassType.getFQCN (sDestPackageName, "JDMSPITest"),
+                                                AbstractJDMGenType.getFQCN (sDestPackageName, "JDMSPITest"),
                                                 EClassType.CLASS);
     jTestClass.javadoc ().add ("Test all SPI implementations of this project\n");
     jTestClass.javadoc ().add ("This class was initially automatically created\n");

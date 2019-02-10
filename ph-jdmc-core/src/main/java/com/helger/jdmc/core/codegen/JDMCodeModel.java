@@ -24,19 +24,19 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
+import com.helger.jdmc.core.datamodel.AbstractJDMGenType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
-import com.helger.jdmc.core.datamodel.IJDMTypeResolver;
-import com.helger.jdmc.core.datamodel.JDMClass;
+import com.helger.jdmc.core.datamodel.IJDMGenTypeResolver;
+import com.helger.jdmc.core.datamodel.JDMGenClass;
 import com.helger.jdmc.core.datamodel.JDMType;
 
 @NotThreadSafe
 public final class JDMCodeModel extends JCodeModel
 {
-  private final IJDMTypeResolver m_aTypeResolver;
+  private final IJDMGenTypeResolver m_aTypeResolver;
   private final SPIImplMap m_aSPIImplMap = new SPIImplMap ();
 
-  public JDMCodeModel (@Nonnull final IJDMTypeResolver aTypeResolver)
+  public JDMCodeModel (@Nonnull final IJDMGenTypeResolver aTypeResolver)
   {
     ValueEnforcer.notNull (aTypeResolver, "Processor");
     m_aTypeResolver = aTypeResolver;
@@ -53,8 +53,8 @@ public final class JDMCodeModel extends JCodeModel
   public AbstractJClass ref (@Nonnull final JDMType aType)
   {
     String sTypeName = aType.getFQCN ();
-    final AbstractJDMClassType aExistingClass = m_aTypeResolver.findTypeByName (sTypeName);
-    if (aExistingClass != null && aExistingClass instanceof JDMClass)
+    final AbstractJDMGenType aExistingClass = m_aTypeResolver.findGenTypeByName (sTypeName);
+    if (aExistingClass != null && aExistingClass instanceof JDMGenClass)
     {
       // It's one of our created classes - add an "I" prefix
       sTypeName = aExistingClass.getFQInterfaceName ();

@@ -36,14 +36,14 @@ import com.helger.jcodemodel.JCommentPart;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class JDMField implements Serializable
+public class JDMGenField implements Serializable
 {
   private final String m_sOriginalFieldName;
   private final String m_sFieldName;
   private final JDMType m_aType;
   private final EJDMMultiplicity m_eMultiplicity;
   private final String m_sComment;
-  private final ICommonsList <JDMConstraint> m_aConstraints;
+  private final ICommonsList <JDMGenConstraint> m_aConstraints;
 
   @Nonnull
   @Nonempty
@@ -116,11 +116,11 @@ public class JDMField implements Serializable
    * @param aConstraints
    *        Optional list of field constraints. May be <code>null</code>.
    */
-  public JDMField (@Nonnull @Nonempty final String sFieldName,
+  public JDMGenField (@Nonnull @Nonempty final String sFieldName,
                    @Nonnull final JDMType aType,
                    @Nonnull final EJDMMultiplicity eMultiplicity,
                    @Nullable final String sComment,
-                   @Nullable final ICommonsList <JDMConstraint> aConstraints)
+                   @Nullable final ICommonsList <JDMGenConstraint> aConstraints)
   {
     ValueEnforcer.notEmpty (sFieldName, "FieldName");
     ValueEnforcer.notNull (aType, "Type");
@@ -272,7 +272,7 @@ public class JDMField implements Serializable
 
   @Nonnull
   @ReturnsMutableObject
-  public ICommonsList <JDMConstraint> constraints ()
+  public ICommonsList <JDMGenConstraint> constraints ()
   {
     return m_aConstraints;
   }

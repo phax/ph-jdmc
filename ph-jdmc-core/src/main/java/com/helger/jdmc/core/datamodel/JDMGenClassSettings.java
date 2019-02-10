@@ -29,14 +29,14 @@ import com.helger.jdmc.core.codegen.JDMCodeGenSettings;
  *
  * @author Philip Helger
  */
-public class JDMPerClassSettings implements Serializable
+public class JDMGenClassSettings implements Serializable
 {
   private ETriState m_eUseBusinessObject = ETriState.UNDEFINED;
   private ETriState m_eSetterArePackagePrivate = ETriState.UNDEFINED;
   private ETriState m_eCreateMicroTypeConverter = ETriState.UNDEFINED;
   private ETriState m_eCreateManager = ETriState.UNDEFINED;
 
-  public JDMPerClassSettings ()
+  public JDMGenClassSettings ()
   {}
 
   @Nonnull
@@ -46,7 +46,7 @@ public class JDMPerClassSettings implements Serializable
   }
 
   @Nonnull
-  public JDMPerClassSettings setUseBusinessObjects (final boolean b)
+  public JDMGenClassSettings setUseBusinessObjects (final boolean b)
   {
     m_eUseBusinessObject = ETriState.valueOf (b);
     return this;
@@ -59,7 +59,7 @@ public class JDMPerClassSettings implements Serializable
   }
 
   @Nonnull
-  public JDMPerClassSettings setSetterArePackagePrivate (final boolean b)
+  public JDMGenClassSettings setSetterArePackagePrivate (final boolean b)
   {
     m_eSetterArePackagePrivate = ETriState.valueOf (b);
     return this;
@@ -72,7 +72,7 @@ public class JDMPerClassSettings implements Serializable
   }
 
   @Nonnull
-  public JDMPerClassSettings setCreateMicroTypeConverter (final boolean b)
+  public JDMGenClassSettings setCreateMicroTypeConverter (final boolean b)
   {
     m_eCreateMicroTypeConverter = ETriState.valueOf (b);
     return this;
@@ -85,7 +85,7 @@ public class JDMPerClassSettings implements Serializable
   }
 
   @Nonnull
-  public JDMPerClassSettings setCreateManager (final boolean b)
+  public JDMGenClassSettings setCreateManager (final boolean b)
   {
     m_eCreateManager = ETriState.valueOf (b);
     return this;

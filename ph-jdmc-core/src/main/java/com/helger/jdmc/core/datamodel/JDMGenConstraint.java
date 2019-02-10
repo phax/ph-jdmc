@@ -16,33 +16,41 @@
  */
 package com.helger.jdmc.core.datamodel;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.helger.commons.annotation.Nonempty;
-import com.helger.commons.annotation.ReturnsMutableObject;
-import com.helger.commons.collection.impl.CommonsArrayList;
-import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.ValueEnforcer;
 
 /**
- * Definition of a class to be created. See also {@link JDMEnum}.
+ * A single constraint in a type.
  *
  * @author Philip Helger
  */
 @NotThreadSafe
-public class JDMClass extends AbstractJDMClassType
+public class JDMGenConstraint implements Serializable
 {
-  private final ICommonsList <JDMField> m_aFields = new CommonsArrayList <> ();
+  private final EJDMConstraintType m_eConstraintType;
+  private final Serializable m_aValue;
 
-  public JDMClass (@Nonnull final String sPackageName, @Nonnull @Nonempty final String sClassName)
+  public JDMGenConstraint (@Nonnull final EJDMConstraintType eConstraintType, @Nonnull final Serializable aValue)
   {
-    super (sPackageName, sClassName);
+    ValueEnforcer.notNull (eConstraintType, "ConstraintType");
+    ValueEnforcer.notNull (aValue, "Value");
+    m_eConstraintType = eConstraintType;
+    m_aValue = aValue;
   }
 
   @Nonnull
-  @ReturnsMutableObject
-  public final ICommonsList <JDMField> fields ()
+  public EJDMConstraintType getConstraintType ()
   {
-    return m_aFields;
+    return m_eConstraintType;
+  }
+
+  @Nonnull
+  public Serializable getValue ()
+  {
+    return m_aValue;
   }
 }

@@ -50,10 +50,10 @@ import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JReturn;
 import com.helger.jcodemodel.JVar;
 import com.helger.jdmc.core.JDMProcessor;
-import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
+import com.helger.jdmc.core.datamodel.AbstractJDMGenType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
-import com.helger.jdmc.core.datamodel.JDMClass;
-import com.helger.jdmc.core.datamodel.JDMField;
+import com.helger.jdmc.core.datamodel.JDMGenClass;
+import com.helger.jdmc.core.datamodel.JDMGenField;
 import com.helger.tenancy.AbstractBusinessObject;
 import com.helger.tenancy.IBusinessObject;
 
@@ -68,9 +68,9 @@ public class JDMCodeGenBase
                                               @Nonnull final JCodeModel cm,
                                               @Nonnull final String sType)
   {
-    final AbstractJDMClassType aExistingClass = aProcessor.findTypeByName (sType);
+    final AbstractJDMGenType aExistingClass = aProcessor.findGenTypeByName (sType);
     String sRealType = sType;
-    if (aExistingClass != null && aExistingClass instanceof JDMClass)
+    if (aExistingClass != null && aExistingClass instanceof JDMGenClass)
     {
       // It's one of our created classes - add an "I" prefix
       sRealType = aExistingClass.getFQInterfaceName ();
@@ -83,7 +83,7 @@ public class JDMCodeGenBase
   static JDefinedClass createMainJavaInterface (@Nonnull final JDMProcessor aProcessor,
                                                 @Nonnull final JDMCodeGenSettings aSettings,
                                                 @Nonnull final JDMCodeModel cm,
-                                                @Nonnull final JDMClass aClass) throws JClassAlreadyExistsException
+                                                @Nonnull final JDMGenClass aClass) throws JClassAlreadyExistsException
   {
     final JDefinedClass jInterface = cm._class (JMod.PUBLIC, aClass.getFQInterfaceName (), EClassType.INTERFACE);
     if (aSettings.isUseBusinessObject ())
@@ -94,7 +94,7 @@ public class JDMCodeGenBase
     jInterface.javadoc ().add ("<p>This class was initially automatically created</p>\n");
     jInterface.javadoc ().addAuthor ().add (JDMCodeGenerator.AUTHOR);
 
-    for (final JDMField aField : aClass.fields ())
+    for (final JDMGenField aField : aClass.fields ())
     {
       final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
       final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
@@ -171,7 +171,7 @@ public class JDMCodeGenBase
   @Nonnull
   static JDefinedClass createMainJavaClass (@Nonnull final JDMCodeGenSettings aSettings,
                                             @Nonnull final JDMCodeModel cm,
-                                            @Nonnull final JDMClass aClass,
+                                            @Nonnull final JDMGenClass aClass,
                                             @Nonnull final JDefinedClass jInterface) throws JClassAlreadyExistsException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC, aClass.getFQClassName (), EClassType.CLASS);
@@ -275,7 +275,7 @@ public class JDMCodeGenBase
       jToStringInvocation = cm.ref (ToStringGenerator.class)._new ().arg (JExpr._this ());
     }
 
-    for (final JDMField aField : aClass.fields ())
+    for (final JDMGenField aField : aClass.fields ())
     {
       final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
       final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);

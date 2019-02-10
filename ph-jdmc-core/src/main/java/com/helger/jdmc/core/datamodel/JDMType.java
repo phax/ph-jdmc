@@ -147,7 +147,7 @@ public class JDMType implements Serializable
   @Nonempty
   public String getFQCN ()
   {
-    return AbstractJDMClassType.getFQCN (m_sPackageName, m_sClassName);
+    return AbstractJDMGenType.getFQCN (m_sPackageName, m_sClassName);
   }
 
   @Nonnull

@@ -33,14 +33,14 @@ import com.helger.commons.string.StringHelper;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class JDMEnumConstant implements Serializable
+public class JDMGenEnumConstant implements Serializable
 {
   private final String m_sName;
   private final String m_sID;
   private final String m_sDisplayName;
   private final String m_sComment;
 
-  public JDMEnumConstant (@Nonnull @Nonempty final String sName,
+  public JDMGenEnumConstant (@Nonnull @Nonempty final String sName,
                           @Nonnull @Nonempty final String sID,
                           @Nonnull @Nonempty final String sDisplayName,
                           @Nullable final String sComment)
@@ -93,7 +93,7 @@ public class JDMEnumConstant implements Serializable
       return true;
     if (o == null || !getClass ().equals (o.getClass ()))
       return false;
-    final JDMEnumConstant rhs = (JDMEnumConstant) o;
+    final JDMGenEnumConstant rhs = (JDMGenEnumConstant) o;
     return m_sName.equals (rhs.m_sName);
   }
 

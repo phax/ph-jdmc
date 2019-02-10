@@ -16,41 +16,33 @@
  */
 package com.helger.jdmc.core.datamodel;
 
-import java.io.Serializable;
-
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.Nonempty;
+import com.helger.commons.annotation.ReturnsMutableObject;
+import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.ICommonsList;
 
 /**
- * A single constraint in a type.
+ * Definition of an enum to be created. See also {@link JDMGenClass}.
  *
  * @author Philip Helger
  */
 @NotThreadSafe
-public class JDMConstraint implements Serializable
+public class JDMGenEnum extends AbstractJDMGenType
 {
-  private final EJDMConstraintType m_eConstraintType;
-  private final Serializable m_aValue;
+  private final ICommonsList <JDMGenEnumConstant> m_aEnumConstants = new CommonsArrayList <> ();
 
-  public JDMConstraint (@Nonnull final EJDMConstraintType eConstraintType, @Nonnull final Serializable aValue)
+  public JDMGenEnum (@Nonnull final String sPackageName, @Nonnull @Nonempty final String sClassName)
   {
-    ValueEnforcer.notNull (eConstraintType, "ConstraintType");
-    ValueEnforcer.notNull (aValue, "Value");
-    m_eConstraintType = eConstraintType;
-    m_aValue = aValue;
+    super (sPackageName, sClassName);
   }
 
   @Nonnull
-  public EJDMConstraintType getConstraintType ()
+  @ReturnsMutableObject
+  public final ICommonsList <JDMGenEnumConstant> enumConstants ()
   {
-    return m_eConstraintType;
-  }
-
-  @Nonnull
-  public Serializable getValue ()
-  {
-    return m_aValue;
+    return m_aEnumConstants;
   }
 }

@@ -19,8 +19,9 @@ package com.helger.jdmc.core.datamodel;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public interface IJDMTypeResolver
+@FunctionalInterface
+public interface IJDMGenTypeResolver
 {
   @Nullable
-  AbstractJDMClassType findTypeByName (@Nonnull String sFQCN);
+  AbstractJDMGenType findGenTypeByName (@Nonnull String sFQCN);
 }

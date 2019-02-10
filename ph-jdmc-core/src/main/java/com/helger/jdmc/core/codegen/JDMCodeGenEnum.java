@@ -40,8 +40,8 @@ import com.helger.jcodemodel.JForEach;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JVar;
-import com.helger.jdmc.core.datamodel.JDMEnum;
-import com.helger.jdmc.core.datamodel.JDMEnumConstant;
+import com.helger.jdmc.core.datamodel.JDMGenEnum;
+import com.helger.jdmc.core.datamodel.JDMGenEnumConstant;
 
 /**
  * Enumeration specific code generation helper
@@ -55,10 +55,10 @@ final class JDMCodeGenEnum
   {}
 
   static void createMainJavaEnums (@Nonnull final JDMCodeModel cm,
-                                   @Nonnull final ICommonsList <JDMEnum> aEnums) throws JClassAlreadyExistsException
+                                   @Nonnull final ICommonsList <JDMGenEnum> aEnums) throws JClassAlreadyExistsException
   {
     final AbstractJType jString = cm.ref (String.class);
-    for (final JDMEnum aEnum : aEnums)
+    for (final JDMGenEnum aEnum : aEnums)
     {
       final JDefinedClass jEnum = cm._class (JMod.PUBLIC, aEnum.getFQClassName (), EClassType.ENUM);
       jEnum._implements (cm.ref (IHasID.class).narrow (jString));
@@ -66,7 +66,7 @@ final class JDMCodeGenEnum
       jEnum.javadoc ().add ("This class was initially automatically created\n");
       jEnum.javadoc ().addAuthor ().add (JDMCodeGenerator.AUTHOR);
 
-      for (final JDMEnumConstant aEnumConstant : aEnum.enumConstants ())
+      for (final JDMGenEnumConstant aEnumConstant : aEnum.enumConstants ())
       {
         final JEnumConstant jEnumConstant = jEnum.enumConstant (aEnumConstant.getName ())
                                                  .arg (JExpr.lit (aEnumConstant.getID ()))
@@ -140,9 +140,9 @@ final class JDMCodeGenEnum
   }
 
   static void createTestJavaEnums (@Nonnull final JDMCodeModel cm,
-                                   @Nonnull final ICommonsList <JDMEnum> aEnums) throws JClassAlreadyExistsException
+                                   @Nonnull final ICommonsList <JDMGenEnum> aEnums) throws JClassAlreadyExistsException
   {
-    for (final JDMEnum aEnum : aEnums)
+    for (final JDMGenEnum aEnum : aEnums)
     {
       final AbstractJClass jEnum = cm.ref (aEnum.getFQClassName ());
       final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,

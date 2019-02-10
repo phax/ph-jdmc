@@ -39,8 +39,8 @@ import com.helger.jcodemodel.JReturn;
 import com.helger.jcodemodel.JTryBlock;
 import com.helger.jcodemodel.JVar;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
-import com.helger.jdmc.core.datamodel.JDMClass;
-import com.helger.jdmc.core.datamodel.JDMField;
+import com.helger.jdmc.core.datamodel.JDMGenClass;
+import com.helger.jdmc.core.datamodel.JDMGenField;
 import com.helger.photon.basic.app.dao.AbstractPhotonMapBasedWALDAO;
 import com.helger.photon.basic.audit.AuditHelper;
 import com.helger.photon.security.object.BusinessObjectHelper;
@@ -52,7 +52,7 @@ final class JDMCodeGenManager
   {}
 
   public static void createMainManagerClass (@Nonnull final JDMCodeModel cm,
-                                             @Nonnull final JDMClass aClass,
+                                             @Nonnull final JDMGenClass aClass,
                                              @Nonnull final JDefinedClass jInterface,
                                              @Nonnull final JDefinedClass jDomainClass) throws JClassAlreadyExistsException
   {
@@ -92,7 +92,7 @@ final class JDMCodeGenManager
       jCreate.javadoc ().addReturn ().add ("The created object and never <code>null</code>.");
 
       final JInvocation jInit = jDomainClass._new ();
-      for (final JDMField aField : aClass.fields ())
+      for (final JDMGenField aField : aClass.fields ())
       {
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
         final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
@@ -137,7 +137,7 @@ final class JDMCodeGenManager
                                    .staticInvoke ("onAuditCreateSuccess")
                                    .arg (jDomainClass.staticRef ("OT"))
                                    .arg (jRet.invoke ("getID"));
-      for (final JDMField aField : aClass.fields ())
+      for (final JDMGenField aField : aClass.fields ())
       {
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
 
@@ -207,7 +207,7 @@ final class JDMCodeGenManager
                                       "eChange",
                                       cm.ref (EChange.class).staticRef ("UNCHANGED"));
 
-      for (final JDMField aField : aClass.fields ())
+      for (final JDMGenField aField : aClass.fields ())
       {
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
         final boolean bIsEffectivePrimitive = aField.getType ().isJavaPrimitive (eMultiplicity);
@@ -248,7 +248,7 @@ final class JDMCodeGenManager
                                    .arg (jDomainClass.staticRef ("OT"))
                                    .arg ("all")
                                    .arg (jImpl.invoke ("getID"));
-      for (final JDMField aField : aClass.fields ())
+      for (final JDMGenField aField : aClass.fields ())
       {
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
 

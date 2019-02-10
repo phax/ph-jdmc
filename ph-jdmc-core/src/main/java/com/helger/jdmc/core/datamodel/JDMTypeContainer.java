@@ -50,7 +50,7 @@ import com.helger.xml.serialize.read.DOMReader;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class JDMTypes
+public class JDMTypeContainer implements Serializable
 {
   private final ICommonsMap <String, JDMType> m_aTypes = new CommonsHashMap <> ();
 
@@ -183,7 +183,7 @@ public class JDMTypes
                                                                             .staticInvoke ("getCurrentZonedDateTime")));
   }
 
-  public JDMTypes ()
+  public JDMTypeContainer ()
   {
     _registerStandardTypes ();
   }
@@ -208,7 +208,7 @@ public class JDMTypes
    *         If another type with the same short name is already registered.
    */
   @Nonnull
-  public JDMType registerType (@Nonnull final AbstractJDMClassType aClass,
+  public JDMType registerType (@Nonnull final AbstractJDMGenType aClass,
                                @Nonnull final IJDMTypeTestValueCreator aTestValueFactory)
   {
     final boolean bPredefined = false;
@@ -226,7 +226,7 @@ public class JDMTypes
   }
 
   @Nonnull
-  public EChange unregisterType (@Nonnull final AbstractJDMClassType aClass)
+  public EChange unregisterType (@Nonnull final AbstractJDMGenType aClass)
   {
     return m_aTypes.removeObject (aClass.getClassName ());
   }

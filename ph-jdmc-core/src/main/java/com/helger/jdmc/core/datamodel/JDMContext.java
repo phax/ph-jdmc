@@ -16,23 +16,30 @@
  */
 package com.helger.jdmc.core.datamodel;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.annotation.ReturnsMutableObject;
 
+/**
+ * JDM processing context.
+ * 
+ * @author Philip Helger
+ */
 @NotThreadSafe
-public class JDMContext
+public class JDMContext implements Serializable
 {
-  private final JDMTypes m_aTypes = new JDMTypes ();
+  private final JDMTypeContainer m_aTypeContainer = new JDMTypeContainer ();
 
   public JDMContext ()
   {}
 
   @Nonnull
   @ReturnsMutableObject
-  public final JDMTypes types ()
+  public final JDMTypeContainer typeContainer ()
   {
-    return m_aTypes;
+    return m_aTypeContainer;
   }
 }
