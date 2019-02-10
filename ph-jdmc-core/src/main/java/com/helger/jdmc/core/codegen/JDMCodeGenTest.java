@@ -189,8 +189,12 @@ final class JDMCodeGenTest
 
       // Invoke all setters
       jMethod.body ().addSingleLineComment ("Test all setters");
+      int nBOReferenceFields = 0;
       for (final JDMGenField aField : aClass.fields ())
       {
+        if (aSettings.isUseBusinessObject () && aField.isBOReference ())
+          nBOReferenceFields++;
+
         final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
         IJExpression aTestVal = aField.getType ().createTestValue (cm, aSettings, eMultiplicity);
         if (aField.getMultiplicity ().isOpenEnded ())
@@ -206,8 +210,14 @@ final class JDMCodeGenTest
       // Check micro type conversion
       if (aSettings.isCreateMicroTypeConverter ())
       {
-        jMethod.body ().addSingleLineComment ("Check XML conversion");
-        jMethod.body ().add (cm.ref (XMLTestHelper.class).staticInvoke ("testMicroTypeConversion").arg (jX));
+        if (nBOReferenceFields == 0)
+        {
+          jMethod.body ().addSingleLineComment ("Check XML conversion");
+          jMethod.body ().add (cm.ref (XMLTestHelper.class).staticInvoke ("testMicroTypeConversion").arg (jX));
+        }
+        else
+          jMethod.body ()
+                 .addSingleLineComment ("XML conversion conversion cannot be checked because custom MicroTypeConverter registration would be needed");
       }
 
       // Try setting values to null (if possible)
@@ -227,8 +237,11 @@ final class JDMCodeGenTest
       }
       if (aSettings.isCreateMicroTypeConverter () && nNullFields > 0)
       {
-        jMethod.body ().addSingleLineComment ("Check XML conversion again");
-        jMethod.body ().add (cm.ref (XMLTestHelper.class).staticInvoke ("testMicroTypeConversion").arg (jX));
+        if (nBOReferenceFields == 0)
+        {
+          jMethod.body ().addSingleLineComment ("Check XML conversion again");
+          jMethod.body ().add (cm.ref (XMLTestHelper.class).staticInvoke ("testMicroTypeConversion").arg (jX));
+        }
       }
     }
   }
@@ -239,7 +252,7 @@ final class JDMCodeGenTest
   {
     final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
                                                 AbstractJDMGenType.getFQCN (aProcessor.getDestinationPackageName (),
-                                                                              "JDMSelfTest"),
+                                                                            "JDMSelfTest"),
                                                 EClassType.CLASS);
     jTestClass.javadoc ().add ("This is the self-test class of JDM\n");
     jTestClass.javadoc ().add ("This class was initially automatically created\n");
