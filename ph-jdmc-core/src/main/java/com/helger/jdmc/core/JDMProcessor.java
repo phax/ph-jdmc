@@ -50,9 +50,9 @@ import com.helger.jdmc.core.datamodel.EJDMBaseType;
 import com.helger.jdmc.core.datamodel.EJDMConstraintType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.IJDMGenTypeResolver;
+import com.helger.jdmc.core.datamodel.JDMContext;
 import com.helger.jdmc.core.datamodel.JDMGenClass;
 import com.helger.jdmc.core.datamodel.JDMGenConstraint;
-import com.helger.jdmc.core.datamodel.JDMContext;
 import com.helger.jdmc.core.datamodel.JDMGenEnum;
 import com.helger.jdmc.core.datamodel.JDMGenEnumConstant;
 import com.helger.jdmc.core.datamodel.JDMGenField;
@@ -186,9 +186,9 @@ public class JDMProcessor implements IJDMGenTypeResolver
     return ret;
   }
 
-  private void _handleClassTypeSettings (@Nonnull final AbstractJDMGenType aType,
-                                         @Nonnull final IJson aFieldDef,
-                                         @Nonnull final Consumer <? super String> aErrorHdl)
+  private static void _handleGenClassSettings (@Nonnull final AbstractJDMGenType aType,
+                                               @Nonnull final IJson aFieldDef,
+                                               @Nonnull final Consumer <? super String> aErrorHdl)
   {
     if (!aFieldDef.isObject ())
       aErrorHdl.accept ("The per-type configuration must be an object");
@@ -254,14 +254,14 @@ public class JDMProcessor implements IJDMGenTypeResolver
     final JDMGenClass ret = new JDMGenClass (m_sDestinationPackageName, sLocalClassName);
 
     // register this type before the actual fields, so that "self reference"
-    // works.
+    // works. In case of error, this must be undone.
     m_aContext.typeContainer ().registerType (ret, (cm, cs, e) -> {
       JInvocation aNew = cm.ref (ret.getFQClassName ())._new ();
       for (final JDMGenField aField : ret.fields ())
       {
-        final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
         final boolean bIsSelfRef = aField.getType ().getShortName ().equals (ret.getClassName ());
-        IJExpression aTestVal = bIsSelfRef ? JExpr._null () : aField.getType ().createTestValue (cm, cs, eMultiplicity);
+        IJExpression aTestVal = bIsSelfRef ? JExpr._null ()
+                                           : aField.getType ().createTestValue (cm, cs, aField.getMultiplicity ());
         if (aField.getMultiplicity ().isOpenEnded ())
           aTestVal = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ().arg (aTestVal);
         aNew = aNew.arg (aTestVal);
@@ -284,7 +284,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
       }
       if ("$settings".equals (sFieldName))
       {
-        _handleClassTypeSettings (ret, aFieldDef, aErrorHdl);
+        _handleGenClassSettings (ret, aFieldDef, aErrorHdl);
         continue;
       }
       if (!isValidIdentifier (sFieldName))
@@ -303,6 +303,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
       final String sTypeName;
       final String sComment;
       final IJsonObject aJsonConstraints;
+      final IJsonObject aJsonSettings;
       if (aFieldDef.isValue ())
       {
         // type
@@ -310,13 +311,16 @@ public class JDMProcessor implements IJDMGenTypeResolver
         sTypeName = aValue.getAsString ();
         sComment = null;
         aJsonConstraints = null;
+        aJsonSettings = null;
       }
       else
         if (aFieldDef.isArray ())
         {
           // [type] or
           // [type, constraints] or
-          // [type, comment, constraints]
+          // [type, constraints, settings] or
+          // [type, comment, constraints] or
+          // [type, comment, constraints, settings]
           final IJsonArray aArray = aFieldDef.getAsArray ();
           sTypeName = aArray.getAsString (0);
           final IJson aSecond = aArray.get (1);
@@ -324,18 +328,21 @@ public class JDMProcessor implements IJDMGenTypeResolver
           {
             sComment = null;
             aJsonConstraints = null;
+            aJsonSettings = null;
           }
           else
             if (aSecond.isValue ())
             {
               sComment = aSecond.getAsValue ().getAsString ();
               aJsonConstraints = aArray.getObjectAtIndex (2);
+              aJsonSettings = aArray.getObjectAtIndex (3);
             }
             else
               if (aSecond.isObject ())
               {
                 sComment = null;
                 aJsonConstraints = aSecond.getAsObject ();
+                aJsonSettings = aArray.getObjectAtIndex (2);
               }
               else
               {
@@ -351,17 +358,20 @@ public class JDMProcessor implements IJDMGenTypeResolver
           break fieldloop;
         }
 
-      // Check for +/?/* suffixes
+      // Check for +/?/* suffixes for multiplicity
       final EJDMMultiplicity eMultiplicity = EJDMMultiplicity.getFromTypeName (sTypeName);
       final String sEffectiveTypeName = sTypeName.substring (0,
                                                              sTypeName.length () -
                                                                 eMultiplicity.getSuffix ().length ());
       if (StringHelper.hasNoText (sEffectiveTypeName))
       {
+        // The type name consists only of the multiplicity suffix :D
         aErrorHdl.accept ("The field definition of '" + sFieldName + "' has no typename");
         bError = true;
         break fieldloop;
       }
+
+      // Try to resolve the type name
       JDMType aType = m_aContext.typeContainer ().findType (sEffectiveTypeName);
       if (aType == null)
       {
@@ -380,6 +390,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
         break fieldloop;
       }
 
+      // Determine the constraints
       ICommonsList <JDMGenConstraint> aConstraints = null;
       if (aJsonConstraints != null && aJsonConstraints.isNotEmpty ())
       {
@@ -499,6 +510,12 @@ public class JDMProcessor implements IJDMGenTypeResolver
         }
       }
 
+      // Determine the settings
+      if (aJsonSettings != null && aJsonSettings.isNotEmpty ())
+      {
+        // TODO
+      }
+
       // Add the field with all constraints
       ret.fields ().add (new JDMGenField (sFieldName, aType, eMultiplicity, sComment, aConstraints));
     }
@@ -510,6 +527,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
       return null;
     }
 
+    // Empty classes are okay
     if (false)
       if (ret.fields ().isEmpty ())
       {
@@ -567,7 +585,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
       }
       if ("$settings".equals (sEnumConstantName))
       {
-        _handleClassTypeSettings (ret, aEnumDef, aErrorHdl);
+        _handleGenClassSettings (ret, aEnumDef, aErrorHdl);
         continue;
       }
       if (!isValidIdentifier (sEnumConstantName))

@@ -24,8 +24,8 @@ import com.helger.commons.state.ETriState;
 import com.helger.jdmc.core.codegen.JDMCodeGenSettings;
 
 /**
- * Per-classType configuration. E.g. read from the <code>$config</code> key in a
- * JDM file.
+ * Per-classType configuration. E.g. read from the <code>$settings</code> key in
+ * a JDM file.
  *
  * @author Philip Helger
  */
