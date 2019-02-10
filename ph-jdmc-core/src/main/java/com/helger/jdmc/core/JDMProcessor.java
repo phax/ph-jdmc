@@ -186,9 +186,9 @@ public class JDMProcessor implements IJDMGenTypeResolver
     return ret;
   }
 
-  private static void _handleGenClassSettings (@Nonnull final AbstractJDMGenType aType,
-                                               @Nonnull final IJson aFieldDef,
-                                               @Nonnull final Consumer <? super String> aErrorHdl)
+  private static void _handleGenTypeSettings (@Nonnull final AbstractJDMGenType aType,
+                                              @Nonnull final IJson aFieldDef,
+                                              @Nonnull final Consumer <? super String> aErrorHdl)
   {
     if (!aFieldDef.isObject ())
       aErrorHdl.accept ("The per-type configuration must be an object");
@@ -231,6 +231,26 @@ public class JDMProcessor implements IJDMGenTypeResolver
               else
                 aErrorHdl.accept ("The configuration property '" + sKey + "' is unknown");
       }
+  }
+
+  private static void _handleGenFieldSettings (@Nonnull final JDMGenField aField,
+                                               @Nonnull final IJsonObject aFieldDef,
+                                               @Nonnull final Consumer <? super String> aErrorHdl)
+  {
+    for (final Map.Entry <String, IJson> aEntry : aFieldDef)
+    {
+      final String sKey = aEntry.getKey ();
+      final IJson aValue = aEntry.getValue ();
+      if ("isReference".equals (sKey))
+      {
+        if (aValue.isValue ())
+          aField.settings ().setIsReference (aValue.getAsValue ().getAsBoolean ());
+        else
+          aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
+      }
+      else
+        aErrorHdl.accept ("The configuration property '" + sKey + "' is unknown");
+    }
   }
 
   @Nullable
@@ -284,7 +304,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
       }
       if ("$settings".equals (sFieldName))
       {
-        _handleGenClassSettings (ret, aFieldDef, aErrorHdl);
+        _handleGenTypeSettings (ret, aFieldDef, aErrorHdl);
         continue;
       }
       if (!isValidIdentifier (sFieldName))
@@ -510,14 +530,16 @@ public class JDMProcessor implements IJDMGenTypeResolver
         }
       }
 
-      // Determine the settings
+      // Create the field
+      final JDMGenField aGenField = new JDMGenField (sFieldName, aType, eMultiplicity, sComment, aConstraints);
       if (aJsonSettings != null && aJsonSettings.isNotEmpty ())
       {
-        // TODO
+        // Add settings
+        _handleGenFieldSettings (aGenField, aJsonSettings, aErrorHdl);
       }
 
-      // Add the field with all constraints
-      ret.fields ().add (new JDMGenField (sFieldName, aType, eMultiplicity, sComment, aConstraints));
+      // Add to the type
+      ret.fields ().add (aGenField);
     }
 
     if (bError)
@@ -585,7 +607,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
       }
       if ("$settings".equals (sEnumConstantName))
       {
-        _handleGenClassSettings (ret, aEnumDef, aErrorHdl);
+        _handleGenTypeSettings (ret, aEnumDef, aErrorHdl);
         continue;
       }
       if (!isValidIdentifier (sEnumConstantName))
