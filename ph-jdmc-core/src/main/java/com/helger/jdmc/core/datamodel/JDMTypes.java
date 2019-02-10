@@ -39,6 +39,7 @@ import com.helger.commons.collection.impl.CommonsHashMap;
 import com.helger.commons.collection.impl.ICommonsMap;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.math.MathHelper;
+import com.helger.commons.state.EChange;
 import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.JExpr;
 import com.helger.xml.serialize.read.DOMReader;
@@ -222,6 +223,12 @@ public class JDMTypes
                                                    bEnum,
                                                    aTestValueFactory);
     return _register (aType);
+  }
+
+  @Nonnull
+  public EChange unregisterType (@Nonnull final AbstractJDMClassType aClass)
+  {
+    return m_aTypes.removeObject (aClass.getClassName ());
   }
 
   @Nonnull

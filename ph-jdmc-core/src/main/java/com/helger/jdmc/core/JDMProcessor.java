@@ -42,6 +42,7 @@ import com.helger.commons.lang.GenericReflection;
 import com.helger.commons.regex.RegExHelper;
 import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JJavaName;
 import com.helger.jdmc.core.datamodel.AbstractJDMClassType;
@@ -73,7 +74,7 @@ public class JDMProcessor implements IJDMTypeResolver
   private String m_sClassNamePrefix = null;
   private String m_sClassNameSuffix = null;
   private final JDMContext m_aContext = new JDMContext ();
-  private final ICommonsList <AbstractJDMClassType> m_aTypes = new CommonsArrayList <> ();
+  private final ICommonsList <AbstractJDMClassType> m_aReadTypes = new CommonsArrayList <> ();
 
   public JDMProcessor (@Nonnull final String sDestinationPackageName)
   {
@@ -252,8 +253,25 @@ public class JDMProcessor implements IJDMTypeResolver
     final String sLocalClassName = _getAdoptedTypeName (FilenameHelper.getBaseName (aSrcFile));
     final JDMClass ret = new JDMClass (m_sDestinationPackageName, sLocalClassName);
 
+    // register this type before the actual fields, so that "self reference"
+    // works.
+    m_aContext.types ().registerType (ret, (cm, cs, e) -> {
+      JInvocation aNew = cm.ref (ret.getFQClassName ())._new ();
+      for (final JDMField aField : ret.fields ())
+      {
+        final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
+        final boolean bIsSelfRef = aField.getType ().getShortName ().equals (ret.getClassName ());
+        IJExpression aTestVal = bIsSelfRef ? JExpr._null () : aField.getType ().createTestValue (cm, cs, eMultiplicity);
+        if (aField.getMultiplicity ().isOpenEnded ())
+          aTestVal = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ().arg (aTestVal);
+        aNew = aNew.arg (aTestVal);
+      }
+      return aNew;
+    });
+
     // Read all fields
-    for (final Map.Entry <String, IJson> aFieldEntry : aJsonObj)
+    boolean bError = false;
+    fieldloop: for (final Map.Entry <String, IJson> aFieldEntry : aJsonObj)
     {
       final String sFieldName = aFieldEntry.getKey ();
       final IJson aFieldDef = aFieldEntry.getValue ();
@@ -261,7 +279,8 @@ public class JDMProcessor implements IJDMTypeResolver
       if (StringHelper.hasNoText (sFieldName))
       {
         aErrorHdl.accept ("The field name may not be empty");
-        return null;
+        bError = true;
+        break fieldloop;
       }
       if ("$settings".equals (sFieldName))
       {
@@ -271,12 +290,14 @@ public class JDMProcessor implements IJDMTypeResolver
       if (!isValidIdentifier (sFieldName))
       {
         aErrorHdl.accept ("The field name '" + sFieldName + "' is not a valid identifier");
-        return null;
+        bError = true;
+        break fieldloop;
       }
       if (ret.fields ().containsAny (x -> x.getFieldName ().equals (sFieldName)))
       {
         aErrorHdl.accept ("Another field with name '" + sFieldName + "' is already present");
-        return null;
+        bError = true;
+        break fieldloop;
       }
 
       final String sTypeName;
@@ -319,13 +340,15 @@ public class JDMProcessor implements IJDMTypeResolver
               else
               {
                 aErrorHdl.accept ("The field definition of '" + sFieldName + "' is inconsistent");
-                return null;
+                bError = true;
+                break fieldloop;
               }
         }
         else
         {
           aErrorHdl.accept ("The field definition of '" + sFieldName + "' is neither a value nor an array");
-          return null;
+          bError = true;
+          break fieldloop;
         }
 
       // Check for +/?/* suffixes
@@ -336,7 +359,8 @@ public class JDMProcessor implements IJDMTypeResolver
       if (StringHelper.hasNoText (sEffectiveTypeName))
       {
         aErrorHdl.accept ("The field definition of '" + sFieldName + "' has no typename");
-        return null;
+        bError = true;
+        break fieldloop;
       }
       JDMType aType = m_aContext.types ().findType (sEffectiveTypeName);
       if (aType == null)
@@ -352,7 +376,8 @@ public class JDMProcessor implements IJDMTypeResolver
       if (aType == null)
       {
         aErrorHdl.accept ("The typename '" + sEffectiveTypeName + "' is unknown");
-        return null;
+        bError = true;
+        break fieldloop;
       }
 
       ICommonsList <JDMConstraint> aConstraints = null;
@@ -370,7 +395,8 @@ public class JDMProcessor implements IJDMTypeResolver
           if (eConstraintType == null)
           {
             aErrorHdl.accept ("Field '" + sFieldName + "' defines unknown constraint '" + sConstraintName + "'");
-            return null;
+            bError = true;
+            break fieldloop;
           }
           if (!eConstraintType.isApplicableOn (eFieldBaseType))
           {
@@ -381,7 +407,8 @@ public class JDMProcessor implements IJDMTypeResolver
                               "' which cannot be applied on the underlying type '" +
                               sTypeName +
                               "'");
-            return null;
+            bError = true;
+            break fieldloop;
           }
 
           // Single or multi value constraint?
@@ -396,7 +423,8 @@ public class JDMProcessor implements IJDMTypeResolver
                               "' defines constraint '" +
                               sConstraintName +
                               "' which requires a single value");
-            return null;
+            bError = true;
+            break fieldloop;
           }
 
           // Determine the base type of the constraint elements
@@ -446,7 +474,8 @@ public class JDMProcessor implements IJDMTypeResolver
                                     "' with illegal type '" +
                                     aType.getFQCN () +
                                     "'");
-                  return null;
+                  bError = true;
+                  break fieldloop;
                 }
                 aValue = (Serializable) aConstraintDataElement.getAsValue ().getConvertedValue (aTargetClass);
               }
@@ -474,6 +503,13 @@ public class JDMProcessor implements IJDMTypeResolver
       ret.fields ().add (new JDMField (sFieldName, aType, eMultiplicity, sComment, aConstraints));
     }
 
+    if (bError)
+    {
+      // Undo initial adding
+      m_aContext.types ().unregisterType (ret);
+      return null;
+    }
+
     if (false)
       if (ret.fields ().isEmpty ())
       {
@@ -481,20 +517,8 @@ public class JDMProcessor implements IJDMTypeResolver
         return null;
       }
 
-    // Upon success, register this type
-    m_aContext.types ().registerType (ret, (cm, cs, e) -> {
-      JInvocation aNew = cm.ref (ret.getFQClassName ())._new ();
-      for (final JDMField aField : ret.fields ())
-      {
-        final EJDMMultiplicity eMultiplicity = aField.getMultiplicity ();
-        IJExpression aTestVal = aField.getType ().createTestValue (cm, cs, eMultiplicity);
-        if (aField.getMultiplicity ().isOpenEnded ())
-          aTestVal = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ().arg (aTestVal);
-        aNew = aNew.arg (aTestVal);
-      }
-      return aNew;
-    });
-    m_aTypes.add (ret);
+    // Register as read at the end
+    m_aReadTypes.add (ret);
 
     return ret;
   }
@@ -630,7 +654,7 @@ public class JDMProcessor implements IJDMTypeResolver
               .registerType (ret,
                              (cm, cs, e) -> cm.ref (ret.getFQClassName ())
                                               .staticRef (ret.enumConstants ().getFirst ().getName ()));
-    m_aTypes.add (ret);
+    m_aReadTypes.add (ret);
 
     return ret;
   }
@@ -638,20 +662,20 @@ public class JDMProcessor implements IJDMTypeResolver
   @Nonnull
   public ICommonsList <AbstractJDMClassType> getAllTypes ()
   {
-    return m_aTypes.getClone ();
+    return m_aReadTypes.getClone ();
   }
 
   @Nullable
   public AbstractJDMClassType findTypeByName (@Nonnull final String sFQCN)
   {
-    return m_aTypes.findFirst (x -> x.getFQClassName ().equals (sFQCN));
+    return m_aReadTypes.findFirst (x -> x.getFQClassName ().equals (sFQCN));
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public ICommonsList <JDMClass> getAllReadClasses ()
   {
-    return CommonsArrayList.createFiltered (m_aTypes,
+    return CommonsArrayList.createFiltered (m_aReadTypes,
                                             x -> x instanceof JDMClass,
                                             (Function <AbstractJDMClassType, JDMClass>) x -> (JDMClass) x);
   }
@@ -660,7 +684,7 @@ public class JDMProcessor implements IJDMTypeResolver
   @ReturnsMutableCopy
   public ICommonsList <JDMEnum> getAllReadEnums ()
   {
-    return CommonsArrayList.createFiltered (m_aTypes,
+    return CommonsArrayList.createFiltered (m_aReadTypes,
                                             x -> x instanceof JDMEnum,
                                             (Function <AbstractJDMClassType, JDMEnum>) x -> (JDMEnum) x);
   }

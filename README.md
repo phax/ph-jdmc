@@ -119,3 +119,13 @@ public enum EDemo2
   ...
 }
 ```
+
+# News and noteworthy
+
+* v0.0.3 - work in progress
+    * Added the possibility to create self referencing types (optional only)
+    * Added base types `char` and `Character` as numeric types
+* v0.0.2 - 2019-02-02
+    * Fixed the code generation for serialization of optional primitive types (e.g. `int?`)
+* v0.0.1 - 2019-01-24
+    * Initial code generation

@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
@@ -87,7 +88,12 @@ public class JDMCodeGenerator
         final String sNodeID = aField.getType ().getShortName ();
         final IMutableDirectedGraphNode aFieldNode = aGraph.getNodeOfID (sNodeID);
         if (aFieldNode != null)
-          aGraph.createRelation (aClassNode, aFieldNode);
+        {
+          // Ensure to draw the connection only once. Happens if type A
+          // references type B with multiple fields
+          if (!aClassNode.isConnectedWith (aFieldNode))
+            aGraph.createRelation (aClassNode, aFieldNode);
+        }
       }
     }
     return aGraph;
@@ -118,12 +124,12 @@ public class JDMCodeGenerator
     ValueEnforcer.notNull (aDestDir, "DestDir");
     final IJDMFeedbackHandler aFeedbackHdl = new IJDMFeedbackHandler ()
     {
-      public void onWarning (final String sMsg, final Throwable aException)
+      public void onWarning (@Nullable final String sMsg, @Nullable final Throwable aException)
       {
         LOGGER.warn (sMsg, aException);
       }
 
-      public void onError (final String sMsg, final Throwable aException) throws Exception
+      public void onError (@Nonnull final String sMsg, @Nullable final Throwable aException) throws Exception
       {
         throw new IllegalStateException (sMsg, aException);
       }
@@ -149,7 +155,7 @@ public class JDMCodeGenerator
    * @param aFeedbackHandler
    *        Feedback handler for reporting issues. May not be <code>null</code>.
    * @throws Exception
-   *         for the error handler
+   *         for the feedback handler implementation
    */
   public void createCode (@Nonnull final File aDirMainJava,
                           @Nonnull final File aDirMainResources,
@@ -178,6 +184,8 @@ public class JDMCodeGenerator
     if (aGraph.containsCycles ())
     {
       // At least one cycle is contained
+      // This should be impossible to create, because of eager type resolution
+      // during parsing
       final ICommonsSortedSet <String> aCycleClassNames = new CommonsTreeSet <> ();
       for (final IMutableDirectedGraphNode aCurNode : aGraph.getAllNodes ().values ())
       {

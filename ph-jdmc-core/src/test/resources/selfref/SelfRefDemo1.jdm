@@ -1,0 +1,8 @@
+{ 
+  "$settings" :
+  {
+    "createManager": false
+  },
+  /* self reference may only be optional, otherwise test value creation fails */
+  "dummy1" : "SelfRefDemo1?"
+}

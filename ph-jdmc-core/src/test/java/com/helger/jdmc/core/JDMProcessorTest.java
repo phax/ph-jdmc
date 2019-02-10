@@ -127,7 +127,10 @@ public final class JDMProcessorTest
       p.setClassNamePrefix ("Ex").setClassNameSuffix ("BO");
       _applyTestJDM (p);
       final JDMCodeGenerator cg = new JDMCodeGenerator (p);
-      cg.defaultSettings ().setUseBusinessObject (true).setSetterArePackagePrivate (true).setReadExistingSPIFiles (true);
+      cg.defaultSettings ()
+        .setUseBusinessObject (true)
+        .setSetterArePackagePrivate (true)
+        .setReadExistingSPIFiles (true);
       cg.createCode (DIR_EXAMPLE);
     }
     // Third run - as little as possible
@@ -146,5 +149,19 @@ public final class JDMProcessorTest
       cg.defaultSettings ().setUseBusinessObject (true).setCreateManager (false).setCreateMicroTypeConverter (false);
       cg.createCode (DIR_EXAMPLE);
     }
+  }
+
+  @Test
+  public void testSelfReference () throws Exception
+  {
+    final JDMProcessor p = new JDMProcessor ("com.helger.selfref");
+    final File aSrcDir = new File ("src/test/resources/selfref");
+
+    JDMClass aClass;
+    aClass = p.readClassDef (new File (aSrcDir, "SelfRefDemo1.jdm"));
+    assertNotNull (aClass);
+    final JDMCodeGenerator cg = new JDMCodeGenerator (p);
+    cg.defaultSettings ().setUseBusinessObject (true).setCreateManager (false).setCreateMicroTypeConverter (false);
+    cg.createCode (DIR_EXAMPLE);
   }
 }
