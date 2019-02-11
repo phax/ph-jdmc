@@ -1,6 +1,6 @@
 # ph-jdmc
 
-Status: last release is **0.0.2** (2019-02-02)
+Status: last release is **0.0.3** (2019-02-11)
 
 Java Domain Model Creator (jdmc).
 The source structure is defined in JSON, and the domain model, test classes and XML serialization for usage on the "ph-" stack is created.
@@ -122,9 +122,10 @@ public enum EDemo2
 
 # News and noteworthy
 
-* v0.0.3 - work in progress
+* v0.0.3 - 2019-02-11
     * Added the possibility to create self referencing types (optional only)
     * Added base types `char` and `Character` as numeric types
+    * Added per-field settings (currently on `businessObjectReference` for XML serialization only)
 * v0.0.2 - 2019-02-02
     * Fixed the code generation for serialization of optional primitive types (e.g. `int?`)
 * v0.0.1 - 2019-01-24
