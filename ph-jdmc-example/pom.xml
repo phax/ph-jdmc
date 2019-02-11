@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.helger</groupId>
     <artifactId>ph-jdmc-parent-pom</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4-SNAPSHOT</version>
   </parent>
   <artifactId>ph-jdmc-example</artifactId>
   <packaging>bundle</packaging>
