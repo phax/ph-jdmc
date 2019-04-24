@@ -41,8 +41,8 @@ import com.helger.jcodemodel.JVar;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMGenClass;
 import com.helger.jdmc.core.datamodel.JDMGenField;
-import com.helger.photon.basic.app.dao.AbstractPhotonMapBasedWALDAO;
-import com.helger.photon.basic.audit.AuditHelper;
+import com.helger.photon.app.dao.AbstractPhotonMapBasedWALDAO;
+import com.helger.photon.audit.AuditHelper;
 import com.helger.photon.security.object.BusinessObjectHelper;
 
 @Immutable

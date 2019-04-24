@@ -47,7 +47,7 @@ import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMGenClass;
 import com.helger.jdmc.core.datamodel.JDMGenField;
 import com.helger.jdmc.core.datamodel.JDMType;
-import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
+import com.helger.photon.app.mock.PhotonAppWebTestRule;
 import com.helger.xml.mock.XMLTestHelper;
 
 @Immutable
@@ -76,7 +76,7 @@ final class JDMCodeGenTest
       final JVar jRule = jTestClass.field (JMod.PUBLIC | JMod.FINAL,
                                            cm.ref (TestRule.class),
                                            "m_aRule",
-                                           cm.ref (PhotonBasicWebTestRule.class)._new ());
+                                           cm.ref (PhotonAppWebTestRule.class)._new ());
       jRule.annotate (Rule.class);
     }
     else
@@ -264,7 +264,7 @@ final class JDMCodeGenTest
       final JVar jRule = jTestClass.field (JMod.PUBLIC | JMod.FINAL,
                                            cm.ref (TestRule.class),
                                            "m_aRule",
-                                           cm.ref (PhotonBasicWebTestRule.class)._new ());
+                                           cm.ref (PhotonAppWebTestRule.class)._new ());
       jRule.annotate (Rule.class);
     }
 

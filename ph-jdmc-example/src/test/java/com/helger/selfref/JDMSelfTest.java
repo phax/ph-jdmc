@@ -13,7 +13,7 @@ import java.time.Period;
 import java.time.ZonedDateTime;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.math.MathHelper;
-import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
+import com.helger.photon.app.mock.PhotonAppWebTestRule;
 import com.helger.xml.serialize.read.DOMReader;
 import javax.xml.namespace.QName;
 import org.junit.Assert;
@@ -32,7 +32,7 @@ import org.w3c.dom.Element;
  */
 public final class JDMSelfTest {
   @Rule
-  public final TestRule m_aRule = new PhotonBasicWebTestRule();
+  public final TestRule m_aRule = new PhotonAppWebTestRule();
 
   @Test
   @SuppressWarnings({

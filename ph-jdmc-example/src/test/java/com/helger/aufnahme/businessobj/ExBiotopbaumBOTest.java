@@ -4,7 +4,7 @@ import java.io.File;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.string.StringHelper;
-import com.helger.photon.basic.mock.PhotonBasicWebTestRule;
+import com.helger.photon.app.mock.PhotonAppWebTestRule;
 import com.helger.xml.mock.XMLTestHelper;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -21,7 +21,7 @@ import org.junit.rules.TestRule;
  */
 public final class ExBiotopbaumBOTest {
   @Rule
-  public final TestRule m_aRule = new PhotonBasicWebTestRule();
+  public final TestRule m_aRule = new PhotonAppWebTestRule();
 
   @Test
   public void testSetterAndGetter() {

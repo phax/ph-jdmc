@@ -72,7 +72,7 @@
     </dependency>
     <dependency>
       <groupId>com.helger</groupId>
-      <artifactId>ph-oton-basic</artifactId>
+      <artifactId>ph-oton-app</artifactId>
     </dependency>
     <dependency>
       <groupId>com.helger</groupId>
