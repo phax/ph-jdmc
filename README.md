@@ -125,6 +125,7 @@ public enum EDemo2
 
 * v0.0.4 - work in progress
     * Updated to ph-oton 8.2.0
+    * Maven plugin parameter `createManager` is now set correctly 
 * v0.0.3 - 2019-02-11
     * Added the possibility to create self referencing types (optional only)
     * Added base types `char` and `Character` as numeric types

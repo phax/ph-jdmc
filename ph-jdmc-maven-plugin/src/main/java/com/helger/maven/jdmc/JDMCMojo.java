@@ -121,7 +121,7 @@ public final class JDMCMojo extends AbstractMojo
    * <code>createMicroTypeConvert</code> is <code>true</code>.
    */
   @Parameter (property = "createManager", defaultValue = "false")
-  private final boolean createManager = false;
+  private boolean createManager = false;
 
   /**
    * The encoding of the created Java files. Defaults to UTF-8.
@@ -237,6 +237,11 @@ public final class JDMCMojo extends AbstractMojo
     createMicroTypeConverter = b;
   }
 
+  public void setCreateManager (final boolean b)
+  {
+    createManager = b;
+  }
+
   @Nonnull
   private File _ensureTargetDirectory (@Nonnull final File aSrc)
   {
@@ -343,6 +348,7 @@ public final class JDMCMojo extends AbstractMojo
       .setSetterArePackagePrivate (settersPackagePrivate)
       .setReadExistingSPIFiles (true)
       .setCreateMicroTypeConverter (createMicroTypeConverter)
+      .setCreateManager (createManager)
       .setCharset (Charset.forName (targetEncoding))
       .setNewLineMode (newLineMode)
       .setIndentString ("  ")
