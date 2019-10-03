@@ -20,6 +20,11 @@ import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
 
+/**
+ * Multiplicity to use
+ * 
+ * @author Philip Helger
+ */
 public enum EJDMMultiplicity
 {
   /** 0..1 */

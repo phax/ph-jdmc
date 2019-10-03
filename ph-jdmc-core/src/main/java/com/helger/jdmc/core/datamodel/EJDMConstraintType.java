@@ -27,6 +27,11 @@ import com.helger.commons.id.IHasID;
 import com.helger.commons.lang.EnumHelper;
 import com.helger.commons.name.IHasDisplayName;
 
+/**
+ * Constraint types in relationship to the base types
+ * 
+ * @author Philip Helger
+ */
 public enum EJDMConstraintType implements IHasID <String>, IHasDisplayName
 {
   MIN_LENGTH ("minLength", "Minimum length", EJDMConstraintDataType.INT_GE0, EJDMBaseType.STRING),

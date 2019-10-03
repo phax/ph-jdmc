@@ -37,6 +37,9 @@ public enum EJDMBaseType
     m_cPrefix = cPrefix;
   }
 
+  /**
+   * @return The prefix for generated code.
+   */
   public char getPrefix ()
   {
     return m_cPrefix;

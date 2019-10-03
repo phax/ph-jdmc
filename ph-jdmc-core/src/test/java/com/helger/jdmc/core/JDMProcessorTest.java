@@ -45,6 +45,8 @@ public final class JDMProcessorTest
     assertNotNull (aEnum);
     aEnum = p.readEnumDef (new File (aSrcDir, "demo/EDemo2.jdm"));
     assertNotNull (aEnum);
+    aEnum = p.readEnumDef (new File (aSrcDir, "demo/EDemo3.jdm"));
+    assertNotNull (aEnum);
 
     aEnum = p.readEnumDef (new File (aSrcDir, "common/EDecompositionDegreeClass.jdm"));
     assertNotNull (aEnum);

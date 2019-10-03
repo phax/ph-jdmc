@@ -669,10 +669,11 @@ public class JDMProcessor implements IJDMGenTypeResolver
         }
         else
         {
-          aErrorHdl.accept ("The enum constant definition of '" +
-                            sEnumConstantName +
-                            "' is neither a value nor an array");
-          return null;
+          // It's an object
+          final IJsonObject aObject = aEnumDef.getAsObject ();
+          sID = aObject.getAsString ("id");
+          sDisplayName = aObject.getAsString ("name");
+          sComment = aObject.getAsString ("comment");
         }
 
       if (sID == null)
