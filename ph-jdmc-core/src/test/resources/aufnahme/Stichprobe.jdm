@@ -20,7 +20,7 @@
     "createManager": true
   },
   "StichNr": ["int", "Schlüsselfeld"],
-  "StichNrzR": ["Reservat", "Zugehörig zu Reservat", {}, { "businessObjectReference" : true }],  
+  "StichNrzR": { "type": "Reservat", "comment": "Zugehörig zu Reservat", "settings": { "businessObjectReference" : true }},  
   "pics": ["File+", "Fotos"],
   "date": [ "LocalDate" ],
   "size": ["int", "Größe in m² bei Abweichung von Radius"],
@@ -34,7 +34,7 @@
   "BKL3": ["double", "Bestandesklasse 3, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
   "BKL4": ["double", "Bestandesklasse 4, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
   "BKL5": ["double", "Bestandesklasse 5, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
-  "BKL6": ["double", "Bestandesklasse 6, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
+  "BKL6": { "type": "double", "comment": "Bestandesklasse 6, Flächenanteil in Zehntel", "constraints": { "fractionDigits": 1 }},
   "BKL7": ["double", "Bestandesklasse 7, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
   "BKL8": ["double", "Bestandesklasse 8, Flächenanteil in Zehntel", { "fractionDigits": 1 }],
   "BKL9": ["double", "Bestandesklasse 9, Flächenanteil in Zehntel", { "fractionDigits": 1 }],

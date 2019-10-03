@@ -46,7 +46,7 @@ public interface ICaveType
   }
 
   /**
-   * Get the value of type.
+   * Höhlentyp
    * 
    * @return
    *     The requested value. May not be <code>null</code>.

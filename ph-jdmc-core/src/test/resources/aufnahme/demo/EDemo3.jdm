@@ -16,7 +16,7 @@
  */
 {
   "ALPHA" : { "id": "a" },
-  "RED" : { "id": "r" },
+  "RED" : {},
   "GREEN" : { "id": "g", "name": "green", "comment": "The green part." },
   "BLUE" :  { "id": "b", "name": "blue" }
 }

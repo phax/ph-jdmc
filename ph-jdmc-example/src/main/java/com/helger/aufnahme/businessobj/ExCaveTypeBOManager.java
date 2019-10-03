@@ -57,7 +57,7 @@ public class ExCaveTypeBOManager
    * @param eClazz
    *     EExCaveClassBO value. May not be <code>null</code>.
    * @param eType
-   *     EExCaveTypeBO value. May not be <code>null</code>.
+   *     Höhlentyp. May not be <code>null</code>.
    * @return
    *     The created object and never <code>null</code>.
    */
@@ -85,7 +85,7 @@ public class ExCaveTypeBOManager
    * @param eClazz
    *     EExCaveClassBO value. May not be <code>null</code>.
    * @param eType
-   *     EExCaveTypeBO value. May not be <code>null</code>.
+   *     Höhlentyp. May not be <code>null</code>.
    * @return
    *     {@link EChange#CHANGED} if something was changed, {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
    */

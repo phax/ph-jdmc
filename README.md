@@ -95,17 +95,16 @@ So the following example is a valid enumeration definition:
 }
 ```
 
-Alternatively an object can be used to describe the same values in a more explicit way:
+Alternatively an object can be used to describe the same values in a more explicit way (since v0.0.4):
 
 ```json
 {
   "ALPHA" : { "id": "a" },
-  "RED" :   { "id": "r" ],
+  "RED" :   {},
   "GREEN" : { "id": "g", "name": "green", "comment": "The green part." },
   "BLUE" :  [ "id": "b", "name": "blue" }
 }
 ```
-
 
 The created code looks as follows, assuming the definition was in file `EDemo2.jdm`.
 Note: The common parts (starting after the constructor) where omitted because it is identical to the previous example:
@@ -138,7 +137,7 @@ public enum EDemo2
 * v0.0.4 - work in progress
     * Updated to ph-oton 8.2.0
     * Maven plugin parameter `createManager` is now set correctly
-    * Allowing for JSON Object for enum definition
+    * Allowing for JSON Object for enum and class members
 * v0.0.3 - 2019-02-11
     * Added the possibility to create self referencing types (optional only)
     * Added base types `char` and `Character` as numeric types

@@ -14,48 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.aufnahme.small;
+package com.helger.aufnahme.smallbo;
 
-import java.io.Serializable;
-import javax.annotation.Nonnull;
+import com.helger.commons.string.StringHelper;
+import org.junit.Assert;
+import org.junit.Test;
 
 
 /**
- * <p>Interface for class {@link CaveType}</p>
- * <p>This class was initially automatically created</p>
+ * This is the test class for class {@link com.helger.aufnahme.smallbo.EDemo3}
+ * This class was initially automatically created
  * 
  * 
  * @author JDMCodeGenerator
  */
-public interface ICaveType
-  extends Serializable
-{
+public final class EDemo3Test {
 
-  /**
-   * Get the value of clazz.
-   * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
-   */
-  @Nonnull
-  ECaveClass getClazz();
-
-  @Nonnull
-  default String getClazzID() {
-    return getClazz().getID();
-  }
-
-  /**
-   * Höhlentyp
-   * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
-   */
-  @Nonnull
-  ECaveType getType();
-
-  @Nonnull
-  default String getTypeID() {
-    return getType().getID();
+  @Test
+  public void testBasic() {
+    for (final EDemo3 e: EDemo3 .values()) {
+      Assert.assertTrue(StringHelper.hasText(e.getID()));
+      Assert.assertTrue(StringHelper.hasText(e.getDisplayName()));
+      Assert.assertSame(e, EDemo3 .getFromIDOrNull(e.getID()));
+      Assert.assertSame(e, EDemo3 .getFromIDOrDefault(e.getID(), null));
+      Assert.assertSame(e, EDemo3 .getFromIDOrThrow(e.getID()));
+    }
   }
 }

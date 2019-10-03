@@ -373,9 +373,12 @@ public class JDMProcessor implements IJDMGenTypeResolver
         }
         else
         {
-          aErrorHdl.accept ("The field definition of '" + sFieldName + "' is neither a value nor an array");
-          bError = true;
-          break fieldloop;
+          // Read from JSON Object
+          final IJsonObject aObject = aFieldDef.getAsObject ();
+          sTypeName = aObject.getAsString ("type");
+          sComment = aObject.getAsString ("comment");
+          aJsonConstraints = aObject.getAsObject ("constraints");
+          aJsonSettings = aObject.getAsObject ("settings");
         }
 
       // Check for +/?/* suffixes for multiplicity
