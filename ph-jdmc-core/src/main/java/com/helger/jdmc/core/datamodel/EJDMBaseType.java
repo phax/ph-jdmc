@@ -16,6 +16,10 @@
  */
 package com.helger.jdmc.core.datamodel;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.annotation.Nonempty;
+
 /**
  * Type base type
  *
@@ -58,5 +62,40 @@ public enum EJDMBaseType
   public boolean isNumeric ()
   {
     return this == INTEGER || this == DOUBLE;
+  }
+
+  @Nonnull
+  public static EJDMBaseType getFromShortName (@Nonnull @Nonempty final String sShortName)
+  {
+    if ("boolean".equals (sShortName) || "Boolean".equals (sShortName))
+      return EJDMBaseType.BOOLEAN;
+    if ("String".equals (sShortName))
+      return EJDMBaseType.STRING;
+    if ("byte".equals (sShortName) ||
+        "Byte".equals (sShortName) ||
+        "char".equals (sShortName) ||
+        "Character".equals (sShortName) ||
+        "int".equals (sShortName) ||
+        "Integer".equals (sShortName) ||
+        "long".equals (sShortName) ||
+        "Long".equals (sShortName) ||
+        "short".equals (sShortName) ||
+        "Short".equals (sShortName) ||
+        "BigInteger".equals (sShortName))
+      return EJDMBaseType.INTEGER;
+    if ("double".equals (sShortName) ||
+        "Double".equals (sShortName) ||
+        "float".equals (sShortName) ||
+        "Float".equals (sShortName) ||
+        "BigDecimal".equals (sShortName))
+      return EJDMBaseType.DOUBLE;
+    if ("Date".equals (sShortName) ||
+        "LocalDate".equals (sShortName) ||
+        "LocalTime".equals (sShortName) ||
+        "LocalDateTime".equals (sShortName) ||
+        "OffsetDateTime".equals (sShortName) ||
+        "ZonedDateTime".equals (sShortName))
+      return EJDMBaseType.DATETIME;
+    return EJDMBaseType.OBJECT;
   }
 }

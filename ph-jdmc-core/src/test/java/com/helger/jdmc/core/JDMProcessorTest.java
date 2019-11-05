@@ -154,6 +154,26 @@ public final class JDMProcessorTest
   }
 
   @Test
+  public void testPostpone () throws Exception
+  {
+    final JDMProcessor p = new JDMProcessor ("com.helger.postpone");
+    final File aSrcDir = new File ("src/test/resources/postpone");
+
+    JDMGenClass aClass;
+    // A references B
+    aClass = p.readClassDef (new File (aSrcDir, "A.jdm"));
+    assertNotNull (aClass);
+    // B references C
+    aClass = p.readClassDef (new File (aSrcDir, "B.jdm"));
+    assertNotNull (aClass);
+    aClass = p.readClassDef (new File (aSrcDir, "C.jdm"));
+    assertNotNull (aClass);
+    final JDMCodeGenerator cg = new JDMCodeGenerator (p);
+    cg.defaultSettings ().setUseBusinessObject (true).setCreateManager (false).setCreateMicroTypeConverter (false);
+    cg.createCode (DIR_EXAMPLE);
+  }
+
+  @Test
   public void testSelfReference () throws Exception
   {
     final JDMProcessor p = new JDMProcessor ("com.helger.selfref");

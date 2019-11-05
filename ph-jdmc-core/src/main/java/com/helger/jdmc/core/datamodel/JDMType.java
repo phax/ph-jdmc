@@ -49,7 +49,7 @@ public class JDMType implements Serializable, Comparable <JDMType>
   private final boolean m_bImmutable;
   private final boolean m_bSerializable;
   private final boolean m_bEnum;
-  private EJDMBaseType m_eBaseType;
+  private final EJDMBaseType m_eBaseType;
   private final IJDMTypeTestValueCreator m_aTestValueFactory;
 
   private JDMType (@Nonnull @Nonempty final String sShortName,
@@ -75,46 +75,15 @@ public class JDMType implements Serializable, Comparable <JDMType>
     m_bImmutable = bImmutable;
     m_bSerializable = bSerializable;
     m_bEnum = bEnum;
-    if ("boolean".equals (sShortName) || "Boolean".equals (sShortName))
-      m_eBaseType = EJDMBaseType.BOOLEAN;
-    else
-      if ("String".equals (sShortName))
-        m_eBaseType = EJDMBaseType.STRING;
-      else
-        if ("byte".equals (sShortName) ||
-            "Byte".equals (sShortName) ||
-            "char".equals (sShortName) ||
-            "Character".equals (sShortName) ||
-            "int".equals (sShortName) ||
-            "Integer".equals (sShortName) ||
-            "long".equals (sShortName) ||
-            "Long".equals (sShortName) ||
-            "short".equals (sShortName) ||
-            "Short".equals (sShortName) ||
-            "BigInteger".equals (sShortName))
-          m_eBaseType = EJDMBaseType.INTEGER;
-        else
-          if ("double".equals (sShortName) ||
-              "Double".equals (sShortName) ||
-              "float".equals (sShortName) ||
-              "Float".equals (sShortName) ||
-              "BigDecimal".equals (sShortName))
-            m_eBaseType = EJDMBaseType.DOUBLE;
-          else
-            if ("LocalDate".equals (sShortName) ||
-                "LocalTime".equals (sShortName) ||
-                "LocalDateTime".equals (sShortName) ||
-                "OffsetDateTime".equals (sShortName) ||
-                "ZonedDateTime".equals (sShortName))
-              m_eBaseType = EJDMBaseType.DATETIME;
-            else
-              m_eBaseType = EJDMBaseType.OBJECT;
+    m_eBaseType = EJDMBaseType.getFromShortName (sShortName);
     m_aTestValueFactory = aTestValueFactory;
   }
 
   /**
    * @return The class short name without the package. Neither <code>null</code>
-   *         nor empty. For primitive types, this is e.g. "int".
+   *         nor empty. For primitive types, this is e.g. "int". For regular
+   *         classes it is the class local name which is the same as
+   *         {@link #getClassName()}.
    * @see #getClassName()
    */
   @Nonnull
@@ -165,6 +134,9 @@ public class JDMType implements Serializable, Comparable <JDMType>
     return AbstractJDMGenType.getFQCN (m_sPackageName, "I" + m_sClassName);
   }
 
+  /**
+   * @return The heuristically determined base type. Never <code>null</code>.
+   */
   @Nonnull
   public EJDMBaseType getBaseType ()
   {

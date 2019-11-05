@@ -35,7 +35,9 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.CommonsHashMap;
 import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.collection.impl.ICommonsMap;
 import com.helger.commons.io.file.FilenameHelper;
 import com.helger.commons.io.resource.FileSystemResource;
 import com.helger.commons.lang.GenericReflection;
@@ -73,6 +75,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
   private Charset m_aSourceCharset = StandardCharsets.UTF_8;
   private String m_sClassNamePrefix = null;
   private String m_sClassNameSuffix = null;
+  private Consumer <? super String> m_aDefaultErrorHdl = LOGGER::error;
   private final JDMContext m_aContext = new JDMContext ();
   private final ICommonsList <AbstractJDMGenType> m_aReadTypes = new CommonsArrayList <> ();
 
@@ -129,6 +132,20 @@ public class JDMProcessor implements IJDMGenTypeResolver
   }
 
   @Nonnull
+  public Consumer <? super String> getDefaultErrorHdl ()
+  {
+    return m_aDefaultErrorHdl;
+  }
+
+  @Nonnull
+  public JDMProcessor setDefaultErrorHdl (@Nonnull final Consumer <? super String> aDefaultErrorHdl)
+  {
+    ValueEnforcer.notNull (aDefaultErrorHdl, "DefaultErrorHdl");
+    m_aDefaultErrorHdl = aDefaultErrorHdl;
+    return this;
+  }
+
+  @Nonnull
   public final JDMContext getContext ()
   {
     return m_aContext;
@@ -156,9 +173,10 @@ public class JDMProcessor implements IJDMGenTypeResolver
       LOGGER.info ("Parsing JSON '" + aSrcFile.getAbsolutePath () + "'");
 
     final CollectingJsonParserHandler aHandler = new CollectingJsonParserHandler ();
-    JsonReader.parseJson (new FileSystemResource (aSrcFile).getReader (m_aSourceCharset), aHandler, x -> {
-      x.setTrackPosition (true);
-    }, ex -> aErrorHdl.accept (ex.getMessage ()));
+    JsonReader.parseJson (new FileSystemResource (aSrcFile).getReader (m_aSourceCharset),
+                          aHandler,
+                          x -> x.setTrackPosition (true),
+                          ex -> aErrorHdl.accept (ex.getMessage ()));
     final IJson aJson = aHandler.getJson ();
     if (aJson == null)
     {
@@ -186,6 +204,43 @@ public class JDMProcessor implements IJDMGenTypeResolver
     return ret;
   }
 
+  private static interface ISettingsCommand
+  {
+    void applyCommand (@Nonnull AbstractJDMGenType aType,
+                       @Nonnull String sKey,
+                       @Nonnull IJson aValue,
+                       @Nonnull Consumer <? super String> aErrorHdl);
+  }
+
+  private static ICommonsMap <String, ISettingsCommand> TYPE_COMMANDS = new CommonsHashMap <> ();
+  static
+  {
+    TYPE_COMMANDS.put ("businessObject", (aType, sKey, aValue, aErrorHdl) -> {
+      if (aValue.isValue ())
+        aType.settings ().setUseBusinessObjects (aValue.getAsValue ().getAsBoolean ());
+      else
+        aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
+    });
+    TYPE_COMMANDS.put ("setterArePackagePrivate", (aType, sKey, aValue, aErrorHdl) -> {
+      if (aValue.isValue ())
+        aType.settings ().setSetterArePackagePrivate (aValue.getAsValue ().getAsBoolean ());
+      else
+        aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
+    });
+    TYPE_COMMANDS.put ("createMicroTypeConverter", (aType, sKey, aValue, aErrorHdl) -> {
+      if (aValue.isValue ())
+        aType.settings ().setCreateMicroTypeConverter (aValue.getAsValue ().getAsBoolean ());
+      else
+        aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
+    });
+    TYPE_COMMANDS.put ("createManager", (aType, sKey, aValue, aErrorHdl) -> {
+      if (aValue.isValue ())
+        aType.settings ().setCreateManager (aValue.getAsValue ().getAsBoolean ());
+      else
+        aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
+    });
+  }
+
   private static void _handleGenTypeSettings (@Nonnull final AbstractJDMGenType aType,
                                               @Nonnull final IJson aFieldDef,
                                               @Nonnull final Consumer <? super String> aErrorHdl)
@@ -196,40 +251,11 @@ public class JDMProcessor implements IJDMGenTypeResolver
       for (final Map.Entry <String, IJson> aEntry : aFieldDef.getAsObject ())
       {
         final String sKey = aEntry.getKey ();
-        final IJson aValue = aEntry.getValue ();
-        if ("businessObject".equals (sKey))
-        {
-          if (aValue.isValue ())
-            aType.settings ().setUseBusinessObjects (aValue.getAsValue ().getAsBoolean ());
-          else
-            aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
-        }
+        final ISettingsCommand aHdl = TYPE_COMMANDS.get (sKey);
+        if (aHdl != null)
+          aHdl.applyCommand (aType, sKey, aEntry.getValue (), aErrorHdl);
         else
-          if ("setterArePackagePrivate".equals (sKey))
-          {
-            if (aValue.isValue ())
-              aType.settings ().setSetterArePackagePrivate (aValue.getAsValue ().getAsBoolean ());
-            else
-              aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
-          }
-          else
-            if ("createMicroTypeConverter".equals (sKey))
-            {
-              if (aValue.isValue ())
-                aType.settings ().setCreateMicroTypeConverter (aValue.getAsValue ().getAsBoolean ());
-              else
-                aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
-            }
-            else
-              if ("createManager".equals (sKey))
-              {
-                if (aValue.isValue ())
-                  aType.settings ().setCreateManager (aValue.getAsValue ().getAsBoolean ());
-                else
-                  aErrorHdl.accept ("The configuration property '" + sKey + "' requires a JSON value");
-              }
-              else
-                aErrorHdl.accept ("The configuration property '" + sKey + "' is unknown");
+          aErrorHdl.accept ("The configuration property '" + sKey + "' is unknown");
       }
   }
 
@@ -256,7 +282,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
   @Nullable
   public JDMGenClass readClassDef (@Nonnull final File aSrcFile)
   {
-    return readClassDef (aSrcFile, LOGGER::error);
+    return readClassDef (aSrcFile, m_aDefaultErrorHdl);
   }
 
   @Nullable
@@ -581,7 +607,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
   @Nullable
   public JDMGenEnum readEnumDef (@Nonnull final File aSrcFile)
   {
-    return readEnumDef (aSrcFile, LOGGER::error);
+    return readEnumDef (aSrcFile, m_aDefaultErrorHdl);
   }
 
   @Nullable

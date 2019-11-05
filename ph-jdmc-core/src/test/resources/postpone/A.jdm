@@ -1,0 +1,7 @@
+{
+  "$settings" :
+  {
+    "createManager": true
+  },
+  "b": { "type": "B", "comment": "Forward ref" }
+}  
