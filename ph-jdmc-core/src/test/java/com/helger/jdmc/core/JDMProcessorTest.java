@@ -26,7 +26,6 @@ import org.junit.Test;
 
 import com.helger.jdmc.core.codegen.JDMCodeGenerator;
 import com.helger.jdmc.core.datamodel.JDMGenClass;
-import com.helger.jdmc.core.datamodel.JDMGenEnum;
 
 /**
  * Test class for class {@link JDMProcessor}.
@@ -38,76 +37,36 @@ public final class JDMProcessorTest
   private static void _applyTestJDM (@Nonnull final JDMProcessor p)
   {
     final File aSrcDir = new File ("src/test/resources/aufnahme");
-
-    JDMGenEnum aEnum;
-
-    aEnum = p.readEnumDef (new File (aSrcDir, "demo/EDemo1.jdm"));
-    assertNotNull (aEnum);
-    aEnum = p.readEnumDef (new File (aSrcDir, "demo/EDemo2.jdm"));
-    assertNotNull (aEnum);
-    aEnum = p.readEnumDef (new File (aSrcDir, "demo/EDemo3.jdm"));
-    assertNotNull (aEnum);
-
-    aEnum = p.readEnumDef (new File (aSrcDir, "common/EDecompositionDegreeClass.jdm"));
-    assertNotNull (aEnum);
-    aEnum = p.readEnumDef (new File (aSrcDir, "common/EExposition.jdm"));
-    assertNotNull (aEnum);
-    aEnum = p.readEnumDef (new File (aSrcDir, "common/ETreeKind.jdm"));
-    assertNotNull (aEnum);
-
-    aEnum = p.readEnumDef (new File (aSrcDir, "biotopbaum/EBiotopbaumType.jdm"));
-    assertNotNull (aEnum);
-    aEnum = p.readEnumDef (new File (aSrcDir, "biotopbaum/ECaveClass.jdm"));
-    assertNotNull (aEnum);
-    aEnum = p.readEnumDef (new File (aSrcDir, "biotopbaum/ECaveType.jdm"));
-    assertNotNull (aEnum);
-    aEnum = p.readEnumDef (new File (aSrcDir, "biotopbaum/EDeadwoodCategory.jdm"));
-    assertNotNull (aEnum);
-    aEnum = p.readEnumDef (new File (aSrcDir, "biotopbaum/ESpecialStructure.jdm"));
-    assertNotNull (aEnum);
-    aEnum = p.readEnumDef (new File (aSrcDir, "biotopbaum/ETreeHeight.jdm"));
-    assertNotNull (aEnum);
-    aEnum = p.readEnumDef (new File (aSrcDir, "biotopbaum/EVitality.jdm"));
-    assertNotNull (aEnum);
-
-    aEnum = p.readEnumDef (new File (aSrcDir, "bestand/EStockDeadwood.jdm"));
-    assertNotNull (aEnum);
-    aEnum = p.readEnumDef (new File (aSrcDir, "bestand/EStockType.jdm"));
-    assertNotNull (aEnum);
-
-    aEnum = p.readEnumDef (new File (aSrcDir, "stichprobe/EUsagePeriod.jdm"));
-    assertNotNull (aEnum);
-    aEnum = p.readEnumDef (new File (aSrcDir, "stichprobe/EUsageType.jdm"));
-    assertNotNull (aEnum);
-
-    JDMGenClass aClass;
-    aClass = p.readClassDef (new File (aSrcDir, "biotopbaum/CaveType.jdm"));
-    assertNotNull (aClass);
-    aClass = p.readClassDef (new File (aSrcDir, "biotopbaum/TrunkSize.jdm"));
-    assertNotNull (aClass);
-    aClass = p.readClassDef (new File (aSrcDir, "biotopbaum/BiotopbaumDeadwood.jdm"));
-    assertNotNull (aClass);
-    aClass = p.readClassDef (new File (aSrcDir, "biotopbaum/BiotopbaumDecompositionDegree.jdm"));
-    assertNotNull (aClass);
-
-    aClass = p.readClassDef (new File (aSrcDir, "stichprobe/StichprobeDeadwood.jdm"));
-    assertNotNull (aClass);
-
-    aClass = p.readClassDef (new File (aSrcDir, "Biotopbaum.jdm"));
-    assertNotNull (aClass);
-    aClass = p.readClassDef (new File (aSrcDir, "Habitatbaumgruppe.jdm"));
-    assertNotNull (aClass);
-    aClass = p.readClassDef (new File (aSrcDir, "Bestand.jdm"));
-    assertNotNull (aClass);
-
-    aClass = p.readClassDef (new File (aSrcDir, "Reservat.jdm"));
-    assertNotNull (aClass);
-    aClass = p.readClassDef (new File (aSrcDir, "Stichprobe.jdm"));
-    assertNotNull (aClass);
-
-    // Test only
-    aClass = p.readClassDef (new File (aSrcDir, "Leergut.jdm"));
-    assertNotNull (aClass);
+    p.reader ()
+     .addEnumDef (new File (aSrcDir, "demo/EDemo1.jdm"))
+     .addEnumDef (new File (aSrcDir, "demo/EDemo2.jdm"))
+     .addEnumDef (new File (aSrcDir, "demo/EDemo3.jdm"))
+     .addEnumDef (new File (aSrcDir, "common/EDecompositionDegreeClass.jdm"))
+     .addEnumDef (new File (aSrcDir, "common/EExposition.jdm"))
+     .addEnumDef (new File (aSrcDir, "common/ETreeKind.jdm"))
+     .addEnumDef (new File (aSrcDir, "biotopbaum/EBiotopbaumType.jdm"))
+     .addEnumDef (new File (aSrcDir, "biotopbaum/ECaveClass.jdm"))
+     .addEnumDef (new File (aSrcDir, "biotopbaum/ECaveType.jdm"))
+     .addEnumDef (new File (aSrcDir, "biotopbaum/EDeadwoodCategory.jdm"))
+     .addEnumDef (new File (aSrcDir, "biotopbaum/ESpecialStructure.jdm"))
+     .addEnumDef (new File (aSrcDir, "biotopbaum/ETreeHeight.jdm"))
+     .addEnumDef (new File (aSrcDir, "biotopbaum/EVitality.jdm"))
+     .addEnumDef (new File (aSrcDir, "bestand/EStockDeadwood.jdm"))
+     .addEnumDef (new File (aSrcDir, "bestand/EStockType.jdm"))
+     .addEnumDef (new File (aSrcDir, "stichprobe/EUsagePeriod.jdm"))
+     .addEnumDef (new File (aSrcDir, "stichprobe/EUsageType.jdm"))
+     .addClassDef (new File (aSrcDir, "biotopbaum/CaveType.jdm"))
+     .addClassDef (new File (aSrcDir, "biotopbaum/TrunkSize.jdm"))
+     .addClassDef (new File (aSrcDir, "biotopbaum/BiotopbaumDeadwood.jdm"))
+     .addClassDef (new File (aSrcDir, "biotopbaum/BiotopbaumDecompositionDegree.jdm"))
+     .addClassDef (new File (aSrcDir, "stichprobe/StichprobeDeadwood.jdm"))
+     .addClassDef (new File (aSrcDir, "Biotopbaum.jdm"))
+     .addClassDef (new File (aSrcDir, "Habitatbaumgruppe.jdm"))
+     .addClassDef (new File (aSrcDir, "Bestand.jdm"))
+     .addClassDef (new File (aSrcDir, "Reservat.jdm"))
+     .addClassDef (new File (aSrcDir, "Stichprobe.jdm"))
+     .addClassDef (new File (aSrcDir, "Leergut.jdm"))
+     .readAll ();
   }
 
   private static final File DIR_EXAMPLE = new File ("../ph-jdmc-example");
@@ -159,15 +118,16 @@ public final class JDMProcessorTest
     final JDMProcessor p = new JDMProcessor ("com.helger.postpone");
     final File aSrcDir = new File ("src/test/resources/postpone");
 
-    JDMGenClass aClass;
     // A references B
-    aClass = p.readClassDef (new File (aSrcDir, "A.jdm"));
-    assertNotNull (aClass);
     // B references C
-    aClass = p.readClassDef (new File (aSrcDir, "B.jdm"));
-    assertNotNull (aClass);
-    aClass = p.readClassDef (new File (aSrcDir, "C.jdm"));
-    assertNotNull (aClass);
+    // C references E
+    p.reader ()
+     .addClassDef (new File (aSrcDir, "A.jdm"))
+     .addClassDef (new File (aSrcDir, "B.jdm"))
+     .addClassDef (new File (aSrcDir, "C.jdm"))
+     .addEnumDef (new File (aSrcDir, "E.jdm"))
+     .readAll ();
+
     final JDMCodeGenerator cg = new JDMCodeGenerator (p);
     cg.defaultSettings ().setUseBusinessObject (true).setCreateManager (false).setCreateMicroTypeConverter (false);
     cg.createCode (DIR_EXAMPLE);

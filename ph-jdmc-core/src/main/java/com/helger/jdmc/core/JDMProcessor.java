@@ -36,11 +36,14 @@ import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.CommonsHashMap;
+import com.helger.commons.collection.impl.CommonsLinkedHashMap;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.collection.impl.ICommonsMap;
+import com.helger.commons.collection.impl.ICommonsOrderedMap;
 import com.helger.commons.io.file.FilenameHelper;
 import com.helger.commons.io.resource.FileSystemResource;
 import com.helger.commons.lang.GenericReflection;
+import com.helger.commons.mutable.MutableInt;
 import com.helger.commons.regex.RegExHelper;
 import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.IJExpression;
@@ -50,6 +53,7 @@ import com.helger.jcodemodel.JJavaName;
 import com.helger.jdmc.core.datamodel.AbstractJDMGenType;
 import com.helger.jdmc.core.datamodel.EJDMBaseType;
 import com.helger.jdmc.core.datamodel.EJDMConstraintType;
+import com.helger.jdmc.core.datamodel.EJDMDefinitionType;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.IJDMGenTypeResolver;
 import com.helger.jdmc.core.datamodel.JDMContext;
@@ -75,6 +79,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
   private Charset m_aSourceCharset = StandardCharsets.UTF_8;
   private String m_sClassNamePrefix = null;
   private String m_sClassNameSuffix = null;
+  private Consumer <? super String> m_aDefaultInfoHdl = LOGGER::info;
   private Consumer <? super String> m_aDefaultErrorHdl = LOGGER::error;
   private final JDMContext m_aContext = new JDMContext ();
   private final ICommonsList <AbstractJDMGenType> m_aReadTypes = new CommonsArrayList <> ();
@@ -132,6 +137,20 @@ public class JDMProcessor implements IJDMGenTypeResolver
   }
 
   @Nonnull
+  public Consumer <? super String> getDefaultInfoHdl ()
+  {
+    return m_aDefaultInfoHdl;
+  }
+
+  @Nonnull
+  public JDMProcessor setDefaultInfoHdl (@Nonnull final Consumer <? super String> aDefaultInfoHdl)
+  {
+    ValueEnforcer.notNull (aDefaultInfoHdl, "DefaultInfoHdl");
+    m_aDefaultInfoHdl = aDefaultInfoHdl;
+    return this;
+  }
+
+  @Nonnull
   public Consumer <? super String> getDefaultErrorHdl ()
   {
     return m_aDefaultErrorHdl;
@@ -167,10 +186,11 @@ public class JDMProcessor implements IJDMGenTypeResolver
   }
 
   @Nullable
-  private IJsonObject _parseJson (@Nonnull final File aSrcFile, @Nonnull final Consumer <? super String> aErrorHdl)
+  private IJsonObject _parseJson (@Nonnull final File aSrcFile,
+                                  @Nonnull final Consumer <? super String> aInfoHdl,
+                                  @Nonnull final Consumer <? super String> aErrorHdl)
   {
-    if (LOGGER.isInfoEnabled ())
-      LOGGER.info ("Parsing JSON '" + aSrcFile.getAbsolutePath () + "'");
+    aInfoHdl.accept ("Parsing JSON '" + aSrcFile.getAbsolutePath () + "'");
 
     final CollectingJsonParserHandler aHandler = new CollectingJsonParserHandler ();
     JsonReader.parseJson (new FileSystemResource (aSrcFile).getReader (m_aSourceCharset),
@@ -282,16 +302,18 @@ public class JDMProcessor implements IJDMGenTypeResolver
   @Nullable
   public JDMGenClass readClassDef (@Nonnull final File aSrcFile)
   {
-    return readClassDef (aSrcFile, m_aDefaultErrorHdl);
+    return readClassDef (aSrcFile, m_aDefaultInfoHdl, m_aDefaultErrorHdl);
   }
 
   @Nullable
-  public JDMGenClass readClassDef (@Nonnull final File aSrcFile, @Nonnull final Consumer <? super String> aErrorHdl)
+  public JDMGenClass readClassDef (@Nonnull final File aSrcFile,
+                                   @Nonnull final Consumer <? super String> aInfoHdl,
+                                   @Nonnull final Consumer <? super String> aErrorHdl)
   {
     ValueEnforcer.notNull (aSrcFile, "SrcFile");
 
     // Basic parsing
-    final IJsonObject aJsonObj = _parseJson (aSrcFile, aErrorHdl);
+    final IJsonObject aJsonObj = _parseJson (aSrcFile, aInfoHdl, aErrorHdl);
     if (aJsonObj == null)
       return null;
 
@@ -607,15 +629,17 @@ public class JDMProcessor implements IJDMGenTypeResolver
   @Nullable
   public JDMGenEnum readEnumDef (@Nonnull final File aSrcFile)
   {
-    return readEnumDef (aSrcFile, m_aDefaultErrorHdl);
+    return readEnumDef (aSrcFile, m_aDefaultInfoHdl, m_aDefaultErrorHdl);
   }
 
   @Nullable
-  public JDMGenEnum readEnumDef (@Nonnull final File aSrcFile, @Nonnull final Consumer <? super String> aErrorHdl)
+  public JDMGenEnum readEnumDef (@Nonnull final File aSrcFile,
+                                 @Nonnull final Consumer <? super String> aInfoHdl,
+                                 @Nonnull final Consumer <? super String> aErrorHdl)
   {
     ValueEnforcer.notNull (aSrcFile, "SrcFile");
 
-    final IJsonObject aJsonObj = _parseJson (aSrcFile, aErrorHdl);
+    final IJsonObject aJsonObj = _parseJson (aSrcFile, aInfoHdl, aErrorHdl);
     if (aJsonObj == null)
       return null;
 
@@ -757,5 +781,130 @@ public class JDMProcessor implements IJDMGenTypeResolver
     return CommonsArrayList.createFiltered (m_aReadTypes,
                                             x -> x instanceof JDMGenEnum,
                                             (Function <AbstractJDMGenType, JDMGenEnum>) x -> (JDMGenEnum) x);
+  }
+
+  public static interface IMultiReaderErrorHandler
+  {
+    void onReadError (@Nonnull EJDMDefinitionType eType,
+                      @Nonnull File aFile,
+                      @Nonnull ICommonsList <String> aInfos,
+                      @Nonnull ICommonsList <String> aErrors);
+  }
+
+  /**
+   * This class ensures the safe reading of multiple class and enum definitions,
+   * taking into account the dependencies between each other.
+   *
+   * @author Philip Helger
+   * @since 0.0.4
+   */
+  @NotThreadSafe
+  public final class MultiReader
+  {
+    private final ICommonsOrderedMap <File, EJDMDefinitionType> m_aDefs = new CommonsLinkedHashMap <> ();
+    private final IMultiReaderErrorHandler m_aDefaultErrHdl = (eType, aFile, aInfoMsgs, aErrorMsgs) -> {
+      aInfoMsgs.forEach (m_aDefaultInfoHdl);
+      aErrorMsgs.forEach (m_aDefaultErrorHdl);
+      throw new IllegalStateException ("Failed to read " +
+                                       eType.getDisplayName () +
+                                       " '" +
+                                       aFile.getAbsolutePath () +
+                                       "'");
+    };
+    private boolean m_bReading = false;
+
+    @Nonnull
+    public MultiReader addEnumDef (@Nonnull final File aFile)
+    {
+      ValueEnforcer.notNull (aFile, "File");
+      ValueEnforcer.isFalse (m_bReading, "Files were already read - cannot add new files");
+      if (m_aDefs.containsKey (aFile))
+        throw new IllegalArgumentException ("The file '" +
+                                            aFile.getAbsolutePath () +
+                                            "' is already part of the list to be read");
+      m_aDefs.put (aFile, EJDMDefinitionType.ENUMERATION);
+      return this;
+    }
+
+    @Nonnull
+    public MultiReader addClassDef (@Nonnull final File aFile)
+    {
+      ValueEnforcer.notNull (aFile, "File");
+      ValueEnforcer.isFalse (m_bReading, "Files were already read - cannot add new files");
+      if (m_aDefs.containsKey (aFile))
+        throw new IllegalArgumentException ("The file '" +
+                                            aFile.getAbsolutePath () +
+                                            "' is already part of the list to be read");
+      m_aDefs.put (aFile, EJDMDefinitionType.CLASS);
+      return this;
+    }
+
+    public void readAll ()
+    {
+      readAll (m_aDefaultErrHdl);
+    }
+
+    public void readAll (@Nonnull final IMultiReaderErrorHandler aErrorHdl)
+    {
+      ValueEnforcer.notNull (aErrorHdl, "ErrorHdl");
+      ValueEnforcer.isFalse (m_bReading, "Definitions were already read");
+
+      m_bReading = true;
+      final ICommonsList <String> aInfoMsgs = new CommonsArrayList <> ();
+      final ICommonsList <String> aErrorMsgs = new CommonsArrayList <> ();
+
+      // Read all enums - no circular dependencies expected
+      for (final Map.Entry <File, EJDMDefinitionType> aEntry : m_aDefs.entrySet ())
+        if (aEntry.getValue ().equals (EJDMDefinitionType.ENUMERATION))
+        {
+          final File aFile = aEntry.getKey ();
+          aInfoMsgs.clear ();
+          aErrorMsgs.clear ();
+          final JDMGenEnum aEnumGen = JDMProcessor.this.readEnumDef (aFile, aInfoMsgs::add, aErrorMsgs::add);
+          if (aEnumGen == null)
+            aErrorHdl.onReadError (EJDMDefinitionType.ENUMERATION, aFile, aInfoMsgs, aErrorMsgs);
+        }
+
+      // Read all classes - may have forward references
+      final ICommonsOrderedMap <File, MutableInt> aRestClasses = new CommonsLinkedHashMap <> ();
+      for (final Map.Entry <File, EJDMDefinitionType> aEntry : m_aDefs.entrySet ())
+        if (aEntry.getValue ().equals (EJDMDefinitionType.CLASS))
+          aRestClasses.put (aEntry.getKey (), new MutableInt (0));
+      final int nMaxCount = aRestClasses.size ();
+      while (aRestClasses.isNotEmpty ())
+      {
+        final File aFile = aRestClasses.getFirstKey ();
+        final MutableInt aCount = aRestClasses.remove (aFile);
+        aInfoMsgs.clear ();
+        aErrorMsgs.clear ();
+        final JDMGenClass aClassGen = JDMProcessor.this.readClassDef (aFile, aInfoMsgs::add, aErrorMsgs::add);
+        if (aClassGen == null)
+        {
+          if (aCount.intValue () >= nMaxCount)
+          {
+            aErrorHdl.onReadError (EJDMDefinitionType.CLASS, aFile, aInfoMsgs, aErrorMsgs);
+            // Don't add again
+          }
+          else
+          {
+            // Retry later by putting at the end of the map
+            aCount.inc ();
+            aRestClasses.put (aFile, aCount);
+          }
+        }
+        else
+        {
+          // Reading successful
+          aInfoMsgs.forEach (m_aDefaultInfoHdl);
+          aErrorMsgs.forEach (m_aDefaultErrorHdl);
+        }
+      }
+    }
+  }
+
+  @Nonnull
+  public MultiReader reader ()
+  {
+    return new MultiReader ();
   }
 }
