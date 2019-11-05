@@ -1,7 +1,6 @@
-
 # ph-jdmc
 
-Status: last release is **0.0.3** (2019-02-11)
+Status: last release is **0.0.4** (2019-11-05)
 
 Java Domain Model Creator (jdmc).
 The source structure is defined in JSON, and the domain model, test classes and XML serialization for usage on the "ph-" stack is created.
@@ -134,10 +133,11 @@ public enum EDemo2
 
 # News and noteworthy
 
-* v0.0.4 - work in progress
+* v0.0.4 - 2019-11-05
     * Updated to ph-oton 8.2.0
     * Maven plugin parameter `createManager` is now set correctly
     * Allowing for JSON Object for enum and class members
+    * Added new `JDMProcessor.reader()` to allow for forward reference resolution
 * v0.0.3 - 2019-02-11
     * Added the possibility to create self referencing types (optional only)
     * Added base types `char` and `Character` as numeric types
