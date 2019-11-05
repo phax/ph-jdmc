@@ -34,10 +34,13 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.DirectoryScanner;
 
 import com.helger.commons.charset.CharsetHelper;
+import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.io.file.FileOperationManager;
 import com.helger.commons.string.StringHelper;
 import com.helger.commons.system.ENewLineMode;
 import com.helger.jdmc.core.JDMProcessor;
+import com.helger.jdmc.core.JDMProcessor.MultiReader;
 import com.helger.jdmc.core.codegen.IJDMFeedbackHandler;
 import com.helger.jdmc.core.codegen.JDMCodeGenerator;
 
@@ -329,17 +332,28 @@ public final class JDMCMojo extends AbstractMojo
     // Read stuff
     final JDMProcessor p = new JDMProcessor (packageName).setSourceCharset (Charset.forName (sourceEncoding))
                                                          .setClassNamePrefix (classNamePrefix)
-                                                         .setClassNameSuffix (classNameSuffix);
+                                                         .setClassNameSuffix (classNameSuffix)
+                                                         .setDefaultInfoHdl (getLog ()::info)
+                                                         .setDefaultErrorHdl (getLog ()::error);
+    final MultiReader aReader = p.reader ();
     if (sourceEnumDefs != null)
       for (final String sEnumDef : sourceEnumDefs)
         for (final File aFile : _getAllMatchingFiles (sEnumDef))
-          if (p.readEnumDef (aFile, getLog ()::error) == null)
-            throw new MojoExecutionException ("The enum definition in " + aFile.getAbsolutePath () + " is invalid");
+          aReader.addEnumDef (aFile);
     if (sourceClassDefs != null)
       for (final String sClassDef : sourceClassDefs)
         for (final File aFile : _getAllMatchingFiles (sClassDef))
-          if (p.readClassDef (aFile, getLog ()::error) == null)
-            throw new MojoExecutionException ("The class definition in " + aFile.getAbsolutePath () + " is invalid");
+          aReader.addClassDef (aFile);
+
+    final ICommonsList <String> aExceptions = new CommonsArrayList <> ();
+    // Main reading
+    aReader.readAll ( (eType, aFile, aInfoMsgs, aErrorMsgs) -> {
+      aInfoMsgs.forEach (getLog ()::info);
+      aErrorMsgs.forEach (getLog ()::error);
+      aExceptions.add ("Failed to read " + eType.getDisplayName () + " '" + aFile.getAbsolutePath () + "'");
+    });
+    if (aExceptions.isNotEmpty ())
+      throw new MojoExecutionException (StringHelper.getImploded ("\n", aExceptions));
 
     // Start code generation
     final JDMCodeGenerator cg = new JDMCodeGenerator (p);
