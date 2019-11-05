@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2018-2019 Philip Helger (www.helger.com)
  * philip[at]helger[dot]com
  *
@@ -14,10 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{
-  "$settings" :
+package com.helger.postpone;
+
+import java.io.IOException;
+import com.helger.commons.mock.SPITestHelper;
+import org.junit.Test;
+
+
+/**
+ * Test all SPI implementations of this project
+ * This class was initially automatically created
+ * 
+ * 
+ * @author JDMCodeGenerator
+ */
+public final class JDMSPITest {
+
+  @Test
+  public void testSPI()
+    throws IOException
   {
-    "createManager": true
-  },
-  "b": { "type": "B", "comment": "Forward ref" }
-}  
+    SPITestHelper.testIfAllSPIImplementationsAreValid();
+  }
+}

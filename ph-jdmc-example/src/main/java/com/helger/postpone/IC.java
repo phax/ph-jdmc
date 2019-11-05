@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2018-2019 Philip Helger (www.helger.com)
  * philip[at]helger[dot]com
  *
@@ -14,10 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.helger.postpone;
+
+import com.helger.tenancy.IBusinessObject;
+import javax.annotation.Nonnull;
+
+
+/**
+ * <p>Interface for class {@link C}</p>
+ * <p>This class was initially automatically created</p>
+ * 
+ * 
+ * @author JDMCodeGenerator
+ */
+public interface IC
+  extends IBusinessObject
 {
-  "$settings" :
-  {
-    "createManager": true
-  },
-  "b": { "type": "B", "comment": "Forward ref" }
-}  
+
+  /**
+   * Get the value of e.
+   * 
+   * @return
+   *     The requested value. May not be <code>null</code>.
+   */
+  @Nonnull
+  EE getE();
+
+  @Nonnull
+  default String getEID() {
+    return getE().getID();
+  }
+}
