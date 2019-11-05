@@ -45,7 +45,7 @@ import com.helger.jdmc.core.codegen.IJDMFeedbackHandler;
 import com.helger.jdmc.core.codegen.JDMCodeGenerator;
 
 /**
- * @description Convert JDM files to Java Code
+ * @description Convert .JDM files to Java Code
  */
 @Mojo (name = "jdmc", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
 public final class JDMCMojo extends AbstractMojo
