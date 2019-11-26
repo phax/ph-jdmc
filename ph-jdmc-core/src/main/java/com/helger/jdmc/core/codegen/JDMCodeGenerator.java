@@ -105,8 +105,10 @@ public class JDMCodeGenerator
     {
       final String sContent = StringHelper.getImploded ('\n', aEntry.getValue ()) + "\n";
       // Fake directory
-      cm._package ("META-INF.services")
-        .addResourceFile (JTextFile.createFully (aEntry.getKey (), StandardCharsets.UTF_8, sContent));
+      cm.rootPackage ()
+        .addResourceFile (JTextFile.createFully ("META-INF/services/" + aEntry.getKey (),
+                                                 StandardCharsets.UTF_8,
+                                                 sContent));
     }
   }
 
