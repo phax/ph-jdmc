@@ -104,11 +104,8 @@ public class JDMCodeGenerator
     for (final Map.Entry <String, ICommonsOrderedSet <String>> aEntry : cm.spiImplMap ().getAll ())
     {
       final String sContent = StringHelper.getImploded ('\n', aEntry.getValue ()) + "\n";
-      // Fake directory
-      cm.rootPackage ()
-        .addResourceFile (JTextFile.createFully ("META-INF/services/" + aEntry.getKey (),
-                                                 StandardCharsets.UTF_8,
-                                                 sContent));
+      cm.resourceDir ("META-INF/services")
+        .addResourceFile (JTextFile.createFully (aEntry.getKey (), StandardCharsets.UTF_8, sContent));
     }
   }
 
