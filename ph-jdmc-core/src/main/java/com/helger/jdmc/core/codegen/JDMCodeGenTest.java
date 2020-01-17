@@ -35,7 +35,7 @@ import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.EClassType;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JAnnotationUse;
-import com.helger.jcodemodel.JClassAlreadyExistsException;
+import com.helger.jcodemodel.JCodeModelException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
@@ -60,7 +60,7 @@ final class JDMCodeGenTest
 
   static void createTestJavaClass (@Nonnull final JDMCodeGenSettings aSettings,
                                    @Nonnull final JDMCodeModel cm,
-                                   @Nonnull final JDMGenClass aClass) throws JClassAlreadyExistsException
+                                   @Nonnull final JDMGenClass aClass) throws JCodeModelException
   {
     final AbstractJClass jClass = cm.ref (aClass.getFQClassName ());
     final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
@@ -248,7 +248,7 @@ final class JDMCodeGenTest
 
   static void createTestJavaSelfTest (@Nonnull final JDMProcessor aProcessor,
                                       @Nonnull final JDMCodeGenSettings aSettings,
-                                      @Nonnull final JDMCodeModel cm) throws JClassAlreadyExistsException
+                                      @Nonnull final JDMCodeModel cm) throws JCodeModelException
   {
     final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
                                                 AbstractJDMGenType.getFQCN (aProcessor.getDestinationPackageName (),
@@ -289,7 +289,7 @@ final class JDMCodeGenTest
   }
 
   static void createSPITest (@Nonnull final String sDestPackageName,
-                             @Nonnull final JDMCodeModel cm) throws JClassAlreadyExistsException
+                             @Nonnull final JDMCodeModel cm) throws JCodeModelException
   {
     final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
                                                 AbstractJDMGenType.getFQCN (sDestPackageName, "JDMSPITest"),

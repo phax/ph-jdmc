@@ -29,7 +29,7 @@ import com.helger.dao.wal.AbstractMapBasedWALDAO.InitSettings;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
 import com.helger.jcodemodel.JBlock;
-import com.helger.jcodemodel.JClassAlreadyExistsException;
+import com.helger.jcodemodel.JCodeModelException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JInvocation;
@@ -54,7 +54,7 @@ final class JDMCodeGenManager
   public static void createMainManagerClass (@Nonnull final JDMCodeModel cm,
                                              @Nonnull final JDMGenClass aClass,
                                              @Nonnull final JDefinedClass jInterface,
-                                             @Nonnull final JDefinedClass jDomainClass) throws JClassAlreadyExistsException
+                                             @Nonnull final JDefinedClass jDomainClass) throws JCodeModelException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC, aClass.getFQManagerClassName (), EClassType.CLASS);
     jClass._extends (cm.ref (AbstractPhotonMapBasedWALDAO.class).narrow (jInterface, jDomainClass));

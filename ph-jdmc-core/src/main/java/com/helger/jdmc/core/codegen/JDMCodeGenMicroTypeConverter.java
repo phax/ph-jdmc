@@ -34,7 +34,7 @@ import com.helger.jcodemodel.EClassType;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JBlock;
-import com.helger.jcodemodel.JClassAlreadyExistsException;
+import com.helger.jcodemodel.JCodeModelException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JFieldVar;
@@ -104,7 +104,7 @@ final class JDMCodeGenMicroTypeConverter
   static JDefinedClass createMainMicroTypeConverterClass (@Nonnull final JDMCodeGenSettings aSettings,
                                                           @Nonnull final JDMCodeModel cm,
                                                           @Nonnull final JDMGenClass aClass,
-                                                          @Nonnull final JDefinedClass jDomainClass) throws JClassAlreadyExistsException
+                                                          @Nonnull final JDefinedClass jDomainClass) throws JCodeModelException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC, aClass.getFQMicroTypeConverterClassName (), EClassType.CLASS);
     if (aSettings.isUseBusinessObject ())
@@ -407,7 +407,7 @@ final class JDMCodeGenMicroTypeConverter
   static void createMainMicroTypeConverterRegistrarClass (@Nonnull final JDMCodeGenSettings aDefaultSettings,
                                                           @Nonnull final String sDestPackageName,
                                                           @Nonnull final JDMCodeModel cm,
-                                                          @Nonnull final ICommonsList <JDMGenClass> aClasses) throws JClassAlreadyExistsException
+                                                          @Nonnull final ICommonsList <JDMGenClass> aClasses) throws JCodeModelException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC | JMod.FINAL,
                                             AbstractJDMGenType.getFQCN (sDestPackageName,

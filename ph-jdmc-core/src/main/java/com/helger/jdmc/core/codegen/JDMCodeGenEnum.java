@@ -32,7 +32,7 @@ import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
-import com.helger.jcodemodel.JClassAlreadyExistsException;
+import com.helger.jcodemodel.JCodeModelException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JEnumConstant;
 import com.helger.jcodemodel.JExpr;
@@ -55,7 +55,7 @@ final class JDMCodeGenEnum
   {}
 
   static void createMainJavaEnums (@Nonnull final JDMCodeModel cm,
-                                   @Nonnull final ICommonsList <JDMGenEnum> aEnums) throws JClassAlreadyExistsException
+                                   @Nonnull final ICommonsList <JDMGenEnum> aEnums) throws JCodeModelException
   {
     final AbstractJType jString = cm.ref (String.class);
     for (final JDMGenEnum aEnum : aEnums)
@@ -140,7 +140,7 @@ final class JDMCodeGenEnum
   }
 
   static void createTestJavaEnums (@Nonnull final JDMCodeModel cm,
-                                   @Nonnull final ICommonsList <JDMGenEnum> aEnums) throws JClassAlreadyExistsException
+                                   @Nonnull final ICommonsList <JDMGenEnum> aEnums) throws JCodeModelException
   {
     for (final JDMGenEnum aEnum : aEnums)
     {

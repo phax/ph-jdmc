@@ -40,6 +40,7 @@ import com.helger.graph.IMutableDirectedGraphNode;
 import com.helger.graph.iterate.DirectedGraphIteratorForward;
 import com.helger.graph.simple.SimpleDirectedGraph;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
+import com.helger.jcodemodel.JCodeModelException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.fmt.JTextFile;
 import com.helger.jcodemodel.writer.JCMWriter;
@@ -99,7 +100,7 @@ public class JDMCodeGenerator
     return aGraph;
   }
 
-  private static void _createMetaInfServices (@Nonnull final JDMCodeModel cm)
+  private static void _createMetaInfServices (@Nonnull final JDMCodeModel cm) throws JCodeModelException
   {
     for (final Map.Entry <String, ICommonsOrderedSet <String>> aEntry : cm.spiImplMap ().getAll ())
     {

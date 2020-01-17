@@ -39,8 +39,8 @@ import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JBlock;
-import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.JCodeModelException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JFieldVar;
@@ -83,7 +83,7 @@ public class JDMCodeGenBase
   static JDefinedClass createMainJavaInterface (@Nonnull final JDMProcessor aProcessor,
                                                 @Nonnull final JDMCodeGenSettings aSettings,
                                                 @Nonnull final JDMCodeModel cm,
-                                                @Nonnull final JDMGenClass aClass) throws JClassAlreadyExistsException
+                                                @Nonnull final JDMGenClass aClass) throws JCodeModelException
   {
     final JDefinedClass jInterface = cm._class (JMod.PUBLIC, aClass.getFQInterfaceName (), EClassType.INTERFACE);
     if (aSettings.isUseBusinessObject ())
@@ -172,7 +172,7 @@ public class JDMCodeGenBase
   static JDefinedClass createMainJavaClass (@Nonnull final JDMCodeGenSettings aSettings,
                                             @Nonnull final JDMCodeModel cm,
                                             @Nonnull final JDMGenClass aClass,
-                                            @Nonnull final JDefinedClass jInterface) throws JClassAlreadyExistsException
+                                            @Nonnull final JDefinedClass jInterface) throws JCodeModelException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC, aClass.getFQClassName (), EClassType.CLASS);
     if (aSettings.isUseBusinessObject ())
