@@ -63,9 +63,7 @@ final class JDMCodeGenTest
                                    @Nonnull final JDMGenClass aClass) throws JCodeModelException
   {
     final AbstractJClass jClass = cm.ref (aClass.getFQClassName ());
-    final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
-                                                aClass.getFQTestClassName (),
-                                                EClassType.CLASS);
+    final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL, aClass.getFQTestClassName (), EClassType.CLASS);
     jTestClass.javadoc ().add ("This is the test class for class {@link " + aClass.getFQClassName () + "}\n");
     jTestClass.javadoc ().add ("This class was initially automatically created\n");
     jTestClass.javadoc ().addAuthor ().add (JDMCodeGenerator.AUTHOR);
@@ -109,9 +107,7 @@ final class JDMCodeGenTest
           else
           {
             jMethod.body ()
-                   .add (cm.ref (Assert.class)
-                           .staticInvoke ("assertNull")
-                           .arg (jObj.invoke (aField.getMethodGetterName (bIsOpenEnded))));
+                   .add (cm.ref (Assert.class).staticInvoke ("assertNull").arg (jObj.invoke (aField.getMethodGetterName (bIsOpenEnded))));
           }
         }
       }
@@ -153,15 +149,9 @@ final class JDMCodeGenTest
         {
           jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertEquals").arg (jX).arg (jY));
           jMethod.body ()
-                 .add (cm.ref (Assert.class)
-                         .staticInvoke ("assertEquals")
-                         .arg (jX.invoke ("hashCode"))
-                         .arg (jY.invoke ("hashCode")));
+                 .add (cm.ref (Assert.class).staticInvoke ("assertEquals").arg (jX.invoke ("hashCode")).arg (jY.invoke ("hashCode")));
           jMethod.body ()
-                 .add (cm.ref (CommonsTestHelper.class)
-                         .staticInvoke ("testDefaultImplementationWithEqualContentObject")
-                         .arg (jX)
-                         .arg (jY));
+                 .add (cm.ref (CommonsTestHelper.class).staticInvoke ("testDefaultImplementationWithEqualContentObject").arg (jX).arg (jY));
         }
       }
       if (!aSettings.isUseBusinessObject () && aClass.fields ().isNotEmpty ())
@@ -175,16 +165,9 @@ final class JDMCodeGenTest
                        .arg (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (jZ.invoke ("toString"))));
         jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertNotSame").arg (jX).arg (jZ));
         jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertEquals").arg (jX).arg (jZ));
+        jMethod.body ().add (cm.ref (Assert.class).staticInvoke ("assertEquals").arg (jX.invoke ("hashCode")).arg (jZ.invoke ("hashCode")));
         jMethod.body ()
-               .add (cm.ref (Assert.class)
-                       .staticInvoke ("assertEquals")
-                       .arg (jX.invoke ("hashCode"))
-                       .arg (jZ.invoke ("hashCode")));
-        jMethod.body ()
-               .add (cm.ref (CommonsTestHelper.class)
-                       .staticInvoke ("testDefaultImplementationWithEqualContentObject")
-                       .arg (jX)
-                       .arg (jZ));
+               .add (cm.ref (CommonsTestHelper.class).staticInvoke ("testDefaultImplementationWithEqualContentObject").arg (jX).arg (jZ));
       }
 
       // Invoke all setters
@@ -251,8 +234,7 @@ final class JDMCodeGenTest
                                       @Nonnull final JDMCodeModel cm) throws JCodeModelException
   {
     final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
-                                                AbstractJDMGenType.getFQCN (aProcessor.getDestinationPackageName (),
-                                                                            "JDMSelfTest"),
+                                                AbstractJDMGenType.getFQCN (aProcessor.getDestinationPackageName (), "JDMSelfTest"),
                                                 EClassType.CLASS);
     jTestClass.javadoc ().add ("This is the self-test class of JDM\n");
     jTestClass.javadoc ().add ("This class was initially automatically created\n");
@@ -271,8 +253,7 @@ final class JDMCodeGenTest
     final JMethod jMethod = jTestClass.method (JMod.PUBLIC, cm.VOID, "testMockValueCreation");
     // Use String to avoid Eclipse treats this as a real test
     jMethod.annotate (cm.ref (ORG_JUNIT_TEST_FQCN));
-    jMethod.annotate (SuppressWarnings.class)
-           .paramArray (JAnnotationUse.SPECIAL_KEY_VALUE, new String [] { "unused", "cast" });
+    jMethod.annotate (SuppressWarnings.class).paramArray (JAnnotationUse.SPECIAL_KEY_VALUE, new String [] { "unused", "cast" });
 
     int nCount = 0;
     for (final JDMType aType : CollectionHelper.getSorted (aProcessor.getContext ().typeContainer ().getTypes (),
@@ -288,8 +269,7 @@ final class JDMCodeGenTest
     }
   }
 
-  static void createSPITest (@Nonnull final String sDestPackageName,
-                             @Nonnull final JDMCodeModel cm) throws JCodeModelException
+  static void createSPITest (@Nonnull final String sDestPackageName, @Nonnull final JDMCodeModel cm) throws JCodeModelException
   {
     final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
                                                 AbstractJDMGenType.getFQCN (sDestPackageName, "JDMSPITest"),

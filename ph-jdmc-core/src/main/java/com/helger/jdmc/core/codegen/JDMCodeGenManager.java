@@ -58,8 +58,7 @@ final class JDMCodeGenManager
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC, aClass.getFQManagerClassName (), EClassType.CLASS);
     jClass._extends (cm.ref (AbstractPhotonMapBasedWALDAO.class).narrow (jInterface, jDomainClass));
-    jClass.javadoc ()
-          .add ("<p>Default Manager implementation of for class {@link " + aClass.getFQClassName () + "}</p>\n");
+    jClass.javadoc ().add ("<p>Default Manager implementation of for class {@link " + aClass.getFQClassName () + "}</p>\n");
     jClass.javadoc ().add ("<p>This class was initially automatically created</p>\n");
     jClass.javadoc ().addAuthor ().add (JDMCodeGenerator.AUTHOR);
     jClass.annotate (ThreadSafe.class);
@@ -144,9 +143,7 @@ final class JDMCodeGenManager
         // List or field?
         final AbstractJType jFieldType = cm.ref (aField.getType (), eMultiplicity);
         if (jFieldType.isPrimitive ())
-          jAudit.arg (jFieldType.boxify ()
-                                .staticInvoke ("valueOf")
-                                .arg (JExpr.ref (aField.getJavaVarName (eMultiplicity))));
+          jAudit.arg (jFieldType.boxify ().staticInvoke ("valueOf").arg (JExpr.ref (aField.getJavaVarName (eMultiplicity))));
         else
           jAudit.arg (JExpr.ref (aField.getJavaVarName (eMultiplicity)));
       }
@@ -158,9 +155,7 @@ final class JDMCodeGenManager
 
     // update method
     {
-      final JMethod jUpdate = jClass.method (JMod.PUBLIC | JMod.FINAL,
-                                             cm.ref (EChange.class),
-                                             "update" + jDomainClass.name ());
+      final JMethod jUpdate = jClass.method (JMod.PUBLIC | JMod.FINAL, cm.ref (EChange.class), "update" + jDomainClass.name ());
       jUpdate.annotate (Nonnull.class);
       jUpdate.javadoc ().add ("Update an existing object with new values.");
       jUpdate.javadoc ()
@@ -173,10 +168,7 @@ final class JDMCodeGenManager
 
       // Start resolving object
       final JVar jImpl = jUpdate.body ()
-                                .decl (JMod.FINAL,
-                                       jDomainClass,
-                                       "a" + jDomainClass.name (),
-                                       JExpr.invoke ("getOfID").arg (jParamID));
+                                .decl (JMod.FINAL, jDomainClass, "a" + jDomainClass.name (), JExpr.invoke ("getOfID").arg (jParamID));
 
       // Check preconditions
       jUpdate.body ().addSingleLineComment ("Check preconditions");
@@ -202,10 +194,7 @@ final class JDMCodeGenManager
       jUpdate.body ().addSingleLineComment ("Update internally");
       jUpdate.body ().add (JExpr.ref ("m_aRWLock").invoke ("writeLock").invoke ("lock"));
       final JTryBlock jTry = jUpdate.body ()._try ();
-      final JVar jChange = jTry.body ()
-                               .decl (cm.ref (EChange.class),
-                                      "eChange",
-                                      cm.ref (EChange.class).staticRef ("UNCHANGED"));
+      final JVar jChange = jTry.body ().decl (cm.ref (EChange.class), "eChange", cm.ref (EChange.class).staticRef ("UNCHANGED"));
 
       for (final JDMGenField aField : aClass.fields ())
       {
@@ -232,8 +221,7 @@ final class JDMCodeGenManager
         // JavaDoc
         jUpdate.javadoc ().addParam (jParam).add (aField.getParamJavaDoc ());
 
-        jTry.body ()
-            .assign (jChange, jChange.invoke ("or").arg (jImpl.invoke (aField.getMethodSetterName ()).arg (jParam)));
+        jTry.body ().assign (jChange, jChange.invoke ("or").arg (jImpl.invoke (aField.getMethodSetterName ()).arg (jParam)));
       }
 
       jTry.body ()._if (jChange.invoke ("isUnchanged"), new JReturn (cm.ref (EChange.class).staticRef ("UNCHANGED")));
@@ -255,9 +243,7 @@ final class JDMCodeGenManager
         // List or field?
         final AbstractJType jFieldType = cm.ref (aField.getType (), eMultiplicity);
         if (jFieldType.isPrimitive ())
-          jAudit.arg (jFieldType.boxify ()
-                                .staticInvoke ("valueOf")
-                                .arg (JExpr.ref (aField.getJavaVarName (eMultiplicity))));
+          jAudit.arg (jFieldType.boxify ().staticInvoke ("valueOf").arg (JExpr.ref (aField.getJavaVarName (eMultiplicity))));
         else
           jAudit.arg (JExpr.ref (aField.getJavaVarName (eMultiplicity)));
       }
@@ -268,9 +254,7 @@ final class JDMCodeGenManager
 
     // mark deleted method
     {
-      final JMethod jMarkDel = jClass.method (JMod.PUBLIC | JMod.FINAL,
-                                              cm.ref (EChange.class),
-                                              "mark" + jDomainClass.name () + "Deleted");
+      final JMethod jMarkDel = jClass.method (JMod.PUBLIC | JMod.FINAL, cm.ref (EChange.class), "mark" + jDomainClass.name () + "Deleted");
       jMarkDel.annotate (Nonnull.class);
       jMarkDel.javadoc ()
               .add ("Mark an existing object as deleted. This means the object is still present and can be restored using the {@link #mark" +
@@ -282,17 +266,12 @@ final class JDMCodeGenManager
 
       final JVar jParamID = jMarkDel.param (JMod.FINAL, cm.ref (String.class), "s" + jDomainClass.name () + "ID");
       jParamID.annotate (Nullable.class);
-      jMarkDel.javadoc ()
-              .addParam (jParamID)
-              .add ("ID of the object to be marked as deleted. May be <code>null</code>.");
+      jMarkDel.javadoc ().addParam (jParamID).add ("ID of the object to be marked as deleted. May be <code>null</code>.");
 
       // Start resolving object
       jMarkDel.body ().addSingleLineComment ("Check preconditions");
       final JVar jImpl = jMarkDel.body ()
-                                 .decl (JMod.FINAL,
-                                        jDomainClass,
-                                        "a" + jDomainClass.name (),
-                                        JExpr.invoke ("getOfID").arg (jParamID));
+                                 .decl (JMod.FINAL, jDomainClass, "a" + jDomainClass.name (), JExpr.invoke ("getOfID").arg (jParamID));
 
       // Check preconditions
       final JBlock jIfNull = jMarkDel.body ()._if (jImpl.eqNull ())._then ();
@@ -360,17 +339,12 @@ final class JDMCodeGenManager
 
       final JVar jParamID = jMarkUndel.param (JMod.FINAL, cm.ref (String.class), "s" + jDomainClass.name () + "ID");
       jParamID.annotate (Nullable.class);
-      jMarkUndel.javadoc ()
-                .addParam (jParamID)
-                .add ("ID of the object to be marked as undeleted. May be <code>null</code>.");
+      jMarkUndel.javadoc ().addParam (jParamID).add ("ID of the object to be marked as undeleted. May be <code>null</code>.");
 
       // Start resolving object
       jMarkUndel.body ().addSingleLineComment ("Check preconditions");
       final JVar jImpl = jMarkUndel.body ()
-                                   .decl (JMod.FINAL,
-                                          jDomainClass,
-                                          "a" + jDomainClass.name (),
-                                          JExpr.invoke ("getOfID").arg (jParamID));
+                                   .decl (JMod.FINAL, jDomainClass, "a" + jDomainClass.name (), JExpr.invoke ("getOfID").arg (jParamID));
 
       // Check preconditions
       final JBlock jIfNull = jMarkUndel.body ()._if (jImpl.eqNull ())._then ();
@@ -423,13 +397,10 @@ final class JDMCodeGenManager
 
     // delete method
     {
-      final JMethod jDelete = jClass.method (JMod.PUBLIC | JMod.FINAL,
-                                             cm.ref (EChange.class),
-                                             "delete" + jDomainClass.name ());
+      final JMethod jDelete = jClass.method (JMod.PUBLIC | JMod.FINAL, cm.ref (EChange.class), "delete" + jDomainClass.name ());
       jDelete.annotate (Nonnull.class);
       jDelete.javadoc ().add ("Delete an existing object so that it can <b>NOT</b> be restored afterwards.");
-      jDelete.javadoc ()
-             .add ("\nNote: if an object was previously marked as deleted it can finally be deleted with this method.");
+      jDelete.javadoc ().add ("\nNote: if an object was previously marked as deleted it can finally be deleted with this method.");
       jDelete.javadoc ()
              .addReturn ()
              .add ("{@link EChange#CHANGED} if the object was deleted {@link EChange#UNCHANGED} if the object does not exist. Never <code>null</code>.");

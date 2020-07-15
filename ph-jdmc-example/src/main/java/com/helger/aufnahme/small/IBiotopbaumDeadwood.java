@@ -19,53 +19,51 @@ package com.helger.aufnahme.small;
 import java.io.Serializable;
 import javax.annotation.Nonnull;
 
-
 /**
- * <p>Interface for class {@link BiotopbaumDeadwood}</p>
- * <p>This class was initially automatically created</p>
- * 
+ * <p>
+ * Interface for class {@link BiotopbaumDeadwood}
+ * </p>
+ * <p>
+ * This class was initially automatically created
+ * </p>
  * 
  * @author JDMCodeGenerator
  */
-public interface IBiotopbaumDeadwood
-  extends Serializable
+public interface IBiotopbaumDeadwood extends Serializable
 {
 
   /**
    * Totholzkategorie
    * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
+   * @return The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EDeadwoodCategory getType();
+  EDeadwoodCategory getType ();
 
   @Nonnull
-  default String getTypeID() {
-    return getType().getID();
+  default String getTypeID ()
+  {
+    return getType ().getID ();
   }
 
   /**
    * Get the value of enabled.
    * 
-   * @return
-   *     The requested value.
+   * @return The requested value.
    */
-  boolean isEnabled();
+  boolean isEnabled ();
 
   /**
    * Länge in cm
    * 
-   * @return
-   *     The requested value.
+   * @return The requested value.
    */
-  int getLength();
+  int getLength ();
 
   /**
    * BHD bzw. Mittendurchmesser in cm
    * 
-   * @return
-   *     The requested value.
+   * @return The requested value.
    */
-  int getBHD();
+  int getBHD ();
 }

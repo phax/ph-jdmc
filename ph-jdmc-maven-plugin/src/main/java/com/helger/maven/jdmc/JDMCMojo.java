@@ -295,9 +295,7 @@ public final class JDMCMojo extends AbstractMojo
         if ("mac".equalsIgnoreCase (sNewLineMode) || "apple".equalsIgnoreCase (sNewLineMode))
           newLineMode = ENewLineMode.MAC;
         else
-          if ("system".equalsIgnoreCase (sNewLineMode) ||
-              "os".equalsIgnoreCase (sNewLineMode) ||
-              "default".equalsIgnoreCase (sNewLineMode))
+          if ("system".equalsIgnoreCase (sNewLineMode) || "os".equalsIgnoreCase (sNewLineMode) || "default".equalsIgnoreCase (sNewLineMode))
             newLineMode = ENewLineMode.DEFAULT;
   }
 

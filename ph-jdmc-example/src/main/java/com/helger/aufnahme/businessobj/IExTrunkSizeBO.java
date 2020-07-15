@@ -19,37 +19,37 @@ package com.helger.aufnahme.businessobj;
 import com.helger.tenancy.IBusinessObject;
 import javax.annotation.Nonnull;
 
-
 /**
- * <p>Interface for class {@link ExTrunkSizeBO}</p>
- * <p>This class was initially automatically created</p>
- * 
+ * <p>
+ * Interface for class {@link ExTrunkSizeBO}
+ * </p>
+ * <p>
+ * This class was initially automatically created
+ * </p>
  * 
  * @author JDMCodeGenerator
  */
-public interface IExTrunkSizeBO
-  extends IBusinessObject
+public interface IExTrunkSizeBO extends IBusinessObject
 {
 
   /**
    * Brusthöhendurchmesser; Mittendurchmesser in cm
    * 
-   * @return
-   *     The requested value.
+   * @return The requested value.
    */
-  int getBHD();
+  int getBHD ();
 
   /**
    * Baumhöhe/Stammlänge
    * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
+   * @return The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EExTreeHeightBO getHeight();
+  EExTreeHeightBO getHeight ();
 
   @Nonnull
-  default String getHeightID() {
-    return getHeight().getID();
+  default String getHeightID ()
+  {
+    return getHeight ().getID ();
   }
 }

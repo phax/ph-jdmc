@@ -109,8 +109,7 @@ final class JDMCodeGenEnum
         jMethod.annotate (Nullable.class);
         final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
         jID.annotate (Nullable.class);
-        jMethod.body ()
-               ._return (cm.ref (EnumHelper.class).staticInvoke ("getFromIDOrNull").arg (jEnum.dotclass ()).arg (jID));
+        jMethod.body ()._return (cm.ref (EnumHelper.class).staticInvoke ("getFromIDOrNull").arg (jEnum.dotclass ()).arg (jID));
       }
 
       {
@@ -121,11 +120,7 @@ final class JDMCodeGenEnum
         final JVar jDefault = jMethod.param (JMod.FINAL, jEnum, "eDefault");
         jDefault.annotate (Nullable.class);
         jMethod.body ()
-               ._return (cm.ref (EnumHelper.class)
-                           .staticInvoke ("getFromIDOrDefault")
-                           .arg (jEnum.dotclass ())
-                           .arg (jID)
-                           .arg (jDefault));
+               ._return (cm.ref (EnumHelper.class).staticInvoke ("getFromIDOrDefault").arg (jEnum.dotclass ()).arg (jID).arg (jDefault));
       }
 
       {
@@ -133,8 +128,7 @@ final class JDMCodeGenEnum
         jMethod.annotate (Nonnull.class);
         final JVar jID = jMethod.param (JMod.FINAL, jString, "sID");
         jID.annotate (Nullable.class);
-        jMethod.body ()
-               ._return (cm.ref (EnumHelper.class).staticInvoke ("getFromIDOrThrow").arg (jEnum.dotclass ()).arg (jID));
+        jMethod.body ()._return (cm.ref (EnumHelper.class).staticInvoke ("getFromIDOrThrow").arg (jEnum.dotclass ()).arg (jID));
       }
     }
   }
@@ -145,9 +139,7 @@ final class JDMCodeGenEnum
     for (final JDMGenEnum aEnum : aEnums)
     {
       final AbstractJClass jEnum = cm.ref (aEnum.getFQClassName ());
-      final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL,
-                                                  aEnum.getFQTestClassName (),
-                                                  EClassType.CLASS);
+      final JDefinedClass jTestClass = cm._class (JMod.PUBLIC | JMod.FINAL, aEnum.getFQTestClassName (), EClassType.CLASS);
       jTestClass.javadoc ().add ("This is the test class for class {@link " + aEnum.getFQClassName () + "}\n");
       jTestClass.javadoc ().add ("This class was initially automatically created\n");
       jTestClass.javadoc ().addAuthor ().add (JDMCodeGenerator.AUTHOR);
@@ -158,15 +150,11 @@ final class JDMCodeGenEnum
       jForEach.body ()
               .add (cm.ref (Assert.class)
                       .staticInvoke ("assertTrue")
-                      .arg (cm.ref (StringHelper.class)
-                              .staticInvoke ("hasText")
-                              .arg (jForEach.var ().invoke ("getID"))));
+                      .arg (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (jForEach.var ().invoke ("getID"))));
       jForEach.body ()
               .add (cm.ref (Assert.class)
                       .staticInvoke ("assertTrue")
-                      .arg (cm.ref (StringHelper.class)
-                              .staticInvoke ("hasText")
-                              .arg (jForEach.var ().invoke ("getDisplayName"))));
+                      .arg (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (jForEach.var ().invoke ("getDisplayName"))));
       jForEach.body ()
               .add (cm.ref (Assert.class)
                       .staticInvoke ("assertSame")
@@ -176,9 +164,7 @@ final class JDMCodeGenEnum
               .add (cm.ref (Assert.class)
                       .staticInvoke ("assertSame")
                       .arg (jForEach.var ())
-                      .arg (jEnum.staticInvoke ("getFromIDOrDefault")
-                                 .arg (jForEach.var ().invoke ("getID"))
-                                 .argNull ()));
+                      .arg (jEnum.staticInvoke ("getFromIDOrDefault").arg (jForEach.var ().invoke ("getID")).argNull ()));
       jForEach.body ()
               .add (cm.ref (Assert.class)
                       .staticInvoke ("assertSame")

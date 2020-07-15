@@ -38,114 +38,111 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.w3c.dom.Element;
 
-
 /**
- * This is the self-test class of JDM
- * This class was initially automatically created
- * 
+ * This is the self-test class of JDM This class was initially automatically
+ * created
  * 
  * @author JDMCodeGenerator
  */
-public final class JDMSelfTest {
+public final class JDMSelfTest
+{
   @Rule
-  public final TestRule m_aRule = new PhotonAppWebTestRule();
+  public final TestRule m_aRule = new PhotonAppWebTestRule ();
 
   @Test
-  @SuppressWarnings({
-    "unused",
-    "cast"
-  })
-  public void testMockValueCreation() {
+  @SuppressWarnings ({ "unused", "cast" })
+  public void testMockValueCreation ()
+  {
     IA var0;
-    var0 = new A(new B(new C(EE.ONE)));
+    var0 = new A (new B (new C (EE.ONE)));
     IB var1;
-    var1 = new B(new C(EE.ONE));
+    var1 = new B (new C (EE.ONE));
     BigDecimal var2;
-    var2 = MathHelper.toBigDecimal("12.3456");
-    Assert.assertNotNull(var2);
+    var2 = MathHelper.toBigDecimal ("12.3456");
+    Assert.assertNotNull (var2);
     BigInteger var3;
-    var3 = MathHelper.toBigInteger("7890");
-    Assert.assertNotNull(var3);
+    var3 = MathHelper.toBigInteger ("7890");
+    Assert.assertNotNull (var3);
     Boolean var4;
     var4 = Boolean.TRUE;
-    Assert.assertNotNull(var4);
+    Assert.assertNotNull (var4);
     boolean var5;
     var5 = true;
     byte var6;
     var6 = 2;
     Byte var7;
-    var7 = Byte.valueOf(((byte) 1));
-    Assert.assertNotNull(var7);
+    var7 = Byte.valueOf (((byte) 1));
+    Assert.assertNotNull (var7);
     IC var8;
-    var8 = new C(EE.ONE);
+    var8 = new C (EE.ONE);
     Character var9;
-    var9 = Character.valueOf(' ');
-    Assert.assertNotNull(var9);
+    var9 = Character.valueOf (' ');
+    Assert.assertNotNull (var9);
     char var10;
     var10 = 'x';
     double var11;
     var11 = 4.0;
     Double var12;
-    var12 = Double.valueOf(3.0);
-    Assert.assertNotNull(var12);
+    var12 = Double.valueOf (3.0);
+    Assert.assertNotNull (var12);
     Duration var13;
-    var13 = Duration.ofDays(1L);
-    Assert.assertNotNull(var13);
+    var13 = Duration.ofDays (1L);
+    Assert.assertNotNull (var13);
     EE var14;
     var14 = EE.ONE;
-    Assert.assertNotNull(var14);
+    Assert.assertNotNull (var14);
     Element var15;
-    var15 = DOMReader.readXMLDOM("<item x='y'/>").getDocumentElement();
-    Assert.assertNotNull(var15);
+    var15 = DOMReader.readXMLDOM ("<item x='y'/>").getDocumentElement ();
+    Assert.assertNotNull (var15);
     File var16;
-    var16 = new File("file.txt");
-    Assert.assertNotNull(var16);
+    var16 = new File ("file.txt");
+    Assert.assertNotNull (var16);
     float var17;
     var17 = 6.0F;
     Float var18;
-    var18 = Float.valueOf(5.0F);
-    Assert.assertNotNull(var18);
+    var18 = Float.valueOf (5.0F);
+    Assert.assertNotNull (var18);
     int var19;
     var19 = 8;
     Integer var20;
-    var20 = Integer.valueOf(7);
-    Assert.assertNotNull(var20);
+    var20 = Integer.valueOf (7);
+    Assert.assertNotNull (var20);
     LocalDate var21;
-    var21 = PDTFactory.getCurrentLocalDate();
-    Assert.assertNotNull(var21);
+    var21 = PDTFactory.getCurrentLocalDate ();
+    Assert.assertNotNull (var21);
     LocalDateTime var22;
-    var22 = PDTFactory.getCurrentLocalDateTime();
-    Assert.assertNotNull(var22);
+    var22 = PDTFactory.getCurrentLocalDateTime ();
+    Assert.assertNotNull (var22);
     LocalTime var23;
-    var23 = PDTFactory.getCurrentLocalTime();
-    Assert.assertNotNull(var23);
+    var23 = PDTFactory.getCurrentLocalTime ();
+    Assert.assertNotNull (var23);
     long var24;
     var24 = 10L;
     Long var25;
-    var25 = Long.valueOf(9L);
-    Assert.assertNotNull(var25);
+    var25 = Long.valueOf (9L);
+    Assert.assertNotNull (var25);
     OffsetDateTime var26;
-    var26 = PDTFactory.getCurrentOffsetDateTime();
-    Assert.assertNotNull(var26);
+    var26 = PDTFactory.getCurrentOffsetDateTime ();
+    Assert.assertNotNull (var26);
     Period var27;
-    var27 = Period.ofDays(2);
-    Assert.assertNotNull(var27);
+    var27 = Period.ofDays (2);
+    Assert.assertNotNull (var27);
     QName var28;
-    var28 = new QName("urn:example", "elem");
-    Assert.assertNotNull(var28);
+    var28 = new QName ("urn:example", "elem");
+    Assert.assertNotNull (var28);
     Serializable var29;
-    var29 = ((Serializable)"object");
-    Assert.assertNotNull(var29);
+    var29 = ((Serializable) "object");
+    Assert.assertNotNull (var29);
     Short var30;
-    var30 = Short.valueOf(((short) 11));
-    Assert.assertNotNull(var30);
+    var30 = Short.valueOf (((short) 11));
+    Assert.assertNotNull (var30);
     short var31;
     var31 = 12;
     String var32;
     var32 = "foo";
-    Assert.assertNotNull(var32);
+    Assert.assertNotNull (var32);
     ZonedDateTime var33;
-    var33 = PDTFactory.getCurrentZonedDateTime();
-    Assert.assertNotNull(var33);
+    var33 = PDTFactory.getCurrentZonedDateTime ();
+    Assert.assertNotNull (var33);
   }
 }

@@ -25,102 +25,121 @@ import com.helger.tenancy.AbstractBusinessObject;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
-
 /**
- * <p>Default implementation of {@link com.helger.aufnahme.businessobj.IExBiotopbaumDeadwoodBO}</p>
- * <p>This class was initially automatically created</p>
- * 
+ * <p>
+ * Default implementation of
+ * {@link com.helger.aufnahme.businessobj.IExBiotopbaumDeadwoodBO}
+ * </p>
+ * <p>
+ * This class was initially automatically created
+ * </p>
  * 
  * @author JDMCodeGenerator
  */
 @NotThreadSafe
-public class ExBiotopbaumDeadwoodBO
-  extends AbstractBusinessObject
-  implements IExBiotopbaumDeadwoodBO
+public class ExBiotopbaumDeadwoodBO extends AbstractBusinessObject implements IExBiotopbaumDeadwoodBO
 {
-  public static final ObjectType OT = new ObjectType("ExBiotopbaumDeadwoodBO");
+  public static final ObjectType OT = new ObjectType ("ExBiotopbaumDeadwoodBO");
   private EExDeadwoodCategoryBO m_eType;
   private boolean m_bEnabled;
   private int m_nLength;
   private int m_nBHD;
 
-  public ExBiotopbaumDeadwoodBO(@Nonnull final EExDeadwoodCategoryBO eType,
-    final boolean bEnabled,
-    final int nLength,
-    final int nBHD) {
-    this(StubObject.createForCurrentUser(), eType, bEnabled, nLength, nBHD);
+  public ExBiotopbaumDeadwoodBO (@Nonnull final EExDeadwoodCategoryBO eType, final boolean bEnabled, final int nLength, final int nBHD)
+  {
+    this (StubObject.createForCurrentUser (), eType, bEnabled, nLength, nBHD);
   }
 
-  protected ExBiotopbaumDeadwoodBO(@Nonnull final StubObject aStubObject,
-    @Nonnull final EExDeadwoodCategoryBO eType,
-    final boolean bEnabled,
-    final int nLength,
-    final int nBHD) {
-    super(aStubObject);
-    setType(eType);
-    setEnabled(bEnabled);
-    setLength(nLength);
-    setBHD(nBHD);
+  protected ExBiotopbaumDeadwoodBO (@Nonnull final StubObject aStubObject,
+                                    @Nonnull final EExDeadwoodCategoryBO eType,
+                                    final boolean bEnabled,
+                                    final int nLength,
+                                    final int nBHD)
+  {
+    super (aStubObject);
+    setType (eType);
+    setEnabled (bEnabled);
+    setLength (nLength);
+    setBHD (nBHD);
   }
 
   @Nonnull
-  public final ObjectType getObjectType() {
+  public final ObjectType getObjectType ()
+  {
     return OT;
   }
 
   @Override
-  public String toString() {
-    return ToStringGenerator.getDerived(super.toString()).append("type", m_eType).append("enabled", m_bEnabled).append("length", m_nLength).append("BHD", m_nBHD).getToString();
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("type", m_eType)
+                            .append ("enabled", m_bEnabled)
+                            .append ("length", m_nLength)
+                            .append ("BHD", m_nBHD)
+                            .getToString ();
   }
 
   @Nonnull
-  public final EExDeadwoodCategoryBO getType() {
+  public final EExDeadwoodCategoryBO getType ()
+  {
     return m_eType;
   }
 
   @Nonnull
-  final EChange setType(@Nonnull final EExDeadwoodCategoryBO eType) {
-    ValueEnforcer.notNull(eType, "Type");
-    if (eType.equals(m_eType)) {
+  final EChange setType (@Nonnull final EExDeadwoodCategoryBO eType)
+  {
+    ValueEnforcer.notNull (eType, "Type");
+    if (eType.equals (m_eType))
+    {
       return EChange.UNCHANGED;
     }
     m_eType = eType;
     return EChange.CHANGED;
   }
 
-  public final boolean isEnabled() {
+  public final boolean isEnabled ()
+  {
     return m_bEnabled;
   }
 
   @Nonnull
-  final EChange setEnabled(final boolean bEnabled) {
-    if (bEnabled == m_bEnabled) {
+  final EChange setEnabled (final boolean bEnabled)
+  {
+    if (bEnabled == m_bEnabled)
+    {
       return EChange.UNCHANGED;
     }
     m_bEnabled = bEnabled;
     return EChange.CHANGED;
   }
 
-  public final int getLength() {
+  public final int getLength ()
+  {
     return m_nLength;
   }
 
   @Nonnull
-  final EChange setLength(final int nLength) {
-    if (nLength == m_nLength) {
+  final EChange setLength (final int nLength)
+  {
+    if (nLength == m_nLength)
+    {
       return EChange.UNCHANGED;
     }
     m_nLength = nLength;
     return EChange.CHANGED;
   }
 
-  public final int getBHD() {
+  public final int getBHD ()
+  {
     return m_nBHD;
   }
 
   @Nonnull
-  final EChange setBHD(final int nBHD) {
-    if (nBHD == m_nBHD) {
+  final EChange setBHD (final int nBHD)
+  {
+    if (nBHD == m_nBHD)
+    {
       return EChange.UNCHANGED;
     }
     m_nBHD = nBHD;

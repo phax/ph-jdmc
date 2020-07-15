@@ -111,8 +111,7 @@ final class JDMCodeGenMicroTypeConverter
       jClass._extends (cm.ref (AbstractBusinessObjectMicroTypeConverter.class).narrow (jDomainClass));
     else
       jClass._implements (cm.ref (IMicroTypeConverter.class).narrow (jDomainClass));
-    jClass.javadoc ()
-          .add ("<p>Default MicroTypeConverter implementation of {@link " + aClass.getFQInterfaceName () + "}</p>\n");
+    jClass.javadoc ().add ("<p>Default MicroTypeConverter implementation of {@link " + aClass.getFQInterfaceName () + "}</p>\n");
     jClass.javadoc ().add ("<p>This class was initially automatically created</p>\n");
     jClass.javadoc ().addAuthor ().add (JDMCodeGenerator.AUTHOR);
 
@@ -159,8 +158,7 @@ final class JDMCodeGenMicroTypeConverter
       final JFieldVar jFieldName = jClass.field (JMod.PRIVATE | JMod.STATIC | JMod.FINAL,
                                                  cm.ref (String.class),
                                                  (bIsOpenEnded || bIsElement ? "ELEMENT_" : "ATTR_") +
-                                                                        aField.getOriginalFieldName ()
-                                                                              .toUpperCase (Locale.ROOT),
+                                                                        aField.getOriginalFieldName ().toUpperCase (Locale.ROOT),
                                                  JExpr.lit (aField.getFieldName ().toLowerCase (Locale.ROOT)));
 
       // To MicroElement
@@ -199,11 +197,7 @@ final class JDMCodeGenMicroTypeConverter
         {
           if (_isString (aField.getType ()))
           {
-            aExec = jSrcElement.invoke ("appendElement")
-                               .arg (jToNS)
-                               .arg (jRealName)
-                               .invoke ("appendText")
-                               .arg (aValueProvider);
+            aExec = jSrcElement.invoke ("appendElement").arg (jToNS).arg (jRealName).invoke ("appendText").arg (aValueProvider);
           }
           else
           {
@@ -276,10 +270,7 @@ final class JDMCodeGenMicroTypeConverter
             if (bIsOpenEnded)
               jGetValue = jToNativeRealElement.invoke ("getTextContent");
             else
-              jGetValue = cm.ref (MicroHelper.class)
-                            .staticInvoke ("getChildTextContent")
-                            .arg (jToNativeRealElement)
-                            .arg (jRealName);
+              jGetValue = cm.ref (MicroHelper.class).staticInvoke ("getChildTextContent").arg (jToNativeRealElement).arg (jRealName);
           }
           else
           {
@@ -315,10 +306,7 @@ final class JDMCodeGenMicroTypeConverter
                 jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsBool").arg (jRealName).arg (JExpr.FALSE);
               else
                 if (jVarType == cm.BYTE)
-                  jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsInt")
-                                                  .arg (jRealName)
-                                                  .arg (-1)
-                                                  .castTo (cm.BYTE);
+                  jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsInt").arg (jRealName).arg (-1).castTo (cm.BYTE);
                 else
                   if (jVarType == cm.DOUBLE)
                     jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsDouble")
@@ -337,10 +325,7 @@ final class JDMCodeGenMicroTypeConverter
                           jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsLong").arg (jRealName).arg (-1);
                         else
                           if (jVarType == cm.SHORT)
-                            jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsInt")
-                                                            .arg (jRealName)
-                                                            .arg (-1)
-                                                            .castTo (cm.SHORT);
+                            jGetValue = jToNativeRealElement.invoke ("getAttributeValueAsInt").arg (jRealName).arg (-1).castTo (cm.SHORT);
                           else
                             jGetValue = jToNativeRealElement.invoke ("getAttributeValueWithConversion")
                                                             .arg (jRealName)
@@ -362,8 +347,7 @@ final class JDMCodeGenMicroTypeConverter
         }
         else
         {
-          final JVar jVar = jToNative.body ()
-                                     .decl (JMod.FINAL, jVarType, aField.getJavaVarName (eMultiplicity), jGetValue);
+          final JVar jVar = jToNative.body ().decl (JMod.FINAL, jVarType, aField.getJavaVarName (eMultiplicity), jGetValue);
           aParamsToNative.add (jVar);
         }
       }
@@ -390,11 +374,8 @@ final class JDMCodeGenMicroTypeConverter
       for (final JDMType aTypeToResolve : aTypesToResolve)
       {
         final AbstractJClass aType = cm.ref (IFunction.class)
-                                       .narrow (cm.ref (String.class),
-                                                cm.ref (aTypeToResolve.getInterfaceFQCN ()).wildcardExtends ());
-        final JFieldVar jField = jClass.field (JMod.PRIVATE_FINAL,
-                                               aType,
-                                               "m_aResolver" + aTypeToResolve.getShortName ());
+                                       .narrow (cm.ref (String.class), cm.ref (aTypeToResolve.getInterfaceFQCN ()).wildcardExtends ());
+        final JFieldVar jField = jClass.field (JMod.PRIVATE_FINAL, aType, "m_aResolver" + aTypeToResolve.getShortName ());
         final JVar jParam = jCtor.param (aType, "aResolver" + aTypeToResolve.getShortName ());
         jParam.annotate (Nonnull.class);
         jCtor.body ().assign (jField, jParam);
@@ -410,8 +391,7 @@ final class JDMCodeGenMicroTypeConverter
                                                           @Nonnull final ICommonsList <JDMGenClass> aClasses) throws JCodeModelException
   {
     final JDefinedClass jClass = cm._class (JMod.PUBLIC | JMod.FINAL,
-                                            AbstractJDMGenType.getFQCN (sDestPackageName,
-                                                                        "MicroTypeConverterRegistrar"),
+                                            AbstractJDMGenType.getFQCN (sDestPackageName, "MicroTypeConverterRegistrar"),
                                             EClassType.CLASS);
     jClass._implements (cm.ref (IMicroTypeConverterRegistrarSPI.class));
     jClass.javadoc ().add ("<p>Default MicroTypeConverter registrar of this project</p>\n");
@@ -450,8 +430,7 @@ final class JDMCodeGenMicroTypeConverter
       }
       else
       {
-        jMethod.body ()
-               .addSingleLineComment ("Registration of " + aClass.getFQClassName () + " must be done manually!");
+        jMethod.body ().addSingleLineComment ("Registration of " + aClass.getFQClassName () + " must be done manually!");
       }
     }
 

@@ -139,8 +139,7 @@ public class JDMCodeGenBase
         final JMethod aMethodHas = jInterface.method (JMod.DEFAULT, cm.BOOLEAN, aField.getMethodHasName ());
         if (bIsStringType)
         {
-          aMethodHas.body ()
-                    ._return (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (JExpr.invoke (aMethodGet)));
+          aMethodHas.body ()._return (cm.ref (StringHelper.class).staticInvoke ("hasText").arg (JExpr.invoke (aMethodGet)));
         }
         else
           aMethodHas.body ()._return (JExpr.invoke (aMethodGet).neNull ());
@@ -230,9 +229,7 @@ public class JDMCodeGenBase
       {
         jToString = jClass.method (JMod.PUBLIC, cm.ref (String.class), "toString");
         jToString.annotate (Override.class);
-        jToStringInvocation = cm.ref (ToStringGenerator.class)
-                                .staticInvoke ("getDerived")
-                                .arg (JExpr._super ().invoke ("toString"));
+        jToStringInvocation = cm.ref (ToStringGenerator.class).staticInvoke ("getDerived").arg (JExpr._super ().invoke ("toString"));
       }
       else
         jToString = null;
@@ -261,8 +258,7 @@ public class JDMCodeGenBase
       final JVar jEqualsArg = jEquals.param (JMod.FINAL, cm.ref (Object.class), "o");
       jEquals.body ()._if (jEqualsArg.eq (JExpr._this ()), new JReturn (JExpr.TRUE));
       jEquals.body ()
-             ._if (jEqualsArg.eqNull ().cor (JExpr.invokeThis ("getClass").ne (jEqualsArg.invoke ("getClass"))),
-                   new JReturn (JExpr.FALSE));
+             ._if (jEqualsArg.eqNull ().cor (JExpr.invokeThis ("getClass").ne (jEqualsArg.invoke ("getClass"))), new JReturn (JExpr.FALSE));
       if (bHasFields)
         jEqualsParam = jEquals.body ().decl (JMod.FINAL, jClass, "rhs", jEqualsArg.castTo (jClass));
 
@@ -349,11 +345,7 @@ public class JDMCodeGenBase
 
         if (jEquals != null)
           jEquals.body ()
-                 ._if (cm.ref (EqualsHelper.class)
-                         .staticInvoke ("equals")
-                         .arg (jField)
-                         .arg (jEqualsParam.ref (jField))
-                         .not (),
+                 ._if (cm.ref (EqualsHelper.class).staticInvoke ("equals").arg (jField).arg (jEqualsParam.ref (jField)).not (),
                        new JReturn (JExpr.FALSE));
 
         if (jHashcodeInvocation != null)
@@ -362,9 +354,7 @@ public class JDMCodeGenBase
 
       // toString
       if (jToStringInvocation != null)
-        jToStringInvocation = jToStringInvocation.invoke ("append")
-                                                 .arg (JExpr.lit (aField.getFieldName ()))
-                                                 .arg (jField);
+        jToStringInvocation = jToStringInvocation.invoke ("append").arg (JExpr.lit (aField.getFieldName ())).arg (jField);
 
       // Getter
       {
@@ -389,8 +379,7 @@ public class JDMCodeGenBase
 
       // Setter
       {
-        final JMethod aMethodSet = jClass.method ((aSettings.isSetterArePackagePrivate () ? 0 : JMod.PUBLIC) |
-                                                  JMod.FINAL,
+        final JMethod aMethodSet = jClass.method ((aSettings.isSetterArePackagePrivate () ? 0 : JMod.PUBLIC) | JMod.FINAL,
                                                   jEChange,
                                                   aField.getMethodSetterName ());
         aMethodSet.annotate (Nonnull.class);

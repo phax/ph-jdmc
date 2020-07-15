@@ -33,23 +33,24 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
-
 /**
- * <p>Default implementation of {@link com.helger.aufnahme.businessobj.IExHabitatbaumgruppeBO}</p>
- * <p>This class was initially automatically created</p>
- * 
+ * <p>
+ * Default implementation of
+ * {@link com.helger.aufnahme.businessobj.IExHabitatbaumgruppeBO}
+ * </p>
+ * <p>
+ * This class was initially automatically created
+ * </p>
  * 
  * @author JDMCodeGenerator
  */
 @NotThreadSafe
-public class ExHabitatbaumgruppeBO
-  extends AbstractBusinessObject
-  implements IExHabitatbaumgruppeBO
+public class ExHabitatbaumgruppeBO extends AbstractBusinessObject implements IExHabitatbaumgruppeBO
 {
-  public static final ObjectType OT = new ObjectType("ExHabitatbaumgruppeBO");
+  public static final ObjectType OT = new ObjectType ("ExHabitatbaumgruppeBO");
   private int m_nHBGNr;
-  private final ICommonsList<File> m_aPics = new CommonsArrayList<>();
-  private final ICommonsList<IExBiotopbaumBO> m_aHBGzBB = new CommonsArrayList<>();
+  private final ICommonsList <File> m_aPics = new CommonsArrayList <> ();
+  private final ICommonsList <IExBiotopbaumBO> m_aHBGzBB = new CommonsArrayList <> ();
   private LocalDate m_aDate;
   private String m_sStandort;
   private boolean m_bOneLevel;
@@ -63,75 +64,113 @@ public class ExHabitatbaumgruppeBO
   private boolean m_bOnlyBB;
   private String m_sBeschreibung;
 
-  public ExHabitatbaumgruppeBO(final int nHBGNr,
-    @Nonnull @Nonempty final ICommonsList<File> aPics,
-    @Nonnull final ICommonsList<IExBiotopbaumBO> aHBGzBB,
-    @Nonnull final LocalDate aDate,
-    @Nonnull final String sStandort,
-    final boolean bOneLevel,
-    final boolean bLight,
-    final boolean bClosedCrown,
-    final boolean bNoSun,
-    final boolean bHomogen,
-    @Nonnull final EExExpositionBO eExposition,
-    @Nullable final String sHanglage,
-    final int nAreaSize,
-    final boolean bOnlyBB,
-    @Nonnull final String sBeschreibung) {
-    this(StubObject.createForCurrentUser(), nHBGNr, aPics, aHBGzBB, aDate, sStandort, bOneLevel, bLight, bClosedCrown, bNoSun, bHomogen, eExposition, sHanglage, nAreaSize, bOnlyBB, sBeschreibung);
+  public ExHabitatbaumgruppeBO (final int nHBGNr,
+                                @Nonnull @Nonempty final ICommonsList <File> aPics,
+                                @Nonnull final ICommonsList <IExBiotopbaumBO> aHBGzBB,
+                                @Nonnull final LocalDate aDate,
+                                @Nonnull final String sStandort,
+                                final boolean bOneLevel,
+                                final boolean bLight,
+                                final boolean bClosedCrown,
+                                final boolean bNoSun,
+                                final boolean bHomogen,
+                                @Nonnull final EExExpositionBO eExposition,
+                                @Nullable final String sHanglage,
+                                final int nAreaSize,
+                                final boolean bOnlyBB,
+                                @Nonnull final String sBeschreibung)
+  {
+    this (StubObject.createForCurrentUser (),
+          nHBGNr,
+          aPics,
+          aHBGzBB,
+          aDate,
+          sStandort,
+          bOneLevel,
+          bLight,
+          bClosedCrown,
+          bNoSun,
+          bHomogen,
+          eExposition,
+          sHanglage,
+          nAreaSize,
+          bOnlyBB,
+          sBeschreibung);
   }
 
-  protected ExHabitatbaumgruppeBO(@Nonnull final StubObject aStubObject,
-    final int nHBGNr,
-    @Nonnull @Nonempty final ICommonsList<File> aPics,
-    @Nonnull final ICommonsList<IExBiotopbaumBO> aHBGzBB,
-    @Nonnull final LocalDate aDate,
-    @Nonnull final String sStandort,
-    final boolean bOneLevel,
-    final boolean bLight,
-    final boolean bClosedCrown,
-    final boolean bNoSun,
-    final boolean bHomogen,
-    @Nonnull final EExExpositionBO eExposition,
-    @Nullable final String sHanglage,
-    final int nAreaSize,
-    final boolean bOnlyBB,
-    @Nonnull final String sBeschreibung) {
-    super(aStubObject);
-    setHBGNr(nHBGNr);
-    setPics(aPics);
-    setHBGzBB(aHBGzBB);
-    setDate(aDate);
-    setStandort(sStandort);
-    setOneLevel(bOneLevel);
-    setLight(bLight);
-    setClosedCrown(bClosedCrown);
-    setNoSun(bNoSun);
-    setHomogen(bHomogen);
-    setExposition(eExposition);
-    setHanglage(sHanglage);
-    setAreaSize(nAreaSize);
-    setOnlyBB(bOnlyBB);
-    setBeschreibung(sBeschreibung);
+  protected ExHabitatbaumgruppeBO (@Nonnull final StubObject aStubObject,
+                                   final int nHBGNr,
+                                   @Nonnull @Nonempty final ICommonsList <File> aPics,
+                                   @Nonnull final ICommonsList <IExBiotopbaumBO> aHBGzBB,
+                                   @Nonnull final LocalDate aDate,
+                                   @Nonnull final String sStandort,
+                                   final boolean bOneLevel,
+                                   final boolean bLight,
+                                   final boolean bClosedCrown,
+                                   final boolean bNoSun,
+                                   final boolean bHomogen,
+                                   @Nonnull final EExExpositionBO eExposition,
+                                   @Nullable final String sHanglage,
+                                   final int nAreaSize,
+                                   final boolean bOnlyBB,
+                                   @Nonnull final String sBeschreibung)
+  {
+    super (aStubObject);
+    setHBGNr (nHBGNr);
+    setPics (aPics);
+    setHBGzBB (aHBGzBB);
+    setDate (aDate);
+    setStandort (sStandort);
+    setOneLevel (bOneLevel);
+    setLight (bLight);
+    setClosedCrown (bClosedCrown);
+    setNoSun (bNoSun);
+    setHomogen (bHomogen);
+    setExposition (eExposition);
+    setHanglage (sHanglage);
+    setAreaSize (nAreaSize);
+    setOnlyBB (bOnlyBB);
+    setBeschreibung (sBeschreibung);
   }
 
   @Nonnull
-  public final ObjectType getObjectType() {
+  public final ObjectType getObjectType ()
+  {
     return OT;
   }
 
   @Override
-  public String toString() {
-    return ToStringGenerator.getDerived(super.toString()).append("HBGNr", m_nHBGNr).append("pics", m_aPics).append("HBGzBB", m_aHBGzBB).append("date", m_aDate).append("Standort", m_sStandort).append("oneLevel", m_bOneLevel).append("light", m_bLight).append("closedCrown", m_bClosedCrown).append("noSun", m_bNoSun).append("homogen", m_bHomogen).append("exposition", m_eExposition).append("Hanglage", m_sHanglage).append("areaSize", m_nAreaSize).append("onlyBB", m_bOnlyBB).append("Beschreibung", m_sBeschreibung).getToString();
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("HBGNr", m_nHBGNr)
+                            .append ("pics", m_aPics)
+                            .append ("HBGzBB", m_aHBGzBB)
+                            .append ("date", m_aDate)
+                            .append ("Standort", m_sStandort)
+                            .append ("oneLevel", m_bOneLevel)
+                            .append ("light", m_bLight)
+                            .append ("closedCrown", m_bClosedCrown)
+                            .append ("noSun", m_bNoSun)
+                            .append ("homogen", m_bHomogen)
+                            .append ("exposition", m_eExposition)
+                            .append ("Hanglage", m_sHanglage)
+                            .append ("areaSize", m_nAreaSize)
+                            .append ("onlyBB", m_bOnlyBB)
+                            .append ("Beschreibung", m_sBeschreibung)
+                            .getToString ();
   }
 
-  public final int getHBGNr() {
+  public final int getHBGNr ()
+  {
     return m_nHBGNr;
   }
 
   @Nonnull
-  final EChange setHBGNr(final int nHBGNr) {
-    if (nHBGNr == m_nHBGNr) {
+  final EChange setHBGNr (final int nHBGNr)
+  {
+    if (nHBGNr == m_nHBGNr)
+    {
       return EChange.UNCHANGED;
     }
     m_nHBGNr = nHBGNr;
@@ -141,49 +180,58 @@ public class ExHabitatbaumgruppeBO
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  public final ICommonsList<File> pics() {
+  public final ICommonsList <File> pics ()
+  {
     return m_aPics;
   }
 
   @Nonnull
-  final EChange setPics(@Nonnull @Nonempty final ICommonsList<File> aPics) {
-    ValueEnforcer.notEmpty(aPics, "Pics");
+  final EChange setPics (@Nonnull @Nonempty final ICommonsList <File> aPics)
+  {
+    ValueEnforcer.notEmpty (aPics, "Pics");
     // Ensure the same implementation type
-    final ICommonsList<File> aRealList = new CommonsArrayList<>(aPics);
-    if (aRealList.equals(m_aPics)) {
+    final ICommonsList <File> aRealList = new CommonsArrayList <> (aPics);
+    if (aRealList.equals (m_aPics))
+    {
       return EChange.UNCHANGED;
     }
-    m_aPics.setAll(aRealList);
+    m_aPics.setAll (aRealList);
     return EChange.CHANGED;
   }
 
   @Nonnull
   @ReturnsMutableObject
-  public final ICommonsList<IExBiotopbaumBO> HBGzBB() {
+  public final ICommonsList <IExBiotopbaumBO> HBGzBB ()
+  {
     return m_aHBGzBB;
   }
 
   @Nonnull
-  final EChange setHBGzBB(@Nonnull final ICommonsList<IExBiotopbaumBO> aHBGzBB) {
-    ValueEnforcer.notNull(aHBGzBB, "HBGzBB");
+  final EChange setHBGzBB (@Nonnull final ICommonsList <IExBiotopbaumBO> aHBGzBB)
+  {
+    ValueEnforcer.notNull (aHBGzBB, "HBGzBB");
     // Ensure the same implementation type
-    final ICommonsList<IExBiotopbaumBO> aRealList = new CommonsArrayList<>(aHBGzBB);
-    if (aRealList.equals(m_aHBGzBB)) {
+    final ICommonsList <IExBiotopbaumBO> aRealList = new CommonsArrayList <> (aHBGzBB);
+    if (aRealList.equals (m_aHBGzBB))
+    {
       return EChange.UNCHANGED;
     }
-    m_aHBGzBB.setAll(aRealList);
+    m_aHBGzBB.setAll (aRealList);
     return EChange.CHANGED;
   }
 
   @Nonnull
-  public final LocalDate getDate() {
+  public final LocalDate getDate ()
+  {
     return m_aDate;
   }
 
   @Nonnull
-  final EChange setDate(@Nonnull final LocalDate aDate) {
-    ValueEnforcer.notNull(aDate, "Date");
-    if (aDate.equals(m_aDate)) {
+  final EChange setDate (@Nonnull final LocalDate aDate)
+  {
+    ValueEnforcer.notNull (aDate, "Date");
+    if (aDate.equals (m_aDate))
+    {
       return EChange.UNCHANGED;
     }
     m_aDate = aDate;
@@ -191,79 +239,97 @@ public class ExHabitatbaumgruppeBO
   }
 
   @Nonnull
-  public final String getStandort() {
+  public final String getStandort ()
+  {
     return m_sStandort;
   }
 
   @Nonnull
-  final EChange setStandort(@Nonnull final String sStandort) {
-    ValueEnforcer.notNull(sStandort, "Standort");
-    if (sStandort.equals(m_sStandort)) {
+  final EChange setStandort (@Nonnull final String sStandort)
+  {
+    ValueEnforcer.notNull (sStandort, "Standort");
+    if (sStandort.equals (m_sStandort))
+    {
       return EChange.UNCHANGED;
     }
     m_sStandort = sStandort;
     return EChange.CHANGED;
   }
 
-  public final boolean isOneLevel() {
+  public final boolean isOneLevel ()
+  {
     return m_bOneLevel;
   }
 
   @Nonnull
-  final EChange setOneLevel(final boolean bOneLevel) {
-    if (bOneLevel == m_bOneLevel) {
+  final EChange setOneLevel (final boolean bOneLevel)
+  {
+    if (bOneLevel == m_bOneLevel)
+    {
       return EChange.UNCHANGED;
     }
     m_bOneLevel = bOneLevel;
     return EChange.CHANGED;
   }
 
-  public final boolean isLight() {
+  public final boolean isLight ()
+  {
     return m_bLight;
   }
 
   @Nonnull
-  final EChange setLight(final boolean bLight) {
-    if (bLight == m_bLight) {
+  final EChange setLight (final boolean bLight)
+  {
+    if (bLight == m_bLight)
+    {
       return EChange.UNCHANGED;
     }
     m_bLight = bLight;
     return EChange.CHANGED;
   }
 
-  public final boolean isClosedCrown() {
+  public final boolean isClosedCrown ()
+  {
     return m_bClosedCrown;
   }
 
   @Nonnull
-  final EChange setClosedCrown(final boolean bClosedCrown) {
-    if (bClosedCrown == m_bClosedCrown) {
+  final EChange setClosedCrown (final boolean bClosedCrown)
+  {
+    if (bClosedCrown == m_bClosedCrown)
+    {
       return EChange.UNCHANGED;
     }
     m_bClosedCrown = bClosedCrown;
     return EChange.CHANGED;
   }
 
-  public final boolean isNoSun() {
+  public final boolean isNoSun ()
+  {
     return m_bNoSun;
   }
 
   @Nonnull
-  final EChange setNoSun(final boolean bNoSun) {
-    if (bNoSun == m_bNoSun) {
+  final EChange setNoSun (final boolean bNoSun)
+  {
+    if (bNoSun == m_bNoSun)
+    {
       return EChange.UNCHANGED;
     }
     m_bNoSun = bNoSun;
     return EChange.CHANGED;
   }
 
-  public final boolean isHomogen() {
+  public final boolean isHomogen ()
+  {
     return m_bHomogen;
   }
 
   @Nonnull
-  final EChange setHomogen(final boolean bHomogen) {
-    if (bHomogen == m_bHomogen) {
+  final EChange setHomogen (final boolean bHomogen)
+  {
+    if (bHomogen == m_bHomogen)
+    {
       return EChange.UNCHANGED;
     }
     m_bHomogen = bHomogen;
@@ -271,14 +337,17 @@ public class ExHabitatbaumgruppeBO
   }
 
   @Nonnull
-  public final EExExpositionBO getExposition() {
+  public final EExExpositionBO getExposition ()
+  {
     return m_eExposition;
   }
 
   @Nonnull
-  final EChange setExposition(@Nonnull final EExExpositionBO eExposition) {
-    ValueEnforcer.notNull(eExposition, "Exposition");
-    if (eExposition.equals(m_eExposition)) {
+  final EChange setExposition (@Nonnull final EExExpositionBO eExposition)
+  {
+    ValueEnforcer.notNull (eExposition, "Exposition");
+    if (eExposition.equals (m_eExposition))
+    {
       return EChange.UNCHANGED;
     }
     m_eExposition = eExposition;
@@ -286,39 +355,48 @@ public class ExHabitatbaumgruppeBO
   }
 
   @Nullable
-  public final String getHanglage() {
+  public final String getHanglage ()
+  {
     return m_sHanglage;
   }
 
   @Nonnull
-  final EChange setHanglage(@Nullable final String sHanglage) {
-    if (EqualsHelper.equals(sHanglage, m_sHanglage)) {
+  final EChange setHanglage (@Nullable final String sHanglage)
+  {
+    if (EqualsHelper.equals (sHanglage, m_sHanglage))
+    {
       return EChange.UNCHANGED;
     }
     m_sHanglage = sHanglage;
     return EChange.CHANGED;
   }
 
-  public final int getAreaSize() {
+  public final int getAreaSize ()
+  {
     return m_nAreaSize;
   }
 
   @Nonnull
-  final EChange setAreaSize(final int nAreaSize) {
-    if (nAreaSize == m_nAreaSize) {
+  final EChange setAreaSize (final int nAreaSize)
+  {
+    if (nAreaSize == m_nAreaSize)
+    {
       return EChange.UNCHANGED;
     }
     m_nAreaSize = nAreaSize;
     return EChange.CHANGED;
   }
 
-  public final boolean isOnlyBB() {
+  public final boolean isOnlyBB ()
+  {
     return m_bOnlyBB;
   }
 
   @Nonnull
-  final EChange setOnlyBB(final boolean bOnlyBB) {
-    if (bOnlyBB == m_bOnlyBB) {
+  final EChange setOnlyBB (final boolean bOnlyBB)
+  {
+    if (bOnlyBB == m_bOnlyBB)
+    {
       return EChange.UNCHANGED;
     }
     m_bOnlyBB = bOnlyBB;
@@ -326,14 +404,17 @@ public class ExHabitatbaumgruppeBO
   }
 
   @Nonnull
-  public final String getBeschreibung() {
+  public final String getBeschreibung ()
+  {
     return m_sBeschreibung;
   }
 
   @Nonnull
-  final EChange setBeschreibung(@Nonnull final String sBeschreibung) {
-    ValueEnforcer.notNull(sBeschreibung, "Beschreibung");
-    if (sBeschreibung.equals(m_sBeschreibung)) {
+  final EChange setBeschreibung (@Nonnull final String sBeschreibung)
+  {
+    ValueEnforcer.notNull (sBeschreibung, "Beschreibung");
+    if (sBeschreibung.equals (m_sBeschreibung))
+    {
       return EChange.UNCHANGED;
     }
     m_sBeschreibung = sBeschreibung;

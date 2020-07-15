@@ -105,8 +105,7 @@ public class JDMCodeGenerator
     for (final Map.Entry <String, ICommonsOrderedSet <String>> aEntry : cm.spiImplMap ().getAll ())
     {
       final String sContent = StringHelper.getImploded ('\n', aEntry.getValue ()) + "\n";
-      cm.resourceDir ("META-INF/services")
-        .addResourceFile (JTextFile.createFully (aEntry.getKey (), StandardCharsets.UTF_8, sContent));
+      cm.resourceDir ("META-INF/services").addResourceFile (JTextFile.createFully (aEntry.getKey (), StandardCharsets.UTF_8, sContent));
     }
   }
 
@@ -195,8 +194,7 @@ public class JDMCodeGenerator
         if (it.hasCycles ())
           aCycleClassNames.add (aCurNode.getID ());
       }
-      aFeedbackHandler.onWarning ("The type graph contains at least one cycle. Involved classes are: " +
-                                  aCycleClassNames);
+      aFeedbackHandler.onWarning ("The type graph contains at least one cycle. Involved classes are: " + aCycleClassNames);
     }
 
     try
@@ -214,14 +212,8 @@ public class JDMCodeGenerator
         final JDMCodeGenSettings aPerClassSettings = m_aDefaultSettings.getClone ();
         aClass.settings ().applyToSettings (aPerClassSettings);
 
-        final JDefinedClass jInterface = JDMCodeGenBase.createMainJavaInterface (m_aProcessor,
-                                                                                 aPerClassSettings,
-                                                                                 cm,
-                                                                                 aClass);
-        final JDefinedClass jDomainClass = JDMCodeGenBase.createMainJavaClass (aPerClassSettings,
-                                                                               cm,
-                                                                               aClass,
-                                                                               jInterface);
+        final JDefinedClass jInterface = JDMCodeGenBase.createMainJavaInterface (m_aProcessor, aPerClassSettings, cm, aClass);
+        final JDefinedClass jDomainClass = JDMCodeGenBase.createMainJavaClass (aPerClassSettings, cm, aClass, jInterface);
 
         if (aPerClassSettings.isCreateMicroTypeConverter ())
         {

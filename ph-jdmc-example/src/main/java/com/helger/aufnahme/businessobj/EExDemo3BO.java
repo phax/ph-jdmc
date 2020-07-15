@@ -23,56 +23,60 @@ import com.helger.commons.name.IHasDisplayName;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-
 /**
  * This class was initially automatically created
  * 
- * 
  * @author JDMCodeGenerator
  */
-public enum EExDemo3BO
-  implements IHasID<String> , IHasDisplayName
+public enum EExDemo3BO implements IHasID <String>, IHasDisplayName
 {
-  ALPHA("a", "a"),
-  RED("RED", "RED"),
+  ALPHA ("a", "a"),
+  RED ("RED", "RED"),
 
   /**
    * The green part.
    */
-  GREEN("g", "green"),
-  BLUE("b", "blue");
+  GREEN ("g", "green"),
+  BLUE ("b", "blue");
+
   private final String m_sID;
   private final String m_sDisplayName;
 
-  private EExDemo3BO(@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName) {
+  private EExDemo3BO (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sDisplayName)
+  {
     m_sID = sID;
     m_sDisplayName = sDisplayName;
   }
 
   @Nonnull
   @Nonempty
-  public String getID() {
+  public String getID ()
+  {
     return m_sID;
   }
 
   @Nonnull
   @Nonempty
-  public String getDisplayName() {
+  public String getDisplayName ()
+  {
     return m_sDisplayName;
   }
 
   @Nullable
-  public static EExDemo3BO getFromIDOrNull(@Nullable final String sID) {
-    return EnumHelper.getFromIDOrNull(EExDemo3BO.class, sID);
+  public static EExDemo3BO getFromIDOrNull (@Nullable final String sID)
+  {
+    return EnumHelper.getFromIDOrNull (EExDemo3BO.class, sID);
   }
 
   @Nullable
-  public static EExDemo3BO getFromIDOrDefault(@Nullable final String sID, @Nullable final EExDemo3BO eDefault) {
-    return EnumHelper.getFromIDOrDefault(EExDemo3BO.class, sID, eDefault);
+  public static EExDemo3BO getFromIDOrDefault (@Nullable final String sID, @Nullable final EExDemo3BO eDefault)
+  {
+    return EnumHelper.getFromIDOrDefault (EExDemo3BO.class, sID, eDefault);
   }
 
   @Nonnull
-  public static EExDemo3BO getFromIDOrThrow(@Nullable final String sID) {
-    return EnumHelper.getFromIDOrThrow(EExDemo3BO.class, sID);
+  public static EExDemo3BO getFromIDOrThrow (@Nullable final String sID)
+  {
+    return EnumHelper.getFromIDOrThrow (EExDemo3BO.class, sID);
   }
 }

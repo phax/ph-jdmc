@@ -88,10 +88,7 @@ public final class JDMProcessorTest
       p.setClassNamePrefix ("Ex").setClassNameSuffix ("BO");
       _applyTestJDM (p);
       final JDMCodeGenerator cg = new JDMCodeGenerator (p);
-      cg.defaultSettings ()
-        .setUseBusinessObject (true)
-        .setSetterArePackagePrivate (true)
-        .setReadExistingSPIFiles (true);
+      cg.defaultSettings ().setUseBusinessObject (true).setSetterArePackagePrivate (true).setReadExistingSPIFiles (true);
       cg.createCode (DIR_EXAMPLE);
     }
     // Third run - as little as possible

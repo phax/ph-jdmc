@@ -26,154 +26,144 @@ import com.helger.tenancy.IBusinessObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-
 /**
- * <p>Interface for class {@link ExHabitatbaumgruppeBO}</p>
- * <p>This class was initially automatically created</p>
- * 
+ * <p>
+ * Interface for class {@link ExHabitatbaumgruppeBO}
+ * </p>
+ * <p>
+ * This class was initially automatically created
+ * </p>
  * 
  * @author JDMCodeGenerator
  */
-public interface IExHabitatbaumgruppeBO
-  extends IBusinessObject
+public interface IExHabitatbaumgruppeBO extends IBusinessObject
 {
 
   /**
    * Schlüsselfeld
    * 
-   * @return
-   *     The requested value.
+   * @return The requested value.
    */
-  int getHBGNr();
+  int getHBGNr ();
 
   /**
    * Fotos
    * 
-   * @return
-   *     The requested value. May neither be <code>null</code> nor empty.
+   * @return The requested value. May neither be <code>null</code> nor empty.
    */
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  ICommonsList<File> pics();
+  ICommonsList <File> pics ();
 
   /**
    * zugehörige Biotopbäume
    * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
+   * @return The requested value. May not be <code>null</code>.
    */
   @Nonnull
   @ReturnsMutableObject
-  ICommonsList<IExBiotopbaumBO> HBGzBB();
+  ICommonsList <IExBiotopbaumBO> HBGzBB ();
 
   /**
    * Get the value of date.
    * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
+   * @return The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  LocalDate getDate();
+  LocalDate getDate ();
 
   /**
-   * allg. Beschreibung  Freitext
+   * allg. Beschreibung Freitext
    * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
+   * @return The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getStandort();
+  String getStandort ();
 
   /**
-   * Wald, einschichtig (1 Baumschicht, kaum Unterwuchs) oder mehrschichtiger Bestand (Unterwuchs, Strauchsch., evtl. 2. Baumschicht)
+   * Wald, einschichtig (1 Baumschicht, kaum Unterwuchs) oder mehrschichtiger
+   * Bestand (Unterwuchs, Strauchsch., evtl. 2. Baumschicht)
    * 
-   * @return
-   *     The requested value.
+   * @return The requested value.
    */
-  boolean isOneLevel();
+  boolean isOneLevel ();
 
   /**
    * lichter Bestand (Besonnung)
    * 
-   * @return
-   *     The requested value.
+   * @return The requested value.
    */
-  boolean isLight();
+  boolean isLight ();
 
   /**
    * geschlossene Kronendach
    * 
-   * @return
-   *     The requested value.
+   * @return The requested value.
    */
-  boolean isClosedCrown();
+  boolean isClosedCrown ();
 
   /**
    * explitzit keine Besonnung
    * 
-   * @return
-   *     The requested value.
+   * @return The requested value.
    */
-  boolean isNoSun();
+  boolean isNoSun ();
 
   /**
    * eingebettet in homogenene oder heterogene Umgebung
    * 
-   * @return
-   *     The requested value.
+   * @return The requested value.
    */
-  boolean isHomogen();
+  boolean isHomogen ();
 
   /**
    * Exposition
    * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
+   * @return The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EExExpositionBO getExposition();
+  EExExpositionBO getExposition ();
 
   @Nonnull
-  default String getExpositionID() {
-    return getExposition().getID();
+  default String getExpositionID ()
+  {
+    return getExposition ().getID ();
   }
 
   /**
    * Angabe von Neigungen: keine, Angabe von Neigungen, Freitext
    * 
-   * @return
-   *     The requested value. May be <code>null</code>.
+   * @return The requested value. May be <code>null</code>.
    */
   @Nullable
-  String getHanglage();
+  String getHanglage ();
 
-  default boolean hasHanglage() {
-    return StringHelper.hasText(getHanglage());
+  default boolean hasHanglage ()
+  {
+    return StringHelper.hasText (getHanglage ());
   }
 
   /**
    * Größe (in m²)
    * 
-   * @return
-   *     The requested value.
+   * @return The requested value.
    */
-  int getAreaSize();
+  int getAreaSize ();
 
   /**
-   * Habitatbaumgruppe NUR aus schon kartierten Biotopbäumen oder  auch aus anderen Bäumen bestehend
+   * Habitatbaumgruppe NUR aus schon kartierten Biotopbäumen oder auch aus
+   * anderen Bäumen bestehend
    * 
-   * @return
-   *     The requested value.
+   * @return The requested value.
    */
-  boolean isOnlyBB();
+  boolean isOnlyBB ();
 
   /**
-   * Freitext 
+   * Freitext
    * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
+   * @return The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getBeschreibung();
+  String getBeschreibung ();
 }

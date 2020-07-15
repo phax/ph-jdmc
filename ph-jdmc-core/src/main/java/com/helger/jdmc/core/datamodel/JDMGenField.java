@@ -197,8 +197,10 @@ public class JDMGenField implements Serializable
       cPrefix = 'a';
     else
       cPrefix = m_aType.isEnum () ? 'e'
-                                  : m_aType.isJavaPrimitive (eMultiplicity) ||
-                                    m_aType.getBaseType ().isString () ? m_aType.getBaseType ().getPrefix () : 'a';
+                                  : m_aType.isJavaPrimitive (eMultiplicity) || m_aType.getBaseType ().isString ()
+                                                                                                                  ? m_aType.getBaseType ()
+                                                                                                                           .getPrefix ()
+                                                                                                                  : 'a';
     return cPrefix + _getStartUC (m_sFieldName);
   }
 

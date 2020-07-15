@@ -41,9 +41,9 @@ public class JDMGenEnumConstant implements Serializable
   private final String m_sComment;
 
   public JDMGenEnumConstant (@Nonnull @Nonempty final String sName,
-                          @Nonnull @Nonempty final String sID,
-                          @Nonnull @Nonempty final String sDisplayName,
-                          @Nullable final String sComment)
+                             @Nonnull @Nonempty final String sID,
+                             @Nonnull @Nonempty final String sDisplayName,
+                             @Nullable final String sComment)
   {
     ValueEnforcer.notEmpty (sName, "Name");
     ValueEnforcer.notEmpty (sID, "ID");

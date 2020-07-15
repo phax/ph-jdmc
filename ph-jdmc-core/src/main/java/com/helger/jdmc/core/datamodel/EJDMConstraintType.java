@@ -127,8 +127,7 @@ public enum EJDMConstraintType implements IHasID <String>, IHasDisplayName
   }
 
   @Nullable
-  public static EJDMConstraintType getFromIDOrDefault (@Nullable final String sID,
-                                                       @Nullable final EJDMConstraintType eDefault)
+  public static EJDMConstraintType getFromIDOrDefault (@Nullable final String sID, @Nullable final EJDMConstraintType eDefault)
   {
     return EnumHelper.getFromIDOrDefault (EJDMConstraintType.class, sID, eDefault);
   }

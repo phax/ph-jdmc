@@ -328,8 +328,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
       for (final JDMGenField aField : ret.fields ())
       {
         final boolean bIsSelfRef = aField.getType ().getShortName ().equals (ret.getClassName ());
-        IJExpression aTestVal = bIsSelfRef ? JExpr._null ()
-                                           : aField.getType ().createTestValue (cm, cs, aField.getMultiplicity ());
+        IJExpression aTestVal = bIsSelfRef ? JExpr._null () : aField.getType ().createTestValue (cm, cs, aField.getMultiplicity ());
         if (aField.getMultiplicity ().isOpenEnded ())
           aTestVal = cm.ref (CommonsArrayList.class).narrowEmpty ()._new ().arg (aTestVal);
         aNew = aNew.arg (aTestVal);
@@ -431,9 +430,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
 
       // Check for +/?/* suffixes for multiplicity
       final EJDMMultiplicity eMultiplicity = EJDMMultiplicity.getFromTypeName (sTypeName);
-      final String sEffectiveTypeName = sTypeName.substring (0,
-                                                             sTypeName.length () -
-                                                                eMultiplicity.getSuffix ().length ());
+      final String sEffectiveTypeName = sTypeName.substring (0, sTypeName.length () - eMultiplicity.getSuffix ().length ());
       if (StringHelper.hasNoText (sEffectiveTypeName))
       {
         // The type name consists only of the multiplicity suffix :D
@@ -500,11 +497,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
             aConstraintDataElement = aConstraintDef.getAsValue ();
           else
           {
-            aErrorHdl.accept ("Field '" +
-                              sFieldName +
-                              "' defines constraint '" +
-                              sConstraintName +
-                              "' which requires a single value");
+            aErrorHdl.accept ("Field '" + sFieldName + "' defines constraint '" + sConstraintName + "' which requires a single value");
             bError = true;
             break fieldloop;
           }
@@ -702,9 +695,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
               sDisplayName = aSecond.getAsValue ().getAsString ();
             else
             {
-              aErrorHdl.accept ("The enum constant definition of '" +
-                                sEnumConstantName +
-                                "' is inconsistent (display name)");
+              aErrorHdl.accept ("The enum constant definition of '" + sEnumConstantName + "' is inconsistent (display name)");
               return null;
             }
           if (aThird == null)
@@ -714,9 +705,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
               sComment = aThird.getAsValue ().getAsString ();
             else
             {
-              aErrorHdl.accept ("The enum constant definition of '" +
-                                sEnumConstantName +
-                                "' is inconsistent (comment)");
+              aErrorHdl.accept ("The enum constant definition of '" + sEnumConstantName + "' is inconsistent (comment)");
               return null;
             }
         }
@@ -745,9 +734,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
 
     // Upon success, register this type
     m_aContext.typeContainer ()
-              .registerType (ret,
-                             (cm, cs, e) -> cm.ref (ret.getFQClassName ())
-                                              .staticRef (ret.enumConstants ().getFirst ().getName ()));
+              .registerType (ret, (cm, cs, e) -> cm.ref (ret.getFQClassName ()).staticRef (ret.enumConstants ().getFirst ().getName ()));
     m_aReadTypes.add (ret);
 
     return ret;
@@ -805,11 +792,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
     private final IMultiReaderErrorHandler m_aDefaultErrHdl = (eType, aFile, aInfoMsgs, aErrorMsgs) -> {
       aInfoMsgs.forEach (m_aDefaultInfoHdl);
       aErrorMsgs.forEach (m_aDefaultErrorHdl);
-      throw new IllegalStateException ("Failed to read " +
-                                       eType.getDisplayName () +
-                                       " '" +
-                                       aFile.getAbsolutePath () +
-                                       "'");
+      throw new IllegalStateException ("Failed to read " + eType.getDisplayName () + " '" + aFile.getAbsolutePath () + "'");
     };
     private boolean m_bReading = false;
 
@@ -819,9 +802,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
       ValueEnforcer.notNull (aFile, "File");
       ValueEnforcer.isFalse (m_bReading, "Files were already read - cannot add new files");
       if (m_aDefs.containsKey (aFile))
-        throw new IllegalArgumentException ("The file '" +
-                                            aFile.getAbsolutePath () +
-                                            "' is already part of the list to be read");
+        throw new IllegalArgumentException ("The file '" + aFile.getAbsolutePath () + "' is already part of the list to be read");
       m_aDefs.put (aFile, EJDMDefinitionType.ENUMERATION);
       return this;
     }
@@ -832,9 +813,7 @@ public class JDMProcessor implements IJDMGenTypeResolver
       ValueEnforcer.notNull (aFile, "File");
       ValueEnforcer.isFalse (m_bReading, "Files were already read - cannot add new files");
       if (m_aDefs.containsKey (aFile))
-        throw new IllegalArgumentException ("The file '" +
-                                            aFile.getAbsolutePath () +
-                                            "' is already part of the list to be read");
+        throw new IllegalArgumentException ("The file '" + aFile.getAbsolutePath () + "' is already part of the list to be read");
       m_aDefs.put (aFile, EJDMDefinitionType.CLASS);
       return this;
     }

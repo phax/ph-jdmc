@@ -38,7 +38,5 @@ public interface IJDMTypeTestValueCreator extends Serializable
    * @return The test expression.
    */
   @Nonnull
-  IJExpression createTestValue (@Nonnull JDMCodeModel cm,
-                                @Nonnull JDMCodeGenSettings cs,
-                                @Nonnull EJDMMultiplicity eMultiplicity);
+  IJExpression createTestValue (@Nonnull JDMCodeModel cm, @Nonnull JDMCodeGenSettings cs, @Nonnull EJDMMultiplicity eMultiplicity);
 }

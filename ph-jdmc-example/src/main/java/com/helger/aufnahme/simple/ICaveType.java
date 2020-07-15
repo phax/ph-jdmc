@@ -19,43 +19,44 @@ package com.helger.aufnahme.simple;
 import java.io.Serializable;
 import javax.annotation.Nonnull;
 
-
 /**
- * <p>Interface for class {@link CaveType}</p>
- * <p>This class was initially automatically created</p>
- * 
+ * <p>
+ * Interface for class {@link CaveType}
+ * </p>
+ * <p>
+ * This class was initially automatically created
+ * </p>
  * 
  * @author JDMCodeGenerator
  */
-public interface ICaveType
-  extends Serializable
+public interface ICaveType extends Serializable
 {
 
   /**
    * Get the value of clazz.
    * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
+   * @return The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ECaveClass getClazz();
+  ECaveClass getClazz ();
 
   @Nonnull
-  default String getClazzID() {
-    return getClazz().getID();
+  default String getClazzID ()
+  {
+    return getClazz ().getID ();
   }
 
   /**
    * Höhlentyp
    * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
+   * @return The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  ECaveType getType();
+  ECaveType getType ();
 
   @Nonnull
-  default String getTypeID() {
-    return getType().getID();
+  default String getTypeID ()
+  {
+    return getType ().getID ();
   }
 }

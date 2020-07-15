@@ -19,43 +19,44 @@ package com.helger.aufnahme.businessobj;
 import com.helger.tenancy.IBusinessObject;
 import javax.annotation.Nonnull;
 
-
 /**
- * <p>Interface for class {@link ExCaveTypeBO}</p>
- * <p>This class was initially automatically created</p>
- * 
+ * <p>
+ * Interface for class {@link ExCaveTypeBO}
+ * </p>
+ * <p>
+ * This class was initially automatically created
+ * </p>
  * 
  * @author JDMCodeGenerator
  */
-public interface IExCaveTypeBO
-  extends IBusinessObject
+public interface IExCaveTypeBO extends IBusinessObject
 {
 
   /**
    * Get the value of clazz.
    * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
+   * @return The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EExCaveClassBO getClazz();
+  EExCaveClassBO getClazz ();
 
   @Nonnull
-  default String getClazzID() {
-    return getClazz().getID();
+  default String getClazzID ()
+  {
+    return getClazz ().getID ();
   }
 
   /**
    * Höhlentyp
    * 
-   * @return
-   *     The requested value. May not be <code>null</code>.
+   * @return The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EExCaveTypeBO getType();
+  EExCaveTypeBO getType ();
 
   @Nonnull
-  default String getTypeID() {
-    return getType().getID();
+  default String getTypeID ()
+  {
+    return getType ().getID ();
   }
 }
