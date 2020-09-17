@@ -71,21 +71,7 @@
       <dependency>
         <groupId>com.helger</groupId>
         <artifactId>ph-commons-parent-pom</artifactId>
-        <version>9.4.8</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.helger</groupId>
-        <artifactId>ph-masterdata-parent-pom</artifactId>
-        <version>6.1.7</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.helger.web</groupId>
-        <artifactId>ph-web-parent-pom</artifactId>
-        <version>9.3.3</version>
+        <version>9.5.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -97,9 +83,23 @@
         <scope>import</scope>
       </dependency>
       <dependency>
+        <groupId>com.helger</groupId>
+        <artifactId>ph-masterdata-parent-pom</artifactId>
+        <version>6.1.8</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.helger.web</groupId>
+        <artifactId>ph-web-parent-pom</artifactId>
+        <version>9.3.4</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
         <groupId>com.helger.photon</groupId>
         <artifactId>ph-oton-parent-pom</artifactId>
-        <version>8.2.7</version>
+        <version>8.2.8</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -129,4 +129,16 @@
     <module>ph-jdmc-example</module>
     <module>ph-jdmc-maven-plugin</module>
   </modules>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <source>8</source>
+        </configuration>
+      </plugin> 
+    </plugins>
+  </build>
 </project>
