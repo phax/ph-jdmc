@@ -1,19 +1,3 @@
-/**
- * Copyright (C) 2018-2019 Philip Helger (www.helger.com)
- * philip[at]helger[dot]com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.helger.aufnahme.businessobj;
 
 import java.io.File;
@@ -26,237 +10,259 @@ import com.helger.tenancy.IBusinessObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+
 /**
- * <p>
- * Interface for class {@link ExStichprobeBO}
- * </p>
- * <p>
- * This class was initially automatically created
- * </p>
+ * <p>Interface for class {@link ExStichprobeBO}</p>
+ * <p>This class was initially automatically created</p>
+ * 
  * 
  * @author JDMCodeGenerator
  */
-public interface IExStichprobeBO extends IBusinessObject
+public interface IExStichprobeBO
+  extends IBusinessObject
 {
 
   /**
    * Schlüsselfeld
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  int getStichNr ();
+  int getStichNr();
 
   /**
    * Zugehörig zu Reservat
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  IExReservatBO getStichNrzR ();
+  IExReservatBO getStichNrzR();
 
   /**
    * Fotos
    * 
-   * @return The requested value. May neither be <code>null</code> nor empty.
+   * @return
+   *     The requested value. May neither be <code>null</code> nor empty.
    */
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  ICommonsList <File> pics ();
+  ICommonsList<File> pics();
 
   /**
    * Get the value of date.
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  LocalDate getDate ();
+  LocalDate getDate();
 
   /**
    * Größe in m² bei Abweichung von Radius
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  int getSize ();
+  int getSize();
 
   /**
    * Exposition
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EExExpositionBO getExposition ();
+  EExExpositionBO getExposition();
 
   @Nonnull
-  default String getExpositionID ()
-  {
-    return getExposition ().getID ();
+  default String getExpositionID() {
+    return getExposition().getID();
   }
 
   /**
    * Angabe von Neigungen
    * 
-   * @return The requested value. May be <code>null</code>.
+   * @return
+   *     The requested value. May be <code>null</code>.
    */
   @Nullable
-  String getHanglage ();
+  String getHanglage();
 
-  default boolean hasHanglage ()
-  {
-    return StringHelper.hasText (getHanglage ());
+  default boolean hasHanglage() {
+    return StringHelper.hasText(getHanglage());
   }
 
   /**
    * Waldgesellschaft oder Waldgruppe
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getGesellschaft ();
+  String getGesellschaft();
 
   /**
    * Bestandesklasse 0, Flächenanteil in Zehntel
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  double getBKL0 ();
+  double getBKL0();
 
   /**
    * Bestandesklasse 1, Flächenanteil in Zehntel
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  double getBKL1 ();
+  double getBKL1();
 
   /**
    * Bestandesklasse 2, Flächenanteil in Zehntel
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  double getBKL2 ();
+  double getBKL2();
 
   /**
    * Bestandesklasse 3, Flächenanteil in Zehntel
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  double getBKL3 ();
+  double getBKL3();
 
   /**
    * Bestandesklasse 4, Flächenanteil in Zehntel
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  double getBKL4 ();
+  double getBKL4();
 
   /**
    * Bestandesklasse 5, Flächenanteil in Zehntel
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  double getBKL5 ();
+  double getBKL5();
 
   /**
    * Bestandesklasse 6, Flächenanteil in Zehntel
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  double getBKL6 ();
+  double getBKL6();
 
   /**
    * Bestandesklasse 7, Flächenanteil in Zehntel
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  double getBKL7 ();
+  double getBKL7();
 
   /**
    * Bestandesklasse 8, Flächenanteil in Zehntel
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  double getBKL8 ();
+  double getBKL8();
 
   /**
    * Bestandesklasse 9, Flächenanteil in Zehntel
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  double getBKL9 ();
+  double getBKL9();
 
   /**
    * Beschreibung Nutzungsspuren
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getUsage ();
+  String getUsage();
 
   /**
    * allgemeine Beschreibung
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getUsageDesc ();
+  String getUsageDesc();
 
   /**
    * Biotopbäume innerhalb Stichprobenpunkt
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
   @ReturnsMutableObject
-  ICommonsList <IExBiotopbaumBO> trees ();
+  ICommonsList<IExBiotopbaumBO> trees();
 
   /**
    * Beschreibung
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getDesc ();
+  String getDesc();
 
   /**
    * gleichaltrig oder ungleichaltrig
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  boolean isSameAge ();
+  boolean isSameAge();
 
   /**
    * einschichtig oder mehrschichtig
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  boolean isOneLevel ();
+  boolean isOneLevel();
 
   /**
    * Stehendes Totholz (Vollaufnahme) ab &gt;= 5cm BHD
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
   @ReturnsMutableObject
-  ICommonsList <IExStichprobeDeadwoodBO> totSteh ();
+  ICommonsList<IExStichprobeDeadwoodBO> totSteh();
 
   /**
-   * Liegendes Totholz (Line-intersect, Transekt 1) ab Mindestdurchmesser &gt;=
-   * 10 cm
+   * Liegendes Totholz (Line-intersect, Transekt 1) ab Mindestdurchmesser &gt;= 10 cm
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
   @ReturnsMutableObject
-  ICommonsList <IExStichprobeDeadwoodBO> totLieg1 ();
+  ICommonsList<IExStichprobeDeadwoodBO> totLieg1();
 
   /**
-   * Liegendes Totholz (Line-intersect, Transekt 2) ab Mindestdurchmesser &gt;=
-   * 10 cm
+   * Liegendes Totholz (Line-intersect, Transekt 2) ab Mindestdurchmesser &gt;= 10 cm
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
   @ReturnsMutableObject
-  ICommonsList <IExStichprobeDeadwoodBO> totLieg2 ();
+  ICommonsList<IExStichprobeDeadwoodBO> totLieg2();
 }

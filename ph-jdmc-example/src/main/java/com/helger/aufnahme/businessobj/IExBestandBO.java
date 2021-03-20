@@ -1,19 +1,3 @@
-/**
- * Copyright (C) 2018-2019 Philip Helger (www.helger.com)
- * philip[at]helger[dot]com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.helger.aufnahme.businessobj;
 
 import java.io.File;
@@ -26,252 +10,264 @@ import com.helger.tenancy.IBusinessObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+
 /**
- * <p>
- * Interface for class {@link ExBestandBO}
- * </p>
- * <p>
- * This class was initially automatically created
- * </p>
+ * <p>Interface for class {@link ExBestandBO}</p>
+ * <p>This class was initially automatically created</p>
+ * 
  * 
  * @author JDMCodeGenerator
  */
-public interface IExBestandBO extends IBusinessObject
+public interface IExBestandBO
+  extends IBusinessObject
 {
 
   /**
    * Schlüsselfeld
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  int getBNr ();
+  int getBNr();
 
   /**
    * Foto-Nr
    * 
-   * @return The requested value. May neither be <code>null</code> nor empty.
+   * @return
+   *     The requested value. May neither be <code>null</code> nor empty.
    */
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  ICommonsList <File> pics ();
+  ICommonsList<File> pics();
 
   /**
    * Get the value of date.
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  LocalDate getDate ();
+  LocalDate getDate();
 
   /**
    * GPS-Punkte oder Verweis auf Polygon
    * 
-   * @return The requested value. May be <code>null</code>.
+   * @return
+   *     The requested value. May be <code>null</code>.
    */
   @Nullable
-  String getVerortung ();
+  String getVerortung();
 
-  default boolean hasVerortung ()
-  {
-    return StringHelper.hasText (getVerortung ());
+  default boolean hasVerortung() {
+    return StringHelper.hasText(getVerortung());
   }
 
   /**
    * Habitatbaumgruppen
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
   @ReturnsMutableObject
-  ICommonsList <IExHabitatbaumgruppeBO> BZHBG ();
+  ICommonsList<IExHabitatbaumgruppeBO> BZHBG();
 
   /**
    * Größe in m²
    * 
-   * @return The requested value. May be <code>null</code>.
+   * @return
+   *     The requested value. May be <code>null</code>.
    */
   @Nullable
-  Integer getAreaSize ();
+  Integer getAreaSize();
 
-  default boolean hasAreaSize ()
-  {
-    return (getAreaSize () != null);
+  default boolean hasAreaSize() {
+    return (getAreaSize()!= null);
   }
 
   /**
    * Größe in m²
    * 
-   * @return The requested value. May be <code>null</code>.
+   * @return
+   *     The requested value. May be <code>null</code>.
    */
   @Nullable
-  Long getAreaSizeLong ();
+  Long getAreaSizeLong();
 
-  default boolean hasAreaSizeLong ()
-  {
-    return (getAreaSizeLong () != null);
+  default boolean hasAreaSizeLong() {
+    return (getAreaSizeLong()!= null);
   }
 
   /**
    * Größe in m²
    * 
-   * @return The requested value. May be <code>null</code>.
+   * @return
+   *     The requested value. May be <code>null</code>.
    */
   @Nullable
-  Float getAreaSizeFloat ();
+  Float getAreaSizeFloat();
 
-  default boolean hasAreaSizeFloat ()
-  {
-    return (getAreaSizeFloat () != null);
+  default boolean hasAreaSizeFloat() {
+    return (getAreaSizeFloat()!= null);
   }
 
   /**
    * Größe in m²
    * 
-   * @return The requested value. May be <code>null</code>.
+   * @return
+   *     The requested value. May be <code>null</code>.
    */
   @Nullable
-  Double getAreaSizeDouble ();
+  Double getAreaSizeDouble();
 
-  default boolean hasAreaSizeDouble ()
-  {
-    return (getAreaSizeDouble () != null);
+  default boolean hasAreaSizeDouble() {
+    return (getAreaSizeDouble()!= null);
   }
 
   /**
    * Bestand-Beschreibung
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getBeschreib ();
+  String getBeschreib();
 
   /**
    * gleichaltrig oder ungleichaltrig
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  boolean isSameAge ();
+  boolean isSameAge();
 
   /**
    * einschichtig oder mehrschichtig
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  boolean isOneLevel ();
+  boolean isOneLevel();
 
   /**
    * Bestandesklasse
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EExStockTypeBO getStockType ();
+  EExStockTypeBO getStockType();
 
   @Nonnull
-  default String getStockTypeID ()
-  {
-    return getStockType ().getID ();
+  default String getStockTypeID() {
+    return getStockType().getID();
   }
 
   /**
    * Bestandesklasse optional
    * 
-   * @return The requested value. May be <code>null</code>.
+   * @return
+   *     The requested value. May be <code>null</code>.
    */
   @Nullable
-  EExStockTypeBO getStockTypeOpt ();
+  EExStockTypeBO getStockTypeOpt();
 
-  default boolean hasStockTypeOpt ()
-  {
-    return (getStockTypeOpt () != null);
+  default boolean hasStockTypeOpt() {
+    return (getStockTypeOpt()!= null);
   }
 
   @Nullable
-  default String getStockTypeOptID ()
-  {
-    final EExStockTypeBO aObj = getStockTypeOpt ();
-    return ((aObj == null) ? null : aObj.getID ());
+  default String getStockTypeOptID() {
+    final EExStockTypeBO aObj = getStockTypeOpt();
+    return ((aObj == null)?null:aObj.getID());
   }
 
   /**
    * Beschreibung Nutzungsspuren
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getUsageDescription ();
+  String getUsageDescription();
 
   /**
    * Waldgesellschaft oder Waldgruppe
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getGesellschaft ();
+  String getGesellschaft();
 
   /**
    * Get the value of Kronenschluss.
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  boolean isKronenschluss ();
+  boolean isKronenschluss();
 
   /**
    * räumig oder lückig stehendes Holz (lichter Bestand)
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  boolean isLightWoods ();
+  boolean isLightWoods();
 
   /**
    * Unterwuchs
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  boolean isUnterwuchs ();
+  boolean isUnterwuchs();
 
   /**
    * Schätzung Totholz stehend
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EExStockDeadwoodBO getTotSteh ();
+  EExStockDeadwoodBO getTotSteh();
 
   @Nonnull
-  default String getTotStehID ()
-  {
-    return getTotSteh ().getID ();
+  default String getTotStehID() {
+    return getTotSteh().getID();
   }
 
   /**
    * Beschreibung Totholz stehend (geklumpt, Art, Herkunft, Zersetzungsgrade)
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getTotStehBesch ();
+  String getTotStehBesch();
 
   /**
    * Schätzung Totholz liegend
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EExStockDeadwoodBO getTotLieg ();
+  EExStockDeadwoodBO getTotLieg();
 
   @Nonnull
-  default String getTotLiegID ()
-  {
-    return getTotLieg ().getID ();
+  default String getTotLiegID() {
+    return getTotLieg().getID();
   }
 
   /**
    * Beschreibung Totholz liegend (geklumpt, Art, Herkunft, Zersetzungsgrade)
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getTotLiegBesch ();
+  String getTotLiegBesch();
 }

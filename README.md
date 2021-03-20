@@ -133,6 +133,8 @@ public enum EDemo2
 
 # News and noteworthy
 
+* v0.0.5 - work in progress
+    * Updated to ph-commons 10
 * v0.0.4 - 2019-11-05
     * Updated to ph-oton 8.2.0
     * Maven plugin parameter `createManager` is now set correctly

@@ -1,19 +1,3 @@
-/**
- * Copyright (C) 2018-2019 Philip Helger (www.helger.com)
- * philip[at]helger[dot]com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.helger.aufnahme.simple;
 
 import com.helger.commons.hashcode.HashCodeGenerator;
@@ -21,47 +5,41 @@ import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.type.ObjectType;
 import javax.annotation.concurrent.NotThreadSafe;
 
+
 /**
- * <p>
- * Default implementation of {@link com.helger.aufnahme.simple.ILeergut}
- * </p>
- * <p>
- * This class was initially automatically created
- * </p>
+ * <p>Default implementation of {@link com.helger.aufnahme.simple.ILeergut}</p>
+ * <p>This class was initially automatically created</p>
+ * 
  * 
  * @author JDMCodeGenerator
  */
 @NotThreadSafe
-public class Leergut implements ILeergut
+public class Leergut
+  implements ILeergut
 {
-  public static final ObjectType OT = new ObjectType ("Leergut");
+  public static final ObjectType OT = new ObjectType("Leergut");
 
-  public Leergut ()
-  {}
+  public Leergut() {
+  }
 
   @Override
-  public boolean equals (final Object o)
-  {
-    if (o == this)
-    {
+  public boolean equals(final Object o) {
+    if (o == this) {
       return true;
     }
-    if ((o == null) || (this.getClass () != o.getClass ()))
-    {
+    if ((o == null)||(this.getClass()!= o.getClass())) {
       return false;
     }
     return true;
   }
 
   @Override
-  public int hashCode ()
-  {
-    return new HashCodeGenerator (this).getHashCode ();
+  public int hashCode() {
+    return new HashCodeGenerator(this).getHashCode();
   }
 
   @Override
-  public String toString ()
-  {
-    return new ToStringGenerator (this).getToString ();
+  public String toString() {
+    return new ToStringGenerator(this).getToString();
   }
 }

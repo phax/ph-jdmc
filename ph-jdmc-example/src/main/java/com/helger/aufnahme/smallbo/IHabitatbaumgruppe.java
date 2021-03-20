@@ -1,19 +1,3 @@
-/**
- * Copyright (C) 2018-2019 Philip Helger (www.helger.com)
- * philip[at]helger[dot]com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.helger.aufnahme.smallbo;
 
 import java.io.File;
@@ -26,144 +10,154 @@ import com.helger.tenancy.IBusinessObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+
 /**
- * <p>
- * Interface for class {@link Habitatbaumgruppe}
- * </p>
- * <p>
- * This class was initially automatically created
- * </p>
+ * <p>Interface for class {@link Habitatbaumgruppe}</p>
+ * <p>This class was initially automatically created</p>
+ * 
  * 
  * @author JDMCodeGenerator
  */
-public interface IHabitatbaumgruppe extends IBusinessObject
+public interface IHabitatbaumgruppe
+  extends IBusinessObject
 {
 
   /**
    * Schlüsselfeld
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  int getHBGNr ();
+  int getHBGNr();
 
   /**
    * Fotos
    * 
-   * @return The requested value. May neither be <code>null</code> nor empty.
+   * @return
+   *     The requested value. May neither be <code>null</code> nor empty.
    */
   @Nonnull
   @Nonempty
   @ReturnsMutableObject
-  ICommonsList <File> pics ();
+  ICommonsList<File> pics();
 
   /**
    * zugehörige Biotopbäume
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
   @ReturnsMutableObject
-  ICommonsList <IBiotopbaum> HBGzBB ();
+  ICommonsList<IBiotopbaum> HBGzBB();
 
   /**
    * Get the value of date.
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  LocalDate getDate ();
+  LocalDate getDate();
 
   /**
-   * allg. Beschreibung Freitext
+   * allg. Beschreibung  Freitext
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getStandort ();
+  String getStandort();
 
   /**
-   * Wald, einschichtig (1 Baumschicht, kaum Unterwuchs) oder mehrschichtiger
-   * Bestand (Unterwuchs, Strauchsch., evtl. 2. Baumschicht)
+   * Wald, einschichtig (1 Baumschicht, kaum Unterwuchs) oder mehrschichtiger Bestand (Unterwuchs, Strauchsch., evtl. 2. Baumschicht)
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  boolean isOneLevel ();
+  boolean isOneLevel();
 
   /**
    * lichter Bestand (Besonnung)
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  boolean isLight ();
+  boolean isLight();
 
   /**
    * geschlossene Kronendach
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  boolean isClosedCrown ();
+  boolean isClosedCrown();
 
   /**
    * explitzit keine Besonnung
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  boolean isNoSun ();
+  boolean isNoSun();
 
   /**
    * eingebettet in homogenene oder heterogene Umgebung
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  boolean isHomogen ();
+  boolean isHomogen();
 
   /**
    * Exposition
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  EExposition getExposition ();
+  EExposition getExposition();
 
   @Nonnull
-  default String getExpositionID ()
-  {
-    return getExposition ().getID ();
+  default String getExpositionID() {
+    return getExposition().getID();
   }
 
   /**
    * Angabe von Neigungen: keine, Angabe von Neigungen, Freitext
    * 
-   * @return The requested value. May be <code>null</code>.
+   * @return
+   *     The requested value. May be <code>null</code>.
    */
   @Nullable
-  String getHanglage ();
+  String getHanglage();
 
-  default boolean hasHanglage ()
-  {
-    return StringHelper.hasText (getHanglage ());
+  default boolean hasHanglage() {
+    return StringHelper.hasText(getHanglage());
   }
 
   /**
    * Größe (in m²)
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  int getAreaSize ();
+  int getAreaSize();
 
   /**
-   * Habitatbaumgruppe NUR aus schon kartierten Biotopbäumen oder auch aus
-   * anderen Bäumen bestehend
+   * Habitatbaumgruppe NUR aus schon kartierten Biotopbäumen oder  auch aus anderen Bäumen bestehend
    * 
-   * @return The requested value.
+   * @return
+   *     The requested value.
    */
-  boolean isOnlyBB ();
+  boolean isOnlyBB();
 
   /**
-   * Freitext
+   * Freitext 
    * 
-   * @return The requested value. May not be <code>null</code>.
+   * @return
+   *     The requested value. May not be <code>null</code>.
    */
   @Nonnull
-  String getBeschreibung ();
+  String getBeschreibung();
 }
