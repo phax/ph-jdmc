@@ -133,7 +133,7 @@ public enum EDemo2
 
 # News and noteworthy
 
-* v0.0.5 - work in progress
+* v0.0.5 - 2021-03-22
     * Updated to ph-commons 10
 * v0.0.4 - 2019-11-05
     * Updated to ph-oton 8.2.0
