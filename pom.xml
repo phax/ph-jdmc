@@ -41,8 +41,8 @@
   </licenses>
   
   <scm>
-    <connection>scm:git:git@github.com:phax/ph-jdmc.git</connection>
-    <developerConnection>scm:git:git@github.com:phax/ph-jdmc.git</developerConnection>
+    <connection>scm:git:https://github.com/phax/ph-jdmc.git</connection>
+    <developerConnection>scm:git:https://github.com/phax/ph-jdmc.git</developerConnection>
     <url>http://github.com/phax/ph-jdmc</url>
     <tag>HEAD</tag>
   </scm>
