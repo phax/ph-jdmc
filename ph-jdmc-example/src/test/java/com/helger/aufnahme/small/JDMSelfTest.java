@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2022 Philip Helger (www.helger.com)
+ * Copyright (C) 2018-2024 Philip Helger (www.helger.com)
  * philip[at]helger[dot]com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,14 +27,17 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZonedDateTime;
+
+import javax.xml.namespace.QName;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.w3c.dom.Element;
+
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.math.MathHelper;
 import com.helger.xml.serialize.read.DOMReader;
-import javax.xml.namespace.QName;
-import org.junit.Assert;
-import org.junit.Test;
-import org.w3c.dom.Element;
 
 
 /**

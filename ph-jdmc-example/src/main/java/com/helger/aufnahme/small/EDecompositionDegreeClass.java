@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2022 Philip Helger (www.helger.com)
+ * Copyright (C) 2018-2024 Philip Helger (www.helger.com)
  * philip[at]helger[dot]com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +16,13 @@
  */
 package com.helger.aufnahme.small;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.id.IHasID;
 import com.helger.commons.lang.EnumHelper;
 import com.helger.commons.name.IHasDisplayName;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 
 /**

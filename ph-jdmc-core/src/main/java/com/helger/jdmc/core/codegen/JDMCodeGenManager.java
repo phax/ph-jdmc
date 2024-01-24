@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2022 Philip Helger (www.helger.com)
+ * Copyright (C) 2018-2024 Philip Helger (www.helger.com)
  * philip[at]helger[dot]com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,8 +41,8 @@ import com.helger.jcodemodel.JVar;
 import com.helger.jdmc.core.datamodel.EJDMMultiplicity;
 import com.helger.jdmc.core.datamodel.JDMGenClass;
 import com.helger.jdmc.core.datamodel.JDMGenField;
-import com.helger.photon.app.dao.AbstractPhotonMapBasedWALDAO;
 import com.helger.photon.audit.AuditHelper;
+import com.helger.photon.io.dao.AbstractPhotonMapBasedWALDAO;
 import com.helger.photon.security.object.BusinessObjectHelper;
 
 @Immutable

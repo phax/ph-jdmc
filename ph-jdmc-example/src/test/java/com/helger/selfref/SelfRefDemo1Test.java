@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2022 Philip Helger (www.helger.com)
+ * Copyright (C) 2018-2024 Philip Helger (www.helger.com)
  * philip[at]helger[dot]com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +16,13 @@
  */
 package com.helger.selfref;
 
-import com.helger.commons.string.StringHelper;
-import com.helger.photon.app.mock.PhotonAppWebTestRule;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
+
+import com.helger.commons.string.StringHelper;
+import com.helger.photon.app.mock.PhotonAppWebTestRule;
 
 
 /**
